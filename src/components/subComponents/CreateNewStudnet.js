@@ -8,6 +8,7 @@ import {
   collection,
   where,
   query,
+  updateDoc
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
@@ -77,12 +78,22 @@ const CreateNewStudnet = () => {
       () => {
         // download url
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-
           console.log("url is   ",url)
-        
           valueRef.current = url
           console.log("value with ref is ",valueRef.current)
+          
+          if(valueRef.current != null){
+          console.log("value with ref with ref is ",valueRef.current)
+          setLoading(true)
           setNewUser({...newUser , avater: valueRef.current})
+          if(newUser.avater !==null){
+           setDoc(doc(firestoreDb, "students", uuid()), newUser);
+           console.log("Student  is createNewStudent    " ,newUser);
+           console.log("Student id   ", uuid())
+          navigate("/list-student"); 
+          setLoading(false)
+          }
+          }
         console.log("images is   ",images)         
         });
       }
@@ -106,21 +117,14 @@ const CreateNewStudnet = () => {
 
   const createNewStudent = async () => {
     console.log("start")
-    await handleUpload()    
-    await setDoc(doc(firestoreDb, "students", uuid()), newUser);
-    console.log("Student  is createNewStudent" ,newUser);
-    console.log("Student id", uuid())
-    navigate("/list-student");
+    await handleUpload() 
+    // if(!loading){ 
+    
+    // }else{
+    //   return;
+    // }
   };
   const children = [];
-
-
-
-  const handleImages = () => {
-    setNewUser({ ...newUser, avater: valueRef.avater });
-  };
-
-
   const handleCourse = (value) => {
     setNewUser({ ...newUser, class: value });
   };
@@ -148,7 +152,6 @@ const CreateNewStudnet = () => {
 
   useEffect(() => {
       getClass();
-      //setNewUser({...newUser , avater: valueRef.current})
   }, []);
   return (
     <>
@@ -193,7 +196,7 @@ const CreateNewStudnet = () => {
           {input.map((_, index) => {
             return <Input onChange={(e) => setPhone(e)} />;
           })}
-          {phone != "" ? (
+          {phone !== "" ? (
             <Button
               onClick={() => {
                 setInputs([...input, 0]);
