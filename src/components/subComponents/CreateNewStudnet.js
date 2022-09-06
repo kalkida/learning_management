@@ -93,7 +93,7 @@ const CreateNewStudnet = () => {
   };
 
   const createNewStudent = async () => {
-    await handleUpload();
+    handleUpload().then()
     await setDoc(doc(firestoreDb, "students", uuid()), newUser);
 
     navigate("/list-student");
