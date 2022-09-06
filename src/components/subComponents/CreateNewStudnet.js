@@ -27,11 +27,13 @@ const CreateNewStudnet = () => {
   const [percent, setPercent] = useState(0);
   const [image, setImage] = useState(null);
 
+  const [loading , setLoading] = useState(false);
   const [file, setFile] = useState("");
+  const [images , setImages] = useState(null);
 
   const [classData, setClassData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-
+  const focalimage = useRef(null)
   const [newUser, setNewUser] = useState({
     DOB: "",
     avater: null,
@@ -45,15 +47,19 @@ const CreateNewStudnet = () => {
     school_id: uid.school,
   });
 
-  function handleChange(event) {
-    setFile(event.target.files[0]);
-  }
+  const valueRef = useRef();
 
-  function handleUpload() {
+  const handleChange =(event) =>{
+    setFile(event.target.files[0]);
+  }; 
+
+
+ 
+ async function handleUpload()  {
     if (!file) {
       alert("Please choose a file first!");
     }
-
+    
     const storageRef = ref(storage, file.name);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -71,7 +77,13 @@ const CreateNewStudnet = () => {
       () => {
         // download url
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setNewUser({ ...newUser, avater: url });
+
+          console.log("url is   ",url)
+        
+          valueRef.current = url
+          console.log("value with ref is ",valueRef.current)
+          setNewUser({...newUser , avater: valueRef.current})
+        console.log("images is   ",images)         
         });
       }
     );
@@ -93,12 +105,21 @@ const CreateNewStudnet = () => {
   };
 
   const createNewStudent = async () => {
-    handleUpload().then()
+    console.log("start")
+    await handleUpload()    
     await setDoc(doc(firestoreDb, "students", uuid()), newUser);
-
+    console.log("Student  is createNewStudent" ,newUser);
+    console.log("Student id", uuid())
     navigate("/list-student");
   };
   const children = [];
+
+
+
+  const handleImages = () => {
+    setNewUser({ ...newUser, avater: valueRef.avater });
+  };
+
 
   const handleCourse = (value) => {
     setNewUser({ ...newUser, class: value });
@@ -126,7 +147,8 @@ const CreateNewStudnet = () => {
   };
 
   useEffect(() => {
-    getClass();
+      getClass();
+      //setNewUser({...newUser , avater: valueRef.current})
   }, []);
   return (
     <>
@@ -136,7 +158,7 @@ const CreateNewStudnet = () => {
         layout="horizontal"
       >
         <Form.Item label="Student Pictue" valuePropName="fileList">
-          <input type="file" onChange={handleChange} accept="/image/*" />
+          <input type="file" onChange={handleChange} accept="/image/*"   />
         </Form.Item>
         <Form.Item label="Date Of Birth">
           <DatePicker onChange={setAge} />
@@ -188,8 +210,8 @@ const CreateNewStudnet = () => {
         </Form.Item>
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button onClick={() => createNewStudent()}>Save</Button>
-        <Button>Cancle</Button>
+        <Button onClick={async() => await createNewStudent()}>Save</Button>
+        <Button>Cancel</Button>
       </div>
     </>
   );
