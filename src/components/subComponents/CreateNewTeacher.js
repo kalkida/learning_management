@@ -87,8 +87,8 @@ const CreateNewTeacher = () => {
           setLoading(true)
           setNewUser({...newUser , avater: valueRef.current})
           if(newUser.avater !==null){
-           setDoc(doc(firestoreDb, "students", uuid()), newUser);
-           console.log("Teacher  is createNewStudent    " ,newUser);
+           setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
+           console.log("Teacher  is createteacher    " ,newUser);
            console.log("teacher id   ", uuid())
           navigate("/list-teacher"); 
           setLoading(false)
