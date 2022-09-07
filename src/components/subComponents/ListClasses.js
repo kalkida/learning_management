@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { async } from "@firebase/util";
 import View from '../modals/classes/view';
 import Update from '../modals/classes/update';
+import CreateSection from "../modals/section/createSection";
 
 export default function ListClasses() {
   const [datas, setData] = useState([]);
@@ -201,11 +202,13 @@ export default function ListClasses() {
           marginBottom: 20,
           color: "white",
           borderRadius: 10,
+          float: "left"
         }}
         to={"/add-class"}
       >
         Add Classes
       </Link>
+      <CreateSection />
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
