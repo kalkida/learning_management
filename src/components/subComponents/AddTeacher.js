@@ -13,7 +13,7 @@ import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
 
-export default function ListClasses() {
+export default function AddTeacher() {
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
 
@@ -28,48 +28,16 @@ export default function ListClasses() {
     }
   };
 
-  const handleCourse = async (id) => {
-    const docRef = doc(firestoreDb, "courses", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset.name;
-    }
-    else {
-      return id;
-    }
-  }
-
-  const handleSections = async (id) => {
-    const docRef = doc(firestoreDb, "sections", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset.name;
-    }
-    else {
-      return id;
-    }
-  }
-
-  const getClasses = async () => {
+  const getTeacher = async () => {
     var branches = await getSchool();
     const q = query(
-      collection(firestoreDb, "class"),
+      collection(firestoreDb, "teachers"),
       where("school_id", "in", branches.branches)
     );
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
       var data = doc.data();
-      data.course.map(async (item, i) => {
-        var name = await handleCourse(item);
-        data.course[i] = name;
-      });
-      data.sections.map(async (item, i) => {
-        var name = await handleSections(item)
-        data.sections[i] = name;
-      })
       temporary.push(data);
     });
     setData(temporary);
@@ -77,15 +45,15 @@ export default function ListClasses() {
 
   const columns = [
     {
-      title: "Grade",
-      dataIndex: "grade",
-      key: "grade",
+      title: "FirstName",
+      dataIndex: "first_name",
+      key: "first_name",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Course",
-      key: "course",
-      dataIndex: "course",
+      title: "Phone Number",
+      key: "phone",
+      dataIndex: "phone",
       render: (value) => {
         return (
           <>
@@ -97,19 +65,19 @@ export default function ListClasses() {
       },
     },
     {
-      title: "Sections",
-      key: "sections",
-      dataIndex: "sections",
-      render: (value) => {
-        return (
-          <>
-            {value?.map((item) => (
-              <Tag color={"green"}>{item}</Tag>
-            ))}
-          </>
-        );
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
+      render: (item) => {
+        return <Tag color={"green"}>{item}</Tag>;
       },
     },
+
     {
       title: "Action",
       key: "action",
@@ -123,7 +91,7 @@ export default function ListClasses() {
   ];
 
   useEffect(() => {
-    getClasses();
+    getTeacher();
   }, []);
 
   return (
@@ -136,9 +104,9 @@ export default function ListClasses() {
           color: "white",
           borderRadius: 10,
         }}
-        to={"/add-class"}
+        to={"/add-teacher"}
       >
-        Add Classes
+        Add Teacher
       </Link>
       <br />
 

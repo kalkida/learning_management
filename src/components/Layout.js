@@ -23,6 +23,9 @@ import AddStudnets from "./subComponents/AddStudnets";
 import CreateNewStudnet from "./subComponents/CreateNewStudnet";
 import ListClasses from "./subComponents/ListClasses";
 import ListCourses from "./subComponents/ListCourses";
+import AddClass from './subComponents/CreateClasses';
+import AddTeacher from "./subComponents/AddTeacher";
+import CreateNewTeacher from "./subComponents/CreateNewTeacher";
 
 const { Header, Content, Sider } = Layout;
 
@@ -32,6 +35,7 @@ const Layouts = () => {
 
   const SiderGenerator = () => {
     if (profile.role["isAdmin"] == true) {
+      const currentURL = window.location.pathname;
       return (
         <Paper
           sx={{ width: 320, maxWidth: "100%", backgroundColor: "#1890ff" }}
@@ -42,7 +46,7 @@ const Layouts = () => {
                 <BookOnline fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-                <Link style={{ color: "white" }} to="/list-student">
+                <Link style={{ color: currentURL === "/list-student" ? "white" : "black" }} to="/list-student">
                   Student
                 </Link>
               </ListItemText>
@@ -51,7 +55,11 @@ const Layouts = () => {
               <ListItemIcon>
                 <ContentCopy fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Teacher</ListItemText>
+              <ListItemText>
+              <Link style={{ color: currentURL === "/list-teacher" ? "white" : "black" }} to="/list-teacher">
+                  Teacher
+                </Link>
+              </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
@@ -63,7 +71,11 @@ const Layouts = () => {
               <ListItemIcon>
                 <ContentPaste fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Classes</ListItemText>
+              <ListItemText>
+                <Link style={{ color: currentURL === "/list-classes" ? "white" : "black" }} to="/list-classes">
+                  Classes
+                </Link>
+              </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
@@ -196,7 +208,11 @@ const Layouts = () => {
               <Route path="/parent" element={<ParentDash />} />
               <Route path="/add-parent" element={<AddParent />} />
               <Route path="/list-student" element={<AddStudnets />} />
+              <Route path="/list-classes" element={<ListClasses />} />
               <Route path="/add-student" element={<CreateNewStudnet />} />
+              <Route path="/add-class" element={<AddClass />} />
+              <Route path="/list-teacher" element={<AddTeacher />} />
+              <Route path="/add-teacher" element={<CreateNewTeacher />}  />   
             </Routes>
           </Content>
         </Layout>
