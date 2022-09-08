@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
-const CreateNewStudnet = () => {
+const CreateNewTeacher = () => {
   const fileInputRef = useRef();
 
   const [courses, setcourse] = useState([]);
@@ -33,17 +33,19 @@ const CreateNewStudnet = () => {
   const [images , setImages] = useState(null);
 
   const [classData, setClassData] = useState([]);
+  const [coursesData ,setCourseData]= useState([]);
+  const [personData, setPersonData] = useState([]);
+
   const uid = useSelector((state) => state.user.profile);
-  const focalimage = useRef(null)
   const [newUser, setNewUser] = useState({
-    DOB: "",
     avater: null,
     email: "",
     first_name: "",
     last_name: "",
+    id:"",
     class: "",
-    parent_id: [],
-    level: "",
+    courses:[],
+    level: [],
     phone: [],
     school_id: uid.school,
   });
@@ -53,8 +55,6 @@ const CreateNewStudnet = () => {
   const handleChange =(event) =>{
     setFile(event.target.files[0]);
   }; 
-
-
  
  async function handleUpload()  {
     if (!file) {
@@ -87,10 +87,10 @@ const CreateNewStudnet = () => {
           setLoading(true)
           setNewUser({...newUser , avater: valueRef.current})
           if(newUser.avater !==null){
-           setDoc(doc(firestoreDb, "students", uuid()), newUser);
-           console.log("Student  is createNewStudent    " ,newUser);
-           console.log("Student id   ", uuid())
-          navigate("/list-student"); 
+           setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
+           console.log("Teacher  is createteacher    " ,newUser);
+           console.log("teacher id   ", uuid())
+          navigate("/list-teacher"); 
           setLoading(false)
           }
           }
@@ -115,22 +115,60 @@ const CreateNewStudnet = () => {
     setClassData(children);
   };
 
-  const createNewStudent = async () => {
+
+  const getCourse = async () => {
+    const coursess = []
+    const q = query(
+      collection(firestoreDb, "courses"),
+      where("school_id", "==", uid.school)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      var datas = doc.data();
+      courses.push({
+        ...datas,
+        key: doc.id,
+      });
+    });
+    setCourseData(courses);
+  };
+
+  const getid = async () => {
+    const Teacher = []
+    const q = query(
+      collection(firestoreDb, "users"),
+      where("role.isTeacher", "==", true)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      var datas = doc.data();
+      Teacher.push({
+        ...datas,
+        key: doc.id,
+      });
+    });
+    setPersonData(Teacher);
+  };
+
+
+
+  const createNewTeacher = async () => {
     console.log("start")
     await handleUpload() 
-    // if(!loading){ 
-    
-    // }else{
-    //   return;
-    // }
   };
   const children = [];
   const handleCourse = (value) => {
     setNewUser({ ...newUser, class: value });
   };
-  const setAge = (value) => {
-    setNewUser({ ...newUser, DOB: JSON.stringify(value._d) });
-  };
+  const handleId = (value) => {   
+     setNewUser({ ...newUser, id: uuid() });
+     };
+    const handleCourses = (value) => {
+    setNewUser({ ...newUser, courses: value });
+      };
+    const handlename = (value) => {
+     setNewUser({ ...newUser, first_name: value });
+      };
 
   const setEmail = (e) => {
     setNewUser({ ...newUser, email: e.target.value });
@@ -140,18 +178,20 @@ const CreateNewStudnet = () => {
     // setNewUser({ ...newUser, ...[newUser.phone]=  allPhone });
     setNewUser({ ...newUser, ["phone"]: allPhone });
   };
-  const setLevel = (e) => {
-    setNewUser({ ...newUser, level: e.target.value });
-  };
-  const setFirstNmae = (e) => {
-    setNewUser({ ...newUser, first_name: e.target.value });
-  };
+//   const setLevel = (e) => {
+//     setNewUser({ ...newUser, level: e.target.value });
+//   };
+//   const setFirstNmae = (e) => {
+//     setNewUser({ ...newUser, first_name: e.target.value });
+//   };
   const setLastName = (e) => {
     setNewUser({ ...newUser, last_name: e.target.value });
   };
 
   useEffect(() => {
       getClass();
+      getCourse();
+      getid();
   }, []);
   return (
     <>
@@ -160,11 +200,24 @@ const CreateNewStudnet = () => {
         wrapperCol={{ span: 14 }}
         layout="horizontal"
       >
-        <Form.Item label="Student Pictue" valuePropName="fileList">
+        <Form.Item label="Teacher Pictue" valuePropName="fileList">
           <input type="file" onChange={handleChange} accept="/image/*"   />
         </Form.Item>
-        <Form.Item label="Date Of Birth">
-          <DatePicker onChange={setAge} />
+        <Form.Item label="Id">
+          <Select
+            style={{
+              width: "100%",
+            }}
+            placeholder={"Teacher Id"}
+            onChange={handleId}
+            optionLabelProp="label"
+          >
+            {personData.map((item, index) => (
+              <Option value={item.key} label={item.user_id}>
+                {item.user_id}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item label="Class">
@@ -172,7 +225,7 @@ const CreateNewStudnet = () => {
             style={{
               width: "100%",
             }}
-            placeholder="select all courses"
+            placeholder="select all classes"
             onChange={handleCourse}
             optionLabelProp="label"
           >
@@ -183,9 +236,44 @@ const CreateNewStudnet = () => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="First Name">
-          <Input onChange={(e) => setFirstNmae(e)} />
+        <Form.Item label="Courses">
+          <Select
+            style={{
+              width: "100%",
+            }}
+            placeholder="select all courses"
+            onChange={handleCourses}
+            optionLabelProp="label"
+          >
+            {coursesData.map((item, index) => (
+              <Option value={item.key} label={item.name}>
+                {item.name}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
+
+        <Form.Item label="name">
+          <Select
+            style={{
+              width: "100%",
+            }}
+            placeholder="see all users"
+            onChange={handlename}
+            optionLabelProp="label"
+          >
+            {personData.map((item, index) => (
+              <Option value={item.key} label={item.name}>
+                {item.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+
+        {/* <Form.Item label="First Name">
+          <Input onChange={(e) => setFirstNmae(e)} />
+        </Form.Item> */}
         <Form.Item label="Last Name">
           <Input onChange={(e) => setLastName(e)} />
         </Form.Item>
@@ -207,17 +295,33 @@ const CreateNewStudnet = () => {
             </Button>
           ) : null}
         </Form.Item>
-
         <Form.Item label="Level">
-          <Input onChange={(e) => setLevel(e)} />
+          <Select
+            style={{
+              width: "100%",
+            }}
+            placeholder="select all level"
+            onChange={handleCourse}
+            optionLabelProp="label"
+          >
+            {classData.map((item, index) => (
+              <Option value={item.key} label={item.sections}>
+                {item.sections}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
+
+        {/* <Form.Item label="Level">
+          <Input onChange={(e) => setLevel(e)} />
+        </Form.Item> */}
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button onClick={async() => await createNewStudent()}>Save</Button>
+        <Button onClick={async() => await createNewTeacher()}>Save</Button>
         <Button>Cancel</Button>
       </div>
     </>
   );
 };
 
-export default CreateNewStudnet;
+export default CreateNewTeacher;

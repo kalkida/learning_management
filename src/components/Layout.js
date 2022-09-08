@@ -24,6 +24,10 @@ import CreateNewStudnet from "./subComponents/CreateNewStudnet";
 import ListClasses from "./subComponents/ListClasses";
 import ListCourses from "./subComponents/ListCourses";
 import AddClass from './subComponents/CreateClasses';
+import AddTeacher from "./subComponents/AddTeacher";
+import CreateNewTeacher from "./subComponents/CreateNewTeacher";
+import CreateCrouse from "./subComponents/CreateCrouse";
+
 
 const { Header, Content, Sider } = Layout;
 
@@ -53,13 +57,21 @@ const Layouts = () => {
               <ListItemIcon>
                 <ContentCopy fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Teacher</ListItemText>
+              <ListItemText>
+              <Link style={{ color: currentURL === "/list-teacher" ? "white" : "black" }} to="/list-teacher">
+                  Teacher
+                </Link>
+              </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
                 <ContentPaste fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Courses</ListItemText>
+              <ListItemText>
+              <Link style={{ color: currentURL === "/list-Course" ? "white" : "black" }} to="/list-Course">
+              Courses
+                </Link>
+                </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
@@ -205,6 +217,10 @@ const Layouts = () => {
               <Route path="/list-classes" element={<ListClasses />} />
               <Route path="/add-student" element={<CreateNewStudnet />} />
               <Route path="/add-class" element={<AddClass />} />
+              <Route path="/list-teacher" element={<AddTeacher />} />
+              <Route path="/add-teacher" element={<CreateNewTeacher />}  />   
+              <Route path="/list-Course" element={<ListCourses />} />
+              <Route path="/add-course" element={<CreateCrouse />}  /> 
             </Routes>
           </Content>
         </Layout>
