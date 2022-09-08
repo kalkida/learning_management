@@ -45,7 +45,7 @@ const CreateNewTeacher = () => {
     last_name: "",
     id:"",
     class: "",
-    courses:[],
+    course:[],
     level: [],
     phone: "",
     school_id: uid.school,
@@ -144,12 +144,12 @@ const CreateNewTeacher = () => {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-      courses.push({
+      coursess.push({
         ...datas,
         key: doc.id,
       });
     });
-    setCourseData(courses);
+    setCourseData(coursess);
   };
 
   const getid = async () => {
@@ -254,6 +254,8 @@ const CreateNewTeacher = () => {
             placeholder="select all classes"
             onChange={handleCourse}
             optionLabelProp="label"
+            mode="multiple"
+
           >
             {classData.map((item, index) => (
               <Option value={item.grade} label={item.grade}>
@@ -270,6 +272,8 @@ const CreateNewTeacher = () => {
             placeholder="select all courses"
             onChange={handleCourses}
             optionLabelProp="label"
+            mode="multiple"
+          
           >
             {coursesData.map((item, index) => (
               <Option value={item.name} label={item.name}>

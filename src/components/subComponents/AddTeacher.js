@@ -50,16 +50,16 @@ export default function AddTeacher() {
       key: "first_name",
       render: (text) => <a>{text}</a>,
     },
-    {
+    { 
       title: "Course",
       key: "course",
       dataIndex: "course",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a>{text}</a>,    
       // render: (value) => {
       //   return (
       //     <>
       //       {value?.map((item) => (
-      //         <Tag color={"green"}>{item.name}</Tag>
+      //         <Tag color={"green"}>{item}</Tag>
       //       ))}
       //     </>
       //   );
@@ -91,9 +91,9 @@ export default function AddTeacher() {
       dataIndex: "class",
       key: "class",
       render: (text) => <a>{text}</a>,
-    //   // render: (item) => {
-    //   //   return <Tag color={"green"}>{item}</Tag>;
-    //   // },
+      // render: (item) => {
+      //   return <Tag color={"green"}>{item}</Tag>;
+      // },
     },
 
     {
