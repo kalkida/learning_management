@@ -12,16 +12,10 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
-import View from '../modals/courses/view';
-import Update from '../modals/courses/update';
 
-export default function ListCourses() {
+export default function AddTeacher() {
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-  const [openView, setOpenView] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [updateComplete, setUpdateComplete] = useState(false);
-  const [viewData, setViewData] = useState();
 
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
@@ -34,57 +28,46 @@ export default function ListCourses() {
     }
   };
 
-  const getCourses = async () => {
+  const getTeacher = async () => {
     var branches = await getSchool();
     const q = query(
-      collection(firestoreDb, "courses"),
+      collection(firestoreDb, "teachers"),
       where("school_id", "in", branches.branches)
     );
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
       var data = doc.data();
-      data.key = doc.id;
       temporary.push(data);
     });
     setData(temporary);
   };
 
-  const handleViewCancel = () => {
-    setOpenView(false);
-  };
-
-  const handleView = (data) => {
-    setViewData(data);
-    setOpenView(true);
-  }
-
-  const handleUpdateCancel = () => {
-    setOpenUpdate(false);
-  };
-
-  const handleUpdate = (data) => {
-    setViewData(data);
-    setOpenUpdate(true);
-  }
-
   const columns = [
     {
-      title: "CourseName",
-      dataIndex: "name",
-      key: "name",
+      title: "FirstName",
+      dataIndex: "first_name",
+      key: "first_name",
       render: (text) => <a>{text}</a>,
     },
-    // {
-    //   title: "id",
-    //   key: "id",
-    //   dataIndex: "id",
-    //   render: (text) => <a>{text}</a>,
-    // },
     {
-      title: "course_description",
-      dataIndex: "description",
-      key: "description",
+      title: "Phone Number",
+      key: "phone",
+      dataIndex: "phone",
+      render: (value) => {
+        return (
+          <>
+            {value?.map((item) => (
+              <Tag color={"green"}>{item}</Tag>
+            ))}
+          </>
+        );
+      },
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
       title: "Level",
@@ -100,18 +83,16 @@ export default function ListCourses() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-           <a onClick={() => handleView(record)}>View </a>
-          <a onClick={() => handleUpdate(record)}>Update</a>
-          {/* <a>View {record.name}</a>
-          <a>Update</a> */}
+          <a>View {record.name}</a>
+          <a>Update</a>
         </Space>
       ),
     },
   ];
 
   useEffect(() => {
-    getCourses();
-  }, [updateComplete]);
+    getTeacher();
+  }, []);
 
   return (
     <div>
@@ -123,27 +104,13 @@ export default function ListCourses() {
           color: "white",
           borderRadius: 10,
         }}
-        to={"/add-course"}
+        to={"/add-teacher"}
       >
-        Add Courses
+        Add Teacher
       </Link>
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ?
-        <View
-          handleCancel={handleViewCancel}
-          openView={openView}
-          data={viewData}
-        /> : null}
-      {viewData ?
-        <Update
-          handleCancel={handleUpdateCancel}
-          openUpdate={openUpdate}
-          data={viewData}
-          setUpdateComplete={setUpdateComplete}
-          updateComplete={updateComplete}
-        /> : null}
     </div>
   );
 }
