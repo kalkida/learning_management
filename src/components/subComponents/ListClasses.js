@@ -12,8 +12,8 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Link } from "react-router-dom";
 import { async } from "@firebase/util";
-import View from '../modals/classes/view';
-import Update from '../modals/classes/update';
+import View from "../modals/classes/view";
+import Update from "../modals/classes/update";
 import CreateSection from "../modals/section/createSection";
 
 export default function ListClasses() {
@@ -45,49 +45,46 @@ export default function ListClasses() {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       var dataset = docSnap.data();
-      const data = { id: id, name: dataset.name }
+      const data = { id: id, name: dataset.name };
+      return data;
+    } else {
+      const data = { id: id, name: id };
       return data;
     }
-    else {
-      const data = { id: id, name: id }
-      return data;
-    }
-  }
+  };
 
   const handleSections = async (id) => {
     const docRef = doc(firestoreDb, "sections", id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       var dataset = docSnap.data();
-      const data = { id: id, name: dataset.name }
+      const data = { id: id, name: dataset.name };
+      return data;
+    } else {
+      const data = { id: id, name: id };
       return data;
     }
-    else {
-      const data = { id: id, name: id }
-      return data;
-    }
-  }
+  };
 
   const handleNameId = async (data) => {
     data.course.map((item, i) => {
-      handleCourse(item).then(response => data.course[i] = response);
-
+      handleCourse(item).then((response) => (data.course[i] = response));
     });
     data.sections.map((item, i) => {
-      handleSections(item).then(response => data.sections[i] = response);
-    })
+      handleSections(item).then((response) => (data.sections[i] = response));
+    });
     return data;
-  }
+  };
 
   const handleViewCancel = () => {
     setOpenView(false);
   };
 
   const handleView = (data) => {
-    handleData(data)
+    handleData(data);
     setViewData(data);
     setOpenView(true);
-  }
+  };
 
   const handleData = (data) => {
     const courseArray = [];
@@ -95,29 +92,28 @@ export default function ListClasses() {
     const courseId = [];
     const sectionId = [];
     data.course.map((item) => {
-      courseId.push(item.id)
-      courseArray.push(item.name)
-
-    })
+      courseId.push(item.id);
+      courseArray.push(item.name);
+    });
     data.sections.map((item) => {
-      sectionId.push(item.id)
-      sectionArray.push(item.name)
-    })
+      sectionId.push(item.id);
+      sectionArray.push(item.name);
+    });
     setSectionData(sectionArray);
     setCousreData(courseArray);
     setSectionIdSingle(sectionId);
     setCourseIdSingle(courseId);
-  }
+  };
 
   const handleUpdateCancel = () => {
     setOpenUpdate(false);
   };
 
   const handleUpdate = (data) => {
-    handleData(data)
+    handleData(data);
     setViewData(data);
     setOpenUpdate(true);
-  }
+  };
 
   const getClasses = async () => {
     var branches = await getSchool();
@@ -130,10 +126,9 @@ export default function ListClasses() {
 
     snap.forEach((doc) => {
       var data = doc.data();
-      handleNameId(data).then(response => {
+      handleNameId(data).then((response) => {
         response.key = doc.id;
         temporary.push(response);
-
       });
     });
     setData(temporary);
@@ -190,8 +185,6 @@ export default function ListClasses() {
     getClasses();
   }, [updateComplete]);
 
-
-
   return (
     <div>
       <Link
@@ -201,7 +194,7 @@ export default function ListClasses() {
           marginBottom: 20,
           color: "white",
           borderRadius: 10,
-          float: "left"
+          float: "left",
         }}
         to={"/add-class"}
       >
@@ -211,15 +204,16 @@ export default function ListClasses() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ?
+      {viewData ? (
         <View
           handleCancel={handleViewCancel}
           openView={openView}
           data={viewData}
           coursedata={coursedata}
           sectionData={sectionData}
-        /> : null}
-      {viewData ?
+        />
+      ) : null}
+      {viewData ? (
         <Update
           handleCancel={handleUpdateCancel}
           openUpdate={openUpdate}
@@ -230,7 +224,8 @@ export default function ListClasses() {
           sectionData={sectionData}
           sectionIdSingle={sectionIdSingle}
           courseIdSingle={courseIdSingle}
-        /> : null}
+        />
+      ) : null}
     </div>
   );
 }

@@ -28,6 +28,7 @@ import AddTeacher from "./subComponents/AddTeacher";
 import CreateNewTeacher from "./subComponents/CreateNewTeacher";
 import CreateCrouse from "./subComponents/CreateCrouse";
 
+
 const { Header, Content, Sider } = Layout;
 
 const Layouts = () => {
