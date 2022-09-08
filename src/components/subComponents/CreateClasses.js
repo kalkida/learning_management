@@ -65,9 +65,7 @@ const CreateClasses = () => {
   };
 
   const createNewClass = async () => {
-    console.log(newClass)
     await setDoc(doc(firestoreDb, "class", uuid()), newClass);
-
     navigate("/list-Classes");
   };
 
