@@ -44,6 +44,7 @@ export default function ListCourses() {
     const snap = await getDocs(q);
     snap.forEach((doc) => {
       var data = doc.data();
+      data.key = doc.id;
       temporary.push(data);
     });
     setData(temporary);
@@ -74,12 +75,12 @@ export default function ListCourses() {
       key: "name",
       render: (text) => <a>{text}</a>,
     },
-    {
-      title: "id",
-      key: "id",
-      dataIndex: "id",
-      render: (text) => <a>{text}</a>,
-    },
+    // {
+    //   title: "id",
+    //   key: "id",
+    //   dataIndex: "id",
+    //   render: (text) => <a>{text}</a>,
+    // },
     {
       title: "course_description",
       dataIndex: "description",

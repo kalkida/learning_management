@@ -18,10 +18,8 @@ const { Option } = Select;
 function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateComplete, }) {
 
     const uid = useSelector((state) => state.user.profile);
-
+    const [courses , setCourses] =useState({})
     const [loading, setLoading] = useState(false);
-    const [courses, setcourse] = useState([]);
-    const [sectionMainData, setSectionMainData] = useState([]);
     const [updateCourse, setUpdateCourse] = useState({
         id: data.id,
         name: data.name,
@@ -31,7 +29,8 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
 
     const handleUpdate = async () => {
         setLoading(true);
-        setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
+        console.log("data is", data)
+        setDoc(doc(firestoreDb, "courses", data.key), updateCourse)
             .then(response => {
                 setLoading(false)
                 message.success("Data is updated successfuly")
@@ -46,29 +45,29 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
     }
 
 
-    const getClass = async () => {
+    // const getClass = async () => {
 
-        const children = [];
+    //     const children = [];
 
-        const q = query(
-            collection(firestoreDb, "courses"),
-            where("school_id", "==", uid.school)
-        );
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            var datas = doc.data();
-            children.push({
-                ...datas,
-                key: doc.id,
-            });
-        });
+    //     const q = query(
+    //         collection(firestoreDb, "courses"),
+    //         where("school_id", "==", uid.school)
+    //     );
+    //     const querySnapshot = await getDocs(q);
+    //     querySnapshot.forEach((doc) => {
+    //         var datas = doc.data();
+    //         children.push({
+    //             ...datas,
+    //             key: doc.id,
+    //         });
+    //     });
 
-        setcourse(children);
-    };
+    //     setCourses(children);
+    // };
 
-    useEffect(() => {
-        getClass();
-    }, []);
+    // useEffect(() => {
+    //     getClass();
+    // }, []);
 
 
     const setcoursname = (e) => {
