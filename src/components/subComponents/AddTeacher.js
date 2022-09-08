@@ -51,31 +51,49 @@ export default function AddTeacher() {
       render: (text) => <a>{text}</a>,
     },
     {
+      title: "Course",
+      key: "course",
+      dataIndex: "course",
+      render: (text) => <a>{text}</a>,
+      // render: (value) => {
+      //   return (
+      //     <>
+      //       {value?.map((item) => (
+      //         <Tag color={"green"}>{item.name}</Tag>
+      //       ))}
+      //     </>
+      //   );
+      // },
+    },
+    {
       title: "Phone Number",
       key: "phone",
       dataIndex: "phone",
-      render: (value) => {
-        return (
-          <>
-            {value?.map((item) => (
-              <Tag color={"green"}>{item}</Tag>
-            ))}
-          </>
-        );
-      },
+      render: (text) => <a>{text}</a>,
+      // render: (value) => {
+      //   return (
+      //     <>
+      //       {value?.map((item) => (
+      //         <Tag color={"green"}>{item}</Tag>
+      //       ))}
+      //     </>
+      //   );
+      // },
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      render: (text) => <a>{text}</a>,
     },
     {
-      title: "Level",
-      dataIndex: "level",
-      key: "level",
-      render: (item) => {
-        return <Tag color={"green"}>{item}</Tag>;
-      },
+      title: "Class",
+      dataIndex: "class",
+      key: "class",
+      render: (text) => <a>{text}</a>,
+    //   // render: (item) => {
+    //   //   return <Tag color={"green"}>{item}</Tag>;
+    //   // },
     },
 
     {

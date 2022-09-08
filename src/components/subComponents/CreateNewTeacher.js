@@ -35,6 +35,7 @@ const CreateNewTeacher = () => {
   const [classData, setClassData] = useState([]);
   const [coursesData ,setCourseData]= useState([]);
   const [personData, setPersonData] = useState([]);
+  const [secData, setSecData] = useState([]);
 
   const uid = useSelector((state) => state.user.profile);
   const [newUser, setNewUser] = useState({
@@ -46,7 +47,7 @@ const CreateNewTeacher = () => {
     class: "",
     courses:[],
     level: [],
-    phone: [],
+    phone: "",
     school_id: uid.school,
   });
 
@@ -115,6 +116,24 @@ const CreateNewTeacher = () => {
     setClassData(children);
   };
 
+  const getSection = async () => {
+
+    const sec =[]
+    const q = query(
+      collection(firestoreDb, "sections"),
+      where("school_id", "==", uid.school)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      var datas = doc.data();
+      sec.push({
+        ...datas,
+        key: doc.id,
+      });
+    });
+    setSecData(sec);
+  };
+
 
   const getCourse = async () => {
     const coursess = []
@@ -150,8 +169,6 @@ const CreateNewTeacher = () => {
     setPersonData(Teacher);
   };
 
-
-
   const createNewTeacher = async () => {
     console.log("start")
     await handleUpload() 
@@ -160,30 +177,38 @@ const CreateNewTeacher = () => {
   const handleCourse = (value) => {
     setNewUser({ ...newUser, class: value });
   };
+
+  const handleSection = (value) => {
+    setNewUser({ ...newUser, level: value });
+  };
   const handleId = (value) => {   
      setNewUser({ ...newUser, id: uuid() });
      };
     const handleCourses = (value) => {
-    setNewUser({ ...newUser, courses: value });
+    setNewUser({ ...newUser, course: value });
       };
-    const handlename = (value) => {
-     setNewUser({ ...newUser, first_name: value });
-      };
+    // const handlename = (value) => {
+    //  setNewUser({ ...newUser, first_name: value });
+    //   };
 
   const setEmail = (e) => {
     setNewUser({ ...newUser, email: e.target.value });
   };
   const setPhone = (e) => {
-    setPhones(e.target.value);
-    // setNewUser({ ...newUser, ...[newUser.phone]=  allPhone });
-    setNewUser({ ...newUser, ["phone"]: allPhone });
+    if (!e) {
+      alert("Please write phone first!");
+    }
+    setNewUser({ ...newUser, phone: e.target.value });
+    // setPhones(e.target.value);
+    // // setNewUser({ ...newUser, ...[newUser.phone]=  allPhone });
+    // setNewUser({ ...newUser, ["phone"]: allPhone });
   };
 //   const setLevel = (e) => {
 //     setNewUser({ ...newUser, level: e.target.value });
 //   };
-//   const setFirstNmae = (e) => {
-//     setNewUser({ ...newUser, first_name: e.target.value });
-//   };
+  const setFirstNmae = (e) => {
+    setNewUser({ ...newUser, first_name: e.target.value });
+  };
   const setLastName = (e) => {
     setNewUser({ ...newUser, last_name: e.target.value });
   };
@@ -192,6 +217,7 @@ const CreateNewTeacher = () => {
       getClass();
       getCourse();
       getid();
+      getSection();
   }, []);
   return (
     <>
@@ -230,7 +256,7 @@ const CreateNewTeacher = () => {
             optionLabelProp="label"
           >
             {classData.map((item, index) => (
-              <Option value={item.key} label={item.grade}>
+              <Option value={item.grade} label={item.grade}>
                 {item.grade}
               </Option>
             ))}
@@ -246,14 +272,14 @@ const CreateNewTeacher = () => {
             optionLabelProp="label"
           >
             {coursesData.map((item, index) => (
-              <Option value={item.key} label={item.name}>
+              <Option value={item.name} label={item.name}>
                 {item.name}
               </Option>
             ))}
           </Select>
         </Form.Item>
 
-        <Form.Item label="name">
+        {/* <Form.Item label="name">
           <Select
             style={{
               width: "100%",
@@ -268,12 +294,12 @@ const CreateNewTeacher = () => {
               </Option>
             ))}
           </Select>
-        </Form.Item>
-
-
-        {/* <Form.Item label="First Name">
-          <Input onChange={(e) => setFirstNmae(e)} />
         </Form.Item> */}
+
+
+        <Form.Item label="First Name">
+          <Input onChange={(e) => setFirstNmae(e)} />
+        </Form.Item>
         <Form.Item label="Last Name">
           <Input onChange={(e) => setLastName(e)} />
         </Form.Item>
@@ -281,10 +307,11 @@ const CreateNewTeacher = () => {
           <Input onChange={(e) => setEmail(e)} />
         </Form.Item>
         <Form.Item label="Phone">
-          {input.map((_, index) => {
+        <Input onChange={(e) => setPhone(e)} />
+          {/* {input.map((_, index) => {
             return <Input onChange={(e) => setPhone(e)} />;
-          })}
-          {phone !== "" ? (
+          })} */}
+          {/* {phone !== "" ? (
             <Button
               onClick={() => {
                 setInputs([...input, 0]);
@@ -293,7 +320,8 @@ const CreateNewTeacher = () => {
             >
               Add New
             </Button>
-          ) : null}
+          ) : null} */}
+
         </Form.Item>
         <Form.Item label="Level">
           <Select
@@ -301,12 +329,12 @@ const CreateNewTeacher = () => {
               width: "100%",
             }}
             placeholder="select all level"
-            onChange={handleCourse}
+            onChange={handleSection}
             optionLabelProp="label"
           >
-            {classData.map((item, index) => (
-              <Option value={item.key} label={item.sections}>
-                {item.sections}
+            {secData.map((item, index) => (
+              <Option value={item.name} label={item.name}>
+                {item.name}
               </Option>
             ))}
           </Select>
