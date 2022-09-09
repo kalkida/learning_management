@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Form, Input, Button, Select } from 'antd';
+import { Modal, Form, Input, Button, Select,Row, Col } from 'antd';
 
 const { Option } = Select;
 
-function View({ handleCancel, openView, data, coursedata, sectionData }) {
+function View({ handleCancel, openView, data, coursedata, sectionData ,classData }) {
     return (
         <>
  {data && openView ?
@@ -11,64 +11,53 @@ function View({ handleCancel, openView, data, coursedata, sectionData }) {
                     visible={openView}
                     title="View Teacher"
                     onCancel={handleCancel}
+                    width={756}
                     footer={[
                         <Button key="back" onClick={handleCancel}>
                             Return
                         </Button>,
                     ]}
                 >
+
+<Row>               
+               <Col style={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <img src={data.avater} alt="" style={{ width: "330px" }} />
+                    </Col>
+                    <Col style={{ width: "50%", padding: "20px" }}>
                     <Form
-                        labelCol={{ span: 4 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 12 }}
+                        wrapperCol={{ span: 24 }}
                         layout="horizontal"
+
                     >
-                         <Form.Item label="Email">
+                  
+                         <Form.Item label="first name">
                             <Input value={data.first_name} />
                         </Form.Item>
                         <Form.Item label="last name">
                             <Input value={data.last_name} />
                         </Form.Item>
                         <Form.Item label="phone">
-                            <Input value={data.email} />
+                            <Input value={data.phone} />
                         </Form.Item>
                         <Form.Item label="Email">
                             <Input value={data.email} />
                         </Form.Item>
                         <Form.Item label="Courses">
-                            {coursedata.length ?
-                                <Select
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                    defaultValue={coursedata}
-
-                                    optionLabelProp="label"
-                                    mode="multiple"
-                                >
-                                    {data.course.map((item, index) => (
-                                        <Option key={item.name} label={item.name}>
-                                            {item.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                                : null}
+                        <Input value={data.course} />
                         </Form.Item>
-
-                        <Form.Item label="Level">
-                            <Select
-                                style={{ width: "100%" }}
-                                value={sectionData}
-                                mode="multiple"
-                            >
-                                {data.sections.map((item, i) => (
-                                    <Option key={item.name} lable={item.name}>
-                                        {item.name}
-                                    </Option>
-                                ))}
-                            </Select>
+                        
+                        <Form.Item label="Section">
+                        <Input value={data.class} />
+                        </Form.Item>
+                        <Form.Item label="Section">
+                        <Input value={data.level} />
                         </Form.Item>
 
                     </Form>
+                    </Col>
+                </Row>
+
                 </Modal>
                 : null}
         </>

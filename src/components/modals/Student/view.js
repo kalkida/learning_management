@@ -1,39 +1,68 @@
-import React, { useEffect, useState } from 'react'
-import { Modal, Form, Input, Button, Select } from 'antd';
+import React, { useState } from 'react';
+import { Button, Modal, Row, Col, Form, Select, Input, DatePicker } from 'antd';
+import moment from "moment";
 
-const { Option } = Select;
-
-function View({ handleCancel, openView, data, }) {
+function View({ openView, handleViewCancel, data }) {
+    const dateFormat = 'YYYY/MM/DD';
     return (
         <>
-            {data && openView ?
-                <Modal
-                    visible={openView}
-                    title="View Student"
-                    onCancel={handleCancel}
-                    footer={[
-                        <Button key="back" onClick={handleCancel}>
-                            Return
-                        </Button>,
-                    ]}
-                >
-                    <Form
-                        labelCol={{ span: 4 }}
-                        wrapperCol={{ span: 14 }}
-                        layout="horizontal"
-                    >
-                        <Form.Item label="course name">
-                            <Input value={data.name} />
-                        </Form.Item>
+            <Modal
+                visible={openView}
+                title="Student Profile"
+                onCancel={handleViewCancel}
+                width={756}
+                footer={[
+                    <Button key="back" onClick={handleViewCancel}>
+                        Return
+                    </Button>,
 
-                        <Form.Item label="course description">
-                            <Input value={data.description} />
-                        </Form.Item>
-                  
-                        
-                    </Form>
-                </Modal>
-                : null}
+                ]}
+            ><Row>
+                    <Col style={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <img src={data.avater} alt="" style={{ width: "330px" }} />
+                    </Col>
+                    <Col style={{ width: "50%", padding: "10px" }}>
+                        <Form
+                            labelCol={{ span: 7 }}
+                            wrapperCol={{ span: 18 }}
+                            layout="horizontal"
+                        >
+
+                            <Form.Item label="First Name">
+                                <Input value={data.first_name} />
+                            </Form.Item>
+                            <Form.Item label="Last Name">
+                                <Input value={data.last_name} />
+                            </Form.Item>
+                            <Form.Item label="Email">
+                                <Input value={data.email} />
+                            </Form.Item>
+                            <Form.Item label="Date Of Birth">
+                                <DatePicker defaultValue={moment(data.DOB, dateFormat)} />
+                            </Form.Item>
+                            <Form.Item label="Phone">
+                                {data.phone?.map((item, index) => {
+                                    return <Input value={item} />;
+                                })}
+                            </Form.Item>
+                            <Form.Item label="Class">
+                                <Select
+                                    style={{
+                                        width: "100%",
+                                    }}
+                                    defaultValue={data.class}
+                                    optionLabelProp="label"
+                                >
+                                </Select>
+                            </Form.Item>
+                            <Form.Item label="Level">
+                                <Input value={data.level} />
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                </Row>
+
+            </Modal>
         </>
     )
 }

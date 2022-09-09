@@ -12,10 +12,20 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
+import View from "../modals/teacher/view";
+import Update from "../modals/teacher/update";
 
 export default function AddTeacher() {
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
+  const [openView, setOpenView] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [updateComplete, setUpdateComplete] = useState(false);
+  const [viewData, setViewData] = useState();
+  const [coursedata, setCousreData] = useState([]);
+  const [sectionData, setSectionData] = useState([]);
+  const [sectionIdSingle, setSectionIdSingle] = useState([]);
+  const [courseIdSingle, setCourseIdSingle] = useState([]);
 
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
@@ -37,11 +47,88 @@ export default function AddTeacher() {
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
-      var data = doc.data();
+      var data = doc.data();   
+      data.key =doc.id
       temporary.push(data);
     });
     setData(temporary);
   };
+  const handleCourse = async (id) => {
+    const docRef = doc(firestoreDb, "courses", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      var dataset = docSnap.data();
+      const data = { id: id, name: dataset.name };
+      return data;
+    } else {
+      const data = { id: id, name: id };
+      return data;
+    }
+  };
+
+  const handleSections = async (id) => {
+    const docRef = doc(firestoreDb, "sections", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      var dataset = docSnap.data();
+      const data = { id: id, name: dataset.name };
+      return data;
+    } else {
+      const data = { id: id, name: id };
+      return data;
+    }
+  };
+
+  const handleNameId = async (data) => {
+    data.course.map((item, i) => {
+      handleCourse(item).then((response) => (data.course[i] = response));
+    });
+    data.sections.map((item, i) => {
+      handleSections(item).then((response) => (data.sections[i] = response));
+    });
+    return data;
+  };
+
+
+  const handleViewCancel = () => {
+    setOpenView(false);
+  };
+
+  const handleView = (data) => {
+    // handleData(data);
+    setViewData(data);
+    setOpenView(true);
+  };
+
+  const handleData = (data) => {
+    const courseArray = [];
+    const sectionArray = [];
+    const courseId = [];
+    const sectionId = [];
+    data.course.map((item) => {
+      courseId.push(item.id);
+      courseArray.push(item.name);
+    });
+    data.sections.map((item) => {
+      sectionId.push(item.id);
+      sectionArray.push(item.name);
+    });
+    setSectionData(sectionArray);
+    setCousreData(courseArray);
+    setSectionIdSingle(sectionId);
+    setCourseIdSingle(courseId);
+  };
+
+  const handleUpdateCancel = () => {
+    setOpenUpdate(false);
+  };
+
+  const handleUpdate = (data) => {
+    // handleData(data);
+    setViewData(data);
+    setOpenUpdate(true);
+  };
+
 
   const columns = [
     {
@@ -101,8 +188,10 @@ export default function AddTeacher() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a>View {record.name}</a>
-          <a>Update</a>
+          <a onClick={() => handleView(record)}>View </a>
+          <a onClick={() => handleUpdate(record)}>Update</a>
+           {/* <a>View {record.name}</a> 
+          <a>Update</a>  */}
         </Space>
       ),
     },
@@ -110,7 +199,7 @@ export default function AddTeacher() {
 
   useEffect(() => {
     getTeacher();
-  }, []);
+  }, [updateComplete]);
 
   return (
     <div>
@@ -129,6 +218,28 @@ export default function AddTeacher() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
+      {viewData ? (
+        <View
+          handleCancel={handleViewCancel}
+          openView={openView}
+          data={viewData}
+          coursedata={coursedata}
+          sectionData={sectionData}
+        />
+      ) : null}
+      {viewData ? (
+        <Update
+          handleCancel={handleUpdateCancel}
+          openUpdate={openUpdate}
+          data={viewData}
+          setUpdateComplete={setUpdateComplete}
+          updateComplete={updateComplete}
+          coursedata={coursedata}
+          sectionData={sectionData}
+          sectionIdSingle={sectionIdSingle}
+          courseIdSingle={courseIdSingle}
+        />
+      ) : null}
     </div>
   );
 }

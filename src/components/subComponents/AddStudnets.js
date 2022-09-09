@@ -12,11 +12,32 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
+import View from "../modals/student/view";
 
 export default function AddStudnets() {
-  const [datas, setData] = useState([]);
+
   const uid = useSelector((state) => state.user.profile);
 
+  const [datas, setData] = useState([]);
+  const [openView, setViewOpen] = useState(false);
+  const [viewData, setViewData] = useState();
+
+  const showViewModal = async (data) => {
+    const id = data.class
+    const docRef = doc(firestoreDb, "class", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      var dataset = docSnap.data();
+      data.class = dataset.grade;
+    }
+    setViewData(data)
+    setViewOpen(true);
+  };
+
+
+  const handleViewCancel = () => {
+    setViewOpen(false);
+  };
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
     const docSnap = await getDoc(docRef);
@@ -83,7 +104,7 @@ export default function AddStudnets() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a>View {record.name}</a>
+          <a onClick={() => showViewModal(record)}>View {record.name}</a>
           <a>Update</a>
         </Space>
       ),
@@ -111,6 +132,7 @@ export default function AddStudnets() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
+      {viewData ? <View openView={openView} handleViewCancel={handleViewCancel} data={viewData} /> : null}
     </div>
   );
 }
