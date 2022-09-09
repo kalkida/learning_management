@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 const { Option } = Select;
 
 const CreateCrouse = () => {
-
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
 
@@ -25,13 +24,12 @@ const CreateCrouse = () => {
   const [sectionData, setSectionData] = useState([]);
   const [newCourse, setNewCourse] = useState({
     id: uuid(),
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     school_id: uid.school,
   });
 
   const getClass = async () => {
-
     const children = [];
     const q = query(
       collection(firestoreDb, "class"),
@@ -49,14 +47,14 @@ const CreateCrouse = () => {
   };
 
   const createNewCourse = async () => {
-    console.log(newCourse)
+    console.log(newCourse);
     await setDoc(doc(firestoreDb, "courses", uuid()), newCourse);
     navigate("/list-Course");
   };
 
   const onCancle = () => {
-    navigate("/list-Course")
-  }
+    navigate("/list-Course");
+  };
 
   const setCourseName = (e) => {
     setNewCourse({ ...newCourse, name: e.target.value });
