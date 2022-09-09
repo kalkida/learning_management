@@ -234,4 +234,4 @@ export default function ListClasses() {
         /> : null}
     </div>
   );
-
+}
