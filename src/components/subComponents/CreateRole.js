@@ -61,7 +61,7 @@ export default function CreateRole() {
     } else {  
       const teacherdata =[]
       const newRef = collection(firestoreDb, "students");
-      const q1 = query(newRef, where("phone", 'in', `${user.phoneNumber}`));
+      const q1 = query(newRef, where("phone", 'array-contains', `${user.phoneNumber}`));
       const querySnapshots = await getDocs(q1);
       querySnapshots.forEach((doc) => {
           var dating = doc.data();

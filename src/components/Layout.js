@@ -56,7 +56,9 @@ const Layouts = () => {
               <ListItemIcon>
                 <ContentCopy fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Add S</ListItemText>
+              <ListItemText>
+              <Link to="/parent ">Profile</Link>
+              </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
@@ -223,17 +225,19 @@ const Layouts = () => {
   useEffect(() => {
     if (profile == undefined) {
         navigate("/createrole")
+    }else{
+      if (profile.role["isAdmin"] == true) {
+        navigate("/admin");
+      } else if (profile.role["isParent"] == true) {
+         navigate("/parent");
+        //navigate("/createrole")
+      } else if (profile.role["isTeacher"] == true) {
+        navigate("/teacher");
+      } else {
+        navigate("/createrole")
+      }
     }
-    if (profile.role["isAdmin"] == true) {
-      navigate("/admin");
-    } else if (profile.role["isParent"] == true) {
-       navigate("/parent");
-      //navigate("/createrole")
-    } else if (profile.role["isTeacher"] == true) {
-      navigate("/teacher");
-    } else {
-      navigate("/createrole")
-    }
+   
   }, []);
 
   return (
