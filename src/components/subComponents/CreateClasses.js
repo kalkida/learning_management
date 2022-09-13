@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker } from "antd";
+import { Form, Input, Button, Select, DatePicker, message } from "antd";
 import {
   doc,
   setDoc,
@@ -21,23 +21,20 @@ const CreateClasses = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
 
-  const [courses, setcourse] = useState([]);
-  const [sectionData, setSectionData] = useState([]);
+  const [students, setStudents] = useState([]);
   const [newClass, setNewClass] = useState({
-    grade: "",
-    course: [],
-    sections: [],
+    level: "",
+    student: [],
+    section: "",
     school_id: uid.school,
   });
 
-  const getClass = async () => {
+  const getStudents = async (level) => {
 
     const children = [];
-    const sectionArray = [];
-
     const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school)
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school), where("level", "==", level)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -47,49 +44,49 @@ const CreateClasses = () => {
         key: doc.id,
       });
     });
-
-    const sectionQuary = query(
-      collection(firestoreDb, "sections"),
-      where("school_id", "==", uid.school)
-    );
-    const sectionQuerySnapshot = await getDocs(sectionQuary);
-    sectionQuerySnapshot.forEach((doc) => {
-      var datas = doc.data();
-      sectionArray.push({
-        ...datas,
-        key: doc.id,
-      });
-    });
-    setcourse(children);
-    setSectionData(sectionArray);
+    setStudents(children);
   };
 
   const createNewClass = async () => {
-    await setDoc(doc(firestoreDb, "class", uuid()), newClass);
-    navigate("/list-Classes");
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school), where("level", "==", newClass.level), where("section", "==", newClass.section),
+    );
+    const checkIsExist = (await getDocs(q)).empty;
+    if (checkIsExist) {
+      setDoc(doc(firestoreDb, "class", uuid()), newClass)
+        .then(response => {
+          message.success("Class Created");
+          navigate("/list-Classes");
+        })
+        .catch(error => console.log(error));
+
+    }
+    else {
+      message.error("This Class already exist");
+    }
   };
 
   const onCancle = () => {
     navigate("/list-Classes")
   }
 
-  const handleCourse = (value) => {
-    setNewClass({ ...newClass, course: value });
+  const handleClass = (e) => {
+    if (e.target.name === "level") {
+
+      getStudents(e.target.value);
+    }
+    setNewClass({ ...newClass, [e.target.name]: e.target.value });
   };
 
-  const handleSection = (value) => {
-    setNewClass({ ...newClass, sections: value });
+  const handleStudent = (value) => {
 
+    value.map((item, i) => {
+      value[i] = JSON.parse(item);
+    })
+    setNewClass({ ...newClass, student: value });
   }
 
-  const setGrade = (e) => {
-    setNewClass({ ...newClass, grade: e.target.value });
-  };
-
-
-  useEffect(() => {
-    getClass();
-  }, []);
   return (
     <>
       <Form
@@ -97,42 +94,37 @@ const CreateClasses = () => {
         wrapperCol={{ span: 14 }}
         layout="horizontal"
       >
-        <Form.Item label="Grade">
-          <Input type={"number"} onChange={(e) => setGrade(e)} />
+        <Form.Item label="Level" name="Level" rules={[
+          {
+            required: true,
+          },
+        ]}>
+          <Input name="level" type={"number"} onChange={(e) => handleClass(e)} />
         </Form.Item>
-        <Form.Item label="Courses">
+        <Form.Item label="Section" name="Section" rules={[
+          {
+            required: true,
+          },
+        ]}>
+          <Input name="section" onChange={(e) => handleClass(e)} />
+        </Form.Item>
+        <Form.Item label="Students">
           <Select
             style={{
               width: "100%",
             }}
-            placeholder="select all courses"
-            onChange={handleCourse}
+            placeholder="select Students"
+            onChange={handleStudent}
             optionLabelProp="label"
             mode="multiple"
           >
-            {courses.map((item, index) => (
-              <Option value={item.key} label={item.name}>
-                {item.name}
+            {students.map((item, index) => (
+              <Option value={JSON.stringify(item)} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
+                {item.first_name + " " + (item.last_name ? item.last_name : "")}
               </Option>
             ))}
           </Select>
         </Form.Item>
-
-        <Form.Item label="Section">
-          <Select
-            style={{ width: "100%" }}
-            placeholder="Select Section"
-            onChange={handleSection}
-            mode="multiple"
-          >
-            {sectionData.map((item, i) => (
-              <Option value={item.key} lable={item.name}>
-                {item.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
         <Button onClick={() => createNewClass()}>Save</Button>

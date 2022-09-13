@@ -3,7 +3,7 @@ import { Modal, Form, Input, Button, Select } from 'antd';
 
 const { Option } = Select;
 
-function View({ handleCancel, openView, data, coursedata, sectionData }) {
+function View({ handleCancel, openView, data }) {
     return (
         <>
             {data && openView ?
@@ -23,42 +23,30 @@ function View({ handleCancel, openView, data, coursedata, sectionData }) {
                         layout="horizontal"
                     >
                         <Form.Item label="Grade">
-                            <Input value={data.grade} />
+                            <Input value={data.level} />
                         </Form.Item>
-                        <Form.Item label="Courses">
-                            {coursedata.length ?
-                                <Select
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                    defaultValue={coursedata}
-
-                                    optionLabelProp="label"
-                                    mode="multiple"
-                                >
-                                    {data.course.map((item, index) => (
-                                        <Option key={item.name} label={item.name}>
-                                            {item.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                                : null}
-                        </Form.Item>
-
                         <Form.Item label="Section">
+                            <Input value={data.section} />
+                        </Form.Item>
+                        <Form.Item label="Students">
+
                             <Select
-                                style={{ width: "100%" }}
-                                value={sectionData}
+                                style={{
+                                    width: "100%",
+                                }}
+                                defaultValue={data.student}
+                                maxTagCount={2}
+                                optionLabelProp="label"
                                 mode="multiple"
                             >
-                                {data.sections.map((item, i) => (
-                                    <Option key={item.name} lable={item.name}>
-                                        {item.name}
+                                {data.student.map((item, index) => (
+                                    <Option key={item.key} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
+                                        {item.first_name + " " + (item.last_name ? item.last_name : "")}
                                     </Option>
                                 ))}
                             </Select>
-                        </Form.Item>
 
+                        </Form.Item>
                     </Form>
                 </Modal>
                 : null}

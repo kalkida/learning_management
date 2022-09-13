@@ -18,19 +18,42 @@ function View({ handleCancel, openView, data, coursedata, sectionData }) {
                     ]}
                 >
                     <Form
-                        labelCol={{ span: 4 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 7 }}
+                        wrapperCol={{ span: 18 }}
                         layout="horizontal"
                     >
                         <Form.Item label="course name">
-                            <Input value={data.name} />
+                            <Input value={data.course_name} />
                         </Form.Item>
+                        <Form.Item label="Teachers">
+                            <Select
+                                style={{
+                                    width: "100%",
+                                }}
 
+                                optionLabelProp="label"
+                                mode="multiple"
+                                maxTagCount={2}
+                                defaultValue={data.teachers}
+                            >
+                                {data.teachers.map((item, index) => (
+                                    <Option key={item.key} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
+                                        {item.first_name + " " + (item.last_name ? item.last_name : "")}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item label="Class">
+                            <Input value={data.class.level + " " + data.class.section} />
+                        </Form.Item>
                         <Form.Item label="course description">
                             <Input value={data.description} />
                         </Form.Item>
-                  
-                        
+                        <Form.Item label="Schedule">
+                            <Input value={data.sechedule} />
+                        </Form.Item>
+
+
                     </Form>
                 </Modal>
                 : null}

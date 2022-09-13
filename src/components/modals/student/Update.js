@@ -112,15 +112,8 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
     };
 
     const setPhone = (e, index) => {
-        console.log(index)
-        // setPhones(e.target.value);
         allPhone[index] = e.target.value;
-
-        // console.log(allPhone)
-        // setUpdateStudent({ ...updateStudent, ...[updateStudent.phone]=  allPhone });
-        setUpdateStudent({ ...updateStudent, ["phone"]: allPhone });
-        console.log(updateStudent.phone)
-
+        setUpdateStudent({ ...updateStudent, phone: allPhone });
     };
 
     const onChange = (e) => {
@@ -178,7 +171,11 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                 wrapperCol={{ span: 18 }}
                                 layout="horizontal"
                             >
-                                <Form.Item label="First Name">
+                                <Form.Item label="First Name" name="First Name" rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}>
                                     <Input name="first_name" defaultValue={data.first_name} onChange={(e) => onChange(e)} />
                                 </Form.Item>
                                 <Form.Item label="Last Name">
@@ -187,7 +184,11 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                 <Form.Item label="Email">
                                     <Input name="email" defaultValue={data.email} onChange={(e) => onChange(e)} />
                                 </Form.Item>
-                                <Form.Item label="Phone">
+                                <Form.Item label="Phone" name="Phone" rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}>
                                     {/* {data.phone.map((item, index) => {
                                         return <Input defaultValue={item} name="phone" onChange={(e) => onChange(e)} />;
                                     })} */}
@@ -204,10 +205,18 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                     </Button>
 
                                 </Form.Item>
-                                <Form.Item label="Level">
+                                <Form.Item label="Level" name="Level" rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}>
                                     <Input defaultValue={data.level} name="level" onChange={(e) => onChange(e)} />
                                 </Form.Item>
-                                <Form.Item label="Date Of Birth">
+                                <Form.Item label="Date Of Birth" name="Date of Birth" rules={[
+                                    {
+                                        required: true,
+                                    },
+                                ]}>
                                     <DatePicker defaultValue={moment(data.DOB, dateFormat)} onChange={setAge} />
                                 </Form.Item>
 

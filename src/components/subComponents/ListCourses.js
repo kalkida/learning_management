@@ -14,6 +14,7 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 import View from '../modals/courses/view';
 import Update from '../modals/courses/update';
+import CreateSubject from "../modals/subject/createSubject";
 
 export default function ListCourses() {
   const [datas, setData] = useState([]);
@@ -70,9 +71,9 @@ export default function ListCourses() {
 
   const columns = [
     {
-      title: "CourseName",
-      dataIndex: "name",
-      key: "name",
+      title: "Course Name",
+      dataIndex: "course_name",
+      key: "course_name",
       render: (text) => <a>{text}</a>,
     },
     // {
@@ -88,10 +89,10 @@ export default function ListCourses() {
     },
     {
       title: "Level",
-      dataIndex: "level",
-      key: "level",
+      dataIndex: "class",
+      key: "class",
       render: (item) => {
-        return <Tag color={"green"}>{item}</Tag>;
+        return <Tag color={"green"}>{item.level}{console.log(item)}</Tag>;
       },
     },
 
@@ -100,7 +101,7 @@ export default function ListCourses() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-           <a onClick={() => handleView(record)}>View </a>
+          <a onClick={() => handleView(record)}>View </a>
           <a onClick={() => handleUpdate(record)}>Update</a>
           {/* <a>View {record.name}</a>
           <a>Update</a> */}
@@ -127,6 +128,7 @@ export default function ListCourses() {
       >
         Add Courses
       </Link>
+      <CreateSubject />
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
