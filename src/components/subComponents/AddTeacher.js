@@ -20,6 +20,7 @@ export default function AddTeacher() {
   const uid = useSelector((state) => state.user.profile);
   const [openView, setOpenView] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [updateData, setUpdateData] = useState();
   const [updateComplete, setUpdateComplete] = useState(false);
   const [viewData, setViewData] = useState();
   const [coursedata, setCousreData] = useState([]);
@@ -53,45 +54,14 @@ export default function AddTeacher() {
     });
     setData(temporary);
   };
-  const handleCourse = async (id) => {
-    const docRef = doc(firestoreDb, "courses", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      const data = { id: id, name: dataset.name };
-      return data;
-    } else {
-      const data = { id: id, name: id };
-      return data;
-    }
-  };
-
-  const handleSections = async (id) => {
-    const docRef = doc(firestoreDb, "sections", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      const data = { id: id, name: dataset.name };
-      return data;
-    } else {
-      const data = { id: id, name: id };
-      return data;
-    }
-  };
-
-  const handleNameId = async (data) => {
-    data.course.map((item, i) => {
-      handleCourse(item).then((response) => (data.course[i] = response));
-    });
-    data.sections.map((item, i) => {
-      handleSections(item).then((response) => (data.sections[i] = response));
-    });
-    return data;
-  };
-
 
   const handleViewCancel = () => {
     setOpenView(false);
+  };
+
+  const showUpdateModal = (data) => {
+    setUpdateData(data)
+    setOpenUpdate(true);
   };
 
   const handleView = (data) => {
@@ -100,24 +70,6 @@ export default function AddTeacher() {
     setOpenView(true);
   };
 
-  const handleData = (data) => {
-    const courseArray = [];
-    const sectionArray = [];
-    const courseId = [];
-    const sectionId = [];
-    data.course.map((item) => {
-      courseId.push(item.id);
-      courseArray.push(item.name);
-    });
-    data.sections.map((item) => {
-      sectionId.push(item.id);
-      sectionArray.push(item.name);
-    });
-    setSectionData(sectionArray);
-    setCousreData(courseArray);
-    setSectionIdSingle(sectionId);
-    setCourseIdSingle(courseId);
-  };
 
   const handleUpdateCancel = () => {
     setOpenUpdate(false);
@@ -127,6 +79,18 @@ export default function AddTeacher() {
     // handleData(data);
     setViewData(data);
     setOpenUpdate(true);
+  };
+
+  const showViewModal = async (data) => {
+    const id = data.class
+    const docRef = doc(firestoreDb, "class", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      var dataset = docSnap.data();
+      data.class = dataset.grade;
+    }
+    setViewData(data)
+    setOpenView(true);
   };
 
 
@@ -188,8 +152,8 @@ export default function AddTeacher() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleView(record)}>View </a>
-          <a onClick={() => handleUpdate(record)}>Update</a>
+          <a onClick={() => showViewModal(record)}>View </a>
+          <a onClick={() => showUpdateModal(record)}>Update</a>
            {/* <a>View {record.name}</a> 
           <a>Update</a>  */}
         </Space>
@@ -229,9 +193,9 @@ export default function AddTeacher() {
       ) : null}
       {viewData ? (
         <Update
-          handleCancel={handleUpdateCancel}
+          handleUpdateCancel={handleUpdateCancel}
           openUpdate={openUpdate}
-          data={viewData}
+          data={updateData}
           setUpdateComplete={setUpdateComplete}
           updateComplete={updateComplete}
           coursedata={coursedata}

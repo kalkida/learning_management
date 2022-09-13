@@ -17,7 +17,8 @@ function View({ openView, handleViewCancel, data }) {
                     </Button>,
 
                 ]}
-            ><Row>
+            >
+                <Row>
                     <Col style={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <img src={data.avater} alt="" style={{ width: "330px" }} />
                     </Col>
@@ -27,7 +28,6 @@ function View({ openView, handleViewCancel, data }) {
                             wrapperCol={{ span: 18 }}
                             layout="horizontal"
                         >
-
                             <Form.Item label="First Name">
                                 <Input value={data.first_name} />
                             </Form.Item>
@@ -46,14 +46,7 @@ function View({ openView, handleViewCancel, data }) {
                                 })}
                             </Form.Item>
                             <Form.Item label="Class">
-                                <Select
-                                    style={{
-                                        width: "100%",
-                                    }}
-                                    defaultValue={data.class}
-                                    optionLabelProp="label"
-                                >
-                                </Select>
+                                <Input defaultValue={data.class} />
                             </Form.Item>
                             <Form.Item label="Level">
                                 <Input value={data.level} />
