@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Space, Table, Tag, Modal, Button } from "antd";
 import { useSelector } from "react-redux";
@@ -13,8 +12,8 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Link } from "react-router-dom";
 import { async } from "@firebase/util";
-import View from '../modals/classes/view';
-import Update from '../modals/classes/update';
+import View from "../modals/classes/view";
+import Update from "../modals/classes/update";
 import CreateSection from "../modals/section/createSection";
 
 export default function ListClasses() {
@@ -44,7 +43,7 @@ export default function ListClasses() {
   const handleView = (data) => {
     setViewData(data);
     setOpenView(true);
-  }
+  };
 
   const handleUpdateCancel = () => {
     setOpenUpdate(false);
@@ -53,7 +52,7 @@ export default function ListClasses() {
   const handleUpdate = (data) => {
     setViewData(data);
     setOpenUpdate(true);
-  }
+  };
 
   const getClasses = async () => {
     var branches = await getSchool();
@@ -68,7 +67,6 @@ export default function ListClasses() {
       var data = doc.data();
       data.key = doc.id;
       temporary.push(data);
-
     });
     setData(temporary);
   };
@@ -86,7 +84,6 @@ export default function ListClasses() {
       key: "section",
       dataIndex: "section",
       render: (text) => <a>{text}</a>,
-
     },
     {
       title: "Action",
@@ -104,8 +101,6 @@ export default function ListClasses() {
     getClasses();
   }, [updateComplete]);
 
-
-
   return (
     <div>
       <Link
@@ -115,7 +110,7 @@ export default function ListClasses() {
           marginBottom: 20,
           color: "white",
           borderRadius: 10,
-          float: "left"
+          float: "left",
         }}
         to={"/add-class"}
       >
@@ -125,12 +120,12 @@ export default function ListClasses() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {openView ?
+      {openView ? (
         <View
           handleCancel={handleViewCancel}
           openView={openView}
           data={viewData}
-        /> : null}
+        />) : null}
       {openUpdate ?
         <Update
           handleCancel={handleUpdateCancel}
