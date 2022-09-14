@@ -76,12 +76,6 @@ export default function ListCourses() {
       key: "course_name",
       render: (text) => <a>{text}</a>,
     },
-    // {
-    //   title: "id",
-    //   key: "id",
-    //   dataIndex: "id",
-    //   render: (text) => <a>{text}</a>,
-    // },
     {
       title: "course_description",
       dataIndex: "description",
@@ -92,7 +86,7 @@ export default function ListCourses() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <Tag color={"green"}>{item.level}{console.log(item)}</Tag>;
+        return <Tag color={"green"}>{item.level}</Tag>;
       },
     },
 

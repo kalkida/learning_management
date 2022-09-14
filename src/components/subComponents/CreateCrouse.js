@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import TextArea from "antd/lib/input/TextArea";
 import { setLogLevel } from "firebase/app";
+import _default from "antd/lib/time-picker";
 
 const { Option } = Select;
 const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"]
@@ -28,11 +29,12 @@ const CreateCrouse = () => {
   const [subject, setSubject] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
+  const [input, setInput] = useState([0]);
   const [newCourse, setNewCourse] = useState({
     course_name: selectedSubject + " " + selectedLevel,
     teachers: [],
     class: {},
-    schedule: "",
+    schedule: [{ day: "", time: [] }],
     description: '',
     school_id: uid.school,
   });
@@ -142,13 +144,23 @@ const CreateCrouse = () => {
     })
     setNewCourse({ ...newCourse, teachers: teacherdata });
   }
-  const handleScheduler = (value) => {
-    console.log(value);
-  }
+  const handleScheduler = (value, i) => {
 
+    if (typeof value === "string") {
+      newCourse.schedule[i].day = value;
+    }
+    else {
+      const timeValue = [];
+      value.map((item, i) => {
+        timeValue.push(item._d.getHours() + ":" + item._d.getMinutes() + ":" + item._d.getSeconds())
+      })
+      newCourse.schedule[i].time = timeValue;
+    }
+  }
   useEffect(() => {
     getCourseData();
   }, []);
+
   return (
     <>
       <Form
@@ -223,25 +235,37 @@ const CreateCrouse = () => {
           <TextArea name="description" onChange={(e) => handleCourse(e)} />
         </Form.Item>
         <Form.Item label="Schedule" onReset={handleScheduler}>
-          <Select
-            style={{
-              width: "40%",
+          {input.map((item, i) => (
+            <>
+              <Select
+                style={{ width: "40%" }}
+                placeholder="First Select Days"
+                onChange={(e) => handleScheduler(e, i)}
+              >
+                {days.map((item, index) => (
+                  <Option value={item} label={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
+              <TimePicker.RangePicker
+                style={{ width: "60%" }}
+                format={"hh:mm"}
+                use12Hours
+                onChange={(e) => handleScheduler(e, i)}
 
+              />
+            </>
+          ))}
+          <Button
+            style={{ float: "right" }}
+            onClick={() => {
+              setInput([...input, 0]);
+              setNewCourse({ ...newCourse, schedule: [...newCourse.schedule, { day: "", time: [] }] });
             }}
-            placeholder="First Select Days"
-            onChange={handleScheduler}
           >
-            {days.map((item, index) => (
-              <Option value={item} label={item}>
-                {item}
-              </Option>
-            ))}
-
-          </Select>
-          <TimePicker.RangePicker
-            use12Hours
-            onChange={handleScheduler}
-          />
+            Add New
+          </Button>
         </Form.Item>
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>

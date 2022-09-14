@@ -28,13 +28,6 @@ export default function AddStudnets() {
 
 
   const showViewModal = async (data) => {
-    const id = data.class
-    const docRef = doc(firestoreDb, "class", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      data.class = dataset.grade;
-    }
     setViewData(data)
     setViewOpen(true);
   };
