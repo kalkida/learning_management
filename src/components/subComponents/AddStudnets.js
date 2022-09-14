@@ -27,7 +27,6 @@ export default function AddStudnets() {
   const [updateComplete, setUpdateComplete] = useState(false);
 
   const showViewModal = async (data) => {
-    setViewLoading(true);
     setViewData(data);
     setViewOpen(true);
     setViewLoading(false);
