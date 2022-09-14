@@ -25,10 +25,6 @@ export default function ListClasses() {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [updateComplete, setUpdateComplete] = useState(false);
   const [viewData, setViewData] = useState();
-  const [coursedata, setCousreData] = useState([]);
-  const [sectionData, setSectionData] = useState([]);
-  const [sectionIdSingle, setSectionIdSingle] = useState([]);
-  const [courseIdSingle, setCourseIdSingle] = useState([]);
 
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
@@ -46,29 +42,8 @@ export default function ListClasses() {
   };
 
   const handleView = (data) => {
-    // handleData(data)
     setViewData(data);
     setOpenView(true);
-  }
-
-  const handleData = (data) => {
-    const courseArray = [];
-    const sectionArray = [];
-    const courseId = [];
-    const sectionId = [];
-    data.course.map((item) => {
-      courseId.push(item.id)
-      courseArray.push(item.name)
-
-    })
-    data.sections.map((item) => {
-      sectionId.push(item.id)
-      sectionArray.push(item.name)
-    })
-    setSectionData(sectionArray);
-    setCousreData(courseArray);
-    setSectionIdSingle(sectionId);
-    setCourseIdSingle(courseId);
   }
 
   const handleUpdateCancel = () => {
@@ -76,7 +51,6 @@ export default function ListClasses() {
   };
 
   const handleUpdate = (data) => {
-    handleData(data)
     setViewData(data);
     setOpenUpdate(true);
   }
@@ -156,8 +130,6 @@ export default function ListClasses() {
           handleCancel={handleViewCancel}
           openView={openView}
           data={viewData}
-        // coursedata={coursedata}
-        // sectionData={sectionData}
         /> : null}
       {openUpdate ?
         <Update
@@ -166,10 +138,7 @@ export default function ListClasses() {
           data={viewData}
           setUpdateComplete={setUpdateComplete}
           updateComplete={updateComplete}
-          coursedata={coursedata}
-          sectionData={sectionData}
-          sectionIdSingle={sectionIdSingle}
-          courseIdSingle={courseIdSingle}
+
         /> : null}
     </div>
   );

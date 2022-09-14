@@ -77,7 +77,7 @@ export default function ListCourses() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "course_description",
+      title: "Course description",
       dataIndex: "description",
       key: "description",
     },

@@ -122,9 +122,6 @@ const CreateCrouse = () => {
   const handleCourse = (e) => {
     setNewCourse({ ...newCourse, [e.target.name]: e.target.value });
   };
-  const setCourseDescription = (e) => {
-    console.log("schedule")
-  };
 
   const handleClass = (value) => {
     const classData = JSON.parse(value);
@@ -152,7 +149,8 @@ const CreateCrouse = () => {
     else {
       const timeValue = [];
       value.map((item, i) => {
-        timeValue.push(item._d.getHours() + ":" + item._d.getMinutes() + ":" + item._d.getSeconds())
+        timeValue.push(JSON.stringify(item._d))
+        console.log(JSON.stringify(item._d))
       })
       newCourse.schedule[i].time = timeValue;
     }
@@ -234,7 +232,11 @@ const CreateCrouse = () => {
         <Form.Item label="Course Description">
           <TextArea name="description" onChange={(e) => handleCourse(e)} />
         </Form.Item>
-        <Form.Item label="Schedule" onReset={handleScheduler}>
+        <Form.Item label="Schedule" name="Schedule" rules={[
+          {
+            required: true,
+          },
+        ]}>
           {input.map((item, i) => (
             <>
               <Select
