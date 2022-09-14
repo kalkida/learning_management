@@ -28,6 +28,7 @@ import AddTeacher from "./subComponents/AddTeacher";
 import CreateNewTeacher from "./subComponents/CreateNewTeacher";
 import CreateCrouse from "./subComponents/CreateCrouse";
 import CreateRole from "./subComponents/CreateRole";
+import ParentProfile from "./subComponents/ParentProfile";
 
 
 const { Header, Content, Sider } = Layout;
@@ -49,7 +50,7 @@ const Layouts = () => {
                 <BookOnline fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-                <Link to="/createrole ">Check Access</Link>
+                <Link to="/list-parent ">Parent Data</Link>
               </ListItemText>
             </MenuItem>
             <MenuItem>
@@ -229,7 +230,7 @@ const Layouts = () => {
       if (profile.role["isAdmin"] == true) {
         navigate("/admin");
       } else if (profile.role["isParent"] == true) {
-         navigate("/parent");
+         navigate("/list-parent");
         //navigate("/createrole")
       } else if (profile.role["isTeacher"] == true) {
         navigate("/teacher");
@@ -274,6 +275,7 @@ const Layouts = () => {
               <Route path="/list-Course" element={<ListCourses />} />
               <Route path="/add-course" element={<CreateCrouse />}  /> 
               <Route path="/createrole" element={<CreateRole />}  /> 
+              <Route path="/list-parent" element={<ParentProfile />}  /> 
             </Routes>
           </Content>
         </Layout>

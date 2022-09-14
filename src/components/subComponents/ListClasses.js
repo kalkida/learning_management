@@ -40,51 +40,12 @@ export default function ListClasses() {
     }
   };
 
-  const handleCourse = async (id) => {
-    const docRef = doc(firestoreDb, "courses", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      const data = { id: id, name: dataset.name }
-      return data;
-    }
-    else {
-      const data = { id: id, name: id }
-      return data;
-    }
-  }
-
-  const handleSections = async (id) => {
-    const docRef = doc(firestoreDb, "sections", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      const data = { id: id, name: dataset.name }
-      return data;
-    }
-    else {
-      const data = { id: id, name: id }
-      return data;
-    }
-  }
-
-  const handleNameId = async (data) => {
-    data.course.map((item, i) => {
-      handleCourse(item).then(response => data.course[i] = response);
-
-    });
-    data.sections.map((item, i) => {
-      handleSections(item).then(response => data.sections[i] = response);
-    })
-    return data;
-  }
-
   const handleViewCancel = () => {
     setOpenView(false);
   };
 
   const handleView = (data) => {
-    handleData(data)
+    // handleData(data)
     setViewData(data);
     setOpenView(true);
   }
@@ -130,49 +91,27 @@ export default function ListClasses() {
 
     snap.forEach((doc) => {
       var data = doc.data();
-      handleNameId(data).then(response => {
-        response.key = doc.id;
-        temporary.push(response);
+      data.key = doc.id;
+      temporary.push(data);
 
-      });
     });
     setData(temporary);
   };
 
   const columns = [
     {
-      title: "Grade",
-      dataIndex: "grade",
-      key: "grade",
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
       render: (text) => <a>{text}</a>,
     },
+
     {
-      title: "Course",
-      key: "course",
-      dataIndex: "course",
-      render: (value) => {
-        return (
-          <>
-            {value?.map((item) => (
-              <Tag color={"green"}>{item.name}</Tag>
-            ))}
-          </>
-        );
-      },
-    },
-    {
-      title: "Sections",
-      key: "sections",
-      dataIndex: "sections",
-      render: (value) => {
-        return (
-          <>
-            {value?.map((item) => (
-              <Tag color={"green"}>{item.name}</Tag>
-            ))}
-          </>
-        );
-      },
+      title: "Section",
+      key: "section",
+      dataIndex: "section",
+      render: (text) => <a>{text}</a>,
+
     },
     {
       title: "Action",
@@ -211,15 +150,15 @@ export default function ListClasses() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ?
+      {openView ?
         <View
           handleCancel={handleViewCancel}
           openView={openView}
           data={viewData}
-          coursedata={coursedata}
-          sectionData={sectionData}
+        // coursedata={coursedata}
+        // sectionData={sectionData}
         /> : null}
-      {viewData ?
+      {openUpdate ?
         <Update
           handleCancel={handleUpdateCancel}
           openUpdate={openUpdate}

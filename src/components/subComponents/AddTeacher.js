@@ -123,11 +123,14 @@ export default function AddTeacher() {
       render: (text) => <a>{text}</a>,
       // render: (value) => {
       //   return (
-      //     <>
-      //       {value?.map((item) => (
-      //         <Tag color={"green"}>{item}</Tag>
-      //       ))}
-      //     </>
+      //     console.log(datas.length)
+      //     // <>
+      //     //   {value.length ?
+      //     //     value.map((item) => (
+      //     //       <Tag color={"green"}>{item}</Tag>
+      //     //     ))
+      //     //     : null}
+      //     // </>
       //   );
       // },
     },

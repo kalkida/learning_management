@@ -12,8 +12,8 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
-import View from "../modals/student/view";
-import Update from "../modals/student/update";
+import View from "../modals/Student/View";
+import Update from "../modals/Student/Update";
 
 export default function AddStudnets() {
 
@@ -28,13 +28,13 @@ export default function AddStudnets() {
 
 
   const showViewModal = async (data) => {
-    const id = data.class
-    const docRef = doc(firestoreDb, "class", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      data.class = dataset.grade;
-    }
+    // const id = data.class
+    // const docRef = doc(firestoreDb, "class", id);
+    // const docSnap = await getDoc(docRef);
+    // if (docSnap.exists()) {
+    //   var dataset = docSnap.data();
+    //   data.class = dataset.grade;
+    // }
     setViewData(data)
     setViewOpen(true);
   };
