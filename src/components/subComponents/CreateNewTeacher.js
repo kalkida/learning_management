@@ -43,7 +43,6 @@ const CreateNewTeacher = () => {
     email: "",
     first_name: "",
     last_name: "",
-    id:"",
     class: "",
     course:[],
     level: [],
@@ -60,45 +59,47 @@ const CreateNewTeacher = () => {
  async function handleUpload()  {
     if (!file) {
       alert("Please choose a file first!");
+    }else{
+      const storageRef = ref(storage, file.name);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+  
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+  
+          // update progress
+          setPercent(percent);
+        },
+        (err) => console.log(err),
+        () => {
+          // download url
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            console.log("url is   ",url)
+            valueRef.current = url
+            console.log("value with ref is ",valueRef.current)
+            
+            if(valueRef.current != null){
+            console.log("value with ref with ref is ",valueRef.current)
+            setLoading(true)
+           // setNewUser({...newUser , avater: valueRef.current})
+           newUser.avater = valueRef.current;
+            if(newUser.avater !==null){
+             setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
+             console.log("Teacher  is createteacher    " ,newUser);
+             console.log("teacher id   ", uuid())
+            navigate("/list-teacher"); 
+            setLoading(false)
+            }
+            }
+          console.log("images is   ",images)         
+          });
+        }
+      );
+
     }
-    
-    const storageRef = ref(storage, file.name);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-
-        // update progress
-        setPercent(percent);
-      },
-      (err) => console.log(err),
-      () => {
-        // download url
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log("url is   ",url)
-          valueRef.current = url
-          console.log("value with ref is ",valueRef.current)
-          
-          if(valueRef.current != null){
-          console.log("value with ref with ref is ",valueRef.current)
-          setLoading(true)
-          setNewUser({...newUser , avater: valueRef.current})
-          if(newUser.avater !==null){
-           setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
-           console.log("Teacher  is createteacher    " ,newUser);
-           console.log("teacher id   ", uuid())
-          navigate("/list-teacher"); 
-          setLoading(false)
-          }
-          }
-        console.log("images is   ",images)         
-        });
-      }
-    );
   }
   const getClass = async () => {
     const q = query(
@@ -226,25 +227,7 @@ const CreateNewTeacher = () => {
         wrapperCol={{ span: 14 }}
         layout="horizontal"
       >
-        <Form.Item label="Teacher Pictue" valuePropName="fileList">
-          <input type="file" onChange={handleChange} accept="/image/*"   />
-        </Form.Item>
-        <Form.Item label="Id">
-          <Select
-            style={{
-              width: "100%",
-            }}
-            placeholder={"Teacher Id"}
-            onChange={handleId}
-            optionLabelProp="label"
-          >
-            {personData.map((item, index) => (
-              <Option value={item.key} label={item.user_id}>
-                {item.user_id}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+       
 
         <Form.Item label="Class">
           <Select
@@ -258,8 +241,8 @@ const CreateNewTeacher = () => {
 
           >
             {classData.map((item, index) => (
-              <Option value={item.grade} label={item.grade}>
-                {item.grade}
+              <Option value={item.level} label={item.level}>
+                {item.level}
               </Option>
             ))}
           </Select>
@@ -276,8 +259,8 @@ const CreateNewTeacher = () => {
           
           >
             {coursesData.map((item, index) => (
-              <Option value={item.name} label={item.name}>
-                {item.name}
+              <Option value={item.course_name} label={item.course_name}>
+                {item.course_name}
               </Option>
             ))}
           </Select>
@@ -342,6 +325,10 @@ const CreateNewTeacher = () => {
               </Option>
             ))}
           </Select>
+        </Form.Item>
+
+        <Form.Item label="Teacher Pictue" valuePropName="fileList">
+          <input type="file" onChange={handleChange} accept="/image/*"   />
         </Form.Item>
 
         {/* <Form.Item label="Level">

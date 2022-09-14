@@ -82,13 +82,13 @@ export default function AddTeacher() {
   };
 
   const showViewModal = async (data) => {
-    const id = data.class
-    const docRef = doc(firestoreDb, "class", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      data.class = dataset.grade;
-    }
+    // const id = data.class
+    // const docRef = doc(firestoreDb, "class", id);
+    // const docSnap = await getDoc(docRef);
+    // if (docSnap.exists()) {
+    //   var dataset = docSnap.data();
+    //   data.class = dataset.grade;
+    // }
     setViewData(data)
     setOpenView(true);
   };
@@ -194,7 +194,7 @@ export default function AddTeacher() {
           sectionData={sectionData}
         />
       ) : null}
-      {viewData ? (
+      {updateData ? (
         <Update
           handleUpdateCancel={handleUpdateCancel}
           openUpdate={openUpdate}

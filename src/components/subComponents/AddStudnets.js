@@ -16,31 +16,25 @@ import View from "../modals/Student/View";
 import Update from "../modals/Student/Update";
 
 export default function AddStudnets() {
-
   const uid = useSelector((state) => state.user.profile);
-
+  const shcool = useSelector((state) => state.user.shcool);
   const [datas, setData] = useState([]);
+  const [viewLoading, setViewLoading] = useState(false);
   const [openView, setViewOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [viewData, setViewData] = useState();
   const [updateData, setUpdateData] = useState();
   const [updateComplete, setUpdateComplete] = useState(false);
 
-
   const showViewModal = async (data) => {
-    // const id = data.class
-    // const docRef = doc(firestoreDb, "class", id);
-    // const docSnap = await getDoc(docRef);
-    // if (docSnap.exists()) {
-    //   var dataset = docSnap.data();
-    //   data.class = dataset.grade;
-    // }
-    setViewData(data)
+    setViewData(data);
     setViewOpen(true);
+    setViewLoading(false);
+    setViewLoading(false);
   };
 
   const showUpdateModal = (data) => {
-    setUpdateData(data)
+    setUpdateData(data);
     setOpenUpdate(true);
   };
 
@@ -64,10 +58,9 @@ export default function AddStudnets() {
   };
 
   const getStudents = async () => {
-    var branches = await getSchool();
     const q = query(
       collection(firestoreDb, "students"),
-      where("school_id", "in", branches.branches)
+      where("school_id", "==", uid.school)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -147,8 +140,21 @@ export default function AddStudnets() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ? <View openView={openView} handleViewCancel={handleViewCancel} data={viewData} /> : null}
-      {openUpdate ? <Update openUpdate={openUpdate} handleUpdateCancel={handleUpdateCancel} data={updateData} setUpdateComplete={setUpdateComplete} /> : null}
+      {viewData ? (
+        <View
+          openView={openView}
+          handleViewCancel={handleViewCancel}
+          data={viewData}
+        />
+      ) : null}
+      {openUpdate ? (
+        <Update
+          openUpdate={openUpdate}
+          handleUpdateCancel={handleUpdateCancel}
+          data={updateData}
+          setUpdateComplete={setUpdateComplete}
+        />
+      ) : null}
     </div>
   );
 }

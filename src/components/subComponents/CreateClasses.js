@@ -49,7 +49,7 @@ const CreateClasses = () => {
 
   const createNewClass = async () => {
     const q = query(
-      collection(firestoreDb, "students"),
+      collection(firestoreDb, "class"),
       where("school_id", "==", uid.school), where("level", "==", newClass.level), where("section", "==", newClass.section),
     );
     const checkIsExist = (await getDocs(q)).empty;
@@ -66,6 +66,7 @@ const CreateClasses = () => {
       message.error("This Class already exist");
     }
   };
+
 
   const onCancle = () => {
     navigate("/list-Classes")

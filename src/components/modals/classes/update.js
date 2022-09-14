@@ -21,15 +21,22 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
 
     const [loading, setLoading] = useState(false);
     const [courses, setcourse] = useState([]);
+    const [students, setStudents] = useState([]);
     const [sectionMainData, setSectionMainData] = useState([]);
     const [updateClass, setUpdateClass] = useState({
-        grade: data.grade,
-        course: courseIdSingle,
-        sections: sectionIdSingle,
+        level: data.level,
+        student: data.student,
+        section: data.section,
         school_id: data.school_id,
     });
 
     const handleUpdate = async () => {
+        // const q = query(
+        //     collection(firestoreDb, "class"),
+        //     where("school_id", "==", updateClass.school_id), where("level", "==", updateClass.level), where("section", "==", updateClass.section),
+        // );
+        // const checkIsExist = (await getDocs(q)).empty;
+        // if (checkIsExist) {
         setLoading(true);
         setDoc(doc(firestoreDb, "class", data.key), updateClass, { merge: true })
             .then(response => {
@@ -42,9 +49,29 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
                 message.error("Data is not updated")
                 console.log(error)
             })
+        // }
+        // else {
+        //     message.error("This Level and Section Exist")
+        // }
     }
 
+    const getStudents = async (level) => {
 
+        const children = [];
+        const q = query(
+            collection(firestoreDb, "students"),
+            where("school_id", "==", uid.school), where("level", "==", level)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            var datas = doc.data();
+            children.push({
+                ...datas,
+                key: doc.id,
+            });
+        });
+        setStudents(children);
+    };
     const getClass = async () => {
 
         const children = [];
@@ -81,22 +108,25 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
 
     useEffect(() => {
         getClass();
+        getStudents(data.level)
     }, []);
 
 
 
-    const handleCourse = (value) => {
-        setUpdateClass({ ...updateClass, course: value });
+    const handleClass = (e) => {
+        if (e.target.name === "level") {
+
+            getStudents(e.target.value);
+        }
+        setUpdateClass({ ...updateClass, [e.target.name]: e.target.value });
     };
+    const handleStudent = (value) => {
 
-    const handleSection = (value) => {
-        setUpdateClass({ ...updateClass, sections: value });
-
+        value.map((item, i) => {
+            value[i] = JSON.parse(item);
+        })
+        setUpdateClass({ ...updateClass, student: value });
     }
-
-    const setGrade = (e) => {
-        setUpdateClass({ ...updateClass, grade: e.target.value });
-    };
 
     return (
         <div>
@@ -120,38 +150,28 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
                         wrapperCol={{ span: 14 }}
                         layout="horizontal"
                     >
-                        <Form.Item label="Grade">
-                            <Input defaultValue={data.grade} onChange={(e) => setGrade(e)} />
+                        <Form.Item label="Level">
+                            <Input name="level" defaultValue={data.level} onChange={(e) => handleClass(e)} />
                         </Form.Item>
-                        <Form.Item label="Courses">
 
+
+                        <Form.Item label="Section">
+                            <Input name="section" defaultValue={data.section} onChange={(e) => handleClass(e)} />
+                        </Form.Item>
+                        <Form.Item label="Students">
                             <Select
                                 style={{
                                     width: "100%",
                                 }}
-                                defaultValue={coursedata}
+                                placeholder="select Students"
+                                onChange={handleStudent}
+                                defaultValue={data.student}
                                 optionLabelProp="label"
                                 mode="multiple"
-                                onChange={handleCourse}
                             >
-                                {courses.map((item, index) => (
-                                    <Option key={item.name} value={item.key} label={item.key}>
-                                        {item.name}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item label="Section">
-                            <Select
-                                style={{ width: "100%" }}
-                                defaultValue={sectionData}
-                                mode="multiple"
-                                onChange={handleSection}
-                            >
-                                {sectionMainData.map((item, i) => (
-                                    <Option key={item.name} value={item.key} lable={item.key}>
-                                        {item.name}
+                                {students.map((item, index) => (
+                                    <Option value={JSON.stringify(item)} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
+                                        {item.first_name + " " + (item.last_name ? item.last_name : "")}
                                     </Option>
                                 ))}
                             </Select>

@@ -12,8 +12,8 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Link } from "react-router-dom";
 import { async } from "@firebase/util";
-import View from '../modals/classes/view';
-import Update from '../modals/classes/update';
+import View from "../modals/classes/view";
+import Update from "../modals/classes/update";
 import CreateSection from "../modals/section/createSection";
 
 export default function ListClasses() {
@@ -24,10 +24,6 @@ export default function ListClasses() {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [updateComplete, setUpdateComplete] = useState(false);
   const [viewData, setViewData] = useState();
-  const [coursedata, setCousreData] = useState([]);
-  const [sectionData, setSectionData] = useState([]);
-  const [sectionIdSingle, setSectionIdSingle] = useState([]);
-  const [courseIdSingle, setCourseIdSingle] = useState([]);
 
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
@@ -45,40 +41,18 @@ export default function ListClasses() {
   };
 
   const handleView = (data) => {
-    // handleData(data)
     setViewData(data);
     setOpenView(true);
-  }
-
-  const handleData = (data) => {
-    const courseArray = [];
-    const sectionArray = [];
-    const courseId = [];
-    const sectionId = [];
-    data.course.map((item) => {
-      courseId.push(item.id)
-      courseArray.push(item.name)
-
-    })
-    data.sections.map((item) => {
-      sectionId.push(item.id)
-      sectionArray.push(item.name)
-    })
-    setSectionData(sectionArray);
-    setCousreData(courseArray);
-    setSectionIdSingle(sectionId);
-    setCourseIdSingle(courseId);
-  }
+  };
 
   const handleUpdateCancel = () => {
     setOpenUpdate(false);
   };
 
   const handleUpdate = (data) => {
-    handleData(data)
     setViewData(data);
     setOpenUpdate(true);
-  }
+  };
 
   const getClasses = async () => {
     var branches = await getSchool();
@@ -93,7 +67,6 @@ export default function ListClasses() {
       var data = doc.data();
       data.key = doc.id;
       temporary.push(data);
-
     });
     setData(temporary);
   };
@@ -111,7 +84,6 @@ export default function ListClasses() {
       key: "section",
       dataIndex: "section",
       render: (text) => <a>{text}</a>,
-
     },
     {
       title: "Action",
@@ -129,8 +101,6 @@ export default function ListClasses() {
     getClasses();
   }, [updateComplete]);
 
-
-
   return (
     <div>
       <Link
@@ -140,7 +110,7 @@ export default function ListClasses() {
           marginBottom: 20,
           color: "white",
           borderRadius: 10,
-          float: "left"
+          float: "left",
         }}
         to={"/add-class"}
       >
@@ -150,14 +120,12 @@ export default function ListClasses() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {openView ?
+      {openView ? (
         <View
           handleCancel={handleViewCancel}
           openView={openView}
           data={viewData}
-        // coursedata={coursedata}
-        // sectionData={sectionData}
-        /> : null}
+        />) : null}
       {openUpdate ?
         <Update
           handleCancel={handleUpdateCancel}
@@ -165,10 +133,7 @@ export default function ListClasses() {
           data={viewData}
           setUpdateComplete={setUpdateComplete}
           updateComplete={updateComplete}
-          coursedata={coursedata}
-          sectionData={sectionData}
-          sectionIdSingle={sectionIdSingle}
-          courseIdSingle={courseIdSingle}
+
         /> : null}
     </div>
   );

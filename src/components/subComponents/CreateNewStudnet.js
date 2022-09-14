@@ -8,25 +8,23 @@ import {
   collection,
   where,
   query,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { createStd } from "../../redux/student";
 
 const { Option } = Select;
 
 const CreateNewStudnet = () => {
-  const fileInputRef = useRef();
-
-  const [courses, setcourse] = useState([]);
   const [allPhone, setAllPhone] = useState([]);
   const [input, setInputs] = useState([0]);
   const [phone, setPhones] = useState("");
   const navigate = useNavigate();
   const [percent, setPercent] = useState(0);
-  const [image, setImage] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
@@ -34,7 +32,6 @@ const CreateNewStudnet = () => {
 
   const [classData, setClassData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-  const focalimage = useRef(null)
   const [newUser, setNewUser] = useState({
     DOB: "",
     avater: null,
@@ -53,8 +50,6 @@ const CreateNewStudnet = () => {
   const handleChange = (event) => {
     setFile(event.target.files[0]);
   };
-
-
 
   async function handleUpload() {
     if (!file) {
@@ -119,9 +114,9 @@ const CreateNewStudnet = () => {
   };
 
   const createNewStudent = async () => {
-    console.log("start")
-    await handleUpload()
-    // if(!loading){ 
+    console.log("start");
+    await handleUpload();
+    // if(!loading){
 
     // }else{
     //   return;
@@ -140,7 +135,6 @@ const CreateNewStudnet = () => {
   };
   const setPhone = (e) => {
     setPhones(e.target.value);
-    // setNewUser({ ...newUser, ...[newUser.phone]=  allPhone });
     setNewUser({ ...newUser, ["phone"]: allPhone });
   };
   const setLevel = (e) => {
@@ -163,11 +157,15 @@ const CreateNewStudnet = () => {
         wrapperCol={{ span: 14 }}
         layout="horizontal"
       >
-        <Form.Item label="First Name" name="First name" rules={[
-          {
-            required: true,
-          },
-        ]}>
+        <Form.Item
+          label="First Name"
+          name="First name"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <Input onChange={(e) => setFirstNmae(e)} />
         </Form.Item>
         <Form.Item label="Last Name">
@@ -176,11 +174,15 @@ const CreateNewStudnet = () => {
         <Form.Item label="Email">
           <Input onChange={(e) => setEmail(e)} />
         </Form.Item>
-        <Form.Item label="Phone" name="Phone" rules={[
-          {
-            required: true,
-          },
-        ]}>
+        <Form.Item
+          label="Phone"
+          name="Phone"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           {input.map((_, index) => {
             return <Input onChange={(e) => setPhone(e)} />;
           })}
@@ -196,18 +198,26 @@ const CreateNewStudnet = () => {
           ) : null}
         </Form.Item>
 
-        <Form.Item label="Level" name="Level" rules={[
-          {
-            required: true,
-          },
-        ]}>
+        <Form.Item
+          label="Level"
+          name="Level"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <Input onChange={(e) => setLevel(e)} />
         </Form.Item>
-        <Form.Item label="Date Of Birth" name="Date of Birth" rules={[
-          {
-            required: true,
-          },
-        ]}>
+        <Form.Item
+          label="Date Of Birth"
+          name="Date of Birth"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <DatePicker onChange={setAge} />
         </Form.Item>
 

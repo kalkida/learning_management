@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Form, Input, Button, Select } from 'antd';
+import { Modal, Form, Input, Button, Select, TimePicker } from 'antd';
+import moment from 'moment';
 
 const { Option } = Select;
 
 function View({ handleCancel, openView, data, coursedata, sectionData }) {
+
     return (
         <>
             {data && openView ?
@@ -50,7 +52,19 @@ function View({ handleCancel, openView, data, coursedata, sectionData }) {
                             <Input value={data.description} />
                         </Form.Item>
                         <Form.Item label="Schedule">
-                            <Input value={data.sechedule} />
+                            {data.schedule.map((item) => (
+                                <>
+                                    <Input value={item.day} style={{ width: "40%" }} />
+                                    <TimePicker.RangePicker
+                                        style={{ width: "60%" }}
+                                        use12Hours
+                                        disabled
+                                        format={"hh:mm"}
+                                        defaultValue={item.time.length ? [moment(JSON.parse(item.time[0])), moment(JSON.parse(item.time[1]))] : []}
+                                    />
+                                </>
+                            ))}
+
                         </Form.Item>
 
 

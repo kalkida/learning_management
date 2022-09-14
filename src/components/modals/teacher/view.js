@@ -30,7 +30,6 @@ function View({ handleCancel, openView, data, coursedata, sectionData ,classData
                         layout="horizontal"
 
                     >
-                  
                          <Form.Item label="first name">
                             <Input value={data.first_name} />
                         </Form.Item>
@@ -47,7 +46,7 @@ function View({ handleCancel, openView, data, coursedata, sectionData ,classData
                         <Input value={data.course} />
                         </Form.Item>
                         
-                        <Form.Item label="Section">
+                        <Form.Item label="class">
                         <Input value={data.class} />
                         </Form.Item>
                         <Form.Item label="Section">

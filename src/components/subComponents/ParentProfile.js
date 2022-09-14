@@ -14,6 +14,7 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 import View from "../modals/parent/View";
 import Update from "../modals/parent/Update";
+import ViewStudent from "../modals/parent/ViewStudent";
 
 
 export default function ParentProfile() {
@@ -23,8 +24,10 @@ export default function ParentProfile() {
 
   const [datas, setData] = useState([]);
   const [openView, setViewOpen] = useState(false);
+  const [openViews, setViewOpens] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [viewData, setViewData] = useState();
+  const [viewDatas , setViewDatas] = useState();
   const [updateData, setUpdateData] = useState();
   const [updateComplete, setUpdateComplete] = useState(false);
 
@@ -41,6 +44,14 @@ export default function ParentProfile() {
     setViewOpen(true);
   };
 
+  const showViewsModal = async (data) => {
+   
+    setViewDatas(data)
+    setViewOpens(true);
+  };
+
+
+
   const showUpdateModal = (data) => {
     setUpdateData(data)
     setOpenUpdate(true);
@@ -50,8 +61,13 @@ export default function ParentProfile() {
     setOpenUpdate(false);
   };
 
+  const handleViewsCancel = () => {
+    setViewOpens(false);
+  }
+
   const handleViewCancel = () => {
     setViewOpen(false);
+  
   };
 
 //   const getSchool = async () => {
@@ -129,6 +145,7 @@ const getparents = async () => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => showViewModal(record)}>View {record.name}</a>
+          <a onClick={() => showViewsModal(record)}>ViewStudent  {record.name}</a>
           {/* <a onClick={() => showUpdateModal(record)}>Update</a> */}
         </Space>
       ),
@@ -157,6 +174,7 @@ const getparents = async () => {
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
       {viewData ? <View openView={openView} handleViewCancel={handleViewCancel} data={viewData} /> : null}
+      {viewDatas? <ViewStudent openView={openViews} handleViewCancel={handleViewsCancel} data={viewDatas} /> : null}
       {openUpdate ? <Update openUpdate={openUpdate} handleUpdateCancel={handleUpdateCancel} data={updateData} setUpdateComplete={setUpdateComplete} /> : null}
     </div>
   );
