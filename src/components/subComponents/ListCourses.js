@@ -12,8 +12,8 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
-import View from '../modals/courses/view';
-import Update from '../modals/courses/update';
+import View from "../modals/courses/view";
+import Update from "../modals/courses/update";
 
 export default function ListCourses() {
   const [datas, setData] = useState([]);
@@ -57,7 +57,7 @@ export default function ListCourses() {
   const handleView = (data) => {
     setViewData(data);
     setOpenView(true);
-  }
+  };
 
   const handleUpdateCancel = () => {
     setOpenUpdate(false);
@@ -66,7 +66,7 @@ export default function ListCourses() {
   const handleUpdate = (data) => {
     setViewData(data);
     setOpenUpdate(true);
-  }
+  };
 
   const columns = [
     {
@@ -100,7 +100,7 @@ export default function ListCourses() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-           <a onClick={() => handleView(record)}>View </a>
+          <a onClick={() => handleView(record)}>View </a>
           <a onClick={() => handleUpdate(record)}>Update</a>
           {/* <a>View {record.name}</a>
           <a>Update</a> */}
@@ -130,20 +130,22 @@ export default function ListCourses() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ?
+      {viewData ? (
         <View
           handleCancel={handleViewCancel}
           openView={openView}
           data={viewData}
-        /> : null}
-      {viewData ?
+        />
+      ) : null}
+      {viewData ? (
         <Update
           handleCancel={handleUpdateCancel}
           openUpdate={openUpdate}
           data={viewData}
           setUpdateComplete={setUpdateComplete}
           updateComplete={updateComplete}
-        /> : null}
+        />
+      ) : null}
     </div>
   );
 }

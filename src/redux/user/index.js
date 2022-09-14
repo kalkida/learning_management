@@ -25,7 +25,10 @@ const loginUser = createAsyncThunk("user/loginUser", async (data) => {
   const docRef = await doc(firestoreDb, "users", response.user.uid);
   const docSnap = await getDoc(docRef);
   const profile = await docSnap.data();
-  var data = { resp, profile };
+  const schoolRef = doc(firestoreDb, "schools", profile.school);
+  const schoolDoc = await getDoc(schoolRef);
+  var datas = schoolDoc.data();
+  var data = { resp, profile, datas };
   return data;
 });
 
@@ -43,6 +46,7 @@ const userSlice = createSlice({
     loading: false,
     error: false,
     value: null,
+    school: null,
     profile: null,
     role: "",
   },
@@ -70,6 +74,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.value = action.payload.resp;
       state.profile = action.payload.profile;
+      state.school = action.payload.datas;
       state.error = "";
     });
     builder.addCase(loginUser.rejected, (state, action) => {

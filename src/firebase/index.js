@@ -5,6 +5,15 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
+// const firebaseConfig = {
+//   apiKey: "AIzaSyDdVnPLMVV80t7eo6ov3CbcHy9ZLMsQ16Q",
+//   authDomain: "laba-web-321c7.firebaseapp.com",
+//   projectId: "laba-web-321c7",
+//   storageBucket: "laba-web-321c7.appspot.com",
+//   // messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
+//   // appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+//   // measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+// };
 const firebaseConfig = {
   apiKey: "AIzaSyBZt7vD-g1DbhgNQBfzYavUEBlrsUPlMA8",
   authDomain: "laba-school.firebaseapp.com",
@@ -17,10 +26,7 @@ const firebaseConfig = {
   measurementId: "G-EYFSX5NK2V",
 };
 
-console.log(firebaseConfig);
-// Initialize Firebase
 const app = getApps.length > 0 ? getApp() : initializeApp(firebaseConfig);
-
 const firebaseAuth = getAuth(app);
 const firestoreDb = getFirestore(app);
 const storage = getStorage(app);

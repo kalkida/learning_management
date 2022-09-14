@@ -15,45 +15,29 @@ import { Link } from "react-router-dom";
 import View from "../modals/student/View";
 
 export default function AddStudnets() {
-
   const uid = useSelector((state) => state.user.profile);
-
+  const shcool = useSelector((state) => state.user.shcool);
   const [datas, setData] = useState([]);
+  const [viewLoading, setViewLoading] = useState(false);
   const [openView, setViewOpen] = useState(false);
   const [viewData, setViewData] = useState();
 
   const showViewModal = async (data) => {
-    const id = data.class
-    const docRef = doc(firestoreDb, "class", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      data.class = dataset.grade;
-    }
-    setViewData(data)
+    setViewLoading(true);
+    setViewData(data);
     setViewOpen(true);
+    setViewLoading(false);
+    setViewLoading(false);
   };
-
 
   const handleViewCancel = () => {
     setViewOpen(false);
   };
-  const getSchool = async () => {
-    const docRef = doc(firestoreDb, "schools", uid.school);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset;
-    } else {
-    }
-  };
 
   const getStudents = async () => {
-    var branches = await getSchool();
     const q = query(
       collection(firestoreDb, "students"),
-      where("school_id", "in", branches.branches)
+      where("school_id", "==", uid.school)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -104,7 +88,10 @@ export default function AddStudnets() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => showViewModal(record)}>View {record.name}</a>
+          {console.log(record)}
+          <Button loading={viewLoading} onClick={() => showViewModal(record)}>
+            View {record.name}
+          </Button>
           <a>Update</a>
         </Space>
       ),
@@ -132,7 +119,13 @@ export default function AddStudnets() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ? <View openView={openView} handleViewCancel={handleViewCancel} data={viewData} /> : null}
+      {viewData ? (
+        <View
+          openView={openView}
+          handleViewCancel={handleViewCancel}
+          data={viewData}
+        />
+      ) : null}
     </div>
   );
 }

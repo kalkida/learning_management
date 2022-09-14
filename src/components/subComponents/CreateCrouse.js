@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Form, Input, Button, Select, DatePicker } from "antd";
 import {
   doc,
@@ -10,18 +9,18 @@ import {
   query,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
+import { useDispatch, useSelector } from "react-redux";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { createCourses } from "../../redux/courses";
 
 const { Option } = Select;
 
 const CreateCrouse = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
-
+  const dispatch = useDispatch();
   const [courses, setcourse] = useState([]);
-  const [sectionData, setSectionData] = useState([]);
   const [newCourse, setNewCourse] = useState({
     id: uuid(),
     name: "",
@@ -47,8 +46,7 @@ const CreateCrouse = () => {
   };
 
   const createNewCourse = async () => {
-    console.log(newCourse);
-    await setDoc(doc(firestoreDb, "courses", uuid()), newCourse);
+    dispatch(createCourses(newCourse));
     navigate("/list-Course");
   };
 
