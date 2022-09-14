@@ -13,6 +13,7 @@ import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
 import View from "../modals/student/View";
+import Update from "../modals/student/Update";
 
 export default function AddStudnets() {
   const uid = useSelector((state) => state.user.profile);
@@ -20,7 +21,10 @@ export default function AddStudnets() {
   const [datas, setData] = useState([]);
   const [viewLoading, setViewLoading] = useState(false);
   const [openView, setViewOpen] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
   const [viewData, setViewData] = useState();
+  const [updateData, setUpdateData] = useState();
+  const [updateComplete, setUpdateComplete] = useState(false);
 
   const showViewModal = async (data) => {
     setViewLoading(true);
@@ -30,8 +34,28 @@ export default function AddStudnets() {
     setViewLoading(false);
   };
 
+  const showUpdateModal = (data) => {
+    setUpdateData(data);
+    setOpenUpdate(true);
+  };
+
+  const handleUpdateCancel = () => {
+    setOpenUpdate(false);
+  };
+
   const handleViewCancel = () => {
     setViewOpen(false);
+  };
+
+  const getSchool = async () => {
+    const docRef = doc(firestoreDb, "schools", uid.school);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      var dataset = docSnap.data();
+      return dataset;
+    } else {
+    }
   };
 
   const getStudents = async () => {
@@ -43,6 +67,7 @@ export default function AddStudnets() {
     const snap = await getDocs(q);
     snap.forEach((doc) => {
       var data = doc.data();
+      data.key = doc.id;
       temporary.push(data);
     });
     setData(temporary);
@@ -88,11 +113,8 @@ export default function AddStudnets() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {console.log(record)}
-          <Button loading={viewLoading} onClick={() => showViewModal(record)}>
-            View {record.name}
-          </Button>
-          <a>Update</a>
+          <a onClick={() => showViewModal(record)}>View {record.name}</a>
+          <a onClick={() => showUpdateModal(record)}>Update</a>
         </Space>
       ),
     },
@@ -100,7 +122,7 @@ export default function AddStudnets() {
 
   useEffect(() => {
     getStudents();
-  }, []);
+  }, [updateComplete]);
 
   return (
     <div>
@@ -124,6 +146,14 @@ export default function AddStudnets() {
           openView={openView}
           handleViewCancel={handleViewCancel}
           data={viewData}
+        />
+      ) : null}
+      {openUpdate ? (
+        <Update
+          openUpdate={openUpdate}
+          handleUpdateCancel={handleUpdateCancel}
+          data={updateData}
+          setUpdateComplete={setUpdateComplete}
         />
       ) : null}
     </div>

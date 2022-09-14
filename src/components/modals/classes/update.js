@@ -41,8 +41,7 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
             .catch(error => {
                 message.error("Data is not updated")
                 console.log(error)
-            }
-            )
+            })
     }
 
 

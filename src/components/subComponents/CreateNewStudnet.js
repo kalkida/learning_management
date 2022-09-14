@@ -28,8 +28,8 @@ const CreateNewStudnet = () => {
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
-  const valueRef = useRef();
-  const dispatch = useDispatch();
+  const [images, setImages] = useState(null);
+
   const [classData, setClassData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
   const [newUser, setNewUser] = useState({
@@ -44,6 +44,8 @@ const CreateNewStudnet = () => {
     phone: [],
     school_id: uid.school,
   });
+
+  const valueRef = useRef();
 
   const handleChange = (event) => {
     setFile(event.target.files[0]);
@@ -66,16 +68,23 @@ const CreateNewStudnet = () => {
       (err) => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log("url is   ", url);
           valueRef.current = url;
+          console.log("value with ref is ", valueRef.current);
+
           if (valueRef.current != null) {
+            console.log("value with ref with ref is ", valueRef.current);
             setLoading(true);
             setNewUser({ ...newUser, avater: valueRef.current });
             if (newUser.avater !== null) {
-              dispatch(createStd(newUser));
+              setDoc(doc(firestoreDb, "students", uuid()), newUser);
+              console.log("Student  is createNewStudent    ", newUser);
+              console.log("Student id   ", uuid());
               navigate("/list-student");
               setLoading(false);
             }
           }
+          console.log("images is   ", images);
         });
       }
     );
@@ -97,7 +106,13 @@ const CreateNewStudnet = () => {
   };
 
   const createNewStudent = async () => {
+    console.log("start");
     await handleUpload();
+    // if(!loading){
+
+    // }else{
+    //   return;
+    // }
   };
   const children = [];
   const handleCourse = (value) => {
@@ -134,10 +149,67 @@ const CreateNewStudnet = () => {
         wrapperCol={{ span: 14 }}
         layout="horizontal"
       >
-        <Form.Item label="Student Pictue" valuePropName="fileList">
-          <input type="file" onChange={handleChange} accept="/image/*" />
+        <Form.Item
+          label="First Name"
+          name="First name"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input onChange={(e) => setFirstNmae(e)} />
         </Form.Item>
-        <Form.Item label="Date Of Birth">
+        <Form.Item label="Last Name">
+          <Input onChange={(e) => setLastName(e)} />
+        </Form.Item>
+        <Form.Item label="Email">
+          <Input onChange={(e) => setEmail(e)} />
+        </Form.Item>
+        <Form.Item
+          label="Phone"
+          name="Phone"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          {input.map((_, index) => {
+            return <Input onChange={(e) => setPhone(e)} />;
+          })}
+          {phone !== "" ? (
+            <Button
+              onClick={() => {
+                setInputs([...input, 0]);
+                setAllPhone([...allPhone, phone]);
+              }}
+            >
+              Add New
+            </Button>
+          ) : null}
+        </Form.Item>
+
+        <Form.Item
+          label="Level"
+          name="Level"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input onChange={(e) => setLevel(e)} />
+        </Form.Item>
+        <Form.Item
+          label="Date Of Birth"
+          name="Date of Birth"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
           <DatePicker onChange={setAge} />
         </Form.Item>
 
@@ -157,33 +229,8 @@ const CreateNewStudnet = () => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="First Name">
-          <Input onChange={(e) => setFirstNmae(e)} />
-        </Form.Item>
-        <Form.Item label="Last Name">
-          <Input onChange={(e) => setLastName(e)} />
-        </Form.Item>
-        <Form.Item label="Email">
-          <Input onChange={(e) => setEmail(e)} />
-        </Form.Item>
-        <Form.Item label="Phone">
-          {input.map((_, index) => {
-            return <Input onChange={(e) => setPhone(e)} />;
-          })}
-          {phone !== "" ? (
-            <Button
-              onClick={() => {
-                setInputs([...input, 0]);
-                setAllPhone([...allPhone, phone]);
-              }}
-            >
-              Add New
-            </Button>
-          ) : null}
-        </Form.Item>
-
-        <Form.Item label="Level">
-          <Input onChange={(e) => setLevel(e)} />
+        <Form.Item label="Student Pictue" valuePropName="fileList">
+          <input type="file" onChange={handleChange} accept="/image/*" />
         </Form.Item>
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
