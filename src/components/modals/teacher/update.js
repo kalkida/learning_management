@@ -167,7 +167,7 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
             {data && openUpdate ?
                 <Modal
                     visible={openUpdate}
-                    title="Update Student Profile"
+                    title="Update Teacher Profile"
                     onOk={handleUpdate}
                     width={756}
                     onCancel={handleUpdateCancel}
@@ -211,13 +211,6 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                   <Input name="phone" defaultValue={data.phone} onChange={(e) => onChange(e)} />
 
                                 </Form.Item>
-                                <Form.Item label="Level" name="Level" rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}>
-                                    <Input defaultValue={data.level} name="level" onChange={(e) => onChange(e)} />
-                                </Form.Item>
                                 <Form.Item label="Class">
                                     <Select
                                         style={{
@@ -227,23 +220,25 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                         defaultValue={data.class}
                                         onChange={handleCourse}
                                         optionLabelProp="label"
+                                        mode ="multiple"
                                     >
                                         {classOption.map((item, index) => (
-                                            <Option value={item.level} label={item.level}>
-                                                {item.level}
+                                            <Option value={item.level + item.section} label={item.level+item.section}>
+                                                {item.level+ item.section}
                                             </Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
-                                <Form.Item label="Class">
+                                <Form.Item label="Course">
                                     <Select
                                         style={{
                                             width: "100%",
                                         }}
                                         placeholder="select all courses"
                                         defaultValue={data.course}
-                                        onChange={handleCourse}
+                                        onChange={handleCourseItem}
                                         optionLabelProp="label"
+                                        mode ="multiple"
                                     >
                                         {courseOption.map((item, index) => (
                                             <Option value={item.course_name} label={item.course_name}>

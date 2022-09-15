@@ -241,8 +241,8 @@ const CreateNewTeacher = () => {
 
           >
             {classData.map((item, index) => (
-              <Option value={item.level} label={item.level}>
-                {item.level}
+              <Option key={item.key} value={item.level + item.section} label={item.level + item.section}>
+                {item.level +item.section}
               </Option>
             ))}
           </Select>
@@ -259,7 +259,7 @@ const CreateNewTeacher = () => {
           
           >
             {coursesData.map((item, index) => (
-              <Option value={item.course_name} label={item.course_name}>
+              <Option key={item.key} value={item.course_name} label={item.course_name}>
                 {item.course_name}
               </Option>
             ))}
@@ -310,7 +310,7 @@ const CreateNewTeacher = () => {
           ) : null} */}
 
         </Form.Item>
-        <Form.Item label="Level">
+        {/* <Form.Item label="Level">
           <Select
             style={{
               width: "100%",
@@ -319,13 +319,13 @@ const CreateNewTeacher = () => {
             onChange={handleSection}
             optionLabelProp="label"
           >
-            {secData.map((item, index) => (
-              <Option value={item.name} label={item.name}>
-                {item.name}
+            {classData.map((item, index) => (
+              <Option key={item.key} value={item.section} label={item.section}>
+                {item.section}
               </Option>
             ))}
           </Select>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item label="Teacher Pictue" valuePropName="fileList">
           <input type="file" onChange={handleChange} accept="/image/*"   />

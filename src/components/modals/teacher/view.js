@@ -49,9 +49,6 @@ function View({ handleCancel, openView, data, coursedata, sectionData ,classData
                         <Form.Item label="class">
                         <Input value={data.class} />
                         </Form.Item>
-                        <Form.Item label="Section">
-                        <Input value={data.level} />
-                        </Form.Item>
 
                     </Form>
                     </Col>
