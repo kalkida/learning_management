@@ -52,17 +52,12 @@ const userSlice = createSlice({
   },
   reducers: {
     logout: (state) => {
-      signOut(firebaseAuth)
-        .then(() => {
-          state.value = null;
-          state.error = false;
-          state.loading = false;
-        })
-        .catch((error) => {
-          state.value = null;
-          state.error = true;
-          state.loading = false;
-        });
+      signOut(firebaseAuth);
+      state.value = null;
+      state.profile = null;
+      state.school = null;
+      state.error = false;
+      state.loading = false;
     },
   },
 

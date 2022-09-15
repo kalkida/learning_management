@@ -8,14 +8,11 @@ import {
   collection,
   where,
   query,
-  updateDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { createStd } from "../../redux/student";
 
 const { Option } = Select;
 
@@ -25,6 +22,7 @@ const CreateNewStudnet = () => {
   const [phone, setPhones] = useState("");
   const navigate = useNavigate();
   const [percent, setPercent] = useState(0);
+  const [loadingbutton, setLoadingButton] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
@@ -107,7 +105,9 @@ const CreateNewStudnet = () => {
 
   const createNewStudent = async () => {
     console.log("start");
+    setLoadingButton(true);
     await handleUpload();
+    setLoadingButton(false);
     // if(!loading){
 
     // }else{
@@ -234,7 +234,12 @@ const CreateNewStudnet = () => {
         </Form.Item>
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button onClick={async () => await createNewStudent()}>Save</Button>
+        <Button
+          loading={loadingbutton}
+          onClick={async () => await createNewStudent()}
+        >
+          Save
+        </Button>
         <Button>Cancel</Button>
       </div>
     </>
