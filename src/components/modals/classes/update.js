@@ -165,7 +165,7 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
                                 }}
                                 placeholder="select Students"
                                 onChange={handleStudent}
-                                defaultValue={data.student}
+                                defaultValue={["abel kebede", "Kal"]}
                                 optionLabelProp="label"
                                 mode="multiple"
                             >

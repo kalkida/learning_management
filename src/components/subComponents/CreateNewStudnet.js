@@ -213,7 +213,7 @@ const CreateNewStudnet = () => {
           <DatePicker onChange={setAge} />
         </Form.Item>
 
-        <Form.Item label="Class">
+        <Form.Item label="Class data">
           <Select
             style={{
               width: "100%",
@@ -223,8 +223,8 @@ const CreateNewStudnet = () => {
             optionLabelProp="label"
           >
             {classData.map((item, index) => (
-              <Option value={item.key} label={item.grade}>
-                {item.grade}
+              <Option value={JSON.stringify(item)} label={item.level}>
+                {item.level}{console.log(item)}
               </Option>
             ))}
           </Select>
