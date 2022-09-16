@@ -12,10 +12,39 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
+import View from "../modals/teachers/view";
+import Update from "../modals/teachers/update";
 
 export default function AddTeacher() {
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
+  const [viewLoading, setViewLoading] = useState(false);
+  const [openView, setViewOpen] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [viewData, setViewData] = useState();
+  const [updateData, setUpdateData] = useState();
+  const [updateComplete, setUpdateComplete] = useState(false);
+
+
+  const showViewModal = async (data) => {
+    setViewData(data);
+    setViewOpen(true);
+    setViewLoading(false);
+    setViewLoading(false);
+  };
+
+  const showUpdateModal = (data) => {
+    setUpdateData(data);
+    setOpenUpdate(true);
+  };
+
+  const handleUpdateCancel = () => {
+    setOpenUpdate(false);
+  };
+
+  const handleViewCancel = () => {
+    setViewOpen(false);
+  };
 
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
@@ -87,8 +116,8 @@ export default function AddTeacher() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a>View {record.name}</a>
-          <a>Update</a>
+          <a onClick={() => showViewModal(record)}>View {record.name}</a>
+          <a onClick={() => showUpdateModal(record)}>Update</a>
         </Space>
       ),
     },
@@ -96,7 +125,7 @@ export default function AddTeacher() {
 
   useEffect(() => {
     getTeacher();
-  }, []);
+  }, [updateComplete]);
 
   return (
     <div>
@@ -115,6 +144,21 @@ export default function AddTeacher() {
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
+      {viewData ? (
+        <View
+          openView={openView}
+          handleViewCancel={handleViewCancel}
+          data={viewData}
+        />
+      ) : null}
+      {openUpdate ? (
+        <Update
+          openUpdate={openUpdate}
+          handleUpdateCancel={handleUpdateCancel}
+          data={updateData}
+          setUpdateComplete={setUpdateComplete}
+        />
+      ) : null}
     </div>
   );
 }
