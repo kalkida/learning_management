@@ -4,6 +4,7 @@ import Register from "../Auth/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation, Outlet } from "react-router-dom";
+import Welcome from "../Auth/Welcome"
 import { doc, getDoc } from "firebase/firestore";
 import TeacherDash from "../components/subComponents/TeacherDash";
 import ParentDash from "../components/subComponents/ParentDash";
@@ -35,6 +36,7 @@ export default function Routing() {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/welcome" element={<Welcome />} />
       </Routes>
     </BrowserRouter>
   );

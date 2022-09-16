@@ -144,120 +144,25 @@ export default function Login() {
       style={{
         display: "flex",
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "center",   
         alignItems: "center",
       }}
     >
-      <div style={{ display: "flex", alignSelf: "center", marginTop: 200 }}>
-
-        <Box sx={{ width: "100%" }}>
-        <img src={require('../logo 1.png')}  width ={166} height={68} />
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
-              <Tab label="Admin" {...a11yProps(0)} />
-              <Tab label="Teacher or Parent" {...a11yProps(1)} />
-              {/* <Tab label="Parent" {...a11yProps(2)} /> */}
-            </Tabs>
-          </Box>
-          <TabPanel value={value} index={0}>
-            <Form
-              name="basic"
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-            >
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your email!",
-                  },
-                ]}
-              >
-                <Input onChange={(e) => setEmail(e.target.value)} />
-              </Form.Item>
-
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password!",
-                  },
-                ]}
-              >
-                <Input.Password onChange={(e) => setPassword(e.target.value)} />
-              </Form.Item>
-
-              <Form.Item
-                name="remember"
-                valuePropName="checked"
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}
-              >
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}
-              >
-                <Button loading={loading} type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <PhoneInput
-              placeholder="Enter phone number"
-              value={phone}
-              onChange={setPhone}
-            />
-            {finished ? (
-              <div style={{ marginTop: 20 }}>
-                <OtpInput
-                  value={otp}
-                  onChange={(e) => verifyOTP(e)}
-                  numInputs={6}
-                  separator={<span>---</span>}
-                />
-              </div>
-            ) : null}
-            <Button
-              id="sign-in-button"
-              loading={buttons}
-              type="primary"
-              style={{ marginTop: 20 }}
-              onClick={() => signInPhone()}
-            >
-              Request OTP
-            </Button>
-          </TabPanel>
-        </Box>
-        <div>
-           <img src={require('../Class Debat 1.png')}  style={{margin:30}}  />
+      <div style={{ display: "flex",height: '1024px',width: '1440px' ,left: '2266px',top: '576px',
+     borderRadius: '0px'}}>
+        <div  style={{ flexDirection:'column'}}>
+        <img src={require('../logo 1.png')}  style={{position:'absolute' , width:'166px', height:'68px',left:'637px',top:'137px'}}  />
+        <div  style={{display:"flex" , flexDirection:'column', alignItems:'center',padding:'24px',gap:'40px',
+      position:'absolute', width:'400px', height:'296px',left:'520px', top:'298px', background:'#FFFFFFF', borderRadius:'8px' }}>
+        <Button 
+         onClick={() => navigate('/login')}
+        >
+        <img src={require('../Dialog.png')}  />
+        </Button >
         </div>
+        <img src={require('../Class Debat 1.png')} style={{position:'absolute', width:'530px',height:'397px',left:'968px',top:'677px', borderRadius:'25px'}}/>
+        </div>
+        
       </div>
     </div>
   );
