@@ -18,23 +18,26 @@ import ParentDash from "./subComponents/ParentDash";
 import Navigation from "./Navigation";
 import AddParent from "./subComponents/AddParent";
 import { useSelector, useDispatch } from "react-redux";
-import userAction from "../redux/user";
+import { userAction } from "../redux/user";
 import AddStudnets from "./subComponents/AddStudnets";
 import CreateNewStudnet from "./subComponents/CreateNewStudnet";
 import ListClasses from "./subComponents/ListClasses";
 import ListCourses from "./subComponents/ListCourses";
-import AddClass from './subComponents/CreateClasses';
+import AddClass from "./subComponents/CreateClasses";
 import AddTeacher from "./subComponents/AddTeacher";
 import CreateNewTeacher from "./subComponents/CreateNewTeacher";
 import CreateCrouse from "./subComponents/CreateCrouse";
-
 
 const { Header, Content, Sider } = Layout;
 
 const Layouts = () => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user.profile);
+  const dispatch = useDispatch();
 
+  const logout = () => {
+    dispatch(userAction.logout());
+  };
   const SiderGenerator = () => {
     if (profile.role["isAdmin"] == true) {
       const currentURL = window.location.pathname;
@@ -48,7 +51,12 @@ const Layouts = () => {
                 <BookOnline fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-                <Link style={{ color: currentURL === "/list-student" ? "white" : "black" }} to="/list-student">
+                <Link
+                  style={{
+                    color: currentURL === "/list-student" ? "white" : "black",
+                  }}
+                  to="/list-student"
+                >
                   Student
                 </Link>
               </ListItemText>
@@ -58,7 +66,12 @@ const Layouts = () => {
                 <ContentCopy fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-              <Link style={{ color: currentURL === "/list-teacher" ? "white" : "black" }} to="/list-teacher">
+                <Link
+                  style={{
+                    color: currentURL === "/list-teacher" ? "white" : "black",
+                  }}
+                  to="/list-teacher"
+                >
                   Teacher
                 </Link>
               </ListItemText>
@@ -68,17 +81,27 @@ const Layouts = () => {
                 <ContentPaste fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-              <Link style={{ color: currentURL === "/list-Course" ? "white" : "black" }} to="/list-Course">
-              Courses
+                <Link
+                  style={{
+                    color: currentURL === "/list-Course" ? "white" : "black",
+                  }}
+                  to="/list-Course"
+                >
+                  Courses
                 </Link>
-                </ListItemText>
+              </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
                 <ContentPaste fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-                <Link style={{ color: currentURL === "/list-classes" ? "white" : "black" }} to="/list-classes">
+                <Link
+                  style={{
+                    color: currentURL === "/list-classes" ? "white" : "black",
+                  }}
+                  to="/list-classes"
+                >
                   Classes
                 </Link>
               </ListItemText>
@@ -94,7 +117,7 @@ const Layouts = () => {
               <ListItemIcon>
                 <Cloud fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Logout</ListItemText>
+              <a onClick={() => logout()}>Logout</a>
             </MenuItem>
           </MenuList>
         </Paper>
@@ -218,9 +241,9 @@ const Layouts = () => {
               <Route path="/add-student" element={<CreateNewStudnet />} />
               <Route path="/add-class" element={<AddClass />} />
               <Route path="/list-teacher" element={<AddTeacher />} />
-              <Route path="/add-teacher" element={<CreateNewTeacher />}  />   
+              <Route path="/add-teacher" element={<CreateNewTeacher />} />
               <Route path="/list-Course" element={<ListCourses />} />
-              <Route path="/add-course" element={<CreateCrouse />}  /> 
+              <Route path="/add-course" element={<CreateCrouse />} />
             </Routes>
           </Content>
         </Layout>
