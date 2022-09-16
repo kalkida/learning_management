@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../redux/user";
 import { Link, useNavigate } from "react-router-dom";
@@ -113,6 +113,9 @@ export default function Login() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
     setPhone();
+  };
+  const Alerts = () => {
+    return message.error("invalid password");
   };
 
   const onFinish = () => {

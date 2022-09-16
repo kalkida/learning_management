@@ -74,7 +74,7 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
-      state.value = {};
+      state.value = null;
       state.error = action.error.message;
     });
     builder.addCase(phoneLogin.pending, (state) => {
