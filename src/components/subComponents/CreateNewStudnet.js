@@ -53,39 +53,46 @@ const CreateNewStudnet = () => {
     if (!file) {
       alert("Please choose a file first!");
     }
-    const storageRef = ref(storage, file.name);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setPercent(percent);
-      },
-      (err) => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log("url is   ", url);
-          valueRef.current = url;
-          console.log("value with ref is ", valueRef.current);
+    else {
+      const storageRef = ref(storage, file.name);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-          if (valueRef.current != null) {
-            console.log("value with ref with ref is ", valueRef.current);
-            setLoading(true);
-            setNewUser({ ...newUser, avater: valueRef.current });
-            if (newUser.avater !== null) {
-              setDoc(doc(firestoreDb, "students", uuid()), newUser);
-              console.log("Student  is createNewStudent    ", newUser);
-              console.log("Student id   ", uuid());
-              navigate("/list-student");
-              setLoading(false);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+
+          // update progress
+          setPercent(percent);
+        },
+        (err) => console.log(err),
+        () => {
+          // download url
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            console.log("url is   ", url)
+            valueRef.current = url
+            console.log("value with ref is ", valueRef.current)
+
+            if (valueRef.current != null) {
+              console.log("value with ref with ref is ", valueRef.current)
+              setLoading(true)
+              //    setNewUser({ ...newUser, avater: valueRef.current })
+              newUser.avater = valueRef.current;
+              if (newUser.avater !== null) {
+                setDoc(doc(firestoreDb, "students", uuid()), newUser);
+                console.log("Student  is createNewStudent    ", newUser);
+                console.log("Student id   ", uuid())
+                navigate("/list-student");
+                setLoading(false)
+              }
             }
-          }
-          console.log("images is   ", images);
-        });
-      }
-    );
+            console.log("images is   ", images)
+          });
+        }
+      );
+    }
   }
   const getClass = async () => {
     const q = query(
@@ -101,6 +108,7 @@ const CreateNewStudnet = () => {
       });
     });
     setClassData(children);
+    console.log("class data  ", classData)
   };
 
   const createNewStudent = async () => {
@@ -218,13 +226,13 @@ const CreateNewStudnet = () => {
             style={{
               width: "100%",
             }}
-            placeholder="select all courses"
+            placeholder="select your class"
             onChange={handleCourse}
             optionLabelProp="label"
           >
             {classData.map((item, index) => (
-              <Option value={JSON.stringify(item)} label={item.level}>
-                {item.level}{console.log(item)}
+              <Option value={item.level + item.section} label={item.level + item.section}>
+                {item.level + item.section}
               </Option>
             ))}
           </Select>

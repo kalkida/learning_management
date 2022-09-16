@@ -25,17 +25,17 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
     const [input, setInputs] = useState(data.phone);
     const [phone, setPhones] = useState("");
     const [classOption, setClassOption] = useState([]);
+    const [courseOption, setCourseOption] = useState([]);
     const [percent, setPercent] = useState(0);
     const [file, setFile] = useState("");
-    const [updateStudent, setUpdateStudent] = useState({
-        DOB: data.DOB,
+    const [updateTeacher, setUpdateTeacher] = useState({
         avater: data.avater,
         email: data.email,
         first_name: data.first_name,
         last_name: data.last_name,
         class: data.class,
-        parent_id: data.parent_id,
         level: data.level,
+        course: data.course,
         phone: data.phone,
         school_id: data.school_id,
     })
@@ -48,7 +48,7 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
 
         setLoading(true);
         if (!file) {
-            setDoc(doc(firestoreDb, "students", data.key), updateStudent, { merge: true }).then(
+            setDoc(doc(firestoreDb, "teachers", data.key), updateTeacher, { merge: true }).then(
                 response => {
                     setLoading(false)
                     message.success("Data is updated successfuly")
@@ -79,10 +79,10 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
 
                         valueRef.current = url
                         if (valueRef.current != null) {
-                            updateStudent.avater = valueRef.current;
+                            updateTeacher.avater = valueRef.current;
 
-                            if (updateStudent.avater !== null) {
-                                setDoc(doc(firestoreDb, "students", data.key), updateStudent, { merge: true }).then(
+                            if (updateTeacher.avater !== null) {
+                                setDoc(doc(firestoreDb, "teachers", data.key), updateTeacher, { merge: true }).then(
                                     response => {
                                         setLoading(false)
                                         message.success("Data is updated successfuly")
@@ -105,19 +105,16 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
     };
 
     const handleCourse = (value) => {
-        setUpdateStudent({ ...updateStudent, class: value });
-    };
-    const setAge = (value) => {
-        setUpdateStudent({ ...updateStudent, DOB: JSON.stringify(value._d) });
+        setUpdateTeacher({ ...updateTeacher, class: value });
     };
 
-    const setPhone = (e, index) => {
-        allPhone[index] = e.target.value;
-        setUpdateStudent({ ...updateStudent, phone: allPhone });
-    };
+    const handleCourseItem = (value) => {
+      setUpdateTeacher({ ...updateTeacher, course: value });
+  };
+  
 
     const onChange = (e) => {
-        setUpdateStudent({ ...updateStudent, [e.target.name]: e.target.value })
+        setUpdateTeacher({ ...updateTeacher, [e.target.name]: e.target.value })
     }
 
     const getClass = async () => {
@@ -139,8 +136,30 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
         setClassOption(children);
     };
 
+    const getCourse = async () => {
+
+      const children = [];
+
+      const q = query(
+          collection(firestoreDb, "courses"),
+          where("school_id", "==", data.school_id)
+      );
+      const Snapshot = await getDocs(q);
+      Snapshot.forEach((doc) => {
+          var datas = doc.data();
+          children.push({
+              ...datas,
+              key: doc.id,
+          });
+      });
+      setCourseOption(children);
+  };
+
+
+
     useEffect(() => {
         getClass();
+        getCourse();
     }, []);
 
     return (
@@ -148,7 +167,7 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
             {data && openUpdate ?
                 <Modal
                     visible={openUpdate}
-                    title="Update Student Profile"
+                    title="Update Teacher Profile"
                     onOk={handleUpdate}
                     width={756}
                     onCancel={handleUpdateCancel}
@@ -189,50 +208,41 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                         required: true,
                                     },
                                 ]}>
-                                    {/* {data.phone.map((item, index) => {
-                                        return <Input defaultValue={item} name="phone" onChange={(e) => onChange(e)} />;
-                                    })} */}
-                                    {input.map((item, index) => {
-                                        return <Input defaultValue={item} onChange={(e) => setPhone(e, index)} />;
-                                    })}
-                                    <Button
-                                        onClick={() => {
-                                            setInputs([...input, 0]);
-                                            setAllPhone([...allPhone, phone]);
-                                        }}
-                                    >
-                                        Add New
-                                    </Button>
+                                  <Input name="phone" defaultValue={data.phone} onChange={(e) => onChange(e)} />
 
                                 </Form.Item>
-                                <Form.Item label="Level" name="Level" rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}>
-                                    <Input defaultValue={data.level} name="level" onChange={(e) => onChange(e)} />
-                                </Form.Item>
-                                <Form.Item label="Date Of Birth" name="Date of Birth" rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}>
-                                    <DatePicker defaultValue={moment(data.DOB, dateFormat)} onChange={setAge} />
-                                </Form.Item>
-
                                 <Form.Item label="Class">
                                     <Select
                                         style={{
                                             width: "100%",
                                         }}
-                                        placeholder="select all class"
+                                        placeholder="select all courses"
                                         defaultValue={data.class}
                                         onChange={handleCourse}
                                         optionLabelProp="label"
+                                        mode ="multiple"
                                     >
                                         {classOption.map((item, index) => (
-                                            <Option value={item.level + item.section} label={item.level + item.section}>
-                                                {item.level + item.section}
+                                            <Option value={item.level + item.section} label={item.level+item.section}>
+                                                {item.level+ item.section}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item label="Course">
+                                    <Select
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                        placeholder="select all courses"
+                                        defaultValue={data.course}
+                                        onChange={handleCourseItem}
+                                        optionLabelProp="label"
+                                        mode ="multiple"
+                                    >
+                                        {courseOption.map((item, index) => (
+                                            <Option value={item.course_name} label={item.course_name}>
+                                                {item.course_name}
                                             </Option>
                                         ))}
                                     </Select>

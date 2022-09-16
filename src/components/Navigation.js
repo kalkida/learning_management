@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 
 export default function Dashboard() {
   const user = useSelector((state) => state.user.value);
-  const role = useSelector((state) => state.user.profile.role);
+  //const role = useSelector((state) => state.user.profile.role);
 
   const current = JSON.parse(user);
   //
@@ -29,7 +29,7 @@ export default function Dashboard() {
           {/* <Button color="secondary">{profile.role}</Button> */}
           <Button color="inherit">
             Wellcome{" "}
-            {role["isAdmin"] == true ? current.user.email : current.phoneNumber}
+       {/* //     {role["isAdmin"] == true ? current.user.email : current.phoneNumber} */}
           </Button>
         </Toolbar>
       </AppBar>

@@ -27,6 +27,8 @@ import AddClass from "./subComponents/CreateClasses";
 import AddTeacher from "./subComponents/AddTeacher";
 import CreateNewTeacher from "./subComponents/CreateNewTeacher";
 import CreateCrouse from "./subComponents/CreateCrouse";
+import CreateRole from "./subComponents/CreateRole";
+import ParentProfile from "./subComponents/ParentProfile";
 
 const { Header, Content, Sider } = Layout;
 
@@ -39,6 +41,47 @@ const Layouts = () => {
     dispatch(userAction.logout());
   };
   const SiderGenerator = () => {
+
+    if (profile == undefined || profile == "undefined") {
+      return (
+        <Paper
+          sx={{ width: 320, maxWidth: "100%", backgroundColor: "#1890ff" }}
+        >
+          <MenuList>
+            <MenuItem>
+              <ListItemIcon>
+                <BookOnline fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>
+                <Link to="/list-parent ">Parent Data</Link>
+              </ListItemText>
+            </MenuItem>
+            <MenuItem>
+              <ListItemIcon>
+                <ContentCopy fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>
+                <Link to="/parent ">Profile</Link>
+              </ListItemText>
+            </MenuItem>
+            <MenuItem>
+              <ListItemIcon>
+                <ContentPaste fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Notification</ListItemText>
+            </MenuItem>
+            <Divider />
+            <MenuItem>
+              <ListItemIcon>
+                <Cloud fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Logout</ListItemText>
+            </MenuItem>
+          </MenuList>
+        </Paper>
+      );
+
+    }
     if (profile.role["isAdmin"] == true) {
       const currentURL = window.location.pathname;
       return (
@@ -198,17 +241,27 @@ const Layouts = () => {
           </MenuList>
         </Paper>
       );
+
     }
+
   };
 
   useEffect(() => {
-    if (profile.role["isAdmin"] == true) {
-      navigate("/admin");
-    } else if (profile.role["isParent"] == true) {
-      navigate("/parent");
-    } else if (profile.role["isTeacher"] == true) {
-      navigate("/teacher");
+    if (profile == undefined) {
+      navigate("/createrole")
+    } else {
+      if (profile.role["isAdmin"] == true) {
+        navigate("/admin");
+      } else if (profile.role["isParent"] == true) {
+        navigate("/list-parent");
+        //navigate("/createrole")
+      } else if (profile.role["isTeacher"] == true) {
+        navigate("/teacher");
+      } else {
+        navigate("/createrole")
+      }
     }
+
   }, []);
 
   return (
@@ -244,6 +297,8 @@ const Layouts = () => {
               <Route path="/add-teacher" element={<CreateNewTeacher />} />
               <Route path="/list-Course" element={<ListCourses />} />
               <Route path="/add-course" element={<CreateCrouse />} />
+              <Route path="/createrole" element={<CreateRole />} />
+              <Route path="/list-parent" element={<ParentProfile />} />
             </Routes>
           </Content>
         </Layout>

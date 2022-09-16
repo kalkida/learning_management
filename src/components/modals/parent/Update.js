@@ -225,14 +225,14 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                         style={{
                                             width: "100%",
                                         }}
-                                        placeholder="select all class"
+                                        placeholder="select all courses"
                                         defaultValue={data.class}
                                         onChange={handleCourse}
                                         optionLabelProp="label"
                                     >
                                         {classOption.map((item, index) => (
-                                            <Option value={item.level + item.section} label={item.level + item.section}>
-                                                {item.level + item.section}
+                                            <Option value={item.key} label={item.grade}>
+                                                {item.grade}
                                             </Option>
                                         ))}
                                     </Select>
