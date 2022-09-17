@@ -10,48 +10,13 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { firebaseAuth, firestoreDb } from "../../firebase";
-import { Button } from "antd";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
-import View from "../modals/teachers/view";
-import Update from "../modals/teachers/update";
-=======
 import View from "../modals/teacher/view";
 import Update from "../modals/teacher/update";
->>>>>>> 4a00bf80afde258bea0b83278c3004073eedbb54
 
 export default function AddTeacher() {
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-<<<<<<< HEAD
-  const [viewLoading, setViewLoading] = useState(false);
-  const [openView, setViewOpen] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [viewData, setViewData] = useState();
-  const [updateData, setUpdateData] = useState();
-  const [updateComplete, setUpdateComplete] = useState(false);
-
-
-  const showViewModal = async (data) => {
-    setViewData(data);
-    setViewOpen(true);
-    setViewLoading(false);
-    setViewLoading(false);
-  };
-
-  const showUpdateModal = (data) => {
-    setUpdateData(data);
-    setOpenUpdate(true);
-  };
-
-  const handleUpdateCancel = () => {
-    setOpenUpdate(false);
-  };
-
-  const handleViewCancel = () => {
-    setViewOpen(false);
-  };
-=======
   const [openView, setOpenView] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [updateData, setUpdateData] = useState();
@@ -61,7 +26,6 @@ export default function AddTeacher() {
   const [sectionData, setSectionData] = useState([]);
   const [sectionIdSingle, setSectionIdSingle] = useState([]);
   const [courseIdSingle, setCourseIdSingle] = useState([]);
->>>>>>> 4a00bf80afde258bea0b83278c3004073eedbb54
 
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
@@ -83,8 +47,8 @@ export default function AddTeacher() {
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
-      var data = doc.data();   
-      data.key =doc.id
+      var data = doc.data();
+      data.key = doc.id
       temporary.push(data);
     });
     setData(temporary);
@@ -136,20 +100,21 @@ export default function AddTeacher() {
       key: "first_name",
       render: (text) => <a>{text}</a>,
     },
-    { 
+    {
       title: "Course",
       key: "course",
       dataIndex: "course",
-      render: (text) => <a>{text}</a>,    
-      // render: (value) => {
-      //   return (
-      //     <>
-      //       {value?.map((item) => (
-      //         <Tag color={"green"}>{item}</Tag>
-      //       ))}
-      //     </>
-      //   );
-      // },
+      // render: (text) => <a>{text}</a>,
+
+      render: (value) => {
+        return (
+          <>
+            {value.map((item) => (
+              <Tag color={"green"}>{item}</Tag>
+            ))}
+          </>
+        );
+      },
     },
     {
       title: "Phone Number",
@@ -179,10 +144,16 @@ export default function AddTeacher() {
       title: "Class",
       dataIndex: "class",
       key: "class",
-      render: (text) => <a>{text}</a>,
-      // render: (item) => {
-      //   return <Tag color={"green"}>{item}</Tag>;
-      // },
+      // render: (text) => <a>{text}</a>,
+      render: (value) => {
+        return (
+          <>
+            {value?.map((item, i) => (
+              <Tag color={"green"}>{item}</Tag>
+            ))}
+          </>
+        )
+      },
     },
 
     {
@@ -190,15 +161,10 @@ export default function AddTeacher() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-<<<<<<< HEAD
-          <a onClick={() => showViewModal(record)}>View {record.name}</a>
-          <a onClick={() => showUpdateModal(record)}>Update</a>
-=======
           <a onClick={() => showViewModal(record)}>View </a>
           <a onClick={() => showUpdateModal(record)}>Update</a>
-           {/* <a>View {record.name}</a> 
+          {/* <a>View {record.name}</a> 
           <a>Update</a>  */}
->>>>>>> 4a00bf80afde258bea0b83278c3004073eedbb54
         </Space>
       ),
     },
@@ -227,19 +193,6 @@ export default function AddTeacher() {
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
       {viewData ? (
         <View
-<<<<<<< HEAD
-          openView={openView}
-          handleViewCancel={handleViewCancel}
-          data={viewData}
-        />
-      ) : null}
-      {openUpdate ? (
-        <Update
-          openUpdate={openUpdate}
-          handleUpdateCancel={handleUpdateCancel}
-          data={updateData}
-          setUpdateComplete={setUpdateComplete}
-=======
           handleCancel={handleViewCancel}
           openView={openView}
           data={viewData}
@@ -258,7 +211,6 @@ export default function AddTeacher() {
           sectionData={sectionData}
           sectionIdSingle={sectionIdSingle}
           courseIdSingle={courseIdSingle}
->>>>>>> 4a00bf80afde258bea0b83278c3004073eedbb54
         />
       ) : null}
     </div>

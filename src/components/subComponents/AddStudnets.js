@@ -86,8 +86,8 @@ export default function AddStudnets() {
       render: (value) => {
         return (
           <>
-            {value?.map((item) => (
-              <Tag color={"green"}>{item}</Tag>
+            {value?.map((item, i) => (
+              <Tag key={i} color={"green"}>{item}</Tag>
             ))}
           </>
         );
@@ -135,7 +135,7 @@ export default function AddStudnets() {
         }}
         to={"/add-student"}
       >
-        Add User
+        Add Student
       </Link>
       <br />
 

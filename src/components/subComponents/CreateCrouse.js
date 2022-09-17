@@ -284,7 +284,7 @@ const CreateCrouse = () => {
         </Form.Item>
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button onClick={() => createNewCourse()}>Save</Button>
+        <Button type="primary" onClick={() => createNewCourse()}>Save</Button>
         <Button onClick={onCancle}>Cancel</Button>
       </div>
     </>

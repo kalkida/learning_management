@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker } from "antd";
+import { Form, Input, Button, Select, DatePicker, message } from "antd";
 import {
   doc,
   setDoc,
@@ -71,24 +71,23 @@ const CreateNewStudnet = () => {
         () => {
           // download url
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            console.log("url is   ", url)
             valueRef.current = url
-            console.log("value with ref is ", valueRef.current)
-
             if (valueRef.current != null) {
-              console.log("value with ref with ref is ", valueRef.current)
               setLoading(true)
               //    setNewUser({ ...newUser, avater: valueRef.current })
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
-                setDoc(doc(firestoreDb, "students", uuid()), newUser);
-                console.log("Student  is createNewStudent    ", newUser);
-                console.log("Student id   ", uuid())
+                setDoc(doc(firestoreDb, "students", uuid()), newUser)
+                  .then(reponse => message.success("Student Added Successfuly"))
+                  .catch(error => {
+                    console.log(error);
+                    message.error("Student is not added, Try Again");
+                  })
                 navigate("/list-student");
                 setLoading(false)
               }
             }
-            console.log("images is   ", images)
+
           });
         }
       );
@@ -108,11 +107,11 @@ const CreateNewStudnet = () => {
       });
     });
     setClassData(children);
-    console.log("class data  ", classData)
+
   };
 
   const createNewStudent = async () => {
-    console.log("start");
+
     setLoadingButton(true);
     await handleUpload();
     setLoadingButton(false);
@@ -124,28 +123,23 @@ const CreateNewStudnet = () => {
   };
   const children = [];
   const handleCourse = (value) => {
-    setNewUser({ ...newUser, class: value });
+    const classData = JSON.parse(value);
+    setNewUser({ ...newUser, class: classData });
   };
   const setAge = (value) => {
     setNewUser({ ...newUser, DOB: JSON.stringify(value._d) });
   };
 
-  const setEmail = (e) => {
-    setNewUser({ ...newUser, email: e.target.value });
+  const handleStudent = (e) => {
+    setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
   const setPhone = (e) => {
     setPhones(e.target.value);
     setNewUser({ ...newUser, ["phone"]: allPhone });
   };
-  const setLevel = (e) => {
-    setNewUser({ ...newUser, level: e.target.value });
-  };
-  const setFirstNmae = (e) => {
-    setNewUser({ ...newUser, first_name: e.target.value });
-  };
-  const setLastName = (e) => {
-    setNewUser({ ...newUser, last_name: e.target.value });
-  };
+  const handleCancle = () => {
+    navigate("/list-student")
+  }
 
   useEffect(() => {
     getClass();
@@ -166,13 +160,13 @@ const CreateNewStudnet = () => {
             },
           ]}
         >
-          <Input onChange={(e) => setFirstNmae(e)} />
+          <Input name="first_name" onChange={(e) => handleStudent(e)} />
         </Form.Item>
         <Form.Item label="Last Name">
-          <Input onChange={(e) => setLastName(e)} />
+          <Input name="last_name" onChange={(e) => handleStudent(e)} />
         </Form.Item>
         <Form.Item label="Email">
-          <Input onChange={(e) => setEmail(e)} />
+          <Input name="email" onChange={(e) => handleStudent(e)} />
         </Form.Item>
         <Form.Item
           label="Phone"
@@ -207,7 +201,7 @@ const CreateNewStudnet = () => {
             },
           ]}
         >
-          <Input onChange={(e) => setLevel(e)} />
+          <Input name="level" onChange={(e) => handleStudent(e)} />
         </Form.Item>
         <Form.Item
           label="Date Of Birth"
@@ -231,7 +225,7 @@ const CreateNewStudnet = () => {
             optionLabelProp="label"
           >
             {classData.map((item, index) => (
-              <Option value={item.level + item.section} label={item.level + item.section}>
+              <Option value={JSON.stringify(item)} label={item.level + item.section}>
                 {item.level + item.section}
               </Option>
             ))}
@@ -243,12 +237,13 @@ const CreateNewStudnet = () => {
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
         <Button
+          type="primary"
           loading={loadingbutton}
           onClick={async () => await createNewStudent()}
         >
           Save
         </Button>
-        <Button>Cancel</Button>
+        <Button onClick={handleCancle}>Cancel</Button>
       </div>
     </>
   );

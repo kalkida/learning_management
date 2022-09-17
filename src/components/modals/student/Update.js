@@ -8,6 +8,7 @@ import {
     collection,
     where,
     query,
+    getDoc,
     updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -101,11 +102,22 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
             );
 
         }
-
     };
 
-    const handleCourse = (value) => {
-        setUpdateStudent({ ...updateStudent, class: value });
+    const getClassID = async (ID) => {
+        const docRef = doc(firestoreDb, "class", ID)
+        var data = "";
+        await getDoc(docRef).then(response => {
+            data = response.data();
+            data.key = response.id;
+        })
+        return data;
+    }
+
+    const handleCourse = async (value) => {
+        const classData = await getClassID(value);
+        setUpdateStudent({ ...updateStudent, class: classData });
+
     };
     const setAge = (value) => {
         setUpdateStudent({ ...updateStudent, DOB: JSON.stringify(value._d) });
@@ -231,7 +243,7 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                         optionLabelProp="label"
                                     >
                                         {classOption.map((item, index) => (
-                                            <Option value={item.level + item.section} label={item.level + item.section}>
+                                            <Option value={item.key} label={item.level + item.section}>
                                                 {item.level + item.section}
                                             </Option>
                                         ))}

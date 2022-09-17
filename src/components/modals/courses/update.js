@@ -8,6 +8,7 @@ import {
   collection,
   where,
   query,
+  getDoc,
   updateDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../../firebase";
@@ -49,7 +50,6 @@ function Update({
 
   const handleUpdate = async () => {
     setLoading(true);
-    console.log("data is", data);
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
       .then((response) => {
         setLoading(false);
@@ -122,12 +122,24 @@ function Update({
     setSelectedSubject(value);
   };
 
+  const getTeacherID = async (ID) => {
+    const docRef = doc(firestoreDb, "teachers", ID)
+    var data = "";
+    await getDoc(docRef).then(response => {
+      data = response.data();
+      data.key = response.id;
+    })
+    return data;
+  }
+
   const handleTeacher = (value) => {
     const teacherdata = [];
-    value.map((item, i) => {
-      teacherdata.push(JSON.parse(item));
+    value.map(async (item, i) => {
+      const respose = await getTeacherID(item);
+      teacherdata.push(respose);
     });
     setUpdateCourse({ ...updateCourse, teachers: teacherdata });
+
   };
   const handleScheduler = (value, i) => {
     if (typeof value === "string") {
@@ -175,8 +187,8 @@ function Update({
           ]}
         >
           <Form
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 14 }}
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 17 }}
             layout="horizontal"
           >
             <Form.Item
@@ -222,11 +234,12 @@ function Update({
                 optionLabelProp="label"
                 mode="multiple"
                 defaultValue={data.teachers}
+                maxTagCount={2}
               >
                 {teachers.map((item, index) => (
                   <Option
                     key={item.key}
-                    // value={JSON.stringify(item)}
+                    value={item.key}
                     label={
                       item.first_name +
                       " " +
@@ -293,6 +306,7 @@ function Update({
                     placeholder="First Select Days"
                     onChange={(e) => handleScheduler(e, i)}
                     defaultValue={item.day}
+                    in
                   >
                     {days.map((item, index) => (
                       <Option value={item} label={item}>
@@ -307,9 +321,9 @@ function Update({
                     defaultValue={
                       item.time.length
                         ? [
-                            moment(JSON.parse(item.time[0])),
-                            moment(JSON.parse(item.time[1])),
-                          ]
+                          moment(JSON.parse(item.time[0])),
+                          moment(JSON.parse(item.time[1])),
+                        ]
                         : []
                     }
                     onChange={(e) => handleScheduler(e, i)}

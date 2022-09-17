@@ -109,9 +109,9 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
     };
 
     const handleCourseItem = (value) => {
-      setUpdateTeacher({ ...updateTeacher, course: value });
-  };
-  
+        setUpdateTeacher({ ...updateTeacher, course: value });
+    };
+
 
     const onChange = (e) => {
         setUpdateTeacher({ ...updateTeacher, [e.target.name]: e.target.value })
@@ -138,22 +138,22 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
 
     const getCourse = async () => {
 
-      const children = [];
+        const children = [];
 
-      const q = query(
-          collection(firestoreDb, "courses"),
-          where("school_id", "==", data.school_id)
-      );
-      const Snapshot = await getDocs(q);
-      Snapshot.forEach((doc) => {
-          var datas = doc.data();
-          children.push({
-              ...datas,
-              key: doc.id,
-          });
-      });
-      setCourseOption(children);
-  };
+        const q = query(
+            collection(firestoreDb, "courses"),
+            where("school_id", "==", data.school_id)
+        );
+        const Snapshot = await getDocs(q);
+        Snapshot.forEach((doc) => {
+            var datas = doc.data();
+            children.push({
+                ...datas,
+                key: doc.id,
+            });
+        });
+        setCourseOption(children);
+    };
 
 
 
@@ -208,7 +208,7 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                         required: true,
                                     },
                                 ]}>
-                                  <Input name="phone" defaultValue={data.phone} onChange={(e) => onChange(e)} />
+                                    <Input name="phone" defaultValue={data.phone} onChange={(e) => onChange(e)} />
 
                                 </Form.Item>
                                 <Form.Item label="Class">
@@ -220,11 +220,11 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                         defaultValue={data.class}
                                         onChange={handleCourse}
                                         optionLabelProp="label"
-                                        mode ="multiple"
+                                        mode="multiple"
                                     >
                                         {classOption.map((item, index) => (
-                                            <Option value={item.level + item.section} label={item.level+item.section}>
-                                                {item.level+ item.section}
+                                            <Option value={item.level + item.section} label={item.level + item.section}>
+                                                {item.level + item.section}
                                             </Option>
                                         ))}
                                     </Select>
@@ -238,7 +238,8 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                                         defaultValue={data.course}
                                         onChange={handleCourseItem}
                                         optionLabelProp="label"
-                                        mode ="multiple"
+                                        mode="multiple"
+                                        maxTagCount={2}
                                     >
                                         {courseOption.map((item, index) => (
                                             <Option value={item.course_name} label={item.course_name}>

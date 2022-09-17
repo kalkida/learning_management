@@ -9,9 +9,11 @@ import {
     where,
     query,
     updateDoc,
+    getDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../../firebase";
 import uuid from "react-uuid";
+import { async } from "@firebase/util";
 
 const { Option } = Select;
 
@@ -21,11 +23,9 @@ function Update({
     data,
     updateComplete,
     setUpdateComplete,
-    coursedata,
-    sectionData,
-    sectionIdSingle,
-    courseIdSingle,
 }) {
+
+
     const uid = useSelector((state) => state.user.profile);
 
     const [loading, setLoading] = useState(false);
@@ -114,6 +114,18 @@ function Update({
         setSectionMainData(sectionArray);
     };
 
+    const getStudentID = async (ID) => {
+
+        const docRef = doc(firestoreDb, "students", ID)
+        var data = "";
+        await getDoc(docRef).then(response => {
+            data = response.data();
+            data.key = response.id;
+        })
+        return data;
+
+    }
+
     useEffect(() => {
         getClass();
         getStudents(data.level);
@@ -125,10 +137,12 @@ function Update({
         }
     }
     const handleStudent = (value) => {
-        value.map((item, i) => {
-            value[i] = JSON.parse(item);
+        value.map(async (item, i) => {
+            const response = await getStudentID(item)
+            value[i] = response;
         });
         setUpdateClass({ ...updateClass, student: value });
+
     };
 
     return (
@@ -154,12 +168,12 @@ function Update({
                         layout="horizontal"
                     >
                         <Form.Item label="Level">
-                            <Input name="level" defaultValue={data.level} onChange={(e) => handleClass(e)} />
+                            <Input disabled name="level" defaultValue={data.level} onChange={(e) => handleClass(e)} />
                         </Form.Item>
 
 
                         <Form.Item label="Section">
-                            <Input name="section" defaultValue={data.section} onChange={(e) => handleClass(e)} />
+                            <Input disabled name="section" defaultValue={data.section} onChange={(e) => handleClass(e)} />
                         </Form.Item>
                         <Form.Item label="Students">
                             <Select
@@ -168,12 +182,13 @@ function Update({
                                 }}
                                 placeholder="select Students"
                                 onChange={handleStudent}
-                                defaultValue={["abel kebede", "Kal"]}
+                                defaultValue={data.student}
                                 optionLabelProp="label"
                                 mode="multiple"
+                                maxTagCount={2}
                             >
                                 {students.map((item, index) => (
-                                    <Option value={JSON.stringify(item)} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
+                                    <Option value={item.key} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
                                         {item.first_name + " " + (item.last_name ? item.last_name : "")}
                                     </Option>
                                 ))}

@@ -116,7 +116,7 @@ export default function ListClasses() {
       >
         Add Classes
       </Link>
-      <CreateSection />
+      {/* <CreateSection /> */}
       <br />
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
