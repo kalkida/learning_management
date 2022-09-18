@@ -64,6 +64,7 @@ export default function AdminDash() {
               <h1 className="text-center">Yearly</h1>
             </div>
           </div>
+
           {/* <div style={{ marginTop: 30, marginLeft: 19 }}>
             <h1 style={{ fontSize: 20 }}>7 Absent Students</h1>
             <h1 style={{ fontSize: 20 }}>2 Absent Teachers</h1>

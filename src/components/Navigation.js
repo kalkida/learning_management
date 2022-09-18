@@ -24,7 +24,6 @@ export default function Dashboard() {
           <img
             src={require("../assets/logo1.png")}
             style={{
-              // backgroundColor: "white",
               width: 130,
               paddingLeft: "0%",
               paddingRight: "0%",

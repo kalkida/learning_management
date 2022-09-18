@@ -102,9 +102,10 @@ const Layouts = () => {
               <ListItemText>
                 <Link
                   style={{
-                    color: currentURL === "/list-student" ? "white" : "black",
+                    fontWeight: "bold",
+                    color: currentURL === "/admin" ? "#E7752B" : "black",
                   }}
-                  to="/list-student"
+                  to="/admin"
                 >
                   Home
                 </Link>
@@ -117,9 +118,11 @@ const Layouts = () => {
               <ListItemText>
                 <Link
                   style={{
-                    color: currentURL === "/list-student" ? "white" : "black",
+                    fontWeight: "bold",
+
+                    color: currentURL === "/message" ? "#E7752B" : "black",
                   }}
-                  to="/list-student"
+                  to="/message"
                 >
                   Messages
                 </Link>
@@ -132,9 +135,11 @@ const Layouts = () => {
               <ListItemText>
                 <Link
                   style={{
-                    color: currentURL === "/list-student" ? "white" : "black",
+                    fontWeight: "bold",
+
+                    color: currentURL === "/announcment" ? "#E7752B" : "black",
                   }}
-                  to="/list-student"
+                  to="/announcment"
                 >
                   Announcement
                 </Link>
@@ -147,7 +152,9 @@ const Layouts = () => {
               <ListItemText>
                 <Link
                   style={{
-                    color: currentURL === "/list-Course" ? "white" : "black",
+                    fontWeight: "bold",
+
+                    color: currentURL === "/list-Course" ? "#E7752B" : "black",
                   }}
                   to="/list-Course"
                 >
@@ -162,7 +169,9 @@ const Layouts = () => {
               <ListItemText>
                 <Link
                   style={{
-                    color: currentURL === "/list-classes" ? "white" : "black",
+                    fontWeight: "bold",
+
+                    color: currentURL === "/list-classes" ? "#E7752B" : "black",
                   }}
                   to="/list-classes"
                 >
@@ -177,7 +186,9 @@ const Layouts = () => {
               <ListItemText>
                 <Link
                   style={{
-                    color: currentURL === "/list-teacher" ? "white" : "black",
+                    fontWeight: "bold",
+
+                    color: currentURL === "/list-teacher" ? "#E7752B" : "black",
                   }}
                   to="/list-teacher"
                 >
@@ -192,7 +203,9 @@ const Layouts = () => {
               <ListItemText>
                 <Link
                   style={{
-                    color: currentURL === "/list-student" ? "white" : "black",
+                    fontWeight: "bold",
+
+                    color: currentURL === "/list-student" ? "#E7752B" : "black",
                   }}
                   to="/list-student"
                 >
@@ -207,9 +220,11 @@ const Layouts = () => {
               <ListItemText>
                 <Link
                   style={{
-                    color: currentURL === "/list-teacher" ? "white" : "black",
+                    fontWeight: "bold",
+
+                    color: currentURL === "/attendance" ? "#E7752B" : "black",
                   }}
-                  to="/list-teacher"
+                  to="/attendance"
                 >
                   Attendance
                 </Link>
@@ -220,7 +235,16 @@ const Layouts = () => {
               <ListItemIcon>
                 <CalendarOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Schedule</ListItemText>
+              <Link
+                style={{
+                  fontWeight: "bold",
+
+                  color: currentURL === "/schedule" ? "#E7752B" : "black",
+                }}
+                to="/schedule"
+              >
+                Schedule
+              </Link>
             </MenuItem>
           </MenuList>
           <MenuItem style={{ bottom: 0, position: "fixed" }}>
