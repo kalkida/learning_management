@@ -4,11 +4,7 @@ import Register from "../Auth/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation, Outlet } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import TeacherDash from "../components/subComponents/TeacherDash";
-import ParentDash from "../components/subComponents/ParentDash";
-import AdminDash from "../components/subComponents/AdminDash";
-import { firestoreDb } from "../firebase";
+import Laba from "../components/subComponents/Laba";
 
 import Dashboard from "../components/Dashboard";
 import LandingPage from "../components/LandingPage";
@@ -22,7 +18,7 @@ const PrivateScreen = ({ children, role }) => {
   return users ? (
     <Outlet />
   ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
+    <Navigate to="/laba" state={{ from: location }} replace />
   );
 };
 
@@ -33,6 +29,7 @@ export default function Routing() {
         <Route element={<PrivateScreen />}>
           <Route path="/*" element={<Layout />} />
         </Route>
+        <Route path="/laba" element={<Laba />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
