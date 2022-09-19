@@ -231,6 +231,7 @@ const CreateCrouse = () => {
           >
             {classes.map((item, index) => (
               <Option
+                key={item.key}
                 value={JSON.stringify(item)}
                 label={item.level + " " + item.section}
               >
@@ -256,7 +257,7 @@ const CreateCrouse = () => {
                 onChange={(e) => handleScheduler(e, i)}
               >
                 {days.map((item, index) => (
-                  <Option value={item} label={item}>
+                  <Option key={index} value={item} label={item}>
                     {item}
                   </Option>
                 ))}
