@@ -8,28 +8,35 @@ import IconButton from "@mui/material/IconButton";
 
 export default function Dashboard() {
   const user = useSelector((state) => state.user.value);
-  //const role = useSelector((state) => state.user.profile.role);
-
+  const role = useSelector((state) => state.user.profile.role);
+  console.log(role);
   const current = JSON.parse(user);
   //
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          ></IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, backgroundColor: "white" }}>
+      <AppBar
+        position="static"
+        style={{
+          backgroundColor: "white",
+        }}
+      >
+        <Toolbar style={{ backgroundColor: "#F2F4F7" }}>
+          <img
+            src={require("../assets/logo1.png")}
+            style={{
+              width: 130,
+              paddingLeft: "0%",
+              paddingRight: "0%",
+              marginRight: 100,
+              marginLeft: -10,
+            }}
+          />
+          {/* <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Laba
-          </Typography>
+          </Typography> */}
           {/* <Button color="secondary">{profile.role}</Button> */}
-          <Button color="inherit">
-            Wellcome{" "}
-       {/* //     {role["isAdmin"] == true ? current.user.email : current.phoneNumber} */}
+          <Button color="inherit" style={{ color: "black" }}>
+            {role["isAdmin"] == true ? current.user.email : current.phoneNumber}
           </Button>
         </Toolbar>
       </AppBar>

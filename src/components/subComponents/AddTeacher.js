@@ -48,7 +48,7 @@ export default function AddTeacher() {
     const snap = await getDocs(q);
     snap.forEach((doc) => {
       var data = doc.data();
-      data.key = doc.id
+      data.key = doc.id;
       temporary.push(data);
     });
     setData(temporary);
@@ -59,7 +59,7 @@ export default function AddTeacher() {
   };
 
   const showUpdateModal = (data) => {
-    setUpdateData(data)
+    setUpdateData(data);
     setOpenUpdate(true);
   };
 
@@ -68,7 +68,6 @@ export default function AddTeacher() {
     setViewData(data);
     setOpenView(true);
   };
-
 
   const handleUpdateCancel = () => {
     setOpenUpdate(false);
@@ -88,10 +87,9 @@ export default function AddTeacher() {
     //   var dataset = docSnap.data();
     //   data.class = dataset.grade;
     // }
-    setViewData(data)
+    setViewData(data);
     setOpenView(true);
   };
-
 
   const columns = [
     {
@@ -109,9 +107,9 @@ export default function AddTeacher() {
       render: (value) => {
         return (
           <>
-            {value.map((item) => (
+            {/* {value.map((item) => (
               <Tag color={"green"}>{item}</Tag>
-            ))}
+            ))} */}
           </>
         );
       },
@@ -148,11 +146,11 @@ export default function AddTeacher() {
       render: (value) => {
         return (
           <>
-            {value?.map((item, i) => (
+            {/* {value?.map((item, i) => (
               <Tag color={"green"}>{item}</Tag>
-            ))}
+            ))} */}
           </>
-        )
+        );
       },
     },
 
