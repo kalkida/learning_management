@@ -61,6 +61,9 @@
     border: 2px solid #e66937;
     border-radius: 5px;
     color: #e66937;
+}
+
+.btn-confirm {
     float: right;
     margin-top: -3.5rem;
 }
@@ -172,7 +175,6 @@
 
 .course-category div:nth-child(2) div {
     width: 100%;
-    flex-direction: column;
     padding: 10px 0px;
 }
 
@@ -203,4 +205,11 @@
 
 .asssign-teacher .ant-table-cell {
     width: 10% !important;
+}
+
+.btn-dlt {
+    left: 90%;
+
+    color: white !important;
+
 }

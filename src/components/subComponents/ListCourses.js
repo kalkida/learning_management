@@ -198,7 +198,6 @@ export default function ListCourses() {
       data.key = doc.id;
       temporary.push(data);
     });
-    console.log("this is hight talk", temporary);
     setData(temporary);
   };
 
@@ -217,9 +216,9 @@ export default function ListCourses() {
   };
 
   const handleUpdate = (data) => {
-    navigate("/update-course", { data })
-    setViewData(data);
-    setOpenUpdate(true);
+    navigate("/update-course", { state: { data } })
+    // setViewData(data);
+    // setOpenUpdate(true);
   };
 
   const columns = [
