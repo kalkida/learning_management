@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker } from "antd";
+import { Form, Input, Button, Select, DatePicker, message } from "antd";
 import {
   doc,
   setDoc,
@@ -8,14 +8,11 @@ import {
   collection,
   where,
   query,
-  updateDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { createStd } from "../../redux/student";
 
 const { Option } = Select;
 
@@ -25,6 +22,7 @@ const CreateNewStudnet = () => {
   const [phone, setPhones] = useState("");
   const navigate = useNavigate();
   const [percent, setPercent] = useState(0);
+  const [loadingbutton, setLoadingButton] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
@@ -55,17 +53,17 @@ const CreateNewStudnet = () => {
     if (!file) {
       alert("Please choose a file first!");
     }
-    else{
+    else {
       const storageRef = ref(storage, file.name);
       const uploadTask = uploadBytesResumable(storageRef, file);
-  
+
       uploadTask.on(
         "state_changed",
         (snapshot) => {
           const percent = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           );
-  
+
           // update progress
           setPercent(percent);
         },
@@ -73,28 +71,27 @@ const CreateNewStudnet = () => {
         () => {
           // download url
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            console.log("url is   ", url)
             valueRef.current = url
-            console.log("value with ref is ", valueRef.current)
-  
             if (valueRef.current != null) {
-              console.log("value with ref with ref is ", valueRef.current)
               setLoading(true)
-          //    setNewUser({ ...newUser, avater: valueRef.current })
+              //    setNewUser({ ...newUser, avater: valueRef.current })
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
-                setDoc(doc(firestoreDb, "students", uuid()), newUser);
-                console.log("Student  is createNewStudent    ", newUser);
-                console.log("Student id   ", uuid())
+                setDoc(doc(firestoreDb, "students", uuid()), newUser)
+                  .then(reponse => message.success("Student Added Successfuly"))
+                  .catch(error => {
+                    console.log(error);
+                    message.error("Student is not added, Try Again");
+                  })
                 navigate("/list-student");
                 setLoading(false)
               }
             }
-            console.log("images is   ", images)
+
           });
         }
       );
-    } 
+    }
   }
   const getClass = async () => {
     const q = query(
@@ -110,12 +107,14 @@ const CreateNewStudnet = () => {
       });
     });
     setClassData(children);
-    console.log("class data  ", classData)
+
   };
 
   const createNewStudent = async () => {
-    console.log("start");
+
+    setLoadingButton(true);
     await handleUpload();
+    setLoadingButton(false);
     // if(!loading){
 
     // }else{
@@ -124,28 +123,23 @@ const CreateNewStudnet = () => {
   };
   const children = [];
   const handleCourse = (value) => {
-    setNewUser({ ...newUser, class: value });
+    const classData = JSON.parse(value);
+    setNewUser({ ...newUser, class: classData });
   };
   const setAge = (value) => {
     setNewUser({ ...newUser, DOB: JSON.stringify(value._d) });
   };
 
-  const setEmail = (e) => {
-    setNewUser({ ...newUser, email: e.target.value });
+  const handleStudent = (e) => {
+    setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
   const setPhone = (e) => {
     setPhones(e.target.value);
     setNewUser({ ...newUser, ["phone"]: allPhone });
   };
-  const setLevel = (e) => {
-    setNewUser({ ...newUser, level: e.target.value });
-  };
-  const setFirstNmae = (e) => {
-    setNewUser({ ...newUser, first_name: e.target.value });
-  };
-  const setLastName = (e) => {
-    setNewUser({ ...newUser, last_name: e.target.value });
-  };
+  const handleCancle = () => {
+    navigate("/list-student")
+  }
 
   useEffect(() => {
     getClass();
@@ -166,13 +160,13 @@ const CreateNewStudnet = () => {
             },
           ]}
         >
-          <Input onChange={(e) => setFirstNmae(e)} />
+          <Input name="first_name" onChange={(e) => handleStudent(e)} />
         </Form.Item>
         <Form.Item label="Last Name">
-          <Input onChange={(e) => setLastName(e)} />
+          <Input name="last_name" onChange={(e) => handleStudent(e)} />
         </Form.Item>
         <Form.Item label="Email">
-          <Input onChange={(e) => setEmail(e)} />
+          <Input name="email" onChange={(e) => handleStudent(e)} />
         </Form.Item>
         <Form.Item
           label="Phone"
@@ -207,7 +201,7 @@ const CreateNewStudnet = () => {
             },
           ]}
         >
-          <Input onChange={(e) => setLevel(e)} />
+          <Input name="level" onChange={(e) => handleStudent(e)} />
         </Form.Item>
         <Form.Item
           label="Date Of Birth"
@@ -221,7 +215,7 @@ const CreateNewStudnet = () => {
           <DatePicker onChange={setAge} />
         </Form.Item>
 
-        <Form.Item label="Class">
+        <Form.Item label="Class data">
           <Select
             style={{
               width: "100%",
@@ -231,7 +225,7 @@ const CreateNewStudnet = () => {
             optionLabelProp="label"
           >
             {classData.map((item, index) => (
-              <Option value={item.level + item.section} label={item.level + item.section}>
+              <Option value={JSON.stringify(item)} label={item.level + item.section}>
                 {item.level + item.section}
               </Option>
             ))}
@@ -242,8 +236,14 @@ const CreateNewStudnet = () => {
         </Form.Item>
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button onClick={async () => await createNewStudent()}>Save</Button>
-        <Button>Cancel</Button>
+        <Button
+          type="primary"
+          loading={loadingbutton}
+          onClick={async () => await createNewStudent()}
+        >
+          Save
+        </Button>
+        <Button onClick={handleCancle}>Cancel</Button>
       </div>
     </>
   );

@@ -120,7 +120,7 @@ const CreateClasses = () => {
             mode="multiple"
           >
             {students.map((item, index) => (
-              <Option value={JSON.stringify(item)} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
+              <Option key={item.key} value={JSON.stringify(item)} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
                 {item.first_name + " " + (item.last_name ? item.last_name : "")}
               </Option>
             ))}
@@ -128,7 +128,7 @@ const CreateClasses = () => {
         </Form.Item>
       </Form>
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button onClick={() => createNewClass()}>Save</Button>
+        <Button onClick={() => createNewClass()} type="primary">Save</Button>
         <Button onClick={onCancle}>Cancle</Button>
       </div>
     </>

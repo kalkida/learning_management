@@ -6,6 +6,18 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Typography from "@mui/material/Typography";
 import BookOnline from "@mui/icons-material/BookOnline";
+import {
+  HomeOutlined,
+  MessageOutlined,
+  SoundOutlined,
+  CopyOutlined,
+  PicRightOutlined,
+  HeatMapOutlined,
+  UsergroupDeleteOutlined,
+  ClockCircleOutlined,
+  CalendarOutlined,
+} from "@ant-design/icons";
+
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import ContentPaste from "@mui/icons-material/ContentPaste";
 import Cloud from "@mui/icons-material/Cloud";
@@ -18,33 +30,33 @@ import ParentDash from "./subComponents/ParentDash";
 import Navigation from "./Navigation";
 import AddParent from "./subComponents/AddParent";
 import { useSelector, useDispatch } from "react-redux";
-import userAction from "../redux/user";
+import { userAction } from "../redux/user";
 import AddStudnets from "./subComponents/AddStudnets";
 import CreateNewStudnet from "./subComponents/CreateNewStudnet";
 import ListClasses from "./subComponents/ListClasses";
 import ListCourses from "./subComponents/ListCourses";
-import AddClass from './subComponents/CreateClasses';
+import AddClass from "./subComponents/CreateClasses";
 import AddTeacher from "./subComponents/AddTeacher";
 import CreateNewTeacher from "./subComponents/CreateNewTeacher";
 import CreateCrouse from "./subComponents/CreateCrouse";
 import CreateRole from "./subComponents/CreateRole";
 import ParentProfile from "./subComponents/ParentProfile";
 
-
 const { Header, Content, Sider } = Layout;
 
 const Layouts = () => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user.profile);
-  console.log("Profile   ",profile)
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch(userAction.logout());
+  };
   const SiderGenerator = () => {
-   
     if (profile == undefined || profile == "undefined") {
       return (
-        <Paper
-          sx={{ width: 320, maxWidth: "100%", backgroundColor: "#1890ff" }}
-        >
-          <MenuList>
+        <Paper sx={{ width: 320, maxWidth: "100%", backgroundColor: "white" }}>
+          <MenuList style={{ backgroundColor: "white" }}>
             <MenuItem>
               <ListItemIcon>
                 <BookOnline fontSize="small" />
@@ -58,7 +70,7 @@ const Layouts = () => {
                 <ContentCopy fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-              <Link to="/parent ">Profile</Link>
+                <Link to="/parent ">Profile</Link>
               </ListItemText>
             </MenuItem>
             <MenuItem>
@@ -77,69 +89,170 @@ const Layouts = () => {
           </MenuList>
         </Paper>
       );
-      
     }
     if (profile.role["isAdmin"] == true) {
       const currentURL = window.location.pathname;
       return (
-        <Paper
-          sx={{ width: 320, maxWidth: "100%", backgroundColor: "#1890ff" }}
-        >
-          <MenuList>
+        <Paper sx={{ width: 320, maxWidth: "100%", backgroundColor: "white" }}>
+          <MenuList style={{ borderBottomWidth: 0 }}>
             <MenuItem>
               <ListItemIcon>
-                <BookOnline fontSize="small" />
+                <HomeOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-                <Link style={{ color: currentURL === "/list-student" ? "white" : "black" }} to="/list-student">
-                  Student
+                <Link
+                  style={{
+                    fontWeight: "bold",
+                    color: currentURL === "/admin" ? "#E7752B" : "black",
+                  }}
+                  to="/admin"
+                >
+                  Home
                 </Link>
               </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
-                <ContentCopy fontSize="small" />
+                <MessageOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-              <Link style={{ color: currentURL === "/list-teacher" ? "white" : "black" }} to="/list-teacher">
-                  Teacher
+                <Link
+                  style={{
+                    fontWeight: "bold",
+
+                    color: currentURL === "/message" ? "#E7752B" : "black",
+                  }}
+                  to="/message"
+                >
+                  Messages
                 </Link>
               </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
-                <ContentPaste fontSize="small" />
+                <SoundOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-              <Link style={{ color: currentURL === "/list-Course" ? "white" : "black" }} to="/list-Course">
-              Courses
+                <Link
+                  style={{
+                    fontWeight: "bold",
+
+                    color: currentURL === "/announcment" ? "#E7752B" : "black",
+                  }}
+                  to="/announcment"
+                >
+                  Announcement
                 </Link>
-                </ListItemText>
+              </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
-                <ContentPaste fontSize="small" />
+                <CopyOutlined fontSize="small" />
               </ListItemIcon>
               <ListItemText>
-                <Link style={{ color: currentURL === "/list-classes" ? "white" : "black" }} to="/list-classes">
+                <Link
+                  style={{
+                    fontWeight: "bold",
+
+                    color: currentURL === "/list-Course" ? "#E7752B" : "black",
+                  }}
+                  to="/list-Course"
+                >
+                  Courses
+                </Link>
+              </ListItemText>
+            </MenuItem>
+            <MenuItem>
+              <ListItemIcon>
+                <PicRightOutlined fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>
+                <Link
+                  style={{
+                    fontWeight: "bold",
+
+                    color: currentURL === "/list-classes" ? "#E7752B" : "black",
+                  }}
+                  to="/list-classes"
+                >
                   Classes
                 </Link>
               </ListItemText>
             </MenuItem>
             <MenuItem>
               <ListItemIcon>
-                <ContentPaste fontSize="small" />
+                <HeatMapOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Notification</ListItemText>
+              <ListItemText>
+                <Link
+                  style={{
+                    fontWeight: "bold",
+
+                    color: currentURL === "/list-teacher" ? "#E7752B" : "black",
+                  }}
+                  to="/list-teacher"
+                >
+                  Teacher
+                </Link>
+              </ListItemText>
             </MenuItem>
-            <Divider />
             <MenuItem>
               <ListItemIcon>
-                <Cloud fontSize="small" />
+                <UsergroupDeleteOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Logout</ListItemText>
+              <ListItemText>
+                <Link
+                  style={{
+                    fontWeight: "bold",
+
+                    color: currentURL === "/list-student" ? "#E7752B" : "black",
+                  }}
+                  to="/list-student"
+                >
+                  Student
+                </Link>
+              </ListItemText>
+            </MenuItem>
+            <MenuItem>
+              <ListItemIcon>
+                <ClockCircleOutlined fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>
+                <Link
+                  style={{
+                    fontWeight: "bold",
+
+                    color: currentURL === "/attendance" ? "#E7752B" : "black",
+                  }}
+                  to="/attendance"
+                >
+                  Attendance
+                </Link>
+              </ListItemText>
+            </MenuItem>
+
+            <MenuItem>
+              <ListItemIcon>
+                <CalendarOutlined fontSize="small" />
+              </ListItemIcon>
+              <Link
+                style={{
+                  fontWeight: "bold",
+
+                  color: currentURL === "/schedule" ? "#E7752B" : "black",
+                }}
+                to="/schedule"
+              >
+                Schedule
+              </Link>
             </MenuItem>
           </MenuList>
+          <MenuItem style={{ bottom: 0, position: "fixed" }}>
+            <ListItemIcon>
+              <Cloud fontSize="small" />
+            </ListItemIcon>
+            <a onClick={() => logout()}>Logout</a>
+          </MenuItem>
         </Paper>
       );
     }
@@ -218,34 +331,31 @@ const Layouts = () => {
           </MenuList>
         </Paper>
       );
-      
     }
-   
   };
 
   useEffect(() => {
     if (profile == undefined) {
-        navigate("/createrole")
-    }else{
+      navigate("/createrole");
+    } else {
       if (profile.role["isAdmin"] == true) {
         navigate("/admin");
       } else if (profile.role["isParent"] == true) {
-         navigate("/list-parent");
+        navigate("/list-parent");
         //navigate("/createrole")
       } else if (profile.role["isTeacher"] == true) {
         navigate("/teacher");
       } else {
-        navigate("/createrole")
+        navigate("/createrole");
       }
     }
-   
   }, []);
 
   return (
     <Layout>
       <Navigation />
       <Layout>
-        <Sider width={200} className="site-layout-background">
+        <Sider width={200} className="bg-[white]">
           <SiderGenerator />
         </Sider>
         <Layout
@@ -259,6 +369,7 @@ const Layouts = () => {
               padding: 24,
               margin: 0,
               minHeight: 280,
+              backgroundColor: "white",
             }}
           >
             <Routes>
@@ -271,11 +382,11 @@ const Layouts = () => {
               <Route path="/add-student" element={<CreateNewStudnet />} />
               <Route path="/add-class" element={<AddClass />} />
               <Route path="/list-teacher" element={<AddTeacher />} />
-              <Route path="/add-teacher" element={<CreateNewTeacher />}  />   
+              <Route path="/add-teacher" element={<CreateNewTeacher />} />
               <Route path="/list-Course" element={<ListCourses />} />
-              <Route path="/add-course" element={<CreateCrouse />}  /> 
-              <Route path="/createrole" element={<CreateRole />}  /> 
-              <Route path="/list-parent" element={<ParentProfile />}  /> 
+              <Route path="/add-course" element={<CreateCrouse />} />
+              <Route path="/createrole" element={<CreateRole />} />
+              <Route path="/list-parent" element={<ParentProfile />} />
             </Routes>
           </Content>
         </Layout>

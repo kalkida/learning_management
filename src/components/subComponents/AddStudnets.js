@@ -12,8 +12,8 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
-import View from "../modals/Student/View";
-import Update from "../modals/Student/Update";
+import View from "../modals/student/View";
+import Update from "../modals/student/Update";
 
 export default function AddStudnets() {
   const uid = useSelector((state) => state.user.profile);
@@ -86,8 +86,8 @@ export default function AddStudnets() {
       render: (value) => {
         return (
           <>
-            {value?.map((item) => (
-              <Tag color={"green"}>{item}</Tag>
+            {value?.map((item, i) => (
+              <Tag key={i} color={"green"}>{item}</Tag>
             ))}
           </>
         );
@@ -135,7 +135,7 @@ export default function AddStudnets() {
         }}
         to={"/add-student"}
       >
-        Add User
+        Add Student
       </Link>
       <br />
 

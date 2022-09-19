@@ -10,7 +10,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { firebaseAuth, firestoreDb } from "../../firebase";
-import { Button } from "antd";
 import { Link } from "react-router-dom";
 import View from "../modals/teacher/view";
 import Update from "../modals/teacher/update";
@@ -48,8 +47,8 @@ export default function AddTeacher() {
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
-      var data = doc.data();   
-      data.key =doc.id
+      var data = doc.data();
+      data.key = doc.id;
       temporary.push(data);
     });
     setData(temporary);
@@ -60,7 +59,7 @@ export default function AddTeacher() {
   };
 
   const showUpdateModal = (data) => {
-    setUpdateData(data)
+    setUpdateData(data);
     setOpenUpdate(true);
   };
 
@@ -69,7 +68,6 @@ export default function AddTeacher() {
     setViewData(data);
     setOpenView(true);
   };
-
 
   const handleUpdateCancel = () => {
     setOpenUpdate(false);
@@ -89,10 +87,9 @@ export default function AddTeacher() {
     //   var dataset = docSnap.data();
     //   data.class = dataset.grade;
     // }
-    setViewData(data)
+    setViewData(data);
     setOpenView(true);
   };
-
 
   const columns = [
     {
@@ -101,20 +98,21 @@ export default function AddTeacher() {
       key: "first_name",
       render: (text) => <a>{text}</a>,
     },
-    { 
+    {
       title: "Course",
       key: "course",
       dataIndex: "course",
-      render: (text) => <a>{text}</a>,    
-      // render: (value) => {
-      //   return (
-      //     <>
-      //       {value?.map((item) => (
-      //         <Tag color={"green"}>{item}</Tag>
-      //       ))}
-      //     </>
-      //   );
-      // },
+      // render: (text) => <a>{text}</a>,
+
+      render: (value) => {
+        return (
+          <>
+            {/* {value.map((item) => (
+              <Tag color={"green"}>{item}</Tag>
+            ))} */}
+          </>
+        );
+      },
     },
     {
       title: "Phone Number",
@@ -144,10 +142,16 @@ export default function AddTeacher() {
       title: "Class",
       dataIndex: "class",
       key: "class",
-      render: (text) => <a>{text}</a>,
-      // render: (item) => {
-      //   return <Tag color={"green"}>{item}</Tag>;
-      // },
+      // render: (text) => <a>{text}</a>,
+      render: (value) => {
+        return (
+          <>
+            {/* {value?.map((item, i) => (
+              <Tag color={"green"}>{item}</Tag>
+            ))} */}
+          </>
+        );
+      },
     },
 
     {
@@ -157,7 +161,7 @@ export default function AddTeacher() {
         <Space size="middle">
           <a onClick={() => showViewModal(record)}>View </a>
           <a onClick={() => showUpdateModal(record)}>Update</a>
-           {/* <a>View {record.name}</a> 
+          {/* <a>View {record.name}</a> 
           <a>Update</a>  */}
         </Space>
       ),

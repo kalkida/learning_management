@@ -52,17 +52,12 @@ const userSlice = createSlice({
   },
   reducers: {
     logout: (state) => {
-      signOut(firebaseAuth)
-        .then(() => {
-          state.value = null;
-          state.error = false;
-          state.loading = false;
-        })
-        .catch((error) => {
-          state.value = null;
-          state.error = true;
-          state.loading = false;
-        });
+      signOut(firebaseAuth);
+      state.value = null;
+      state.profile = null;
+      state.school = null;
+      state.error = false;
+      state.loading = false;
     },
   },
 
@@ -79,7 +74,7 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
-      state.value = {};
+      state.value = null;
       state.error = action.error.message;
     });
     builder.addCase(phoneLogin.pending, (state) => {

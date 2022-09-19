@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Form, Input, Button, Select, Modal, message } from 'antd';
+import React, { useState, useEffect } from "react";
+import { Form, Input, Button, Select, Modal, message } from "antd";
 import { useSelector } from "react-redux";
 import {
     doc,
@@ -9,13 +9,22 @@ import {
     where,
     query,
     updateDoc,
+    getDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../../firebase";
 import uuid from "react-uuid";
+import { async } from "@firebase/util";
 
 const { Option } = Select;
 
-function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateComplete, coursedata, sectionData, sectionIdSingle, courseIdSingle }) {
+function Update({
+    handleCancel,
+    openUpdate,
+    data,
+    updateComplete,
+    setUpdateComplete,
+}) {
+
 
     const uid = useSelector((state) => state.user.profile);
 
@@ -39,28 +48,28 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
         // if (checkIsExist) {
         setLoading(true);
         setDoc(doc(firestoreDb, "class", data.key), updateClass, { merge: true })
-            .then(response => {
-                setLoading(false)
-                message.success("Data is updated successfuly")
-                setUpdateComplete(!updateComplete)
-                handleCancel()
+            .then((response) => {
+                setLoading(false);
+                message.success("Data is updated successfuly");
+                setUpdateComplete(!updateComplete);
+                handleCancel();
             })
-            .catch(error => {
-                message.error("Data is not updated")
-                console.log(error)
-            })
+            .catch((error) => {
+                message.error("Data is not updated");
+                console.log(error);
+            });
         // }
         // else {
         //     message.error("This Level and Section Exist")
         // }
-    }
+    };
 
     const getStudents = async (level) => {
-
         const children = [];
         const q = query(
             collection(firestoreDb, "students"),
-            where("school_id", "==", uid.school), where("level", "==", level)
+            where("school_id", "==", uid.school),
+            where("level", "==", level)
         );
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
@@ -73,7 +82,6 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
         setStudents(children);
     };
     const getClass = async () => {
-
         const children = [];
         const sectionArray = [];
 
@@ -106,31 +114,40 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
         setSectionMainData(sectionArray);
     };
 
+    const getStudentID = async (ID) => {
+
+        const docRef = doc(firestoreDb, "students", ID)
+        var data = "";
+        await getDoc(docRef).then(response => {
+            data = response.data();
+            data.key = response.id;
+        })
+        return data;
+
+    }
+
     useEffect(() => {
         getClass();
-        getStudents(data.level)
+        getStudents(data.level);
     }, []);
-
-
 
     const handleClass = (e) => {
         if (e.target.name === "level") {
-
             getStudents(e.target.value);
         }
-        setUpdateClass({ ...updateClass, [e.target.name]: e.target.value });
-    };
-    const handleStudent = (value) => {
-
-        value.map((item, i) => {
-            value[i] = JSON.parse(item);
-        })
-        setUpdateClass({ ...updateClass, student: value });
     }
+    const handleStudent = (value) => {
+        value.map(async (item, i) => {
+            const response = await getStudentID(item)
+            value[i] = response;
+        });
+        setUpdateClass({ ...updateClass, student: value });
+
+    };
 
     return (
         <div>
-            {data && openUpdate ?
+            {data && openUpdate ? (
                 <Modal
                     visible={openUpdate}
                     title="Update Class"
@@ -151,12 +168,12 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
                         layout="horizontal"
                     >
                         <Form.Item label="Level">
-                            <Input name="level" defaultValue={data.level} onChange={(e) => handleClass(e)} />
+                            <Input disabled name="level" defaultValue={data.level} onChange={(e) => handleClass(e)} />
                         </Form.Item>
 
 
                         <Form.Item label="Section">
-                            <Input name="section" defaultValue={data.section} onChange={(e) => handleClass(e)} />
+                            <Input disabled name="section" defaultValue={data.section} onChange={(e) => handleClass(e)} />
                         </Form.Item>
                         <Form.Item label="Students">
                             <Select
@@ -168,9 +185,10 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
                                 defaultValue={data.student}
                                 optionLabelProp="label"
                                 mode="multiple"
+                                maxTagCount={2}
                             >
                                 {students.map((item, index) => (
-                                    <Option value={JSON.stringify(item)} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
+                                    <Option value={item.key} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
                                         {item.first_name + " " + (item.last_name ? item.last_name : "")}
                                     </Option>
                                 ))}
@@ -178,10 +196,10 @@ function Update({ handleCancel, openUpdate, data, updateComplete, setUpdateCompl
                         </Form.Item>
 
                     </Form>
-                </Modal>
+                </Modal>)
                 : null}
         </div>
     )
 }
 
-export default Update
+export default Update;

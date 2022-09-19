@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../redux/user";
 import { Link, useNavigate } from "react-router-dom";
@@ -114,6 +114,9 @@ export default function Login() {
     setValue(newValue);
     setPhone();
   };
+  const Alerts = () => {
+    return message.error("invalid password");
+  };
 
   const onFinish = () => {
     setLoading(true);
@@ -146,119 +149,237 @@ export default function Login() {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
+        width: "100%",
       }}
     >
-      <div style={{ display: "flex", alignSelf: "center", marginTop: 200 }}>
+      <img
+        src={require("../assets/Vector1.png")}
+        style={{
+          width: 400,
+          height: 300,
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
+      />
+      <img
+        src={require("../assets/data.png")}
+        style={{
+          width: 400,
+          height: 300,
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          zIndex: 1,
+        }}
+      />
+      <img
+        src={require("../assets/Vector.png")}
+        style={{
+          width: 400,
+          height: 300,
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+        }}
+      />
+      <img
+        src={require("../assets/logo1.png")}
+        style={{
+          width: 120,
+          height: 60,
+          position: "absolute",
+          left: "45%",
+          top: "20%",
+        }}
+      />
+      <h1
+        style={{
+          position: "absolute",
+          color: "black",
+          fontWeight: "bold",
+          left: "45%",
+          top: "35%",
+          fontSize: 26,
+        }}
+      >
+        Login To Laba
+      </h1>
+      <Form
+        layout="vertical"
+        style={{
+          position: "absolute",
+          color: "black",
+          fontWeight: "bold",
+          left: "43%",
+          top: "45%",
+          fontSize: 26,
+        }}
+        // name="basic"
+        size="large"
+        labelCol={{
+          span: 8,
+        }}
+        wrapperCol={{
+          span: 40,
+        }}
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: "Please input your email!",
+            },
+          ]}
+        >
+          <Input
+            className="hover:border-[#E7752B] text-[gray] font-light"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Form.Item>
 
-        <Box sx={{ width: "100%" }}>
-        <img src={require('../logo 1.png')}  width ={166} height={68} />
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
-              <Tab label="Admin" {...a11yProps(0)} />
-              <Tab label="Teacher or Parent" {...a11yProps(1)} />
-              {/* <Tab label="Parent" {...a11yProps(2)} /> */}
-            </Tabs>
-          </Box>
-          <TabPanel value={value} index={0}>
-            <Form
-              name="basic"
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-            >
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your email!",
-                  },
-                ]}
-              >
-                <Input onChange={(e) => setEmail(e.target.value)} />
-              </Form.Item>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Input
+            type="password"
+            className="hover:border-[#E7752B] text-[gray] font-light"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Item>
 
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password!",
-                  },
-                ]}
-              >
-                <Input.Password onChange={(e) => setPassword(e.target.value)} />
-              </Form.Item>
-
-              <Form.Item
-                name="remember"
-                valuePropName="checked"
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}
-              >
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}
-              >
-                <Button loading={loading} type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <PhoneInput
-              placeholder="Enter phone number"
-              value={phone}
-              onChange={setPhone}
-            />
-            {finished ? (
-              <div style={{ marginTop: 20 }}>
-                <OtpInput
-                  value={otp}
-                  onChange={(e) => verifyOTP(e)}
-                  numInputs={6}
-                  separator={<span>---</span>}
-                />
-              </div>
-            ) : null}
-            <Button
-              id="sign-in-button"
-              loading={buttons}
-              type="primary"
-              style={{ marginTop: 20 }}
-              onClick={() => signInPhone()}
-            >
-              Request OTP
-            </Button>
-          </TabPanel>
-        </Box>
-        <div>
-           <img src={require('../Class Debat 1.png')}  style={{margin:30}}  />
-        </div>
-      </div>
+        <Form.Item
+          wrapperCol={{
+            // offset: 8,
+            span: 16,
+          }}
+        >
+          <Button
+            className="w-[250px] active:bg-[#E7752B] after:bg-[#E7752B] visited:bg-[#E7752B] hover:bg-[white] hover:border-[#E7752B] hover:text-[#E7752B] bg-[#E7752B] text-white  border-[#E7752B]"
+            loading={loading}
+            type="primary"
+            htmlType="submit"
+          >
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 }
+
+// {/* <Box sx={{ width: "100%" }}>
+//   <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+//     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+//       <Tab label="Admin" {...a11yProps(0)} />
+//       <Tab label="Teacher or Parent" {...a11yProps(1)} />
+//       {/* <Tab label="Parent" {...a11yProps(2)} /> */}
+//     </Tabs>
+//   </Box>
+//   <TabPanel value={value} index={0}>
+//     <Form
+//       name="basic"
+//       labelCol={{
+//         span: 8,
+//       }}
+//       wrapperCol={{
+//         span: 16,
+//       }}
+//       initialValues={{
+//         remember: true,
+//       }}
+//       onFinish={onFinish}
+//       onFinishFailed={onFinishFailed}
+//       autoComplete="off"
+//     >
+//       <Form.Item
+//         label="Email"
+//         name="email"
+//         rules={[
+//           {
+//             required: true,
+//             message: "Please input your email!",
+//           },
+//         ]}
+//       >
+//         <Input onChange={(e) => setEmail(e.target.value)} />
+//       </Form.Item>
+
+//       <Form.Item
+//         label="Password"
+//         name="password"
+//         rules={[
+//           {
+//             required: true,
+//             message: "Please input your password!",
+//           },
+//         ]}
+//       >
+//         <Input.Password onChange={(e) => setPassword(e.target.value)} />
+//       </Form.Item>
+
+//       <Form.Item
+//         name="remember"
+//         valuePropName="checked"
+//         wrapperCol={{
+//           offset: 8,
+//           span: 16,
+//         }}
+//       >
+//         <Checkbox>Remember me</Checkbox>
+//       </Form.Item>
+
+//       <Form.Item
+//         wrapperCol={{
+//           offset: 8,
+//           span: 16,
+//         }}
+//       >
+//         <Button loading={loading} type="primary" htmlType="submit">
+//           Submit
+//         </Button>
+//       </Form.Item>
+//     </Form>
+//   </TabPanel>
+//   <TabPanel value={value} index={1}>
+//     <PhoneInput
+//       placeholder="Enter phone number"
+//       value={phone}
+//       onChange={setPhone}
+//     />
+//     {finished ? (
+//       <div style={{ marginTop: 20 }}>
+//         <OtpInput
+//           value={otp}
+//           onChange={(e) => verifyOTP(e)}
+//           numInputs={6}
+//           separator={<span>---</span>}
+//         />
+//       </div>
+//     ) : null}
+//     <Button
+//       id="sign-in-button"
+//       loading={buttons}
+//       type="primary"
+//       style={{ marginTop: 20 }}
+//       onClick={() => signInPhone()}
+//     >
+//       Request OTP
+//     </Button>
+//   </TabPanel>
+// </Box>; */}

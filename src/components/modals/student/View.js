@@ -4,6 +4,7 @@ import moment from "moment";
 
 function View({ openView, handleViewCancel, data }) {
     const dateFormat = 'YYYY/MM/DD';
+
     return (
         <>
             <Modal
@@ -46,7 +47,7 @@ function View({ openView, handleViewCancel, data }) {
                                 })}
                             </Form.Item>
                             <Form.Item label="Class">
-                                <Input defaultValue={data.class} />
+                                <Input defaultValue={data.class?.level + data.class?.section} />
                             </Form.Item>
                             <Form.Item label="Level">
                                 <Input value={data.level} />
