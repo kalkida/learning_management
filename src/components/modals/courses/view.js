@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Modal, Form, Input, Button, Select, TimePicker, Tabs, Table } from "antd";
 import moment from "moment";
 import './style.css';
+import AttendanceList from "../../subComponents/AttendanceList";
 
 const { Option } = Select;
 
@@ -55,7 +56,7 @@ function ViewCourse() {
       <div className="tab-content">
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="Profile" key="1">
-            <Button onClick={handleUpdate}>Edit Course</Button>
+            <Button className="btn-confirm" onClick={handleUpdate}>Edit Course</Button>
             <div className="course-description">
               <h4>Coures Description</h4>
               <Input.TextArea
@@ -104,7 +105,8 @@ function ViewCourse() {
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane tab="Attendance" key="2">
-            Content of Tab Pane 2
+            <AttendanceList />
+
           </Tabs.TabPane>
           <Tabs.TabPane tab="Assignment" key="3">
             Content of Tab Pane 3

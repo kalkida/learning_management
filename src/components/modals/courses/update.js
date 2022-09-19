@@ -14,8 +14,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../../firebase";
-import TextArea from "antd/lib/input/TextArea";
-import uuid from "react-uuid";
+import AttendanceList from "../../subComponents/AttendanceList";
 import moment from "moment";
 
 const { Option } = Select;
@@ -403,7 +402,7 @@ function UpdateCourse() {
 
           </Tabs.TabPane>
           <Tabs.TabPane tab="Attendance" key="2">
-            Content of Tab Pane 2
+            <AttendanceList />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Assignment" key="3">
             Content of Tab Pane 3
