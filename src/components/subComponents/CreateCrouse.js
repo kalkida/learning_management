@@ -155,9 +155,10 @@ const CreateCrouse = () => {
   return (
     <>
 
-    <div  className="site-layout-background"
+    <div  
         style={{
-          backgroundColor: '#f0f0f0',
+          backgroundColor: '#FFFFFF',
+          color:'white' 
         }}
     >
       

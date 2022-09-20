@@ -241,7 +241,7 @@ const CreateNewTeacher = () => {
 
           >
             {classData.map((item, index) => (
-              <Option key={item.key} value={item.level + item.section} label={item.level + item.section}>
+              <Option key={item.key} value={item.key} label={item.level + item.section}>
                 {item.level +item.section}
               </Option>
             ))}
@@ -259,7 +259,7 @@ const CreateNewTeacher = () => {
           
           >
             {coursesData.map((item, index) => (
-              <Option key={item.key} value={item.course_name} label={item.course_name}>
+              <Option key={item.key} value={item.key} label={item.course_name}>
                 {item.course_name}
               </Option>
             ))}
