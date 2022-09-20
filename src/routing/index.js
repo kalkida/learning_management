@@ -18,7 +18,7 @@ const PrivateScreen = ({ children, role }) => {
   return users ? (
     <Outlet />
   ) : (
-    <Navigate to="/laba" state={{ from: location }} replace />
+    <Navigate to="/login" state={{ from: location }} replace />
   );
 };
 
@@ -29,7 +29,7 @@ export default function Routing() {
         <Route element={<PrivateScreen />}>
           <Route path="/*" element={<Layout />} />
         </Route>
-        <Route path="/laba" element={<Laba />} />
+        {/* <Route path="/laba" element={<Laba />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>

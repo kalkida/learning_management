@@ -12,7 +12,8 @@
       ".git",
       "firebase-debug.log",
       "firebase-debug.*.log"
-    ]
+    ],
+    "source": "functions"
   },
   "hosting": {
     "public": "build",
@@ -46,9 +47,13 @@
     },
     "ui": {
       "enabled": true
+    },
+    "functions": {
+      "port": 5001
+    },
+    "database": {
+      "port": 9000
     }
   },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
-  }
+  "remoteconfig": {}
 }
