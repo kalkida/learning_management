@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
+import '../../css/teacher.css'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -222,17 +223,61 @@ const CreateNewTeacher = () => {
   }, []);
   return (
     <>
-      <Form
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
+      <div 
+      style={{}}
+      
       >
-       
+        <Form 
+        layout="vertical"
+        >
+        <h1 className="h1"> Profile information</h1>
+        <div style={{
+          flexDirection:'row',
+          justifyContent: "space-between",
+          display: "flex",
 
+        }}>
+        <div style={{
+           display: 'flex',
+           alignItems:'flex-start',
+           width: '50%',
+           flexDirection:'column',
+
+        }} >
+         <text style={{
+          textAlign: 'left',
+          fontFamily:'plus jakarta sans',
+          fontSize:16,
+          fontWeight:'bold',
+          padding:24
+        }}>Profile Picture</text>
+        <img  style ={{
+          width:151,
+          height:151,
+          padding:8
+        }}src="logo512.png" alt="profile" />
+        <Form.Item  valuePropName="fileList">
+        <input type="file" onChange={handleChange} accept="/image/*"   />
+        </Form.Item>
+        </div>
+        <div 
+        style={{
+          display: "flex",
+          flexDirection:'column',
+          alignItems:'flex-start',
+          paddingRight:120
+        }}
+        >
+      <Form.Item label="First Name">
+          <Input onChange={(e) => setFirstNmae(e)} />
+        </Form.Item>
+        <Form.Item label="Last Name">
+          <Input onChange={(e) => setLastName(e)} />
+        </Form.Item>
         <Form.Item label="Class">
           <Select
             style={{
-              width: "100%",
+              width: 241,
             }}
             placeholder="select all classes"
             onChange={handleCourse}
@@ -247,6 +292,34 @@ const CreateNewTeacher = () => {
             ))}
           </Select>
         </Form.Item>
+        </div>
+        <div style={{
+          display: "flex",
+          flexDirection:'column',
+          alignItems:'flex-end',
+          paddingRight:120
+        }}>
+        <Form.Item label="Email">
+          <Input onChange={(e) => setEmail(e)} />
+        </Form.Item>
+        <Form.Item label="Phone">
+        <Input onChange={(e) => setPhone(e)} />
+      </Form.Item>
+      </div>
+      </div>
+ 
+      </Form>
+      <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
+        <Button onClick={async() => await createNewTeacher()}>Save</Button>
+        <Button>Cancel</Button>
+      </div>
+      </div>
+
+
+    <div >
+      <Form
+        layout="vertical"
+      >
         <Form.Item label="Courses">
           <Select
             style={{
@@ -259,86 +332,15 @@ const CreateNewTeacher = () => {
           
           >
             {coursesData.map((item, index) => (
-              <Option key={item.key} value={item.key} label={item.course_name}>
+              <Option key={item.key} value={item.cour} label={item.course_name}>
                 {item.course_name}
               </Option>
             ))}
           </Select>
-        </Form.Item>
-
-        {/* <Form.Item label="name">
-          <Select
-            style={{
-              width: "100%",
-            }}
-            placeholder="see all users"
-            onChange={handlename}
-            optionLabelProp="label"
-          >
-            {personData.map((item, index) => (
-              <Option value={item.key} label={item.name}>
-                {item.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item> */}
-
-
-        <Form.Item label="First Name">
-          <Input onChange={(e) => setFirstNmae(e)} />
-        </Form.Item>
-        <Form.Item label="Last Name">
-          <Input onChange={(e) => setLastName(e)} />
-        </Form.Item>
-        <Form.Item label="Email">
-          <Input onChange={(e) => setEmail(e)} />
-        </Form.Item>
-        <Form.Item label="Phone">
-        <Input onChange={(e) => setPhone(e)} />
-          {/* {input.map((_, index) => {
-            return <Input onChange={(e) => setPhone(e)} />;
-          })} */}
-          {/* {phone !== "" ? (
-            <Button
-              onClick={() => {
-                setInputs([...input, 0]);
-                setAllPhone([...allPhone, phone]);
-              }}
-            >
-              Add New
-            </Button>
-          ) : null} */}
-
-        </Form.Item>
-        {/* <Form.Item label="Level">
-          <Select
-            style={{
-              width: "100%",
-            }}
-            placeholder="select all level"
-            onChange={handleSection}
-            optionLabelProp="label"
-          >
-            {classData.map((item, index) => (
-              <Option key={item.key} value={item.section} label={item.section}>
-                {item.section}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item> */}
-
-        <Form.Item label="Teacher Pictue" valuePropName="fileList">
-          <input type="file" onChange={handleChange} accept="/image/*"   />
-        </Form.Item>
-
-        {/* <Form.Item label="Level">
-          <Input onChange={(e) => setLevel(e)} />
-        </Form.Item> */}
+        </Form.Item>    
       </Form>
-      <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button onClick={async() => await createNewTeacher()}>Save</Button>
-        <Button>Cancel</Button>
       </div>
+      
     </>
   );
 };
