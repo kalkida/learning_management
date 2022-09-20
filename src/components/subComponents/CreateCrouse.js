@@ -161,7 +161,6 @@ const CreateCrouse = () => {
           color:'white' 
         }}
     >
-      
       <Form
         layout="vertical"
         style={{
@@ -330,6 +329,18 @@ const CreateCrouse = () => {
             ))}
           </Select>
         </Form.Item>
+        <Button style={{
+            padding:5,
+            backgroundColor: "#E7752B",
+            marginBottom: 20,
+            color: "white",
+            borderRadius: 5,
+            marginLeft: 50,
+            width:250,
+            
+            alignItems:'flex-end',
+            marginTop:170
+        }} onClick={() => createNewCourse()}>Submit</Button>
         </div>
        
         </Form>
@@ -346,8 +357,7 @@ const CreateCrouse = () => {
           paddingTop:50,
 
         }}
-      >
-       
+      >  
       <div style={{
         width:50 ,
         display: 'flex',
@@ -367,8 +377,7 @@ const CreateCrouse = () => {
           minheight:400,
           paddingLeft:34,
           backgroundColor:'#F9FAFB',
-        }}
-        
+        }} 
         >
   <div   style={{
     display:'flex',
@@ -501,8 +510,7 @@ const CreateCrouse = () => {
           >
             Add New
           </Button>
-        <Button type="primary" onClick={() => createNewCourse()}>Save</Button>
-        <Button onClick={onCancle}>Cancel</Button>
+    
       </div>
       </Form>
       </div>

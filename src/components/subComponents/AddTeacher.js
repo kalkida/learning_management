@@ -313,11 +313,11 @@ export default function AddTeacher() {
         <Option value="Yiminghe">yiminghe</Option>
       </Select>
       <Select
-        style={{ width: 120, marginLeft: 30, marginRight: 30 }}
+        style={{ width: 120, marginLeft: 30,borderColor: "#E7752B", marginRight: 30 }}
         defaultValue="Grade"
         onChange={handleChange}
       >
-        <Option value="Grade">Grade</Option>
+        <Option  value="Grade">Grade</Option>
 
         <Option value="jack">Jack</Option>
         <Option value="disabled" disabled>
