@@ -283,7 +283,6 @@ export default function ListCourses() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        console.log(item)
         return (
           <div>
             {item.level}
