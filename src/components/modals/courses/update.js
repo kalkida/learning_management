@@ -16,6 +16,7 @@ import {
 import { firestoreDb, storage } from "../../../firebase";
 import AttendanceList from "../../subComponents/AttendanceList";
 import moment from "moment";
+import { async } from "@firebase/util";
 
 const { Option } = Select;
 
@@ -29,12 +30,14 @@ function UpdateCourse() {
   const [classes, setClasses] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [subject, setSubject] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState(data.subject);
+  const [selectedLevel, setSelectedLevel] = useState(data.class ? data.class.level + data.class.section : "");
   const [loading, setLoading] = useState(false);
   const [teacherView, setTeacherView] = useState(true);
+  const [teacherData, setTeacherData] = useState(data.teachers);
   const [updateCourse, setUpdateCourse] = useState({
     course_name: data.course_name,
+    subject: data.subject,
     teachers: data.teachers,
     class: data.class,
     schedule: data.schedule,
@@ -108,18 +111,43 @@ function UpdateCourse() {
     setSubject(subjectArrary);
   };
 
+  const getSubjectID = async (ID) => {
+    const docRef = doc(firestoreDb, "subject", ID)
+    var data = "";
+    await getDoc(docRef).then(response => {
+      data = response.data();
+      data.key = response.id;
+    })
+    return data;
+  }
+
+  const getClasstID = async (ID) => {
+    const docRef = doc(firestoreDb, "class", ID)
+    var data = "";
+    await getDoc(docRef).then(response => {
+      data = response.data();
+      data.key = response.id;
+    })
+    return data;
+  }
+
   const handleCourse = (e) => {
     setUpdateCourse({ ...updateCourse, [e.target.name]: e.target.value });
   };
 
-  const handleClass = (value) => {
-    const classData = JSON.parse(value);
+  const handleClass = async (value) => {
+    const classData = await getClasstID(value);
     setSelectedLevel(classData.level + classData.section);
-    setUpdateCourse({ ...updateCourse, class: classData });
+    setUpdateCourse({ ...updateCourse, class: value });
   };
 
-  const handleSubject = (value) => {
-    setSelectedSubject(value);
+  const handleSubject = async (value) => {
+    console.log(value)
+    const response = await getSubjectID(value)
+    console.log(response)
+    setSelectedSubject(response.name);
+    setUpdateCourse({ ...updateCourse, subject: value });
+
   };
 
   const getTeacherID = async (ID) => {
@@ -140,9 +168,10 @@ function UpdateCourse() {
       const respose = await getTeacherID(item);
       teacherdata.push(respose);
     });
-    setUpdateCourse({ ...updateCourse, teachers: teacherdata });
+    setTeacherData(teacherdata)
+    setUpdateCourse({ ...updateCourse, teachers: value });
     setTimeout(() => {
-      setTeacherView(true)
+      setTeacherView(true);
     }, 2000);
 
 
@@ -238,10 +267,10 @@ function UpdateCourse() {
                       placeholder="select Subjects"
                       onChange={handleSubject}
                       optionLabelProp="label"
-                      defaultValue={updateCourse.course_name}
+                      defaultValue={updateCourse.subject}
                     >
                       {subject.map((item, index) => (
-                        <Option value={item.name} label={item.name}>
+                        <Option key={index} value={item.key} label={item.name}>
                           {item.name}
                         </Option>
                       ))}
@@ -259,10 +288,11 @@ function UpdateCourse() {
                         optionLabelProp="label"
                         defaultValue={updateCourse.class}
                       >
+
                         {classes.map((item, index) => (
                           <Option
                             key={item.key}
-                            value={JSON.stringify(item)}
+                            value={item.key}
                             label={item.level + " " + item.section}
                           >
                             {item.level + " " + item.section}
@@ -315,7 +345,7 @@ function UpdateCourse() {
                   ))}
                 </Select>
               </div>
-              {teacherView ? <Table dataSource={updateCourse.teachers} columns={columns} /> : null}
+              {teacherView ? <Table dataSource={teacherData} columns={columns} /> : null}
             </div>
             <div className="schedule">
               <h4>Weekly Schedule</h4>
@@ -341,7 +371,7 @@ function UpdateCourse() {
                       in
                     >
                       {days.map((item, index) => (
-                        <Option value={item} label={item}>
+                        <Option key={index} value={item} label={item}>
                           {item}
                         </Option>
                       ))}
@@ -370,7 +400,7 @@ function UpdateCourse() {
                       onChange={(e) => handleNewScheduler(e, i)}
                     >
                       {days.map((item, index) => (
-                        <Option value={item} label={item}>
+                        <Option key={index} value={item} label={item}>
                           {item}
                         </Option>
                       ))}

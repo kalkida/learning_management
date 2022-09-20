@@ -27,6 +27,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
+import { async } from "@firebase/util";
 
 const { Option } = Select;
 
@@ -69,6 +70,7 @@ export default function ListCourses() {
   const [viewData, setViewData] = useState();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [rerender, setRerender] = useState(false)
   const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -185,6 +187,49 @@ export default function ListCourses() {
     }
   };
 
+  const getClassData = async (ID) => {
+    const docRef = doc(firestoreDb, "class", ID)
+    var data = "";
+    await getDoc(docRef).then(response => {
+      data = response.data();
+      data.key = response.id;
+    })
+    return data;
+  }
+
+  const getSubjectData = async (ID) => {
+    const docRef = doc(firestoreDb, "subject", ID)
+    var data = "";
+    await getDoc(docRef).then(response => {
+      data = response.data();
+      data.key = response.id;
+    })
+    return data;
+  }
+
+  const getTeacherData = async (ID) => {
+    const docRef = doc(firestoreDb, "teachers", ID)
+    var data = "";
+    await getDoc(docRef).then(response => {
+      data = response.data();
+      data.key = response.id;
+    })
+    return data;
+  }
+  const getData = async (data) => {
+
+    data.class = await getClassData(data.class)
+    data.subject = await getSubjectData(data.subject)
+
+    data.teachers?.map(async (item, index) => {
+      data.teachers[index] = await getTeacherData(item)
+    })
+    return data;
+  }
+
+
+
+
   const getCourses = async () => {
     var branches = await getSchool();
     const q = query(
@@ -193,12 +238,16 @@ export default function ListCourses() {
     );
     var temporary = [];
     const snap = await getDocs(q);
-    snap.forEach((doc) => {
+    snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data);
+
+      getData(data).then(response => temporary.push(response))
     });
-    setData(temporary);
+
+    setTimeout(() => {
+      setData(temporary);
+    }, 2000);
   };
 
   const handleViewCancel = () => {
@@ -234,6 +283,7 @@ export default function ListCourses() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
+        console.log(item)
         return (
           <div>
             {item.level}
