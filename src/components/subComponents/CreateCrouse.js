@@ -465,7 +465,7 @@ const CreateCrouse = () => {
                 onChange={(e) => handleScheduler(e, i)}
               >
                 {days.map((item, index) => (
-                  <Option value={item} label={item}>
+                  <Option key={index} value={item} label={item}>
                     {item}
                   </Option>
                 ))}

@@ -201,12 +201,13 @@ export default function Login() {
           left: "45%",
           top: "35%",
           fontSize: 26,
+
         }}
       >
         Login To Laba
       </h1>
       <Form
-        layout="vertical"
+        // layout="vertical"
         style={{
           position: "absolute",
           color: "black",

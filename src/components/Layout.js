@@ -41,6 +41,8 @@ import CreateNewTeacher from "./subComponents/CreateNewTeacher";
 import CreateCrouse from "./subComponents/CreateCrouse";
 import CreateRole from "./subComponents/CreateRole";
 import ParentProfile from "./subComponents/ParentProfile";
+import ViewCourse from './modals/courses/view';
+import UpdateCourse from './modals/courses/update';
 
 const { Header, Content, Sider } = Layout;
 
@@ -387,6 +389,8 @@ const Layouts = () => {
               <Route path="/add-course" element={<CreateCrouse />} />
               <Route path="/createrole" element={<CreateRole />} />
               <Route path="/list-parent" element={<ParentProfile />} />
+              <Route path="/view-course" element={<ViewCourse />} />
+              <Route path="/update-course" element={<UpdateCourse />} />
             </Routes>
           </Content>
         </Layout>
