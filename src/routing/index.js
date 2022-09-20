@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation, Outlet } from "react-router-dom";
 import Laba from "../components/subComponents/Laba";
+import Welcome from  "../Auth/Welcome"
 
 import Dashboard from "../components/Dashboard";
 import LandingPage from "../components/LandingPage";
@@ -32,6 +33,7 @@ export default function Routing() {
         <Route path="/laba" element={<Laba />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/welcome" element={<Welcome />} />
       </Routes>
     </BrowserRouter>
   );
