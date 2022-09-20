@@ -363,10 +363,10 @@ export default function ListCourses() {
       </Select>
       <Select
         style={{ width: 120, marginLeft: 30, marginRight: 30 }}
-        defaultValue="Grade"
+        defaultValue="Section"
         onChange={handleChange}
       >
-        <Option value="Grade">Grade</Option>
+        <Option value="Grade">Section</Option>
 
         <Option value="jack">Jack</Option>
         <Option value="disabled" disabled>
@@ -375,8 +375,8 @@ export default function ListCourses() {
         <Option value="Yiminghe">yiminghe</Option>
       </Select>
       <Input
-        style={{ width: 200, marginLeft: 294 }}
-        placeholder="Enter your username"
+        style={{ width: 200, marginLeft: 254 }}
+        placeholder="Search"
         prefix={<UserOutlined className="site-form-item-icon" />}
         suffix={
           <Tooltip title="Extra information">
@@ -386,12 +386,12 @@ export default function ListCourses() {
       />
       <Link
         style={{
-          padding: 10,
+          padding:5,
           backgroundColor: "#E7752B",
           marginBottom: 20,
           color: "white",
           borderRadius: 5,
-          marginLeft: 50,
+          marginLeft: 10,
         }}
         to={"/add-course"}
       >
