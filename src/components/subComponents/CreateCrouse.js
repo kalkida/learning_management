@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import TextArea from "antd/lib/input/TextArea";
 import { setLogLevel } from "firebase/app";
 import _default from "antd/lib/time-picker";
+import { NodeExpandOutlined } from "@ant-design/icons";
+import { borderColor } from "@mui/system";
 
 const { Option } = Select;
 const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
@@ -152,11 +154,88 @@ const CreateCrouse = () => {
 
   return (
     <>
+
+    <div  
+        style={{
+          backgroundColor: '#FFFFFF',
+          color:'white' 
+        }}
+    >
+      
       <Form
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
+        layout="vertical"
+        style={{
+          padding: 24,
+          top:110,
+          left:280,
+          borderRadius:8,
+          gap:24,
+          minHeight: 400,
+          backgroundColor: "#F9FAFB",
+        }}
       >
+        <text  style={{
+        height:32,
+        left:43,
+        fontWeight:'bold',
+        fontSize:24,
+        fontFamily:'Plus Jakarta sans',
+        color: '#344054'
+      }}>Course information</text>
+
+       <Form.Item 
+       style={{ 
+        alignItems:'flex-start',
+        padding:0,
+        gap:12,
+        height:143,
+        top:80,
+        left:43
+       }}
+       >
+        <text
+        style={{
+          fontSize:14,
+          fontFamily:'Plus jakarta sans',
+          fontWeight:'500',
+          height:20
+        }}
+        > Description</text> 
+          <TextArea name="description" onChange={(e) => handleCourse(e)}   
+          style={{
+           height:117,
+           top:26,
+           borderRadius:6,
+           gap:6
+          }}
+          />
+        </Form.Item>
+
+        <div  className="site-layout-background"
+        style={{
+          display:'flex',
+          flexDirection:'row',
+          alignItems:'flex-start',
+          marginTop:24,
+          gap:249,
+          width:'60%',
+          height:182,
+          top:249,
+          order:2,
+        }}
+        >
+       <div  style={{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'flex-start',
+        padding:'0',
+        gap:12,
+        width:250,
+        height:152,
+        top:250,
+        marginTop:24
+
+       }}>
         <Form.Item
           label="Subject"
           name="Subject"
@@ -182,8 +261,8 @@ const CreateCrouse = () => {
           </Select>
         </Form.Item>
         <Form.Item
-          label="Teachers"
-          name="Teachers"
+          label="Class"
+          name="Class"
           rules={[
             {
               required: true,
@@ -193,6 +272,45 @@ const CreateCrouse = () => {
           <Select
             style={{
               width: "100%",
+            }}
+            placeholder="select Classes"
+            onChange={handleClass}
+            optionLabelProp="label"
+          >
+            {classes.map((item, index) => (
+              <Option
+                value={JSON.stringify(item)}
+                label={item.level + " " + item.section}
+              >
+                {item.level + " " + item.section}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        </div>
+        <Form.Item
+          label="Teachers"
+          name="Teachers"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+
+          style={{
+            display:'flex',
+            width:250,
+            height:182,
+            left:499,
+            gap:34 ,
+            marginTop:24
+          }}
+        >
+          <Select
+            style={{
+              width: 250,
+              
             }}
             placeholder="select Teachers"
             onChange={handleTeacher}
@@ -212,47 +330,137 @@ const CreateCrouse = () => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item
-          label="Class"
-          name="Class"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select
-            style={{
-              width: "100%",
-            }}
-            placeholder="select Classes"
-            onChange={handleClass}
-            optionLabelProp="label"
-          >
-            {classes.map((item, index) => (
-              <Option
-                key={item.key}
-                value={JSON.stringify(item)}
-                label={item.level + " " + item.section}
-              >
-                {item.level + " " + item.section}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+        </div>
+       
+        </Form>
+        <Form
+        // labelCol={{ span: 4 }}
+        // wrapperCol={{ span: 14 }}
+        layout="vertical"
+        style={{
+          flexDirection:'column',
+          display: 'flex',
+          backgroundColor:'#FFFFFFF',
+          position: 'absolute', 
+          width: 648 ,
+          paddingTop:50,
 
-        <Form.Item label="Course Description">
-          <TextArea name="description" onChange={(e) => handleCourse(e)} />
-        </Form.Item>
-        <Form.Item label="Schedule" name="Schedule" rules={[
+        }}
+      >
+       
+      <div style={{
+        width:50 ,
+        display: 'flex',
+        backgroundColor:'#FFFFFFF',
+        marginBottom:40
+      }}/>
+        <Form.Item  rules={[
           {
             required: true,
           },
-        ]}>
+        ]}
+        style={{
+          display:'flex',
+          justifyContent:'center',
+          flexDirection:'column',
+          alignItems:"flex-start",
+          minheight:400,
+          paddingLeft:34,
+          backgroundColor:'#F9FAFB',
+        }}
+        
+        >
+  <div   style={{
+    display:'flex',
+    flexDirection:'column',
+  }}>
+     <text style={{
+          fontSize:24,
+          fontWeight:'600',
+          fontFamily:'plus jakarta sans',
+          top:24,
+          left:24,
+          paddingLeft:34,
+          paddingTop:34
+
+        }}>Schedule</text>
+        <text style={{
+          fontSize:20,
+          fontWeight:'600',
+          fontFamily:'plus jakarta sans',
+          top:80,
+          left:4,
+          paddingLeft:34,
+          color:'#EA8848'
+
+        }}>Class 7B</text>
+
+</div>
+        <div  
+        style={{
+          flexDirection:'row',
+          display:'flex',
+        }}>
+          <Button
+            style={{ 
+            display: 'flex',
+            flexDirection:'row',
+            alignItems:'flex-start',
+            paddingLeft:40,
+            paddingTop:16,
+            gap:8,
+            border:1,
+            height:40
+
+          }}
+          >
+            Period
+          </Button>
+          <Button
+            style={{ 
+              display: 'flex',
+              flexDirection:'row',
+              alignItems:'flex-start',
+              paddingLeft:110,
+              paddingTop:16,
+              gap:8,
+              border:1,
+              height:40
+            }}
+          >
+            Start Time
+          </Button>
+          <Button
+            style={{ 
+              display: 'flex',
+              flexDirection:'row',
+              alignItems:'flex-start',
+              paddingLeft:110,
+              paddingTop:16,
+              gap:8,
+              border:1,
+              height:40
+
+            }}
+          >
+            End Time
+          </Button>
+          </div>
+
+        <div  style={{
+          width:600,
+          alignItems:'flex-start',
+
+        }}>
           {input.map((item, i) => (
             <>
               <Select
-                style={{ width: "40%" }}
+                style={{ 
+                width: 200 ,
+                 top:40,
+                 gap:40,
+                 paddingLeft:8,
+                }}
                 placeholder="First Select Days"
                 onChange={(e) => handleScheduler(e, i)}
               >
@@ -263,17 +471,28 @@ const CreateCrouse = () => {
                 ))}
               </Select>
               <TimePicker.RangePicker
-                style={{ width: "60%" }}
+                style={{ width: 250,
+                top:40,
+                left:20,
+                justifyContent: "space-between",
+                gap:32,
+                paddingLeft:20,
+              
+              }}
                 format={"hh:mm"}
                 use12Hours
                 onChange={(e) => handleScheduler(e, i)}
               />
             </>
           ))}
-          <Button
-            style={{ float: "right" }}
+          </div>
+         
+        </Form.Item>
+        <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 , marginTop:50 , paddingBottom:50 }}>
+        <Button
+            style={{ float: "left" }}
             onClick={() => {
-              setInput([...input, 0]);
+              setInput([...input, 7]);
               setNewCourse({
                 ...newCourse,
                 schedule: [...newCourse.schedule, { day: "", time: [] }],
@@ -282,12 +501,12 @@ const CreateCrouse = () => {
           >
             Add New
           </Button>
-        </Form.Item>
-      </Form>
-      <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
         <Button type="primary" onClick={() => createNewCourse()}>Save</Button>
         <Button onClick={onCancle}>Cancel</Button>
       </div>
+      </Form>
+      </div>
+     
     </>
   );
 };

@@ -9,10 +9,23 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import { Button } from "antd";
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Link } from "react-router-dom";
 import View from "../modals/teacher/view";
 import Update from "../modals/teacher/update";
+import { SearchOutlined } from "@ant-design/icons";
+import { Input } from "antd";
+import { useRef } from "react";
+import Highlighter from "react-highlight-words";
+import { Select } from "antd";
+import {
+  InfoCircleOutlined,
+  UserOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Tooltip } from "antd";
+const { Option } = Select;
 
 export default function AddTeacher() {
   const [datas, setData] = useState([]);
@@ -26,6 +39,114 @@ export default function AddTeacher() {
   const [sectionData, setSectionData] = useState([]);
   const [sectionIdSingle, setSectionIdSingle] = useState([]);
   const [courseIdSingle, setCourseIdSingle] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
+
 
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
@@ -168,25 +289,80 @@ export default function AddTeacher() {
     },
   ];
 
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
   useEffect(() => {
     getTeacher();
   }, [updateComplete]);
 
   return (
-    <div>
+       <div>
+      <h1 style={{ fontSize: 28 }}>List Of Teachers</h1>
+      <Select
+        defaultValue="Subject"
+        style={{ width: 120, borderColor: "#E7752B", borderWidth: 4 }}
+        onChange={handleChange}
+      >
+        <Option value="Subject">Subject</Option>
+
+        <Option value="jack">Jack</Option>
+        <Option value="disabled" disabled>
+          Disabled
+        </Option>
+        <Option value="Yiminghe">yiminghe</Option>
+      </Select>
+      <Select
+        style={{ width: 120, marginLeft: 30, marginRight: 30 }}
+        defaultValue="Grade"
+        onChange={handleChange}
+      >
+        <Option value="Grade">Grade</Option>
+
+        <Option value="jack">Jack</Option>
+        <Option value="disabled" disabled>
+          Disabled
+        </Option>
+        <Option value="Yiminghe">yiminghe</Option>
+      </Select>
+      <Select
+        style={{ width: 120, marginLeft: 30, marginRight: 30 }}
+        defaultValue="Section"
+        onChange={handleChange}
+      >
+        <Option value="Grade">Section</Option>
+
+        <Option value="jack">Jack</Option>
+        <Option value="disabled" disabled>
+          Disabled
+        </Option>
+        <Option value="Yiminghe">yiminghe</Option>
+      </Select>
+      <Input
+        style={{ width: 200, marginLeft: 254 }}
+        placeholder="Search"
+        prefix={<UserOutlined className="site-form-item-icon" />}
+        suffix={
+          <Tooltip title="Extra information">
+            <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+          </Tooltip>
+        }
+      />
       <Link
         style={{
-          padding: 10,
-          backgroundColor: "black",
+          padding:5,
+          backgroundColor: "#E7752B",
           marginBottom: 20,
           color: "white",
-          borderRadius: 10,
+          borderRadius: 5,
+          marginLeft: 10,
         }}
         to={"/add-teacher"}
       >
+        <PlusOutlined className="site-form-item-icon" />
         Add Teacher
       </Link>
-      <br />
+    
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
       {viewData ? (
