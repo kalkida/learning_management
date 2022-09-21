@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker, message,TimePicker } from "antd";
+import { Form, Input, Button, Select, DatePicker, message,TimePicker ,Table } from "antd";
 import {
   doc,
   setDoc,
@@ -34,6 +34,32 @@ const CreateClasses = () => {
     section: "",
     school_id: uid.school,
   });
+
+  const columns = [
+    {
+      title: 'courses _name',
+      dataIndex: 'course_name',
+      key: 'course_name'
+
+
+    },
+    {
+      title: 'subject',
+      dataIndex: 'subject',
+      key: 'subject',
+    },
+    {
+      title: 'level',
+      dataIndex: 'level',
+      key: 'level',
+    },
+    {
+      title: 'section',
+      dataIndex: 'section',
+      key: 'section',
+    },
+
+  ];
 
   const getStudents = async (level) => {
 
@@ -162,6 +188,10 @@ const CreateClasses = () => {
   return (
     <>
     <div>
+    <div className="create-header">
+          <h1>Add Classes</h1>
+          <Button onClick={() => createNewClass()}>Submit</Button>
+        </div>
      <div style={{
          padding:15,
          backgroundColor:'#FFFFFF',
@@ -216,7 +246,6 @@ const CreateClasses = () => {
       borderWidth:1,
       top:95 ,
       marginTop:50,
-      display:'flex'
     }}
     >
 <div  style={{
@@ -226,13 +255,10 @@ const CreateClasses = () => {
  <div className="list-header">
       <h1 style={{ fontSize: 28 }}>Add Courses</h1>
     </div>
-      <Form
-        layout="vertical"
-      >
-        <Form.Item label="Courses">
+     
           <Select
             style={{
-              width: "97%",
+              width: "100%",
             }}
             placeholder="Select all courses"
             onChange={handleCourses}
@@ -241,13 +267,15 @@ const CreateClasses = () => {
           
           >
             {coursesData.map((item, index) => (
-              <Option key={item.key} value={item.cour} label={item.course_name}>
+              <Option key={item.key} value={item.course_name} label={item.course_name}>
                 {item.course_name}
               </Option>
+              
             ))}
           </Select>
-        </Form.Item>    
-      </Form>
+          <div className="asssign-teacher">
+              <Table dataSource={newClass.course} columns={columns} />
+            </div>   
       </div>
       </div>
       <div className="schedule">
@@ -331,8 +359,9 @@ const CreateClasses = () => {
 
               </div>
             </div>
+          
             <Button className="btn-dlt" type="primary" danger onClick={handleDelete}>Delete</Button>
-
+            
       {/* <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
         <Button onClick={() => createNewClass()} type="primary">Save</Button>
         <Button onClick={onCancle}>Cancle</Button>
