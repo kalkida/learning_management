@@ -154,3 +154,62 @@
 .career-profile h3 {
     color: gray;
 }
+
+.edit-teacher {
+    padding: 15px;
+}
+
+.edit-teacher h1 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.update-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgb(228, 228, 228);
+    border-radius: 10px;
+    background-color: #ececec;
+    padding: 30px 50px;
+}
+
+.avater-img {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.update-card .col {
+    padding: 25px;
+}
+
+.update-card .col div {
+    margin-bottom: 10px;
+}
+
+.avater-img :nth-child(1),
+.avater-img :nth-child(2),
+.avater-img :nth-child(3) {
+    padding: 10px 5px;
+}
+
+.img-btn :nth-child(1),
+.img-btn :nth-child(2) {
+    padding: 2px 5px
+}
+
+.img-btn :nth-child(1) {
+    margin-right: 10px;
+}
+
+.avater-img img {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+}
+
+.avater-img h2 {
+    font-weight: 600;
+}

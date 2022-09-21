@@ -11,14 +11,14 @@ function TeacherView() {
     const { data } = state;
 
     const handleUpdate = () => {
-        console.log("update")
+        navigate('/update-teacher', { state: { data } })
     }
     return (
         <>
             <div>
                 <div className="profile-header" >
                     <div className="teacher-avater" >
-                        <img src="logo512.png" alt="profile" />
+                        <img src="img-5.jpg" alt="profile" />
                         <div className="profile-info">
                             <h2>Teacher Name</h2>
                             <h3>ID: 1334</h3>

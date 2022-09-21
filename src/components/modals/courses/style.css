@@ -347,11 +347,10 @@
 }
 
 .btn-cancle {
-    left: 90%;
+    left: 95%;
     color: #e66937 !important;
 }
 
 .btn-cancle:hover {
-
     color: white !important;
 }
