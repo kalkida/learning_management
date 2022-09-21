@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { Button } from "antd";
 import { firebaseAuth, firestoreDb } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import View from "../modals/teacher/view";
 import Update from "../modals/teacher/update";
@@ -30,6 +31,9 @@ const { Option } = Select;
 
 
 export default function AddTeacher() {
+
+  const navigate = useNavigate();
+
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
   const [openView, setOpenView] = useState(false);
@@ -187,9 +191,10 @@ export default function AddTeacher() {
   };
 
   const handleView = (data) => {
+    navigate("/view-teacher", { state: { data } })
     // handleData(data);
-    setViewData(data);
-    setOpenView(true);
+    // setViewData(data);
+    // setOpenView(true);
   };
 
   const handleUpdateCancel = () => {
@@ -198,21 +203,10 @@ export default function AddTeacher() {
 
   const handleUpdate = (data) => {
     // handleData(data);
-    setViewData(data);
-    setOpenUpdate(true);
+    navigate("/update-teacher", { state: { data } })
   };
 
-  const showViewModal = async (data) => {
-    // const id = data.class
-    // const docRef = doc(firestoreDb, "class", id);
-    // const docSnap = await getDoc(docRef);
-    // if (docSnap.exists()) {
-    //   var dataset = docSnap.data();
-    //   data.class = dataset.grade;
-    // }
-    setViewData(data);
-    setOpenView(true);
-  };
+
 
   const columns = [
     {
@@ -282,8 +276,8 @@ export default function AddTeacher() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => showViewModal(record)}>View </a>
-          <a onClick={() => showUpdateModal(record)}>Update</a>
+          <a onClick={() => handleView(record)}>View </a>
+          <a onClick={() => handleUpdate(record)}>Update</a>
           {/* <a>View {record.name}</a> 
           <a>Update</a>  */}
         </Space>

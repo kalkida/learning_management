@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Modal, Form, Select, Input, DatePicker, Row, Col, message } from 'antd';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Button, Modal, Form, Select, Input, DatePicker, Row, Col, message, Tabs } from 'antd';
 import moment from "moment";
 import {
     doc,
@@ -12,10 +13,15 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
+import './style.css'
 
 const { Option } = Select;
 
-function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdateComplete }) {
+function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpdateComplete }) {
+
+    const navigate = useNavigate();
+    const { state } = useLocation();
+    const { data } = state;
 
     const dateFormat = 'YYYY/MM/DD';
     const valueRef = useRef();
@@ -164,7 +170,91 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
 
     return (
         <>
-            {data && openUpdate ?
+            <div>
+                <div className="profile-header" >
+                    <div className="teacher-avater" >
+                        <img src="img-5.jpg" alt="profile" />
+                        <div className="profile-info">
+                            <h2>Teacher Name</h2>
+                            <h3>ID: 1334</h3>
+                        </div>
+                    </div>
+                    <div className="header-extra">
+                        <div>
+                            <h3>Assigned Subject</h3>
+                            <h4>Math,Physics</h4>
+                        </div>
+                        <div>
+                            <h3>Assigned Class</h3>
+                            <h4>Math,Physics</h4>
+                        </div>
+                    </div>
+                </div>
+                <div className="tab-content">
+                    <Tabs defaultActiveKey="1">
+                        <Tabs.TabPane tab="Profile" key="1">
+                            <Button className="btn-confirm" onClick={handleUpdate}>Confirm</Button>
+                            <div className='edit-teacher'>
+                                <h1>Edit Profile</h1>
+                                <div className='update-card'>
+                                    <div className='avater-img'>
+                                        <h2>Profile Picture</h2>
+                                        <img src='img-5.jpg' />
+                                        <div className='img-btn'>
+                                            <Button>Add</Button>
+                                            <Button>Remove</Button>
+                                        </div>
+                                    </div>
+                                    <div className='col'>
+                                        <div>
+                                            <label>First</label>
+                                            <Input defaultValue={"melaku"} />
+                                        </div>
+                                        <div>
+                                            <label>Sex</label>
+                                            <Input defaultValue={"Mail"} />
+                                        </div>
+                                        <div>
+                                            <label>Branch</label>
+                                            <Input defaultValue={"Saris"} />
+                                        </div>
+                                        <div>
+                                            <label>Phone</label>
+                                            <Input defaultValue={"+25192546546"} />
+                                        </div>
+                                    </div>
+                                    <div className='col'>
+                                        <div>
+                                            <label>Last Name</label>
+                                            <Input defaultValue={"melaku"} />
+                                        </div>
+                                        <div>
+                                            <label>ID</label>
+                                            <Input defaultValue={"0354"} />
+                                        </div>
+                                        <div>
+                                            <label>Date Of Birth</label>
+                                            <Input defaultValue={"1996"} />
+                                        </div>
+                                        <div>
+                                            <label>Email</label>
+                                            <Input defaultValue={"teacher@gmail.com"} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Course" key="2">
+                            Content of Tab Pane 3 course
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Course" key="3">
+                            Content of Tab Pane 3
+                        </Tabs.TabPane>
+                    </Tabs>
+                </div>
+
+            </div>
+            {/* {data && openUpdate ?
                 <Modal
                     visible={openUpdate}
                     title="Update Teacher Profile"
@@ -255,9 +345,9 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                         </Col>
                     </Row>
                 </Modal>
-                : null}
+                : null} */}
         </>
     );
 }
 
-export default Update
+export default TeacherUpdate

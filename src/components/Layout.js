@@ -43,6 +43,8 @@ import CreateRole from "./subComponents/CreateRole";
 import ParentProfile from "./subComponents/ParentProfile";
 import ViewCourse from './modals/courses/view';
 import UpdateCourse from './modals/courses/update';
+import TeacherView from "./modals/teacher/view";
+import TeacherUpdate from "./modals/teacher/update";
 
 const { Header, Content, Sider } = Layout;
 
@@ -391,6 +393,9 @@ const Layouts = () => {
               <Route path="/list-parent" element={<ParentProfile />} />
               <Route path="/view-course" element={<ViewCourse />} />
               <Route path="/update-course" element={<UpdateCourse />} />
+              <Route path="/view-teacher" element={<TeacherView />} />
+              <Route path="/update-teacher" element={<TeacherUpdate />} />
+
             </Routes>
           </Content>
         </Layout>
