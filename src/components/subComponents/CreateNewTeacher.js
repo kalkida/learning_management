@@ -353,7 +353,8 @@ const CreateNewTeacher = () => {
         backgroundColor:'#F9FAFB',
         borderRadius:8,
         borderWidth:1,
-        top:95 
+        top:95 ,
+        display:'flex'
       }}
       >
         <Form 
@@ -369,7 +370,7 @@ const CreateNewTeacher = () => {
         <div style={{
            display: 'flex',
            alignItems:'flex-start',
-           width: '50%',
+          // width: '50%',
            flexDirection:'column',
 
         }} >
@@ -386,18 +387,18 @@ const CreateNewTeacher = () => {
           height:151,
           padding:8,
           marginLeft:50,
-        }}src={file ? URL.createObjectURL(file) :"logo512.png"} alt="profile" />
+        }}src={file ? URL.createObjectURL(file) :"logo512.png"}  />
         <Form.Item 
         style={{
           display: 'flex',
-          width:98,
+          //width:98,
           height:38,
           padding:20,
           gap:8,
           borderBlockColor:'#E7752B',
         }}
-        valuePropName="fileList">
-        <input type="file" onChange={handleChange} accept="/image/*"   />
+        >
+        <input  type="file" onChange={handleChange} accept="/image/*"   />
         </Form.Item>
         </div>
         <div 
@@ -409,7 +410,7 @@ const CreateNewTeacher = () => {
         }}
         >
       <Form.Item  style ={{
-        width:241,
+        minWidth:"100%",
         height:44,
         borderRadius:6,
         padding:10,
@@ -418,7 +419,7 @@ const CreateNewTeacher = () => {
           <Input onChange={(e) => setFirstNmae(e)} />
         </Form.Item>
         <Form.Item style ={{
-        width:241,
+        width:'100%',
         height:44,
         borderRadius:6,
         padding:10,
@@ -427,22 +428,22 @@ const CreateNewTeacher = () => {
           <Input onChange={(e) => setLastName(e)} />
         </Form.Item>
         <Form.Item style ={{
-        width:241,
+        width:"100%",
         height:44,
         borderRadius:6,
         padding:10,
         gap:8
       }} label="Class">
           <Select
-            placeholder="select all classes"
+            placeholder="Select Classes"
             onChange={handleCourse}
             optionLabelProp="label"
             mode="multiple"
 
           >
             {classData.map((item, index) => (
-              <Option key={item.key} value={item.key} label={item.level + item.section}>
-                {item.level +item.section}
+              <Option key={item.key} value={item.level} label={item.level}>
+                {item.level}
               </Option>
             ))}
           </Select>
@@ -454,24 +455,46 @@ const CreateNewTeacher = () => {
           alignItems:'flex-end',
           paddingRight:120
         }}>
+        <Form.Item style ={{
+        width:'100%',
+        height:44,
+        borderRadius:6,
+        padding:10,
+        gap:8
+      }} label="Section">
+          <Select
+            placeholder="Select Section"
+            onChange={handleCourse}
+            optionLabelProp="label"
+            mode="multiple"
+
+          >
+            {classData.map((item, index) => (
+              <Option key={item.key} value={item.section} label={item.section}>
+                {item.section}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+
         <Form.Item 
         style ={{
-          width:241,
+          width:"100%",
           height:44,
           borderRadius:6,
           padding:10,
-          gap:8
+          gap:8,
         }}
         label="Email">
           <Input onChange={(e) => setEmail(e)} />
         </Form.Item>
         <Form.Item
         style ={{
-          width:241,
+          width:'100%',
           height:44,
           borderRadius:6,
           padding:10,
-          gap:8
+          gap:8,
         }}
         label="Phone">
         <Input onChange={(e) => setPhone(e)} />
@@ -490,7 +513,8 @@ const CreateNewTeacher = () => {
       borderRadius:8,
       borderWidth:1,
       top:95 ,
-      marginTop:50
+      marginTop:50,
+      display:'flex'
     }}
     >
 <div  style={{
