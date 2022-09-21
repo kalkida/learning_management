@@ -65,10 +65,10 @@ function CreateSubject() {
         style={{
           padding: 10,
           backgroundColor: "#E7752B",
-          marginTop: 20,
+          // marginTop: 20,
           color: "white",
           borderRadius: 5,
-          float: "right",
+          // float: "right",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
