@@ -216,3 +216,45 @@
 .at-filters :nth-child(2) {
     margin-right: 15px;
 }
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-sub {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.list-filter :nth-child(1) {
+    margin-right: 1rem;
+}
+
+.course-search {
+    display: flex;
+}
+
+.course-search div:nth-child(1) {
+    margin-right: 1rem;
+}
+
+.course-search div:nth-child(2) {
+    border: 2px solid #e66937;
+    border-radius: 5px;
+    color: #e66937;
+    padding: 5px 10px;
+    align-content: center;
+}
+
+
+.course-search div:nth-child(2):hover {
+    box-shadow: 0px 0px 5px #e66937;
+    color: #e66937;
+}
+
+.course-search div:nth-child(2) a:hover {
+    color: #e66937;
+
+}
