@@ -258,3 +258,100 @@
     color: #e66937;
 
 }
+
+.create-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.create-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.create-header Button {
+    border: 2px solid #e66937;
+    border-radius: 5px;
+    color: #e66937;
+}
+
+
+.create-header Button:hover {
+    border: 2px solid #e66937;
+    border-radius: 5px;
+    color: #e66937;
+    box-shadow: 0px 0px 6px #e66937;
+}
+
+.create-info {
+    border: 2px solid rgb(226, 226, 226);
+    padding: 15px;
+    background-color: rgb(247, 247, 247);
+    border-radius: 5px;
+}
+
+.create-description {
+    margin-bottom: 15px;
+}
+
+.create-description h1 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.create-description h3 {
+    margin-bottom: 10px;
+}
+
+.info-selection {
+    display: flex;
+}
+
+.col {
+    width: 50%;
+}
+
+.info-selection .col .class,
+.info-selection .col .teacher {
+    width: 50%;
+
+}
+
+.info-selection .col .subject {
+    margin-bottom: 10px;
+}
+
+.create-schedule {
+    width: 50%;
+    margin-top: 25px;
+}
+
+.create-schedule h1 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.create-schedule h2 {
+    color: #e66937;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.create-schedule Button {
+    display: flex;
+    justify-content: right;
+    align-items: right;
+}
+
+.btn-cancle {
+    left: 90%;
+    color: #e66937 !important;
+}
+
+.btn-cancle:hover {
+
+    color: white !important;
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Modal, Form, Select, Input, DatePicker, Row, Col, message } from 'antd';
 import moment from "moment";
 import {
@@ -15,7 +16,11 @@ import { firestoreDb, storage } from "../../../firebase";
 
 const { Option } = Select;
 
-function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdateComplete }) {
+function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpdateComplete }) {
+
+    const navigate = useNavigate();
+    const { state } = useLocation();
+    const { data } = state;
 
     const dateFormat = 'YYYY/MM/DD';
     const valueRef = useRef();
@@ -164,7 +169,8 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
 
     return (
         <>
-            {data && openUpdate ?
+            <h1>teacher Update</h1>
+            {/* {data && openUpdate ?
                 <Modal
                     visible={openUpdate}
                     title="Update Teacher Profile"
@@ -255,9 +261,9 @@ function Update({ openUpdate, handleUpdateCancel, data, updateComplete, setUpdat
                         </Col>
                     </Row>
                 </Modal>
-                : null}
+                : null} */}
         </>
     );
 }
 
-export default Update
+export default TeacherUpdate
