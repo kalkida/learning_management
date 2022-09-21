@@ -28,7 +28,7 @@ import {
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import { async } from "@firebase/util";
-import '../modals/courses/style.css'
+import "../modals/courses/style.css";
 
 const { Option } = Select;
 
@@ -60,7 +60,6 @@ const data = [
 ];
 
 export default function ListCourses() {
-
   const navigate = useNavigate();
 
   const [datas, setData] = useState([]);
@@ -71,7 +70,7 @@ export default function ListCourses() {
   const [viewData, setViewData] = useState();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const [rerender, setRerender] = useState(false)
+  const [rerender, setRerender] = useState(false);
   const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -189,47 +188,45 @@ export default function ListCourses() {
   };
 
   const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID)
+    const docRef = doc(firestoreDb, "class", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const getSubjectData = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID)
+    const docRef = doc(firestoreDb, "subject", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const getTeacherData = async (ID) => {
-    const docRef = doc(firestoreDb, "teachers", ID)
+    const docRef = doc(firestoreDb, "teachers", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
   const getData = async (data) => {
-
-    data.class = await getClassData(data.class)
-    data.subject = await getSubjectData(data.subject)
+    if (data.class) {
+      data.class = await getClassData(data.class);
+    }
+    data.subject = await getSubjectData(data.subject);
 
     data.teachers?.map(async (item, index) => {
-      data.teachers[index] = await getTeacherData(item)
-    })
+      data.teachers[index] = await getTeacherData(item);
+    });
     return data;
-  }
-
-
-
+  };
 
   const getCourses = async () => {
     var branches = await getSchool();
@@ -242,13 +239,13 @@ export default function ListCourses() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-
-      getData(data).then(response => temporary.push(response))
+      console.log(data);
+      getData(data).then((response) => temporary.push(response));
     });
 
     setTimeout(() => {
       setData(temporary);
-    }, 2000);
+    }, 5000);
   };
 
   const handleViewCancel = () => {
@@ -266,7 +263,7 @@ export default function ListCourses() {
   };
 
   const handleUpdate = (data) => {
-    navigate("/update-course", { state: { data } })
+    navigate("/update-course", { state: { data } });
     // setViewData(data);
     // setOpenUpdate(true);
   };
@@ -341,7 +338,6 @@ export default function ListCourses() {
       </div>
       <div className="list-sub">
         <div className="list-filter">
-
           <Select
             defaultValue="Subject"
             style={{ width: 120 }}
@@ -383,7 +379,7 @@ export default function ListCourses() {
             />
           </div>
           <div>
-            <Link to={"/add-course"} >
+            <Link to={"/add-course"}>
               <PlusOutlined className="site-form-item-icon" />
               Add Courses
             </Link>
