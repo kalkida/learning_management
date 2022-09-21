@@ -213,3 +213,40 @@
 .avater-img h2 {
     font-weight: 600;
 }
+
+.tch-cr-list {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.teacher-course-list h1 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.tch-cr-list {
+    margin-top: 15px;
+}
+
+.tch-cr-list div:nth-child(1) {
+    margin-right: 10px;
+}
+
+.tch-cr-list div:last-child {
+    margin-left: 10px;
+}
+
+.ant-input:focus,
+.ant-input:hover,
+.ant-select-selector:hover,
+.ant-select-selector:focus,
+.ant-select-selector:active,
+.ant-select-focused .ant-select-selector,
+.ant-select-open .ant-select-selector,
+.ant-picker:hover,
+.ant-picker:active {
+    border-color: #e66937 !important;
+    outline: 0;
+    -webkit-box-shadow: 0 0 0 2px rgba(233, 170, 87, 0.2) !important;
+}
