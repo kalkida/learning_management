@@ -15,6 +15,23 @@ import { async } from "@firebase/util";
 import View from "../modals/classes/view";
 import Update from "../modals/classes/update";
 import CreateSection from "../modals/section/createSection";
+import '../modals/courses/style.css'
+import { SearchOutlined } from "@ant-design/icons";
+import { Input } from "antd";
+import { useRef } from "react";
+import Highlighter from "react-highlight-words";
+import { Select } from "antd";
+import {
+  InfoCircleOutlined,
+  UserOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Tooltip } from "antd";
+import '../modals/courses/style.css'
+
+const { Option } = Select;
+
+
 
 export default function ListClasses() {
   const [datas, setData] = useState([]);
@@ -24,6 +41,113 @@ export default function ListClasses() {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [updateComplete, setUpdateComplete] = useState(false);
   const [viewData, setViewData] = useState();
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const [rerender, setRerender] = useState(false)
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
 
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
@@ -96,6 +220,9 @@ export default function ListClasses() {
       ),
     },
   ];
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
 
   useEffect(() => {
     getClasses();
@@ -103,19 +230,60 @@ export default function ListClasses() {
 
   return (
     <div>
-      <Link
-        style={{
-          padding: 10,
-          backgroundColor: "black",
-          marginBottom: 20,
-          color: "white",
-          borderRadius: 10,
-          float: "left",
-        }}
-        to={"/add-class"}
-      >
-        Add Classes
-      </Link>
+        <div className="list-header">
+        <h1 style={{ fontSize: 28 }}>List Of Class</h1>
+      </div>
+      <div className="list-sub">
+        <div className="list-filter">
+
+          <Select
+            defaultValue="Subject"
+            style={{ width: 120 }}
+            onChange={handleChange}
+          >
+            <Option value="Subject">Subject</Option>
+
+            <Option value="jack">Jack</Option>
+            <Option value="disabled" disabled>
+              Disabled
+            </Option>
+            <Option value="Yiminghe">yiminghe</Option>
+          </Select>
+          <Select
+            style={{ width: 120 }}
+            defaultValue="Class"
+            onChange={handleChange}
+          >
+            <Option value="Grade">Grade</Option>
+
+            <Option value="jack">Jack</Option>
+            <Option value="disabled" disabled>
+              Disabled
+            </Option>
+            <Option value="Yiminghe">yiminghe</Option>
+          </Select>
+        </div>
+        <div className="course-search">
+          <div>
+            <Input
+              style={{ width: 200 }}
+              placeholder="Search"
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              suffix={
+                <Tooltip title="Extra information">
+                  <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+                </Tooltip>
+              }
+            />
+          </div>
+          <div>
+            <Link to={"/add-class"} >
+              <PlusOutlined className="site-form-item-icon" />
+              Add Classes
+            </Link>
+          </div>
+        </div>
+      </div>
       {/* <CreateSection /> */}
       <br />
 

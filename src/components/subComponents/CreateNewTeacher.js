@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import '../modals/courses/style.css'
 import {
   InfoCircleOutlined,
   UserOutlined,
@@ -25,6 +26,7 @@ import {
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 const { Option } = Select;
+
 
 const CreateNewTeacher = () => {
   const fileInputRef = useRef();
@@ -305,9 +307,6 @@ const CreateNewTeacher = () => {
     const handleCourses = (value) => {
     setNewUser({ ...newUser, course: value });
       };
-    // const handlename = (value) => {
-    //  setNewUser({ ...newUser, first_name: value });
-    //   };
 
   const setEmail = (e) => {
     setNewUser({ ...newUser, email: e.target.value });
@@ -518,71 +517,74 @@ const CreateNewTeacher = () => {
     }}
     >
 <div  style={{
-  padding:20
+  padding:20,
+  
 }}>
-<h1 style={{ fontSize: 21 }}>Add Courses</h1>
-      <Select
-        defaultValue="Subject"
-        style={{ width: 120, borderColor: "#E7752B", borderWidth: 4 }}
-        onChange={handleChange}
-      >
-        <Option value="Subject">Subject</Option>
+ <div className="list-header">
+      <h1 style={{ fontSize: 28 }}>List Of Teachers</h1>
+    </div>
+    <div className="list-sub">
+      <div className="list-filter">
 
-        <Option value="jack">Jack</Option>
-        <Option value="disabled" disabled>
-          Disabled
-        </Option>
-        <Option value="Yiminghe">yiminghe</Option>
-      </Select>
-      <Select
-        style={{ width: 120, marginLeft: 30, marginRight: 30 }}
-        defaultValue="Grade"
-        onChange={handleChange}
-      >
-        <Option value="Grade">Grade</Option>
+        <Select
+          defaultValue="Subject"
+          style={{ width: 120 }}
+          onChange={handleChange}
+        >
+          <Option value="Subject">Subject</Option>
 
-        <Option value="jack">Jack</Option>
-        <Option value="disabled" disabled>
-          Disabled
-        </Option>
-        <Option value="Yiminghe">yiminghe</Option>
-      </Select>
-      <Select
-        style={{ width: 120, marginLeft: 30, marginRight: 30 }}
-        defaultValue="Section"
-        onChange={handleChange}
-      >
-        <Option value="Grade">Section</Option>
+          <Option value="jack">Jack</Option>
+          <Option value="disabled" disabled>
+            Disabled
+          </Option>
+          <Option value="Yiminghe">yiminghe</Option>
+        </Select>
+        <Select
+          style={{ width: 120 }}
+          defaultValue="Class"
+          onChange={handleChange}
+        >
+          <Option value="Grade">Grade</Option>
 
-        <Option value="jack">Jack</Option>
-        <Option value="disabled" disabled>
-          Disabled
-        </Option>
-        <Option value="Yiminghe">yiminghe</Option>
-      </Select>
-      <Input
-        style={{ width: 200, marginLeft: 200 }}
-        placeholder="Search"
-        prefix={<UserOutlined className="site-form-item-icon" />}
-        suffix={
-          <Tooltip title="Extra information">
-            <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-          </Tooltip>
-        }
-      />
-
-<Button 
- style={{
-  padding:5,
-  backgroundColor: "#E7752B",
-  marginBottom: 20,
-  color: "white",
-  borderRadius: 5,
-  marginLeft: 10,
-  width:87
-}}
+          <Option value="jack">Jack</Option>
+          <Option value="disabled" disabled>
+            Disabled
+          </Option>
+          <Option value="Yiminghe">yiminghe</Option>
+        </Select>
+      </div>
+      <div className="course-search">
+        <div>
+          <Input
+            style={{ width: 200 }}
+            placeholder="Search"
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            suffix={
+              <Tooltip title="Extra information">
+                <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+              </Tooltip>
+            }
+          />
+        </div>
+        <div>
+        <Button 
+  style={{
+//   padding:5,
+backgroundColor: "#E7752B",
+//   marginBottom: 20,
+//   color: "white",
+//   borderRadius: 5,
+//   marginLeft: 10,
+//   width:87
+ }}
 
  onClick={async() => await createNewTeacher()}>Confirm</Button>
+         
+        </div>
+      </div>
+    </div>
+
+
 
       <Form
         layout="vertical"
