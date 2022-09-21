@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker } from "antd";
+import { Form, Input, Button, Select, DatePicker, Space } from "antd";
+import { Link } from "react-router-dom";
 import {
   doc,
   setDoc,
@@ -15,8 +16,17 @@ import uuid from "react-uuid";
 import '../../css/teacher.css'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import { SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
+import '../modals/courses/style.css'
+import {
+  InfoCircleOutlined,
+  UserOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Tooltip } from "antd";
 const { Option } = Select;
+
 
 const CreateNewTeacher = () => {
   const fileInputRef = useRef();
@@ -37,6 +47,114 @@ const CreateNewTeacher = () => {
   const [coursesData ,setCourseData]= useState([]);
   const [personData, setPersonData] = useState([]);
   const [secData, setSecData] = useState([]);
+
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
 
   const uid = useSelector((state) => state.user.profile);
   const [newUser, setNewUser] = useState({
@@ -189,9 +307,6 @@ const CreateNewTeacher = () => {
     const handleCourses = (value) => {
     setNewUser({ ...newUser, course: value });
       };
-    // const handlename = (value) => {
-    //  setNewUser({ ...newUser, first_name: value });
-    //   };
 
   const setEmail = (e) => {
     setNewUser({ ...newUser, email: e.target.value });
@@ -214,6 +329,10 @@ const CreateNewTeacher = () => {
   const setLastName = (e) => {
     setNewUser({ ...newUser, last_name: e.target.value });
   };
+  const handleChanges = (value) => {
+    console.log(`selected ${value}`);
+  };
+
 
   useEffect(() => {
       getClass();
@@ -221,11 +340,21 @@ const CreateNewTeacher = () => {
       getid();
       getSection();
   }, []);
+
+
+  
   return (
     <>
+    <div>
       <div 
-      style={{}}
-      
+      style={{
+        height:357,
+        backgroundColor:'#F9FAFB',
+        borderRadius:8,
+        borderWidth:1,
+        top:95 ,
+        display:'flex'
+      }}
       >
         <Form 
         layout="vertical"
@@ -240,7 +369,7 @@ const CreateNewTeacher = () => {
         <div style={{
            display: 'flex',
            alignItems:'flex-start',
-           width: '50%',
+          // width: '50%',
            flexDirection:'column',
 
         }} >
@@ -249,15 +378,26 @@ const CreateNewTeacher = () => {
           fontFamily:'plus jakarta sans',
           fontSize:16,
           fontWeight:'bold',
-          padding:24
+          padding:24,
+          marginLeft:50,
         }}>Profile Picture</text>
         <img  style ={{
           width:151,
           height:151,
-          padding:8
-        }}src="logo512.png" alt="profile" />
-        <Form.Item  valuePropName="fileList">
-        <input type="file" onChange={handleChange} accept="/image/*"   />
+          padding:8,
+          marginLeft:50,
+        }}src={file ? URL.createObjectURL(file) :"logo512.png"}  />
+        <Form.Item 
+        style={{
+          display: 'flex',
+          //width:98,
+          height:38,
+          padding:20,
+          gap:8,
+          borderBlockColor:'#E7752B',
+        }}
+        >
+        <input  type="file" onChange={handleChange} accept="/image/*"   />
         </Form.Item>
         </div>
         <div 
@@ -268,26 +408,41 @@ const CreateNewTeacher = () => {
           paddingRight:120
         }}
         >
-      <Form.Item label="First Name">
+      <Form.Item  style ={{
+        minWidth:"100%",
+        height:44,
+        borderRadius:6,
+        padding:10,
+        gap:8
+      }}label="First Name">
           <Input onChange={(e) => setFirstNmae(e)} />
         </Form.Item>
-        <Form.Item label="Last Name">
+        <Form.Item style ={{
+        width:'100%',
+        height:44,
+        borderRadius:6,
+        padding:10,
+        gap:8
+      }} label="Last Name">
           <Input onChange={(e) => setLastName(e)} />
         </Form.Item>
-        <Form.Item label="Class">
+        <Form.Item style ={{
+        width:"100%",
+        height:44,
+        borderRadius:6,
+        padding:10,
+        gap:8
+      }} label="Class">
           <Select
-            style={{
-              width: 241,
-            }}
-            placeholder="select all classes"
+            placeholder="Select Classes"
             onChange={handleCourse}
             optionLabelProp="label"
             mode="multiple"
 
           >
             {classData.map((item, index) => (
-              <Option key={item.key} value={item.key} label={item.level + item.section}>
-                {item.level +item.section}
+              <Option key={item.key} value={item.level} label={item.level}>
+                {item.level}
               </Option>
             ))}
           </Select>
@@ -299,33 +454,147 @@ const CreateNewTeacher = () => {
           alignItems:'flex-end',
           paddingRight:120
         }}>
-        <Form.Item label="Email">
+        <Form.Item style ={{
+        width:'100%',
+        height:44,
+        borderRadius:6,
+        padding:10,
+        gap:8
+      }} label="Section">
+          <Select
+            placeholder="Select Section"
+            onChange={handleCourse}
+            optionLabelProp="label"
+            mode="multiple"
+
+          >
+            {classData.map((item, index) => (
+              <Option key={item.key} value={item.section} label={item.section}>
+                {item.section}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item 
+        style ={{
+          width:"100%",
+          height:44,
+          borderRadius:6,
+          padding:10,
+          gap:8,
+        }}
+        label="Email">
           <Input onChange={(e) => setEmail(e)} />
         </Form.Item>
-        <Form.Item label="Phone">
+        <Form.Item
+        style ={{
+          width:'100%',
+          height:44,
+          borderRadius:6,
+          padding:10,
+          gap:8,
+        }}
+        label="Phone">
         <Input onChange={(e) => setPhone(e)} />
       </Form.Item>
       </div>
       </div>
  
       </Form>
-      <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button onClick={async() => await createNewTeacher()}>Save</Button>
-        <Button>Cancel</Button>
-      </div>
       </div>
 
 
-    <div >
+    <div 
+    style={{
+      height:417,
+      backgroundColor:'#F9FAFB',
+      borderRadius:8,
+      borderWidth:1,
+      top:95 ,
+      marginTop:50,
+      display:'flex'
+    }}
+    >
+<div  style={{
+  padding:20,
+  
+}}>
+ <div className="list-header">
+      <h1 style={{ fontSize: 28 }}>List Of Teachers</h1>
+    </div>
+    <div className="list-sub">
+      <div className="list-filter">
+
+        <Select
+          defaultValue="Subject"
+          style={{ width: 120 }}
+          onChange={handleChange}
+        >
+          <Option value="Subject">Subject</Option>
+
+          <Option value="jack">Jack</Option>
+          <Option value="disabled" disabled>
+            Disabled
+          </Option>
+          <Option value="Yiminghe">yiminghe</Option>
+        </Select>
+        <Select
+          style={{ width: 120 }}
+          defaultValue="Class"
+          onChange={handleChange}
+        >
+          <Option value="Grade">Grade</Option>
+
+          <Option value="jack">Jack</Option>
+          <Option value="disabled" disabled>
+            Disabled
+          </Option>
+          <Option value="Yiminghe">yiminghe</Option>
+        </Select>
+      </div>
+      <div className="course-search">
+        <div>
+          <Input
+            style={{ width: 200 }}
+            placeholder="Search"
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            suffix={
+              <Tooltip title="Extra information">
+                <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+              </Tooltip>
+            }
+          />
+        </div>
+        <div>
+        <Button 
+  style={{
+//   padding:5,
+backgroundColor: "#E7752B",
+//   marginBottom: 20,
+//   color: "white",
+//   borderRadius: 5,
+//   marginLeft: 10,
+//   width:87
+ }}
+
+ onClick={async() => await createNewTeacher()}>Confirm</Button>
+         
+        </div>
+      </div>
+    </div>
+
+
+
       <Form
         layout="vertical"
       >
         <Form.Item label="Courses">
           <Select
             style={{
-              width: "100%",
+              width: "97%",
             }}
-            placeholder="select all courses"
+            placeholder="Select all courses"
             onChange={handleCourses}
             optionLabelProp="label"
             mode="multiple"
@@ -340,7 +609,8 @@ const CreateNewTeacher = () => {
         </Form.Item>    
       </Form>
       </div>
-      
+      </div>
+      </div>
     </>
   );
 };

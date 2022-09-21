@@ -18,7 +18,7 @@ import { setLogLevel } from "firebase/app";
 import _default from "antd/lib/time-picker";
 import { NodeExpandOutlined } from "@ant-design/icons";
 import { borderColor } from "@mui/system";
-import moment from 'moment';
+import moment from "moment";
 
 const { Option } = Select;
 const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
@@ -128,10 +128,9 @@ const CreateCrouse = () => {
   };
 
   const handleSubject = (value) => {
-    const subValue = JSON.parse(value)
+    const subValue = JSON.parse(value);
     setSelectedSubject(subValue.name);
-    setNewCourse({ ...newCourse, subject: subValue.key })
-
+    setNewCourse({ ...newCourse, subject: subValue.key });
   };
 
   const handleTeacher = (value) => {
@@ -147,9 +146,9 @@ const CreateCrouse = () => {
     } else {
       const timeValue = [];
       value.map((item, i) => {
-        timeValue.push(JSON.stringify(item._d))
-        console.log(JSON.stringify(item._d))
-      })
+        timeValue.push(JSON.stringify(item._d));
+        console.log(JSON.stringify(item._d));
+      });
       newCourse.schedule[i].time = timeValue;
     }
   };
@@ -181,14 +180,18 @@ const CreateCrouse = () => {
                 <h3>Subject</h3>
                 <Select
                   style={{
-                    width: "50%"
+                    width: "50%",
                   }}
                   placeholder="select Subjects"
                   onChange={handleSubject}
                   optionLabelProp="label"
                 >
                   {subject.map((item, index) => (
-                    <Option key={item.key} value={JSON.stringify(item)} label={item.name}>
+                    <Option
+                      key={item.key}
+                      value={JSON.stringify(item)}
+                      label={item.name}
+                    >
                       {item.name}
                     </Option>
                   ))}
@@ -234,10 +237,14 @@ const CreateCrouse = () => {
                       key={item.key}
                       value={item.key}
                       label={
-                        item.first_name + " " + (item.last_name ? item.last_name : "")
+                        item.first_name +
+                        " " +
+                        (item.last_name ? item.last_name : "")
                       }
                     >
-                      {item.first_name + " " + (item.last_name ? item.last_name : "")}
+                      {item.first_name +
+                        " " +
+                        (item.last_name ? item.last_name : "")}
                     </Option>
                   ))}
                 </Select>
@@ -246,10 +253,9 @@ const CreateCrouse = () => {
           </div>
         </div>
         <div className="create-schedule">
-
           <div className="up-card-schedule">
             <h1>Weekly Schedule</h1>
-            <h2 >Class {selectedLevel ? selectedLevel : ""}</h2>
+            <h2>Class {selectedLevel ? selectedLevel : ""}</h2>
             <div className="schedule-header">
               <div>
                 <p> Period</p>
@@ -265,7 +271,6 @@ const CreateCrouse = () => {
                 <Select
                   style={{
                     width: "40%",
-
                   }}
                   placeholder="First Select Days"
                   onChange={(e) => handleScheduler(e, i)}
@@ -288,7 +293,7 @@ const CreateCrouse = () => {
             ))}
             <Button
               style={{
-                float: "right"
+                float: "right",
               }}
               onClick={() => {
                 setInput([...input, 7]);
@@ -300,12 +305,12 @@ const CreateCrouse = () => {
             >
               Add New
             </Button>
-
           </div>
         </div>
-        <Button className="btn-cancle" type="danger" onClick={onCancle}>Cancle</Button>
+        <Button className="btn-cancle" type="danger" onClick={onCancle}>
+          Cancle
+        </Button>
       </div>
-
     </>
   );
 };
