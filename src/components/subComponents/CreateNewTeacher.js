@@ -9,6 +9,7 @@ import {
   collection,
   where,
   query,
+  addDoc,
   updateDoc
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
@@ -302,9 +303,6 @@ const CreateNewTeacher = () => {
   const handleSection = (value) => {
     setNewUser({ ...newUser, level: value });
   };
-  const handleId = (value) => {   
-     setNewUser({ ...newUser, id: uuid() });
-     };
     const handleCourses = (value) => {
     setNewUser({ ...newUser, course: value });
       };
@@ -333,6 +331,20 @@ const CreateNewTeacher = () => {
   const handleChanges = (value) => {
     console.log(`selected ${value}`);
   };
+
+  const docRef = addDoc(collection(firestoreDb, "users"), {
+    name: newUser.first_name,
+    user_id: uuid(),
+    phone_Numbers:newUser.phone,
+    role: {
+      isAdmin : false,
+      isParent : false,
+      isTeacher : true,
+    }
+   
+  });
+  console.log("Document written with ID: ", docRef.id);
+  
 
 
   useEffect(() => {
