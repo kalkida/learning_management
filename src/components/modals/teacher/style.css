@@ -1,0 +1,156 @@
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.teacher-avater {
+    display: flex;
+    align-items: center;
+
+    width: 50%;
+}
+
+.teacher-avater img {
+    border: 1px solid black;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.teacher-avater h3 {
+    color: gray;
+}
+
+.header-extra {
+    width: 50%;
+    border-left: 2px solid lightgray;
+    padding-left: 25px;
+}
+
+.header-extra div:nth-child(1) {
+    margin-bottom: 10px;
+}
+
+.header-extra h3 {
+    color: rgb(56, 54, 54);
+}
+
+.header-extra h4 {
+    color: gray;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #e66937 !important;
+    font-weight: 500;
+}
+
+.ant-tabs-tab:hover {
+    color: #e66937 !important;
+
+}
+
+.ant-tabs-ink-bar {
+    position: absolute;
+    background: #e66937;
+    pointer-events: none;
+}
+
+.tab-content {
+    margin-top: 15px;
+}
+
+.tab-content Button {
+    border: 2px solid #e66937;
+    border-radius: 5px;
+    color: #e66937;
+}
+
+.btn-confirm {
+    float: right;
+    margin-top: -3.5rem;
+}
+
+.tab-content Button:hover {
+    border: 2px solid #e66937;
+    border-radius: 5px;
+    color: #e66937;
+    box-shadow: 0px 0px 6px #e66937;
+}
+
+.teacher-static {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+}
+
+.teacher-static div {
+    width: 7rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.teacher-static div h1 {
+    font-weight: bolder;
+    font-size: 32px;
+}
+
+.teacher-profile {
+    display: flex;
+}
+
+.personal-info {
+    width: 50%;
+    padding: 15px 30px;
+    border: 2px solid rgb(226, 226, 226);
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.info-content {
+    display: flex;
+}
+
+.personal-info h1 {
+    margin-bottom: 2rem;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.col {
+    width: 50%;
+}
+
+.personal-info .col div {
+    margin-bottom: 25px;
+}
+
+.personal-info .col h3 {
+    color: gray;
+}
+
+.career-profile {
+    margin-left: 10px;
+    width: 50%;
+    padding: 15px 30px;
+    border: 2px solid rgb(226, 226, 226);
+    border-radius: 5px;
+}
+
+.career-profile h1 {
+    margin-bottom: 2rem;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.career-profile div {
+    margin-bottom: 25px;
+}
+
+.career-profile h3 {
+    color: gray;
+}
