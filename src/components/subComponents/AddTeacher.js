@@ -230,18 +230,6 @@ export default function AddTeacher() {
       key: "phone",
       dataIndex: "phone",
       render: (text) => <a>{text}</a>,
-      // render: (value) => {
-      //   return (
-      //     console.log(datas.length)
-      //     // <>
-      //     //   {value.length ?
-      //     //     value.map((item) => (
-      //     //       <Tag color={"green"}>{item}</Tag>
-      //     //     ))
-      //     //     : null}
-      //     // </>
-      //   );
-      // },
     },
     {
       title: "Email",

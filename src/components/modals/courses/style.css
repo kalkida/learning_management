@@ -347,11 +347,29 @@
 }
 
 .btn-cancle {
-    left: 90%;
+    left: 95%;
     color: #e66937 !important;
 }
 
 .btn-cancle:hover {
-
     color: white !important;
+}
+
+.ant-input:focus,
+.ant-input:hover,
+.ant-select-selector:hover,
+.ant-select-selector:focus,
+.ant-select-selector:active,
+.ant-select-focused .ant-select-selector,
+.ant-select-open .ant-select-selector,
+.ant-picker:hover,
+.ant-picker:active {
+    border-color: #e66937 !important;
+    outline: 0;
+    -webkit-box-shadow: 0 0 0 2px rgba(233, 170, 87, 0.2) !important;
+}
+
+.ant-btn:hover {
+    border-color: #e66937 !important;
+    color: #e66937 !important;
 }

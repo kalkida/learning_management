@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Form, Input, Button, Select, Row, Col, Tabs } from 'antd';
+import { Modal, Form, Input, Button, Select, Row, Col, Tabs, Table } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './style.css'
 
@@ -11,14 +11,84 @@ function TeacherView() {
     const { data } = state;
 
     const handleUpdate = () => {
-        console.log("update")
+        navigate('/update-teacher', { state: { data } })
     }
+
+    const teacherCourse = [{
+        subject: "Math",
+        Grade: "8",
+        Section: "A",
+        Class_week: "4",
+        Branch: "4 Kilo"
+    },
+    {
+        subject: "Chemistry",
+        Grade: "8",
+        Section: "B",
+        Class_week: "2",
+        Branch: "Bole"
+    },
+    {
+        subject: "Biology",
+        Grade: "9",
+        Section: "B",
+        Class_week: "3",
+        Branch: "Gerji"
+    },
+    {
+        subject: "History",
+        Grade: "7",
+        Section: "D",
+        Class_week: "1",
+        Branch: "Legehar"
+    },
+    {
+        subject: "Physics",
+        Grade: "11",
+        Section: "A",
+        Class_week: "4",
+        Branch: "Saris"
+    }]
+
+    const columns = [
+        {
+            title: 'Subject',
+            dataIndex: 'subject',
+            key: 'subject'
+
+
+        },
+        {
+            title: 'Grade',
+            dataIndex: 'Grade',
+            key: 'Grade',
+        },
+        {
+            title: 'Section',
+            dataIndex: 'Section',
+            key: 'Section'
+
+
+        },
+        {
+            title: 'Class/Week',
+            dataIndex: 'Class_week',
+            key: 'Class_week',
+        },
+        {
+            title: 'Branch',
+            dataIndex: 'Branch',
+            key: 'Branch',
+        },
+
+    ]
+
     return (
         <>
             <div>
                 <div className="profile-header" >
                     <div className="teacher-avater" >
-                        <img src="logo512.png" alt="profile" />
+                        <img src="img-5.jpg" alt="profile" />
                         <div className="profile-info">
                             <h2>Teacher Name</h2>
                             <h3>ID: 1334</h3>
@@ -105,7 +175,13 @@ function TeacherView() {
                             </div>
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="Course" key="2">
-                            Content of Tab Pane 3 course
+                            <div className='teacher-course-list'>
+                                <div className='tch-cr-list'>
+                                    <h1>Assigned Courses</h1>
+                                    <Button>Add/Remove</Button>
+                                </div>
+                                <Table dataSource={teacherCourse} columns={columns} />
+                            </div>
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="Course" key="3">
                             Content of Tab Pane 3

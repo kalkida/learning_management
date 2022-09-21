@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import '../modals/courses/style.css'
+import "../modals/teacher/style.css"
 import {
   InfoCircleOutlined,
   UserOutlined,
@@ -345,8 +346,95 @@ const CreateNewTeacher = () => {
   
   return (
     <>
-    <div>
-      <div 
+                       <div>
+                           <div className='update-card'>
+                            <div  style={{
+                              flexDirection:'column',
+                              paddingLeft: '10px',
+                              marginLeft: '10px',
+                              top:95 ,
+                            }} >
+                           <h1 className="h1" > Profile information</h1>
+                                    <div className='avater-img'>
+                                        <h2>Profile Picture</h2>
+                                        <img src= {file ? URL.createObjectURL(file) :'img-5.jpg'} />
+                                        <div className='img-btn'>
+                                        <input  type="file" onChange={handleChange} accept="/image/*"   />
+                                          {/* <Button>Add</Button> */}
+                                            {/* <Button>Remove</Button> */}
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div className='col'>
+                                        <div>
+                                            <label>First</label>
+                                            <Input onChange={(e) => setFirstNmae(e)} />
+                                        </div>
+                                        <div>
+                                            <label>Class</label>
+                                            <Select
+                                              placeholder="Select Classes"
+                                              onChange={handleCourse}
+                                              optionLabelProp="label"
+                                              mode="multiple"
+                                              style={{
+                                                width: '100%',
+                                              }}
+
+          >
+            {classData.map((item, index) => (
+              <Option key={item.key} value={item.level} label={item.level}>
+                {item.level}
+              </Option>
+            ))}
+          </Select>
+                                        </div>
+                                        <div>
+                                            <label>Branch</label>
+                                            <Input defaultValue={"Saris"} />
+                                        </div>
+                                        <div>
+                                            <label>Phone</label>
+                                            <Input onChange={(e) => setPhone(e)} />
+                                        </div>
+                                    </div>
+                                    <div className='col'>
+                                        <div>
+                                            <label>Last Name</label>
+                                            <Input onChange={(e) => setLastName(e)} />
+                                        </div>
+                                        <div>
+                                            <label>Section</label>
+                                            <Select
+                                              placeholder="Select Section"
+                                             onChange={handleCourse}
+                                             optionLabelProp="label"
+                                             mode="multiple"
+                                             style={{
+                                              width: '100%',
+                                             }}
+
+          >
+            {classData.map((item, index) => (
+              <Option key={item.key} value={item.section} label={item.section}>
+                {item.section}
+              </Option>
+            ))}
+          </Select>
+                                            
+                                        </div>
+                                        <div>
+                                            <label>ID</label>
+                                            <Input defaultValue={"0354"} />
+                                        </div>
+                                        
+                                        <div>
+                                            <label>Email</label>
+                                            <Input onChange={(e) => setEmail(e)} />
+                                        </div>
+                                    </div>
+                                </div>
+      {/* <div 
       style={{
         height:357,
         backgroundColor:'#F9FAFB',
@@ -502,18 +590,18 @@ const CreateNewTeacher = () => {
       </div>
  
       </Form>
-      </div>
+      </div> */}
 
 
     <div 
     style={{
-      height:417,
+      // height:417,
       backgroundColor:'#F9FAFB',
       borderRadius:8,
       borderWidth:1,
-      top:95 ,
+      // top:95 ,
       marginTop:50,
-      display:'flex'
+      // display:'flex'
     }}
     >
 <div  style={{
@@ -521,7 +609,7 @@ const CreateNewTeacher = () => {
   
 }}>
  <div className="list-header">
-      <h1 style={{ fontSize: 28 }}>List Of Teachers</h1>
+      <h1 style={{ fontSize: 28 }}>Add Course </h1>
     </div>
     <div className="list-sub">
       <div className="list-filter">

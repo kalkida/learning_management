@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Modal, Form, Select, Input, DatePicker, Row, Col, message } from 'antd';
+import { Button, Modal, Form, Select, Input, DatePicker, Row, Col, message, Tabs, Table } from 'antd';
 import moment from "moment";
 import {
     doc,
@@ -13,6 +13,13 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
+import './style.css'
+import {
+    InfoCircleOutlined,
+    UserOutlined,
+    PlusOutlined,
+} from "@ant-design/icons";
+import { Tooltip } from "antd";
 
 const { Option } = Select;
 
@@ -33,6 +40,8 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
     const [courseOption, setCourseOption] = useState([]);
     const [percent, setPercent] = useState(0);
     const [file, setFile] = useState("");
+    const [updateCourseView, setUpdateCourseView] = useState(true);
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [updateTeacher, setUpdateTeacher] = useState({
         avater: data.avater,
         email: data.email,
@@ -160,7 +169,124 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
         setCourseOption(children);
     };
 
+    const teacherCourse = [{
+        subject: "Math",
+        Grade: "8",
+        Section: "A",
+        Class_week: "4",
+        Branch: "4 Kilo",
+        key: 1
+    },
+    {
+        subject: "Chemistry",
+        Grade: "8",
+        Section: "B",
+        Class_week: "2",
+        Branch: "Bole",
+        key: 2
+    },
+    {
+        subject: "Biology",
+        Grade: "9",
+        Section: "B",
+        Class_week: "3",
+        Branch: "Gerji",
+        key: 3
+    },
+    {
+        subject: "History",
+        Grade: "7",
+        Section: "D",
+        Class_week: "1",
+        Branch: "Legehar",
+        key: 4
+    },
+    {
+        subject: "Physics",
+        Grade: "11",
+        Section: "A",
+        Class_week: "4",
+        Branch: "Saris",
+        key: 5
+    }]
 
+    const columns = [
+        {
+            title: 'Subject',
+            dataIndex: 'subject',
+            key: 'subject'
+
+
+        },
+        {
+            title: 'Grade',
+            dataIndex: 'Grade',
+            key: 'Grade',
+        },
+        {
+            title: 'Section',
+            dataIndex: 'Section',
+            key: 'Section'
+
+
+        },
+        {
+            title: 'Class/Week',
+            dataIndex: 'Class_week',
+            key: 'Class_week',
+        },
+        {
+            title: 'Branch',
+            dataIndex: 'Branch',
+            key: 'Branch',
+        },
+
+    ]
+
+    const onSelectChange = (newSelectedRowKeys) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        setSelectedRowKeys(newSelectedRowKeys);
+    };
+
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+        selections: [
+            Table.SELECTION_ALL,
+            Table.SELECTION_INVERT,
+            Table.SELECTION_NONE,
+            {
+                key: 'odd',
+                text: 'Select Odd Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return false;
+                        }
+
+                        return true;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+            {
+                key: 'even',
+                text: 'Select Even Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return true;
+                        }
+
+                        return false;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+        ],
+    };
 
     useEffect(() => {
         getClass();
@@ -169,7 +295,124 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
 
     return (
         <>
-            <h1>teacher Update</h1>
+            <div>
+                <div className="profile-header" >
+                    <div className="teacher-avater" >
+                        <img src="img-5.jpg" alt="profile" />
+                        <div className="profile-info">
+                            <h2>Teacher Name</h2>
+                            <h3>ID: 1334</h3>
+                        </div>
+                    </div>
+                    <div className="header-extra">
+                        <div>
+                            <h3>Assigned Subject</h3>
+                            <h4>Math,Physics</h4>
+                        </div>
+                        <div>
+                            <h3>Assigned Class</h3>
+                            <h4>Math,Physics</h4>
+                        </div>
+                    </div>
+                </div>
+                <div className="tab-content">
+                    <Tabs defaultActiveKey="1">
+                        <Tabs.TabPane tab="Profile" key="1">
+                            <Button className="btn-confirm" onClick={handleUpdate}>Confirm</Button>
+                            <div className='edit-teacher'>
+                                <h1>Edit Profile</h1>
+                                <div className='update-card'>
+                                    <div className='avater-img'>
+                                        <h2>Profile Picture</h2>
+                                        <img src='img-5.jpg' />
+                                        <div className='img-btn'>
+                                            <Button>Add</Button>
+                                            <Button>Remove</Button>
+                                        </div>
+                                    </div>
+                                    <div className='col'>
+                                        <div>
+                                            <label>First</label>
+                                            <Input defaultValue={"melaku"} />
+                                        </div>
+                                        <div>
+                                            <label>Sex</label>
+                                            <Input defaultValue={"Mail"} />
+                                        </div>
+                                        <div>
+                                            <label>Branch</label>
+                                            <Input defaultValue={"Saris"} />
+                                        </div>
+                                        <div>
+                                            <label>Phone</label>
+                                            <Input defaultValue={"+25192546546"} />
+                                        </div>
+                                    </div>
+                                    <div className='col'>
+                                        <div>
+                                            <label>Last Name</label>
+                                            <Input defaultValue={"melaku"} />
+                                        </div>
+                                        <div>
+                                            <label>ID</label>
+                                            <Input defaultValue={"0354"} />
+                                        </div>
+                                        <div>
+                                            <label>Date Of Birth</label>
+                                            <Input defaultValue={"1996"} />
+                                        </div>
+                                        <div>
+                                            <label>Email</label>
+                                            <Input defaultValue={"teacher@gmail.com"} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Course" key="2">
+                            {updateCourseView ?
+                                <div className='teacher-course-list'>
+                                    <div className='tch-cr-list'>
+                                        <h1>Assigned Courses</h1>
+                                        <Button onClick={() => setUpdateCourseView(false)}>Add/Remove</Button>
+                                    </div>
+                                    <Table dataSource={teacherCourse} columns={columns} />
+                                </div> :
+                                <div>
+                                    <div className='teacher-course-list'>
+                                        <h1>Add/Remove Courses</h1>
+                                        <div className='tch-cr-list'>
+                                            <div>
+                                                <Select defaultValue={"Subject"} />
+                                                <Select defaultValue={"Grade"} />
+                                                <Select defaultValue={"Section"} />
+                                            </div>
+                                            <div>
+                                                <Input
+                                                    style={{ width: 200, marginRight: 10 }}
+                                                    placeholder="Search"
+                                                    prefix={<UserOutlined className="site-form-item-icon" />}
+                                                    suffix={
+                                                        <Tooltip title="Extra information">
+                                                            <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+                                                        </Tooltip>
+                                                    }
+                                                />
+                                                <Button onClick={() => setUpdateCourseView(true)}>confirm</Button>
+                                            </div>
+                                        </div>
+                                        <Table rowSelection={rowSelection} dataSource={teacherCourse} columns={columns} />
+                                    </div>
+                                </div>
+                            }
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Course" key="3">
+                            Content of Tab Pane 3
+                        </Tabs.TabPane>
+                    </Tabs>
+                </div>
+
+            </div>
             {/* {data && openUpdate ?
                 <Modal
                     visible={openUpdate}
