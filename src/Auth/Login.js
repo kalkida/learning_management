@@ -119,6 +119,7 @@ export default function Login() {
   };
 
   const onFinish = () => {
+    console.log("data");
     setLoading(true);
     var data = {
       email: email,
@@ -190,95 +191,46 @@ export default function Login() {
           height: 60,
           position: "absolute",
           left: "45%",
-          top: "20%",
+          top: "15%",
         }}
       />
-      <h1
-        style={{
-          position: "absolute",
-          color: "black",
-          fontWeight: "bold",
-          left: "45%",
-          top: "35%",
-          fontSize: 26,
-        }}
-      >
-        Login To Laba
-      </h1>
-      <Form
-        layout="vertical"
-        style={{
-          position: "absolute",
-          color: "black",
-          fontWeight: "bold",
-          left: "43%",
-          top: "45%",
-          fontSize: 26,
-        }}
-        // name="basic"
-        size="large"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 40,
-        }}
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-      >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please input your email!",
-            },
-          ]}
-        >
-          <Input
-            className="hover:border-[#E7752B] text-[gray] font-light"
+
+      <div className="flex flex-col top-[30%] absolute">
+        <h1 className="text-center text-2xl font-bold mb-10">Login To Laba</h1>
+        <div className="flex flex-col mb-[20px]">
+          <label>Email Address</label>
+          <input
+            className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-sm p-2"
             onChange={(e) => setEmail(e.target.value)}
           />
-        </Form.Item>
-
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-        >
-          <Input
+        </div>
+        <div className="flex flex-col mb-[20px]">
+          <label>Password</label>
+          <input
             type="password"
-            className="hover:border-[#E7752B] text-[gray] font-light"
+            className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-sm p-2"
             onChange={(e) => setPassword(e.target.value)}
           />
-        </Form.Item>
+        </div>
+        <div className="flex flex-row justify-between">
+          <div className="py-5">
+            <input type="radio" className="mr-2 p-2" />
+            <label className="text-xs">Remember my Password</label>
+          </div>
+          <a className="py-6 hover:text-[#e7762bc2] text-xs">
+            Forgot Password?
+          </a>
+        </div>
 
-        <Form.Item
-          wrapperCol={{
-            // offset: 8,
-            span: 16,
-          }}
+        <button
+          onClick={() => onFinish()}
+          className="w-[300px] h-[44px] active:bg-[#E7752B] after:bg-[#E7752B] visited:bg-[#E7752B] hover:bg-[#e7762bc2] text- hover:border-[#E7752B] hover:text-[white] bg-[#E7752B] text-white  border-[#E7752B]"
+          disabled={loading}
+          type="submit"
         >
-          <Button
-            className="w-[250px] active:bg-[#E7752B] after:bg-[#E7752B] visited:bg-[#E7752B] hover:bg-[white] hover:border-[#E7752B] hover:text-[#E7752B] bg-[#E7752B] text-white  border-[#E7752B]"
-            loading={loading}
-            type="primary"
-            htmlType="submit"
-          >
-            Login
-          </Button>
-        </Form.Item>
-      </Form>
+          Login
+        </button>
+      </div>
     </div>
   );
 }

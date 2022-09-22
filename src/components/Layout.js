@@ -4,19 +4,15 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import Typography from "@mui/material/Typography";
-import BookOnline from "@mui/icons-material/BookOnline";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  HomeOutlined,
-  MessageOutlined,
-  SoundOutlined,
-  CopyOutlined,
-  PicRightOutlined,
-  HeatMapOutlined,
-  UsergroupDeleteOutlined,
-  ClockCircleOutlined,
-  CalendarOutlined,
-} from "@ant-design/icons";
+  faHome,
+  faMessage,
+  faMicrophone,
+  faBook,
+} from "@fortawesome/free-solid-svg-icons";
+
+import BookOnline from "@mui/icons-material/BookOnline";
 
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import ContentPaste from "@mui/icons-material/ContentPaste";
@@ -117,129 +113,182 @@ const Layouts = () => {
               borderColor: "white",
             }}
           >
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <HomeOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/admin" ? "#E7752B" : "#2c5886",
-                }}
-                to="/admin"
-              >
-                <ListItemText>Home</ListItemText>
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <MessageOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/message" ? "#E7752B" : "#2c5886",
-                }}
-                to="/message"
-              >
-                <ListItemText>Messages</ListItemText>
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <SoundOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/announcment" ? "#E7752B" : "#2c5886",
-                }}
-                to="/announcment"
-              >
-                {" "}
-                <ListItemText>Announcement</ListItemText>
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <CopyOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/list-Course" ? "#E7752B" : "#2c5886",
-                }}
-                to="/list-Course"
-              >
-                {" "}
-                <ListItemText>Courses</ListItemText>{" "}
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <PicRightOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/list-classes" ? "#E7752B" : "#2c5886",
-                }}
-                to="/list-classes"
-              >
-                {" "}
-                <ListItemText>Classes</ListItemText>{" "}
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <HeatMapOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/list-teacher" ? "#E7752B" : "#2c5886",
-                }}
-                to="/list-teacher"
-              >
-                {" "}
-                <ListItemText>Teacher</ListItemText>{" "}
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <UsergroupDeleteOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/list-student" ? "#E7752B" : "#2c5886",
-                }}
-                to="/list-student"
-              >
-                <ListItemText>Student</ListItemText>{" "}
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <ClockCircleOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/attendance" ? "#E7752B" : "#2c5886",
-                }}
-                to="/attendance"
-              >
-                {" "}
-                <ListItemText>Attendance</ListItemText>{" "}
-              </Link>
-            </MenuItem>
-
-            <MenuItem>
-              <ListItemIcon style={{ color: "#2c5886" }}>
-                <CalendarOutlined fontSize="small" />
-              </ListItemIcon>
-              <Link
-                style={{
-                  color: currentURL === "/schedule" ? "#E7752B" : "#2c5886",
-                }}
-                to="/schedule"
-              >
-                Schedule
-              </Link>
-            </MenuItem>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faHome}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color: currentURL === "/admin" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/admin"
+                >
+                  Home
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faMessage}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color: currentURL === "/message" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/message"
+                >
+                  Messages
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faMicrophone}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color:
+                      currentURL === "/announcment" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/announcment"
+                >
+                  Announcement
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faBook}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color:
+                      currentURL === "/list-Course" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/list-Course"
+                >
+                  Courses
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faHome}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color:
+                      currentURL === "/list-classes" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/list-classes"
+                >
+                  Classes
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faHome}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color:
+                      currentURL === "/list-teacher" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/list-teacher"
+                >
+                  Teacher
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faHome}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color:
+                      currentURL === "/list-student" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/list-student"
+                >
+                  Student
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faHome}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color: currentURL === "/attendance" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/attendance"
+                >
+                  Attendance
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
+              <div>
+                <FontAwesomeIcon
+                  icon={faHome}
+                  className="text-xl px-5 text-[#2c5886]"
+                />
+              </div>
+              <div>
+                <Link
+                  className="hover:bg-[#FCF0E8] text-lg"
+                  style={{
+                    color: currentURL === "/schedule" ? "#E7752B" : "#2c5886",
+                  }}
+                  to="/schedule"
+                >
+                  Schedule
+                </Link>
+              </div>
+            </div>
           </MenuList>
           <MenuItem style={{ bottom: 0, position: "fixed", bottom: 20 }}>
             <ListItemIcon style={{ color: "#2c5886" }}>
@@ -356,7 +405,7 @@ const Layouts = () => {
     <Layout style={{ backgroundColor: "white" }}>
       <Navigation />
       <Layout className="bg-white">
-        <Sider width={200} className="bg-[white]">
+        <Sider width={200} className="bg-[white] ">
           <SiderGenerator />
         </Sider>
         <Layout

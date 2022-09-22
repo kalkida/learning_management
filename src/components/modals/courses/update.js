@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Select, Modal, message, TimePicker, Tabs, Table } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  Modal,
+  message,
+  TimePicker,
+  Tabs,
+  Table,
+} from "antd";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -21,7 +31,7 @@ import { async } from "@firebase/util";
 const { Option } = Select;
 
 function UpdateCourse() {
-  const { state } = useLocation()
+  const { state } = useLocation();
   const { data } = state;
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
@@ -31,7 +41,9 @@ function UpdateCourse() {
   const [teachers, setTeachers] = useState([]);
   const [subject, setSubject] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(data.subject?.name);
-  const [selectedLevel, setSelectedLevel] = useState(data.class ? data.class.level + data.class.section : "");
+  const [selectedLevel, setSelectedLevel] = useState(
+    data.class ? data.class.level + data.class.section : ""
+  );
   const [loading, setLoading] = useState(false);
   const [teacherView, setTeacherView] = useState(true);
   const [teacherData, setTeacherData] = useState(data.teachers);
@@ -56,15 +68,14 @@ function UpdateCourse() {
     updateCourse.course_name = selectedSubject + " " + selectedLevel;
     updateCourse.teachers?.map((item, i) => {
       if (typeof item === "object") {
-        updateCourse.teachers[i] = item.key
+        updateCourse.teachers[i] = item.key;
       }
-    })
+    });
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
       .then((response) => {
         setLoading(false);
         message.success("Data is updated successfuly");
-        navigate('/list-course')
-
+        navigate("/list-course");
       })
       .catch((error) => {
         message.error("Data is not updated");
@@ -118,24 +129,24 @@ function UpdateCourse() {
   };
 
   const getSubjectID = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID)
+    const docRef = doc(firestoreDb, "subject", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const getClasstID = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID)
+    const docRef = doc(firestoreDb, "class", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const handleCourse = (e) => {
     setUpdateCourse({ ...updateCourse, [e.target.name]: e.target.value });
@@ -148,37 +159,33 @@ function UpdateCourse() {
   };
 
   const handleSubject = async (value) => {
-    const response = await getSubjectID(value)
+    const response = await getSubjectID(value);
     setSelectedSubject(response.name);
     setUpdateCourse({ ...updateCourse, subject: value });
-
   };
 
   const getTeacherID = async (ID) => {
-    const docRef = doc(firestoreDb, "teachers", ID)
+    const docRef = doc(firestoreDb, "teachers", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const handleTeacher = (value) => {
-
-    setTeacherView(false)
+    setTeacherView(false);
     const teacherdata = [];
     value.map(async (item, i) => {
       const respose = await getTeacherID(item);
       teacherdata.push(respose);
     });
-    setTeacherData(teacherdata)
+    setTeacherData(teacherdata);
     setUpdateCourse({ ...updateCourse, teachers: value });
     setTimeout(() => {
       setTeacherView(true);
     }, 2000);
-
-
   };
   const handleScheduler = (value, i) => {
     if (typeof value === "string") {
@@ -206,16 +213,15 @@ function UpdateCourse() {
 
   const columns = [
     {
-      title: 'Teacher',
-      dataIndex: 'first_name',
-      key: 'first_name',
+      title: "Teacher",
+      dataIndex: "first_name",
+      key: "first_name",
     },
     {
-      title: '',
-      dataIndex: 'last_name',
-      key: 'last_name',
+      title: "",
+      dataIndex: "last_name",
+      key: "last_name",
     },
-
   ];
 
   const handleDelete = () => {
@@ -223,23 +229,24 @@ function UpdateCourse() {
       .then((response) => {
         setLoading(false);
         message.success("Data is Deleted successfuly");
-        navigate('/list-course')
-
+        navigate("/list-course");
       })
       .catch((error) => {
         message.error("Data is not Deleted, Try Again");
         console.log(error);
       });
-  }
+  };
 
   return (
     <div>
-      <div className="profile-header" >
-        <div className="course-avater" >
+      <div className="profile-header -mt-14">
+        <div className="course-avater -ml-6">
           <img src="logo512.png" alt="profile" />
           <div className="profile-info">
             <h2>{data.course_name}</h2>
-            <h3>Grade {data.class ? data.class.level + data.class.section : ""}</h3>
+            <h3>
+              Grade {data.class ? data.class.level + data.class.section : ""}
+            </h3>
           </div>
         </div>
         <div className="header-extra">
@@ -256,7 +263,9 @@ function UpdateCourse() {
       <div className="tab-content">
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="Profile" key="1">
-            <Button className="btn-confirm" onClick={handleUpdate}>Confirm</Button>
+            <Button className="btn-confirm" onClick={handleUpdate}>
+              Confirm
+            </Button>
             <div className="course-information">
               <h1>Course Information</h1>
               <div className="course-content">
@@ -267,7 +276,6 @@ function UpdateCourse() {
                       style={{
                         width: "100%",
                       }}
-
                       placeholder="select Subjects"
                       onChange={handleSubject}
                       optionLabelProp="label"
@@ -292,7 +300,6 @@ function UpdateCourse() {
                         optionLabelProp="label"
                         defaultValue={updateCourse.class}
                       >
-
                         {classes.map((item, index) => (
                           <Option
                             key={item.key}
@@ -304,7 +311,6 @@ function UpdateCourse() {
                         ))}
                       </Select>
                     </div>
-
                   </div>
                 </div>
                 <div className="up-course-description">
@@ -323,7 +329,7 @@ function UpdateCourse() {
               <div className="assign-header">
                 <h4>Assigned Teachers</h4>
                 <Select
-                  style={{ width: '30%' }}
+                  style={{ width: "30%" }}
                   showArrow={true}
                   placeholder="select Teachers"
                   onChange={handleTeacher}
@@ -349,12 +355,19 @@ function UpdateCourse() {
                   ))}
                 </Select>
               </div>
-              {teacherView ? <Table dataSource={teacherData} columns={columns} /> : null}
+              {teacherView ? (
+                <Table dataSource={teacherData} columns={columns} />
+              ) : null}
             </div>
             <div className="schedule">
               <h4>Weekly Schedule</h4>
               <div className="up-card-schedule">
-                <h2 >Class {updateCourse.class ? updateCourse.class.level + updateCourse.class.section : null}</h2>
+                <h2>
+                  Class{" "}
+                  {updateCourse.class
+                    ? updateCourse.class.level + updateCourse.class.section
+                    : null}
+                </h2>
                 <div className="schedule-header">
                   <div>
                     <p> Period</p>
@@ -387,9 +400,9 @@ function UpdateCourse() {
                       defaultValue={
                         item.time.length
                           ? [
-                            moment(JSON.parse(item.time[0])),
-                            moment(JSON.parse(item.time[1])),
-                          ]
+                              moment(JSON.parse(item.time[0])),
+                              moment(JSON.parse(item.time[1])),
+                            ]
                           : []
                       }
                       onChange={(e) => handleScheduler(e, i)}
@@ -423,17 +436,25 @@ function UpdateCourse() {
                     setInput([...input, 0]);
                     setUpdateCourse({
                       ...updateCourse,
-                      schedule: [...updateCourse.schedule, { day: "", time: [] }],
+                      schedule: [
+                        ...updateCourse.schedule,
+                        { day: "", time: [] },
+                      ],
                     });
                   }}
                 >
                   Add New
                 </Button>
-
               </div>
             </div>
-            <Button className="btn-dlt" type="primary" danger onClick={handleDelete}>Delete</Button>
-
+            <Button
+              className="btn-dlt"
+              type="primary"
+              danger
+              onClick={handleDelete}
+            >
+              Delete
+            </Button>
           </Tabs.TabPane>
           <Tabs.TabPane tab="Attendance" key="2">
             <AttendanceList />
@@ -443,7 +464,6 @@ function UpdateCourse() {
           </Tabs.TabPane>
         </Tabs>
       </div>
-
     </div>
   );
 }
