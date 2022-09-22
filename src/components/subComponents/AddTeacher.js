@@ -20,6 +20,7 @@ import { Input } from "antd";
 import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
+import "../modals/courses/style.css";
 import {
   InfoCircleOutlined,
   UserOutlined,
@@ -29,7 +30,6 @@ import { Tooltip } from "antd";
 const { Option } = Select;
 
 export default function AddTeacher() {
-
   const navigate = useNavigate();
 
   const [datas, setData] = useState([]);
@@ -150,8 +150,6 @@ export default function AddTeacher() {
       ),
   });
 
-
-
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
     const docSnap = await getDoc(docRef);
@@ -189,7 +187,7 @@ export default function AddTeacher() {
   };
 
   const handleView = (data) => {
-    navigate("/view-teacher", { state: { data } })
+    navigate("/view-teacher", { state: { data } });
     // handleData(data);
     // setViewData(data);
     // setOpenView(true);
@@ -201,10 +199,8 @@ export default function AddTeacher() {
 
   const handleUpdate = (data) => {
     // handleData(data);
-    navigate("/update-teacher", { state: { data } })
+    navigate("/update-teacher", { state: { data } });
   };
-
-
 
   const columns = [
     {
@@ -234,18 +230,6 @@ export default function AddTeacher() {
       key: "phone",
       dataIndex: "phone",
       render: (text) => <a>{text}</a>,
-      // render: (value) => {
-      //   return (
-      //     console.log(datas.length)
-      //     // <>
-      //     //   {value.length ?
-      //     //     value.map((item) => (
-      //     //       <Tag color={"green"}>{item}</Tag>
-      //     //     ))
-      //     //     : null}
-      //     // </>
-      //   );
-      // },
     },
     {
       title: "Email",
@@ -292,71 +276,59 @@ export default function AddTeacher() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28 }}>List Of Teachers</h1>
-      <Select
-        defaultValue="Subject"
-        style={{ width: 120, borderColor: "#E7752B", borderWidth: 4 }}
-        onChange={handleChange}
-      >
-        <Option value="Subject">Subject</Option>
+      <div className="list-header">
+        <h1 style={{ fontSize: 28 }}>List Of Teachers</h1>
+      </div>
+      <div className="list-sub">
+        <div className="list-filter">
+          <Select
+            defaultValue="Subject"
+            style={{ width: 120 }}
+            onChange={handleChange}
+          >
+            <Option value="Subject">Subject</Option>
 
-        <Option value="jack">Jack</Option>
-        <Option value="disabled" disabled>
-          Disabled
-        </Option>
-        <Option value="Yiminghe">yiminghe</Option>
-      </Select>
-      <Select
-        style={{ width: 120, marginLeft: 30, marginRight: 30 }}
-        defaultValue="Grade"
-        onChange={handleChange}
-      >
-        <Option value="Grade">Grade</Option>
+            <Option value="jack">Jack</Option>
+            <Option value="disabled" disabled>
+              Disabled
+            </Option>
+            <Option value="Yiminghe">yiminghe</Option>
+          </Select>
+          <Select
+            style={{ width: 120 }}
+            defaultValue="Class"
+            onChange={handleChange}
+          >
+            <Option value="Grade">Grade</Option>
 
-        <Option value="jack">Jack</Option>
-        <Option value="disabled" disabled>
-          Disabled
-        </Option>
-        <Option value="Yiminghe">yiminghe</Option>
-      </Select>
-      <Select
-        style={{ width: 120, marginLeft: 30, marginRight: 30 }}
-        defaultValue="Section"
-        onChange={handleChange}
-      >
-        <Option value="Grade">Section</Option>
-
-        <Option value="jack">Jack</Option>
-        <Option value="disabled" disabled>
-          Disabled
-        </Option>
-        <Option value="Yiminghe">yiminghe</Option>
-      </Select>
-      <Input
-        style={{ width: 200, marginLeft: 254 }}
-        placeholder="Search"
-        prefix={<UserOutlined className="site-form-item-icon" />}
-        suffix={
-          <Tooltip title="Extra information">
-            <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-          </Tooltip>
-        }
-      />
-      <Link
-        style={{
-          padding: 5,
-          backgroundColor: "#E7752B",
-          marginBottom: 20,
-          color: "white",
-          borderRadius: 5,
-          marginLeft: 10,
-        }}
-        to={"/add-teacher"}
-      >
-        <PlusOutlined className="site-form-item-icon" />
-        Add Teacher
-      </Link>
-
+            <Option value="jack">Jack</Option>
+            <Option value="disabled" disabled>
+              Disabled
+            </Option>
+            <Option value="Yiminghe">yiminghe</Option>
+          </Select>
+        </div>
+        <div className="course-search">
+          <div>
+            <Input
+              style={{ width: 200 }}
+              placeholder="Search"
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              suffix={
+                <Tooltip title="Extra information">
+                  <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
+                </Tooltip>
+              }
+            />
+          </div>
+          <div>
+            <Link to={"/add-teacher"}>
+              <PlusOutlined className="site-form-item-icon" />
+              Add teacher
+            </Link>
+          </div>
+        </div>
+      </div>
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
       {viewData ? (
