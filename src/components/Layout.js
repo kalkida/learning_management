@@ -21,7 +21,7 @@ import {
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import ContentPaste from "@mui/icons-material/ContentPaste";
 import Cloud from "@mui/icons-material/Cloud";
-import { Breadcrumb, Layout, Menu } from "antd";
+import { Avatar, Breadcrumb, Layout, Menu } from "antd";
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import AdminDash from "./subComponents/AdminDash";
@@ -41,8 +41,8 @@ import CreateNewTeacher from "./subComponents/CreateNewTeacher";
 import CreateCrouse from "./subComponents/CreateCrouse";
 import CreateRole from "./subComponents/CreateRole";
 import ParentProfile from "./subComponents/ParentProfile";
-import ViewCourse from './modals/courses/view';
-import UpdateCourse from './modals/courses/update';
+import ViewCourse from "./modals/courses/view";
+import UpdateCourse from "./modals/courses/update";
 import TeacherView from "./modals/teacher/view";
 import TeacherUpdate from "./modals/teacher/update";
 import ViewClass from "./modals/classes/view";
@@ -53,6 +53,9 @@ const { Header, Content, Sider } = Layout;
 const Layouts = () => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user.profile);
+  const user = useSelector((state) => state.user.value);
+  const role = useSelector((state) => state.user.profile.role);
+  const current = JSON.parse(user);
   const dispatch = useDispatch();
 
   const logout = () => {
@@ -99,153 +102,140 @@ const Layouts = () => {
     if (profile.role["isAdmin"] == true) {
       const currentURL = window.location.pathname;
       return (
-        <Paper sx={{ width: 320, maxWidth: "100%", backgroundColor: "white" }}>
-          <MenuList style={{ borderBottomWidth: 0 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            display: "flex",
+            height: "100%",
+            width: "auto",
+            marginLeft: 1.5,
+          }}
+        >
+          <MenuList
+            style={{
+              borderBottomWidth: 0,
+              marginTop: 10,
+              borderWidth: 0,
+              borderColor: "white",
+            }}
+          >
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <HomeOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>
-                <Link
-                  style={{
-                    fontWeight: "bold",
-                    color: currentURL === "/admin" ? "#E7752B" : "black",
-                  }}
-                  to="/admin"
-                >
-                  Home
-                </Link>
-              </ListItemText>
+              <Link
+                style={{
+                  color: currentURL === "/admin" ? "#E7752B" : "#2c5886",
+                }}
+                to="/admin"
+              >
+                <ListItemText>Home</ListItemText>
+              </Link>
             </MenuItem>
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <MessageOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>
-                <Link
-                  style={{
-                    fontWeight: "bold",
-
-                    color: currentURL === "/message" ? "#E7752B" : "black",
-                  }}
-                  to="/message"
-                >
-                  Messages
-                </Link>
-              </ListItemText>
+              <Link
+                style={{
+                  color: currentURL === "/message" ? "#E7752B" : "#2c5886",
+                }}
+                to="/message"
+              >
+                <ListItemText>Messages</ListItemText>
+              </Link>
             </MenuItem>
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <SoundOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>
-                <Link
-                  style={{
-                    fontWeight: "bold",
-
-                    color: currentURL === "/announcment" ? "#E7752B" : "black",
-                  }}
-                  to="/announcment"
-                >
-                  Announcement
-                </Link>
-              </ListItemText>
+              <Link
+                style={{
+                  color: currentURL === "/announcment" ? "#E7752B" : "#2c5886",
+                }}
+                to="/announcment"
+              >
+                {" "}
+                <ListItemText>Announcement</ListItemText>
+              </Link>
             </MenuItem>
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <CopyOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>
-                <Link
-                  style={{
-                    fontWeight: "bold",
-
-                    color: currentURL === "/list-Course" ? "#E7752B" : "black",
-                  }}
-                  to="/list-Course"
-                >
-                  Courses
-                </Link>
-              </ListItemText>
+              <Link
+                style={{
+                  color: currentURL === "/list-Course" ? "#E7752B" : "#2c5886",
+                }}
+                to="/list-Course"
+              >
+                {" "}
+                <ListItemText>Courses</ListItemText>{" "}
+              </Link>
             </MenuItem>
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <PicRightOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>
-                <Link
-                  style={{
-                    fontWeight: "bold",
-
-                    color: currentURL === "/list-classes" ? "#E7752B" : "black",
-                  }}
-                  to="/list-classes"
-                >
-                  Classes
-                </Link>
-              </ListItemText>
+              <Link
+                style={{
+                  color: currentURL === "/list-classes" ? "#E7752B" : "#2c5886",
+                }}
+                to="/list-classes"
+              >
+                {" "}
+                <ListItemText>Classes</ListItemText>{" "}
+              </Link>
             </MenuItem>
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <HeatMapOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>
-                <Link
-                  style={{
-                    fontWeight: "bold",
-
-                    color: currentURL === "/list-teacher" ? "#E7752B" : "black",
-                  }}
-                  to="/list-teacher"
-                >
-                  Teacher
-                </Link>
-              </ListItemText>
+              <Link
+                style={{
+                  color: currentURL === "/list-teacher" ? "#E7752B" : "#2c5886",
+                }}
+                to="/list-teacher"
+              >
+                {" "}
+                <ListItemText>Teacher</ListItemText>{" "}
+              </Link>
             </MenuItem>
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <UsergroupDeleteOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>
-                <Link
-                  style={{
-                    fontWeight: "bold",
-
-                    color: currentURL === "/list-student" ? "#E7752B" : "black",
-                  }}
-                  to="/list-student"
-                >
-                  Student
-                </Link>
-              </ListItemText>
+              <Link
+                style={{
+                  color: currentURL === "/list-student" ? "#E7752B" : "#2c5886",
+                }}
+                to="/list-student"
+              >
+                <ListItemText>Student</ListItemText>{" "}
+              </Link>
             </MenuItem>
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <ClockCircleOutlined fontSize="small" />
               </ListItemIcon>
-              <ListItemText>
-                <Link
-                  style={{
-                    fontWeight: "bold",
-
-                    color: currentURL === "/attendance" ? "#E7752B" : "black",
-                  }}
-                  to="/attendance"
-                >
-                  Attendance
-                </Link>
-              </ListItemText>
+              <Link
+                style={{
+                  color: currentURL === "/attendance" ? "#E7752B" : "#2c5886",
+                }}
+                to="/attendance"
+              >
+                {" "}
+                <ListItemText>Attendance</ListItemText>{" "}
+              </Link>
             </MenuItem>
 
             <MenuItem>
-              <ListItemIcon>
+              <ListItemIcon style={{ color: "#2c5886" }}>
                 <CalendarOutlined fontSize="small" />
               </ListItemIcon>
               <Link
                 style={{
-                  fontWeight: "bold",
-
-                  color: currentURL === "/schedule" ? "#E7752B" : "black",
+                  color: currentURL === "/schedule" ? "#E7752B" : "#2c5886",
                 }}
                 to="/schedule"
               >
@@ -253,11 +243,18 @@ const Layouts = () => {
               </Link>
             </MenuItem>
           </MenuList>
-          <MenuItem style={{ bottom: 0, position: "fixed" }}>
-            <ListItemIcon>
-              <Cloud fontSize="small" />
+          <MenuItem style={{ bottom: 0, position: "fixed", bottom: 20 }}>
+            <ListItemIcon style={{ color: "#2c5886" }}>
+              <Avatar fontSize="small" />
             </ListItemIcon>
-            <a onClick={() => logout()}>Logout</a>
+            <a onClick={() => logout()}>
+              {" "}
+              {role["isAdmin"] == true ? (
+                <h1 className="text-[#2c5886]">Admin</h1>
+              ) : (
+                <h1></h1>
+              )}
+            </a>
           </MenuItem>
         </Paper>
       );
@@ -295,7 +292,7 @@ const Layouts = () => {
               <ListItemIcon>
                 <Cloud fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Logout</ListItemText>
+              <ListItemText>logout</ListItemText>
             </MenuItem>
           </MenuList>
         </Paper>
@@ -358,9 +355,9 @@ const Layouts = () => {
   }, []);
 
   return (
-    <Layout>
+    <Layout style={{ backgroundColor: "white" }}>
       <Navigation />
-      <Layout>
+      <Layout className="bg-white">
         <Sider width={200} className="bg-[white]">
           <SiderGenerator />
         </Sider>
@@ -368,6 +365,7 @@ const Layouts = () => {
           style={{
             padding: "0 24px 24px",
           }}
+          className="bg-white"
         >
           <Content
             className="site-layout-background"

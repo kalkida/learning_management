@@ -179,8 +179,9 @@ const navigate= useNavigate();
   };
 
   const handleUpdate = (data) => {
-    setViewData(data);
-    setOpenUpdate(true);
+    navigate('/update-class', { state: { data } });
+    // setViewData(data);
+    // setOpenUpdate(true);
   };
 
   const getClasses = async () => {

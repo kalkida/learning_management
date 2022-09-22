@@ -140,25 +140,70 @@ const CreateClasses = () => {
     //   });
   }
 
- const selectRow = (record) => {
-    const selectedRowKeys = [...selectedRowKeys];
-    if (selectedRowKeys.indexOf(record.key) >= 0) {
-      selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
-    } else {
-      selectedRowKeys.push(record.key);
-    }
-    setSelectedRowKeys({ selectedRowKeys });
-  }
+//  const selectRow = (record) => {
+//     const selectedRowKeys = [...selectedRowKeys];
+//     if (selectedRowKeys.indexOf(record.key) >= 0) {
+//       selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
+//     } else {
+//       selectedRowKeys.push(record.key);
+//     }
+//     setSelectedRowKeys({ selectedRowKeys });
+//   }
 //  const  onSelectedRowKeysChange = (selectedRowKeys) => {
 //   setNewClass({...newClass, course : selectedRowKeys });
 //   }
 
-  const rowSelection = {
-    selectedRowKeys: selectRow.map((row) => row.id),
-    onSelectAll: (selected, selectedRows) => {
-      setSelectedRowKeys(selectedRows);
-    },
-  };
+const onSelectChange = (newSelectedRowKeys) => {
+  console.log('selectedRowKeys changed: ', selectedRowKeys);
+  setSelectedRowKeys(newSelectedRowKeys);
+  setNewClass({...newClass ,course : newSelectedRowKeys});
+};
+const rowSelection = {
+  selectedRowKeys,
+  onChange: onSelectChange,
+  selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+          key: 'odd',
+          text: 'Select Odd Row',
+          onSelect: (changableRowKeys) => {
+              let newSelectedRowKeys = [];
+              newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                  if (index % 2 !== 0) {
+                      return false;
+                  }
+
+                  return true;
+              });
+              setSelectedRowKeys(newSelectedRowKeys);
+          },
+      },
+      {
+          key: 'even',
+          text: 'Select Even Row',
+          onSelect: (changableRowKeys) => {
+              let newSelectedRowKeys = [];
+              newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                  if (index % 2 !== 0) {
+                      return true;
+                  }
+
+                  return false;
+              });
+              setSelectedRowKeys(newSelectedRowKeys);
+          },
+      },
+  ],
+};
+
+  // const rowSelection = {
+  //   selectedRowKeys: selectRow.map((row) => row.id),
+  //   onSelectAll: (selected, selectedRows) => {
+  //     setSelectedRowKeys(selectedRows);
+  //   },
+  // };
 
   const createNewClass = async () => {
     const q = query(
@@ -278,21 +323,17 @@ const CreateClasses = () => {
          borderWidth:2
      }}>
               <div className="course-content">
-                <div className="course-category">
+                {/* <div className="course-category"> */}
                   <div >
                     <div>
                       <span>Class</span>
                     <Input name="level" type={"number"} onChange={(e) => handleClass(e)} />
                     </div>
-                    <div style={{
-                      flexDirection:'column',
-                      minHeight:44
-                    }}>
+                    <div>
                     <span>Student</span>
                     <Select
                       style={{
                         width: "100%",
-                        height:80
                       }}
 
                       placeholder="select Student"
@@ -306,11 +347,11 @@ const CreateClasses = () => {
                       </Option>
                       ))}
                     </Select>
-                  </div>
+                  {/* </div> */}
                   </div>
                 </div>
                 <div style={{
-                  marginTop: "15px",
+                  marginLeft: "20px",
                 }}>
                       <span>Section</span>
                       <Input name="section" onChange={(e) => handleClass(e)} />
@@ -351,7 +392,8 @@ const CreateClasses = () => {
             ))}
           </Select> */}
           <div >
-          <Table
+          <Table rowSelection={rowSelection} dataSource={coursesData} columns={columns} />
+          {/* <Table
            rowSelection={rowSelection}
               columns={columns}
               dataSource={coursesData}
@@ -360,7 +402,7 @@ const CreateClasses = () => {
              selectRow(record);
           },
         })}
-      />
+      /> */}
             </div>   
       </div>
       </div>

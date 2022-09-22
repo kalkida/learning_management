@@ -28,50 +28,24 @@ import {
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import { async } from "@firebase/util";
-import '../modals/courses/style.css'
+import "../modals/courses/style.css";
 
 const { Option } = Select;
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-];
-
 export default function ListCourses() {
-
   const navigate = useNavigate();
+  const { Search } = Input;
 
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
   const [openView, setOpenView] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [updateComplete, setUpdateComplete] = useState(false);
+  const [subject, setSubject] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [viewData, setViewData] = useState();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const [rerender, setRerender] = useState(false)
   const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -189,47 +163,45 @@ export default function ListCourses() {
   };
 
   const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID)
+    const docRef = doc(firestoreDb, "class", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const getSubjectData = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID)
+    const docRef = doc(firestoreDb, "subject", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const getTeacherData = async (ID) => {
-    const docRef = doc(firestoreDb, "teachers", ID)
+    const docRef = doc(firestoreDb, "teachers", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
   const getData = async (data) => {
-
-    data.class = await getClassData(data.class)
-    data.subject = await getSubjectData(data.subject)
+    if (data.class) {
+      data.class = await getClassData(data.class);
+    }
+    data.subject = await getSubjectData(data.subject);
 
     data.teachers?.map(async (item, index) => {
-      data.teachers[index] = await getTeacherData(item)
-    })
+      data.teachers[index] = await getTeacherData(item);
+    });
     return data;
-  }
-
-
-
+  };
 
   const getCourses = async () => {
     var branches = await getSchool();
@@ -242,14 +214,47 @@ export default function ListCourses() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-
-      getData(data).then(response => temporary.push(response))
+      console.log(data);
+      getData(data).then((response) => temporary.push(response));
     });
 
     setTimeout(() => {
       setData(temporary);
-    }, 2000);
+    }, 5000);
   };
+
+  const getClass = async () => {
+    var branches = await getSchool();
+    const q = query(
+      collection(firestoreDb, "class"),
+      where("school_id", "in", branches.branches)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data)
+    });
+    setClasses(temporary);
+  }
+
+
+  const getsubject = async () => {
+    var branches = await getSchool();
+    const q = query(
+      collection(firestoreDb, "subject"),
+      where("school_id", "in", branches.branches)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data)
+    });
+    setSubject(temporary);
+  }
 
   const handleViewCancel = () => {
     setOpenView(false);
@@ -266,7 +271,7 @@ export default function ListCourses() {
   };
 
   const handleUpdate = (data) => {
-    navigate("/update-course", { state: { data } })
+    navigate("/update-course", { state: { data } });
     // setViewData(data);
     // setOpenUpdate(true);
   };
@@ -329,8 +334,14 @@ export default function ListCourses() {
     console.log(`selected ${value}`);
   };
 
+  const onSearch = (value) => {
+    console.log("search Value: " + value)
+  }
+
   useEffect(() => {
     getCourses();
+    getClass();
+    getsubject();
   }, [updateComplete]);
 
   return (
@@ -341,49 +352,38 @@ export default function ListCourses() {
       </div>
       <div className="list-sub">
         <div className="list-filter">
-
           <Select
             defaultValue="Subject"
             style={{ width: 120 }}
             onChange={handleChange}
           >
-            <Option value="Subject">Subject</Option>
-
-            <Option value="jack">Jack</Option>
-            <Option value="disabled" disabled>
-              Disabled
-            </Option>
-            <Option value="Yiminghe">yiminghe</Option>
+            {subject?.map((item, i) => (
+              <Option key={item.key} value={item.key} lable={item.name}>{item.name}</Option>
+            ))}
           </Select>
           <Select
             style={{ width: 120 }}
             defaultValue="Class"
             onChange={handleChange}
           >
-            <Option value="Grade">Grade</Option>
-
-            <Option value="jack">Jack</Option>
-            <Option value="disabled" disabled>
-              Disabled
-            </Option>
-            <Option value="Yiminghe">yiminghe</Option>
+            {classes?.map((item, i) => (
+              <Option key={item.key} value={item.key} lable={item.level + item.section}>{item.level + item.section}</Option>
+            ))}
           </Select>
         </div>
         <div className="course-search">
           <div>
-            <Input
-              style={{ width: 200 }}
-              placeholder="Search"
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              suffix={
-                <Tooltip title="Extra information">
-                  <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-                </Tooltip>
-              }
+            <Search
+              placeholder="input search text"
+              allowClear
+              onSearch={onSearch}
+              style={{
+                width: 200,
+              }}
             />
           </div>
           <div>
-            <Link to={"/add-course"} >
+            <Link to={"/add-course"}>
               <PlusOutlined className="site-form-item-icon" />
               Add Courses
             </Link>

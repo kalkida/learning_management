@@ -30,20 +30,21 @@ function UpdateCourse() {
   const [classes, setClasses] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [subject, setSubject] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState(data.subject);
+  const [selectedSubject, setSelectedSubject] = useState(data.subject?.name);
   const [selectedLevel, setSelectedLevel] = useState(data.class ? data.class.level + data.class.section : "");
   const [loading, setLoading] = useState(false);
   const [teacherView, setTeacherView] = useState(true);
   const [teacherData, setTeacherData] = useState(data.teachers);
   const [updateCourse, setUpdateCourse] = useState({
     course_name: data.course_name,
-    subject: data.subject,
+    subject: data.subject?.key,
     teachers: data.teachers,
-    class: data.class,
+    class: data.class.key,
     schedule: data.schedule,
     description: data.description,
     school_id: data.school_id,
   });
+
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
 
   useEffect(() => {
@@ -53,6 +54,11 @@ function UpdateCourse() {
   const handleUpdate = async () => {
     setLoading(true);
     updateCourse.course_name = selectedSubject + " " + selectedLevel;
+    updateCourse.teachers?.map((item, i) => {
+      if (typeof item === "object") {
+        updateCourse.teachers[i] = item.key
+      }
+    })
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
       .then((response) => {
         setLoading(false);
@@ -142,9 +148,7 @@ function UpdateCourse() {
   };
 
   const handleSubject = async (value) => {
-    console.log(value)
     const response = await getSubjectID(value)
-    console.log(response)
     setSelectedSubject(response.name);
     setUpdateCourse({ ...updateCourse, subject: value });
 
@@ -184,7 +188,7 @@ function UpdateCourse() {
       value.map((item, i) => {
         timeValue.push(JSON.stringify(item._d));
       });
-      updateCourse.schedule[i].day = value;
+      updateCourse.schedule[i].day = timeValue;
     }
   };
 
@@ -234,18 +238,18 @@ function UpdateCourse() {
         <div className="course-avater" >
           <img src="logo512.png" alt="profile" />
           <div className="profile-info">
-            <h2>{updateCourse.course_name}</h2>
-            <h3>Grade {updateCourse.class ? updateCourse.class.level + updateCourse.class.section : ""}</h3>
+            <h2>{data.course_name}</h2>
+            <h3>Grade {data.class ? data.class.level + data.class.section : ""}</h3>
           </div>
         </div>
         <div className="header-extra">
           <div>
             <h3>Assigned Teachers</h3>
-            <h4>{updateCourse.teachers.length}</h4>
+            <h4>{data.teachers.length}</h4>
           </div>
           <div>
             <h3>Class/week</h3>
-            <h4>{updateCourse.schedule.length}</h4>
+            <h4>{data.schedule.length}</h4>
           </div>
         </div>
       </div>
@@ -325,7 +329,7 @@ function UpdateCourse() {
                   onChange={handleTeacher}
                   optionLabelProp="label"
                   mode="multiple"
-                  defaultValue={updateCourse.teachers}
+                  defaultValue={data.teachers}
                   maxTagCount={2}
                 >
                   {teachers.map((item, index) => (

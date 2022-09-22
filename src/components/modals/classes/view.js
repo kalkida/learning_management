@@ -191,19 +191,22 @@ function ViewClass() {
     var branches = await getSchool();
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "in", branches.branches)
+      where("school_id", "in", branches.branches),
+      where("")
       
     );
     var temporary = [];
     const snap = await getDocs(q);
+for (var i = 0; i < data.course.length; i++) {
     snap.forEach(async (doc) => {
-      var data = doc.data();
-      data.key = doc.id;
-      console.log(data);
-      getData(data).then(response => temporary.push(response))
+      var datause = doc.data();
+      datause.key = doc.id;
+    if(datause.key == data[i].course) {
+      console.log(data[i].course);
+      getData(datause).then(response => temporary.push(response))
+    }
     });
-  
-
+}
     setTimeout(() => {
       setData(temporary);
     }, 2000);
