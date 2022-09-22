@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker, message,TimePicker ,Table } from "antd";
+import { Form, Input, Button, Select, DatePicker, message,TimePicker ,Table  ,Tag} from "antd";
 import {
   doc,
   setDoc,
@@ -8,6 +8,7 @@ import {
   collection,
   where,
   query,
+  getDoc,
   deleteDoc
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
@@ -27,6 +28,7 @@ const CreateClasses = () => {
   const [students, setStudents] = useState([]);
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
   const [coursesData ,setCourseData]= useState([]);
+  const [selectedRowKeys , setSelectedRowKeys] = useState([]);
   const [newClass, setNewClass] = useState({
     level: "",
     student: [],
@@ -37,26 +39,48 @@ const CreateClasses = () => {
 
   const columns = [
     {
-      title: 'courses _name',
+      title: 'Courses _name',
       dataIndex: 'course_name',
       key: 'course_name'
 
 
     },
     {
-      title: 'subject',
+      title: 'Subject',
       dataIndex: 'subject',
       key: 'subject',
+      render: (item) => {
+        return (
+          <div>
+            {item.name}
+          </div>
+        );
+      },
     },
     {
-      title: 'level',
-      dataIndex: 'level',
-      key: 'level',
+      title: 'Level',
+      dataIndex: 'class',
+      key: 'class',
+      render: (item) => {
+        return (
+          <div>
+            {item.level}
+          </div>
+        );
+      },
+      
     },
     {
-      title: 'section',
-      dataIndex: 'section',
-      key: 'section',
+      title: 'Section',
+      dataIndex: 'class',
+      key: 'class',
+      render: (item) => {
+        return (
+          <div>
+            {item.section}
+          </div>
+        );
+      },
     },
 
   ];
@@ -116,6 +140,26 @@ const CreateClasses = () => {
     //   });
   }
 
+ const selectRow = (record) => {
+    const selectedRowKeys = [...selectedRowKeys];
+    if (selectedRowKeys.indexOf(record.key) >= 0) {
+      selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
+    } else {
+      selectedRowKeys.push(record.key);
+    }
+    setSelectedRowKeys({ selectedRowKeys });
+  }
+//  const  onSelectedRowKeysChange = (selectedRowKeys) => {
+//   setNewClass({...newClass, course : selectedRowKeys });
+//   }
+
+  const rowSelection = {
+    selectedRowKeys: selectRow.map((row) => row.id),
+    onSelectAll: (selected, selectedRows) => {
+      setSelectedRowKeys(selectedRows);
+    },
+  };
+
   const createNewClass = async () => {
     const q = query(
       collection(firestoreDb, "class"),
@@ -136,6 +180,35 @@ const CreateClasses = () => {
     }
   };
 
+
+  const getData = async (data) => {
+
+    data.class = await getClassData(data.class)
+    data.subject = await getSubjectData(data.subject)
+
+    return data;
+  }
+
+  const getClassData = async (ID) => {
+    const docRef = doc(firestoreDb, "class", ID)
+    var data = "";
+    await getDoc(docRef).then(response => {
+      data = response.data();
+      data.key = response.id;
+    })
+    return data;
+  }
+
+  const getSubjectData = async (ID) => {
+    const docRef = doc(firestoreDb, "subject", ID)
+    var data = "";
+    await getDoc(docRef).then(response => {
+      data = response.data();
+      data.key = response.id;
+    })
+    return data;
+  }
+
   const getCourse = async () => {
     const coursess = []
     const q = query(
@@ -145,12 +218,18 @@ const CreateClasses = () => {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-      coursess.push({
-        ...datas,
-        key: doc.id,
-      });
+     
+      getData(datas).then(response => coursess.push({...response, key:doc.id }))
+      // coursess.push({
+      //   ...datas,
+      //   key: doc.id,
+      // });
     });
-    setCourseData(coursess);
+   // getData(data).then(response => temporary.push(response))
+    //setCourseData(coursess);
+    setTimeout(() => {
+      setCourseData(coursess);
+    }, 2000);
   };
 
 
@@ -213,7 +292,7 @@ const CreateClasses = () => {
                     <Select
                       style={{
                         width: "100%",
-                        height:50
+                        height:80
                       }}
 
                       placeholder="select Student"
@@ -239,24 +318,22 @@ const CreateClasses = () => {
                 
               </div>
            </div>
+           <div className="list-header">
+      <h1 style={{ fontSize: 28 , marginTop:20 }}>Add Courses</h1>
+    </div>
            <div 
     style={{
       backgroundColor:'#F9FAFB',
       borderRadius:8,
       borderWidth:1,
       top:95 ,
-      marginTop:50,
+      marginTop:20,
     }}
     >
 <div  style={{
-  padding:20,
-  
+  padding:5
 }}>
- <div className="list-header">
-      <h1 style={{ fontSize: 28 }}>Add Courses</h1>
-    </div>
-     
-          <Select
+          {/* <Select
             style={{
               width: "100%",
             }}
@@ -272,15 +349,29 @@ const CreateClasses = () => {
               </Option>
               
             ))}
-          </Select>
-          <div className="asssign-teacher">
-              <Table dataSource={newClass.course} columns={columns} />
+          </Select> */}
+          <div >
+          <Table
+           rowSelection={rowSelection}
+              columns={columns}
+              dataSource={coursesData}
+              onRow={(record) => ({
+              onClick: () => {
+             selectRow(record);
+          },
+        })}
+      />
             </div>   
       </div>
       </div>
+      <div style={{
+        marginTop: '20px',
+      }}>
+
+      </div>
       <div className="schedule">
-              <h4>Weekly Schedule</h4>
               <div className="up-card-schedule">
+              <h1 style={{ fontSize:24 , fontWeight:'bold' , padding:10}}> Schedule</h1>
     {/* <h2 >Class {updateCourse.class ? updateCourse.class.level + updateCourse.class.section : null}</h2> */}
                 <div className="schedule-header">
                   <div>
