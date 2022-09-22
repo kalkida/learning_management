@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Form, Input, Button, Select, Row, Col, Tabs, Table } from 'antd';
+import { Modal, Form, Input, Button, Select, Row, Col, Tabs, Table, Tag } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './style.css'
 
@@ -9,6 +9,8 @@ function TeacherView() {
     const navigate = useNavigate();
     const { state } = useLocation();
     const { data } = state;
+
+    console.log(data)
 
     const handleUpdate = () => {
         navigate('/update-teacher', { state: { data } })
@@ -88,20 +90,20 @@ function TeacherView() {
             <div>
                 <div className="profile-header" >
                     <div className="teacher-avater" >
-                        <img src="img-5.jpg" alt="profile" />
+                        <img src={data.avater ? data.avater : "img-5.jpg"} alt="profile" />
                         <div className="profile-info">
-                            <h2>Teacher Name</h2>
-                            <h3>ID: 1334</h3>
+                            <h2>{data.first_name + " " + data.last_name}</h2>
+                            <h3>ID: {data.id}</h3>
                         </div>
                     </div>
                     <div className="header-extra">
                         <div>
                             <h3>Assigned Subject</h3>
-                            <h4>Math,Physics</h4>
+                            <h4>{data.course?.map((item, i) => <Tag key={i} color={"orange"}>{item}</Tag>)}</h4>
                         </div>
                         <div>
                             <h3>Assigned Class</h3>
-                            <h4>Math,Physics</h4>
+                            <h4>{data.class?.map((item, i) => <Tag key={i} color={"orange"}>{item}</Tag>)}</h4>
                         </div>
                     </div>
                 </div>
@@ -115,11 +117,11 @@ function TeacherView() {
                                     <span>Assigned Grade</span>
                                 </div>
                                 <div>
-                                    <h1>9</h1>
+                                    <h1>{data.class.length}</h1>
                                     <span>Classes</span>
                                 </div>
                                 <div>
-                                    <h1>2</h1>
+                                    <h1>{data.course.length}</h1>
                                     <span>Course</span>
                                 </div>
                                 <div>
@@ -142,11 +144,11 @@ function TeacherView() {
                                             </div>
                                             <div>
                                                 <h3>Phone number</h3>
-                                                <span>0911554787</span>
+                                                <span>{data.phone}</span>
                                             </div>
                                             <div>
                                                 <h3>Email</h3>
-                                                <span>teacher@gmail.com</span>
+                                                <span>{data.email}</span>
                                             </div>
                                         </div>
                                         <div className='col'>
