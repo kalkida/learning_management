@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Space, Table, Tag, Modal, Button } from "antd";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   collection,
@@ -34,6 +35,9 @@ const { Option } = Select;
 
 
 export default function ListClasses() {
+
+const navigate= useNavigate();
+
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
   const [isData, setIsData] = useState(false);
@@ -165,8 +169,9 @@ export default function ListClasses() {
   };
 
   const handleView = (data) => {
-    setViewData(data);
-    setOpenView(true);
+    navigate('/view-class', { state: { data } });
+    // setViewData(data);
+    // setOpenView(true);
   };
 
   const handleUpdateCancel = () => {
@@ -174,8 +179,9 @@ export default function ListClasses() {
   };
 
   const handleUpdate = (data) => {
-    setViewData(data);
-    setOpenUpdate(true);
+    navigate('/update-class', { state: { data } });
+    // setViewData(data);
+    // setOpenUpdate(true);
   };
 
   const getClasses = async () => {
