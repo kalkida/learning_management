@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker, Space } from "antd";
+import { Form, Input, Button, Select, DatePicker, Space, Table } from "antd";
 import { Link } from "react-router-dom";
 import {
   doc,
@@ -9,6 +9,7 @@ import {
   collection,
   where,
   query,
+  getDoc,
   updateDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
@@ -20,13 +21,11 @@ import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import "../modals/courses/style.css";
 import "../modals/teacher/style.css";
-import {
-  InfoCircleOutlined,
-  UserOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import { Tooltip } from "antd";
+
 const { Option } = Select;
+const { Search } = Input;
+
+const gender = ["Male", "Female", "Other"]
 
 const CreateNewTeacher = () => {
   const navigate = useNavigate();
@@ -43,8 +42,27 @@ const CreateNewTeacher = () => {
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedClassKeys, setSelectedClassKeys] = useState([])
+  const [subject, setSubject] = useState();
   const searchInput = useRef(null);
   const schools = useSelector((state) => state.user.profile.school);
+  const uid = useSelector((state) => state.user.profile);
+  const [newUser, setNewUser] = useState({
+    avater: null,
+    email: "",
+    first_name: "",
+    last_name: "",
+    class: "",
+    course: [],
+    DOB: "",
+    sex: '',
+    working_since: "",
+    phone: "",
+    school_id: uid.school,
+  });
+
+  const valueRef = useRef();
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -149,28 +167,113 @@ const CreateNewTeacher = () => {
       ),
   });
 
-  const uid = useSelector((state) => state.user.profile);
-  const [newUser, setNewUser] = useState({
-    avater: null,
-    email: "",
-    first_name: "",
-    last_name: "",
-    class: "",
-    course: [],
-    level: [],
-    phone: "",
-    school_id: uid.school,
-  });
-
-  const valueRef = useRef();
-
-  const handleChange = (event) => {
-    setFile(event.target.files[0]);
+  const onSelectChange = (newSelectedRowKeys) => {
+    setNewUser({ ...newUser, course: newSelectedRowKeys });
+    setSelectedRowKeys(newSelectedRowKeys);
   };
+
+  const onSelectChangeClass = (newSelectedRowKeys) => {
+    setNewUser({ ...newUser, class: newSelectedRowKeys });
+    setSelectedClassKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+        key: 'odd',
+        text: 'Select Odd Row',
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return false;
+            }
+
+            return true;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+      {
+        key: 'even',
+        text: 'Select Even Row',
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return true;
+            }
+
+            return false;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+    ],
+  };
+
+
+  const rowSelectionClass = {
+    selectedClassKeys,
+    onChange: onSelectChangeClass,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+        key: 'odd',
+        text: 'Select Odd Row',
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return false;
+            }
+
+            return true;
+          });
+          setSelectedClassKeys(newSelectedRowKeys);
+        },
+      },
+      {
+        key: 'even',
+        text: 'Select Even Row',
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return true;
+            }
+
+            return false;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+    ],
+  };
+
 
   async function handleUpload() {
     if (!file) {
-      alert("Please choose a file first!");
+      console.log(newUser)
+      setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
+      setDoc(doc(firestoreDb, "users", uuid()), {
+        phoneNumber: newUser.phone,
+        role: {
+          isAdmin: false,
+          isTeacher: true,
+          isParent: false,
+        },
+        school: schools,
+      });
+      navigate("/list-teacher");
+      setLoading(false);
     } else {
       const storageRef = ref(storage, file.name);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -189,14 +292,9 @@ const CreateNewTeacher = () => {
         () => {
           // download url
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            console.log("url is   ", url);
             valueRef.current = url;
-            console.log("value with ref is ", valueRef.current);
-
             if (valueRef.current != null) {
-              console.log("value with ref with ref is ", valueRef.current);
               setLoading(true);
-              // setNewUser({...newUser , avater: valueRef.current})
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
                 setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
@@ -209,19 +307,19 @@ const CreateNewTeacher = () => {
                   },
                   school: schools,
                 });
-                console.log("Teacher  is createteacher    ", newUser);
-                console.log("teacher id   ", uuid());
                 navigate("/list-teacher");
                 setLoading(false);
               }
             }
-            console.log("images is   ", images);
+
           });
         }
       );
     }
   }
+
   const getClass = async () => {
+    const children = [];
     const q = query(
       collection(firestoreDb, "class"),
       where("school_id", "==", uid.school)
@@ -254,10 +352,54 @@ const CreateNewTeacher = () => {
     setSecData(sec);
   };
 
+  const getClassData = async (ID) => {
+    const docRef = doc(firestoreDb, "class", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+    return data;
+  };
+
+  const getSubjectData = async (ID) => {
+    const docRef = doc(firestoreDb, "subject", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+    return data;
+  };
+
+  const getData = async (data) => {
+    data.class = await getClassData(data.class);
+    data.subject = await getSubjectData(data.subject);
+    return data;
+  };
+
   const getCourse = async () => {
-    const coursess = [];
     const q = query(
       collection(firestoreDb, "courses"),
+      where("school_id", "==", uid.school)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      getData(data).then((response) => temporary.push(response));
+    });
+
+    setTimeout(() => {
+      setCourseData(temporary);
+    }, 2000);
+  };
+
+  const getSubject = async () => {
+    const coursess = [];
+    const q = query(
+      collection(firestoreDb, "subject"),
       where("school_id", "==", uid.school)
     );
     const querySnapshot = await getDocs(q);
@@ -268,7 +410,7 @@ const CreateNewTeacher = () => {
         key: doc.id,
       });
     });
-    setCourseData(coursess);
+    setSubject(coursess);
   };
 
   const getid = async () => {
@@ -289,412 +431,268 @@ const CreateNewTeacher = () => {
   };
 
   const createNewTeacher = async () => {
-    console.log("start");
     await handleUpload();
   };
-  const children = [];
-  const handleCourse = (value) => {
-    setNewUser({ ...newUser, class: value });
+
+  const handleChangeTeacher = (e) => {
+    setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
-  const handleSection = (value) => {
-    setNewUser({ ...newUser, level: value });
+  const handleGender = (value) => {
+    setNewUser({ ...newUser, sex: value });
   };
-  const handleId = (value) => {
-    setNewUser({ ...newUser, id: uuid() });
+  const handleDob = (value) => {
+    setNewUser({ ...newUser, DOB: JSON.stringify(value) });
   };
-  const handleCourses = (value) => {
-    setNewUser({ ...newUser, course: value });
+  const handleWork = (value) => {
+    setNewUser({ ...newUser, working_since: JSON.stringify(value) });
   };
 
-  const setEmail = (e) => {
-    setNewUser({ ...newUser, email: e.target.value });
-  };
-  const setPhone = (e) => {
-    if (!e) {
-      alert("Please write phone first!");
+  const handleFilterSubject = async (value) => {
+
+    if (value) {
+      const q = query(
+        collection(firestoreDb, "courses"),
+        where("school_id", "==", uid.school), where("subject", "==", value)
+      );
+      var temporary = [];
+      const snap = await getDocs(q);
+      snap.forEach(async (doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        getData(data).then((response) => temporary.push(response));
+      })
+      setTimeout(() => {
+        setCourseData(temporary);
+      }, 2000);
     }
-    setNewUser({ ...newUser, phone: e.target.value });
-    // setPhones(e.target.value);
-    // // setNewUser({ ...newUser, ...[newUser.phone]=  allPhone });
-    // setNewUser({ ...newUser, ["phone"]: allPhone });
   };
-  //   const setLevel = (e) => {
-  //     setNewUser({ ...newUser, level: e.target.value });
-  //   };
-  const setFirstNmae = (e) => {
-    setNewUser({ ...newUser, first_name: e.target.value });
-  };
-  const setLastName = (e) => {
-    setNewUser({ ...newUser, last_name: e.target.value });
-  };
-  const handleChanges = (value) => {
-    console.log(`selected ${value}`);
-  };
+
+  const handleFilterClass = async (value) => {
+    if (value) {
+      const q = query(collection(firestoreDb, "courses"), where("school_id", "==", uid.school), where("class", "==", value));
+      var temporary = [];
+      const snap = await getDocs(q);
+      snap.forEach(async (doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        getData(data).then((response) => temporary.push(response));
+      })
+      setTimeout(() => {
+        setCourseData(temporary);
+      }, 2000);
+    }
+  }
+
+  const onRemove = () => {
+    setFile('');
+  }
+
+  const columns = [
+    {
+      title: 'Course',
+      dataIndex: 'course_name',
+      key: 'course_name'
+
+
+    },
+    {
+      title: 'Subject',
+      dataIndex: 'subject',
+      key: 'subject',
+      render: (item) => {
+        return (
+          <div>
+            {item.name}
+
+          </div>
+        );
+      },
+    },
+    {
+      title: "Class",
+      dataIndex: "class",
+      key: "class",
+      render: (item) => {
+        return (
+          <div>
+            {item.level}
+            {"   "}
+            {item.section}
+          </div>
+        );
+      },
+    },
+  ]
+
+  const classColumns = [
+    {
+      title: 'Grade',
+      dataIndex: 'level',
+      key: 'course_name'
+
+
+    },
+    {
+      title: 'Section',
+      dataIndex: 'section',
+      key: 'secticon',
+
+    },
+
+  ]
 
   useEffect(() => {
     getClass();
     getCourse();
     getid();
     getSection();
+    getSubject();
   }, []);
 
+  function HandleBrowseClick() {
+    var fileinput = document.getElementById("browse");
+    fileinput.click();
+  }
+
+  function handleFile(event) {
+    var fileinput = document.getElementById("browse");
+    var textinput = document.getElementById("filename");
+    textinput.value = fileinput.value;
+    setFile(event.target.files[0]);
+  }
   return (
     <>
       <div>
-        <div className="update-card">
-          <div
-            style={{
-              flexDirection: "column",
-              paddingLeft: "10px",
-              marginLeft: "10px",
-              top: 95,
-            }}
-          >
-            <h1 className="h1"> Profile information</h1>
-            <div className="avater-img">
+        <div className="add-header">
+          <h1>Add Teacher</h1>
+          <button onClick={async () => await createNewTeacher()}>Confirm</button>
+        </div>
+        <div className="add-teacher">
+          <div className="avater-img">
+            <div>
               <h2>Profile Picture</h2>
               <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
+            </div>
+            <div className="file-content">
+              <span>This will be displayed to you when you view this profile</span>
+
               <div className="img-btn">
-                <input type="file" onChange={handleChange} accept="/image/*" />
-                {/* <Button>Add</Button> */}
-                {/* <Button>Remove</Button> */}
+                <button>
+                  <input type="file" id="browse" name="files" style={{ display: "none" }} onChange={handleFile} accept="/image/*" />
+                  <input type="hidden" id="filename" readonly="true" />
+                  <input type="button" value="Add Photo" id="fakeBrowse" onClick={HandleBrowseClick} />
+                </button>
+                <button onClick={onRemove}>Remove</button>
               </div>
             </div>
           </div>
-          <div className="col">
-            <div>
-              <label>First</label>
-              <Input onChange={(e) => setFirstNmae(e)} />
-            </div>
-            <div>
-              <label>Class</label>
-              <Select
-                placeholder="Select Classes"
-                onChange={handleCourse}
-                optionLabelProp="label"
-                mode="multiple"
-                style={{
-                  width: "100%",
-                }}
-              >
-                {classData.map((item, index) => (
-                  <Option key={item.key} value={item.level} label={item.level}>
-                    {item.level}
-                  </Option>
-                ))}
-              </Select>
-            </div>
-            <div>
-              <label>Branch</label>
-              <Input defaultValue={"Saris"} />
-            </div>
-            <div>
-              <label>Phone</label>
-              <Input onChange={(e) => setPhone(e)} />
-            </div>
-          </div>
-          <div className="col">
-            <div>
-              <label>Last Name</label>
-              <Input onChange={(e) => setLastName(e)} />
-            </div>
-            <div>
-              <label>Section</label>
-              <Select
-                placeholder="Select Section"
-                onChange={handleCourse}
-                optionLabelProp="label"
-                mode="multiple"
-                style={{
-                  width: "100%",
-                }}
-              >
-                {classData.map((item, index) => (
-                  <Option
-                    key={item.key}
-                    value={item.section}
-                    label={item.section}
-                  >
-                    {item.section}
-                  </Option>
-                ))}
-              </Select>
-            </div>
-            <div>
-              <label>ID</label>
-              <Input defaultValue={"0354"} />
-            </div>
 
-            <div>
-              <label>Email</label>
-              <Input onChange={(e) => setEmail(e)} />
+          <div className="add-form">
+            <div className="col">
+              <div>
+                <label>First Name</label>
+                <Input name="first_name" onChange={(e) => handleChangeTeacher(e)} />
+              </div>
+              <div>
+                <label>Last Name</label>
+                <Input name="last_name" onChange={(e) => handleChangeTeacher(e)} />
+              </div>
+            </div>
+            <div className="col">
+              <div>
+                <label>Phone</label>
+                <Input name="phone" onChange={(e) => handleChangeTeacher(e)} />
+              </div>
+
+              <div>
+                <label>Email</label>
+                <Input name="email" onChange={(e) => handleChangeTeacher(e)} />
+              </div>
+            </div>
+            <div className="col">
+              <div>
+                <label>Date of Birth</label>
+                <DatePicker style={{ width: "100%" }} onChange={handleDob} />
+              </div>
+              <div>
+                <label>Sex </label>
+                <Select
+                  placeholder="Select Gender"
+                  onChange={handleGender}
+                  optionLabelProp="label"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {gender.map((item, index) => (
+                    <Option
+                      key={item.index}
+                      value={item}
+                      label={item}
+                    >
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <label>Working since</label>
+                <DatePicker style={{ width: "100%" }} onChange={handleWork} />
+              </div>
             </div>
           </div>
         </div>
-        {/* <div 
-      style={{
-        height:357,
-        backgroundColor:'#F9FAFB',
-        borderRadius:8,
-        borderWidth:1,
-        top:95 ,
-        display:'flex'
-      }}
-      >
-        <Form 
-        layout="vertical"
-        >
-        <h1 className="h1"> Profile information</h1>
-        <div style={{
-          flexDirection:'row',
-          justifyContent: "space-between",
-          display: "flex",
-
-        }}>
-        <div style={{
-           display: 'flex',
-           alignItems:'flex-start',
-          // width: '50%',
-           flexDirection:'column',
-
-        }} >
-         <text style={{
-          textAlign: 'left',
-          fontFamily:'plus jakarta sans',
-          fontSize:16,
-          fontWeight:'bold',
-          padding:24,
-          marginLeft:50,
-        }}>Profile Picture</text>
-        <img  style ={{
-          width:151,
-          height:151,
-          padding:8,
-          marginLeft:50,
-        }}src={file ? URL.createObjectURL(file) :"logo512.png"}  />
-        <Form.Item 
-        style={{
-          display: 'flex',
-          //width:98,
-          height:38,
-          padding:20,
-          gap:8,
-          borderBlockColor:'#E7752B',
-        }}
-        >
-        <input  type="file" onChange={handleChange} accept="/image/*"   />
-        </Form.Item>
-        </div>
-        <div 
-        style={{
-          display: "flex",
-          flexDirection:'column',
-          alignItems:'flex-start',
-          paddingRight:120
-        }}
-        >
-      <Form.Item  style ={{
-        minWidth:"100%",
-        height:44,
-        borderRadius:6,
-        padding:10,
-        gap:8
-      }}label="First Name">
-          <Input onChange={(e) => setFirstNmae(e)} />
-        </Form.Item>
-        <Form.Item style ={{
-        width:'100%',
-        height:44,
-        borderRadius:6,
-        padding:10,
-        gap:8
-      }} label="Last Name">
-          <Input onChange={(e) => setLastName(e)} />
-        </Form.Item>
-        <Form.Item style ={{
-        width:"100%",
-        height:44,
-        borderRadius:6,
-        padding:10,
-        gap:8
-      }} label="Class">
-          <Select
-            placeholder="Select Classes"
-            onChange={handleCourse}
-            optionLabelProp="label"
-            mode="multiple"
-
-          >
-            {classData.map((item, index) => (
-              <Option key={item.key} value={item.level} label={item.level}>
-                {item.level}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        </div>
-        <div style={{
-          display: "flex",
-          flexDirection:'column',
-          alignItems:'flex-end',
-          paddingRight:120
-        }}>
-        <Form.Item style ={{
-        width:'100%',
-        height:44,
-        borderRadius:6,
-        padding:10,
-        gap:8
-      }} label="Section">
-          <Select
-            placeholder="Select Section"
-            onChange={handleCourse}
-            optionLabelProp="label"
-            mode="multiple"
-
-          >
-            {classData.map((item, index) => (
-              <Option key={item.key} value={item.section} label={item.section}>
-                {item.section}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Form.Item 
-        style ={{
-          width:"100%",
-          height:44,
-          borderRadius:6,
-          padding:10,
-          gap:8,
-        }}
-        label="Email">
-          <Input onChange={(e) => setEmail(e)} />
-        </Form.Item>
-        <Form.Item
-        style ={{
-          width:'100%',
-          height:44,
-          borderRadius:6,
-          padding:10,
-          gap:8,
-        }}
-        label="Phone">
-        <Input onChange={(e) => setPhone(e)} />
-      </Form.Item>
-      </div>
-      </div>
- 
-      </Form>
-      </div> */}
-
-        <div
-          style={{
-            // height:417,
-            backgroundColor: "#F9FAFB",
-            borderRadius: 8,
-            borderWidth: 1,
-            // top:95 ,
-            marginTop: 50,
-            // display:'flex'
-          }}
-        >
-          <div
-            style={{
-              padding: 20,
-            }}
-          >
+        <div style={{ marginTop: 20, }}>
+          <div style={{ padding: 20, }}>
             <div className="list-header">
               <h1 style={{ fontSize: 28 }}>Add Course </h1>
             </div>
             <div className="list-sub">
               <div className="list-filter">
                 <Select
-                  defaultValue="Subject"
+                  placeholder="Subject"
                   style={{ width: 120 }}
-                  onChange={handleChange}
+                  onChange={handleFilterSubject}
                 >
-                  <Option value="Subject">Subject</Option>
-
-                  <Option value="jack">Jack</Option>
-                  <Option value="disabled" disabled>
-                    Disabled
-                  </Option>
-                  <Option value="Yiminghe">yiminghe</Option>
+                  {subject?.map((item, i) => (
+                    <Option key={item.key} value={item.key} label={item.name}>{item.name}</Option>
+                  ))}
                 </Select>
                 <Select
                   style={{ width: 120 }}
-                  defaultValue="Class"
-                  onChange={handleChange}
+                  placeholder="Class"
+                  onChange={handleFilterClass}
                 >
-                  <Option value="Grade">Grade</Option>
-
-                  <Option value="jack">Jack</Option>
-                  <Option value="disabled" disabled>
-                    Disabled
-                  </Option>
-                  <Option value="Yiminghe">yiminghe</Option>
+                  {classData?.map((item, i) => (
+                    <Option key={item.key} value={item.key} label={item.level + item.section}>{item.level + item.section}</Option>
+                  ))}
                 </Select>
               </div>
               <div className="course-search">
                 <div>
-                  <Input
-                    style={{ width: 200 }}
-                    placeholder="Search"
-                    prefix={<UserOutlined className="site-form-item-icon" />}
-                    suffix={
-                      <Tooltip title="Extra information">
-                        <InfoCircleOutlined
-                          style={{ color: "rgba(0,0,0,.45)" }}
-                        />
-                      </Tooltip>
-                    }
-                  />
-                </div>
-                <div>
-                  <Button
+                  <Search
+                    placeholder="input search text"
+                    allowClear
+                    // onSearch={onSearch}
                     style={{
-                      //   padding:5,
-                      backgroundColor: "#E7752B",
-                      //   marginBottom: 20,
-                      //   color: "white",
-                      //   borderRadius: 5,
-                      //   marginLeft: 10,
-                      //   width:87
+                      width: 200,
                     }}
-                    onClick={async () => await createNewTeacher()}
-                  >
-                    Confirm
-                  </Button>
+                  />
                 </div>
               </div>
             </div>
-
-            <Form layout="vertical">
-              <Form.Item label="Courses">
-                <Select
-                  style={{
-                    width: "97%",
-                  }}
-                  placeholder="Select all courses"
-                  onChange={handleCourses}
-                  optionLabelProp="label"
-                  mode="multiple"
-                >
-                  {coursesData.map((item, index) => (
-                    <Option
-                      key={item.key}
-                      value={item.cour}
-                      label={item.course_name}
-                    >
-                      {item.course_name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Form>
+            <br />
+            <Table rowSelection={rowSelection} dataSource={coursesData} columns={columns} />
+          </div>
+        </div>
+        <div >
+          <div style={{ padding: 20, }}>
+            <div className="list-header">
+              <h1 style={{ fontSize: 28 }}>Add Class </h1>
+            </div>
+            <br />
+            <Table rowSelection={rowSelectionClass} dataSource={classData} columns={classColumns} />
           </div>
         </div>
       </div>

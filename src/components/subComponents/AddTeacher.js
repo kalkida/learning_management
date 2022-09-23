@@ -34,17 +34,10 @@ export default function AddTeacher() {
 
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-  const [openView, setOpenView] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [updateData, setUpdateData] = useState();
-  const [updateComplete, setUpdateComplete] = useState(false);
-  const [viewData, setViewData] = useState();
-  const [coursedata, setCousreData] = useState([]);
-  const [sectionData, setSectionData] = useState([]);
-  const [sectionIdSingle, setSectionIdSingle] = useState([]);
-  const [courseIdSingle, setCourseIdSingle] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [course, setCourse] = useState([]);
+  const [classes, setClasses] = useState([]);
   const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -161,6 +154,38 @@ export default function AddTeacher() {
     }
   };
 
+  const getClassData = async (ID) => {
+    const docRef = doc(firestoreDb, "class", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+    return data;
+  };
+
+  const getCourseData = async (ID) => {
+    const docRef = doc(firestoreDb, "courses", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+    return data;
+  };
+
+  const getData = async (data) => {
+
+    data.class?.map(async (item, index) => {
+      data.class[index] = await getClassData(item);
+    });
+
+    data.course?.map(async (item, index) => {
+      data.course[index] = await getCourseData(item);
+    });
+    return data;
+  };
+
   const getTeacher = async () => {
     var branches = await getSchool();
     const q = query(
@@ -172,35 +197,101 @@ export default function AddTeacher() {
     snap.forEach((doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data);
+
+      getData(data).then((response) => temporary.push(response));
     });
-    setData(temporary);
-  };
+    setTimeout(() => {
+      setData(temporary);
+    }, 2000);
 
-  const handleViewCancel = () => {
-    setOpenView(false);
-  };
-
-  const showUpdateModal = (data) => {
-    setUpdateData(data);
-    setOpenUpdate(true);
   };
 
   const handleView = (data) => {
     navigate("/view-teacher", { state: { data } });
-    // handleData(data);
-    // setViewData(data);
-    // setOpenView(true);
-  };
 
-  const handleUpdateCancel = () => {
-    setOpenUpdate(false);
   };
 
   const handleUpdate = (data) => {
-    // handleData(data);
     navigate("/update-teacher", { state: { data } });
   };
+
+  const getClass = async () => {
+    var branches = await getSchool();
+    const q = query(
+      collection(firestoreDb, "class"),
+      where("school_id", "in", branches.branches)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data)
+    });
+    setClasses(temporary);
+  }
+
+
+  const getCourse = async () => {
+    var branches = await getSchool();
+    const q = query(
+      collection(firestoreDb, "courses"),
+      where("school_id", "in", branches.branches)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data)
+    });
+    setCourse(temporary);
+  }
+
+  const handleFilterSubject = async (value) => {
+
+    if (value) {
+      var branches = await getSchool();
+      const q = query(
+        collection(firestoreDb, "teachers"),
+        where("school_id", "in", branches.branches), where("course", "array-contains", value)
+      );
+      var temporary = [];
+      const snap = await getDocs(q);
+      snap.forEach(async (doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        // temporary.push(data)
+        getData(data).then((response) => temporary.push(response));
+      })
+      // console.log(temporary)
+      // setData(temporary);
+
+      setTimeout(() => {
+        setData(temporary);
+      }, 2000);
+    }
+  };
+
+  const handleFilterClass = async (value) => {
+    if (value) {
+      var branches = await getSchool();
+      const q = query(collection(firestoreDb, "teachers"), where("school_id", "in", branches.branches), where("class", "array-contains", value));
+      var temporary = [];
+      const snap = await getDocs(q);
+      snap.forEach(async (doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        temporary.push(data)
+        getData(data).then((response) => temporary.push(response));
+      })
+      // setData(temporary);
+
+      setTimeout(() => {
+        setData(temporary);
+      }, 2000);
+    }
+  }
 
   const columns = [
     {
@@ -213,14 +304,15 @@ export default function AddTeacher() {
       title: "Course",
       key: "course",
       dataIndex: "course",
-      // render: (text) => <a>{text}</a>,
-
       render: (value) => {
         return (
           <>
-            {/* {value.map((item) => (
-              <Tag color={"green"}>{item}</Tag>
-            ))} */}
+            {value.map((item) => (
+              <h1>
+                {item.course_name}
+              </h1>
+
+            ))}
           </>
         );
       },
@@ -241,13 +333,15 @@ export default function AddTeacher() {
       title: "Class",
       dataIndex: "class",
       key: "class",
-      // render: (text) => <a>{text}</a>,
+
       render: (value) => {
         return (
           <>
-            {/* {value?.map((item, i) => (
-              <Tag color={"green"}>{item}</Tag>
-            ))} */}
+            {value?.map((item, i) => (
+              <h1>
+                {item.level + item.section}
+              </h1>
+            ))}
           </>
         );
       },
@@ -260,19 +354,16 @@ export default function AddTeacher() {
         <Space size="middle">
           <a onClick={() => handleView(record)}>View </a>
           <a onClick={() => handleUpdate(record)}>Update</a>
-          {/* <a>View {record.name}</a> 
-          <a>Update</a>  */}
         </Space>
       ),
     },
   ];
 
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
   useEffect(() => {
     getTeacher();
-  }, [updateComplete]);
+    getClass();
+    getCourse();
+  }, []);
 
   return (
     <div>
@@ -282,30 +373,23 @@ export default function AddTeacher() {
       <div className="list-sub">
         <div className="list-filter">
           <Select
-            defaultValue="Subject"
+            placeholder="Course"
             style={{ width: 120 }}
-            onChange={handleChange}
+            onChange={handleFilterSubject}
           >
-            <Option value="Subject">Subject</Option>
+            {course?.map((item, i) => (
+              <Option key={item.key} value={item.key} lable={item.course_name}>{item.course_name}</Option>
+            ))}
 
-            <Option value="jack">Jack</Option>
-            <Option value="disabled" disabled>
-              Disabled
-            </Option>
-            <Option value="Yiminghe">yiminghe</Option>
           </Select>
           <Select
             style={{ width: 120 }}
-            defaultValue="Class"
-            onChange={handleChange}
+            placeholder="Class"
+            onChange={handleFilterClass}
           >
-            <Option value="Grade">Grade</Option>
-
-            <Option value="jack">Jack</Option>
-            <Option value="disabled" disabled>
-              Disabled
-            </Option>
-            <Option value="Yiminghe">yiminghe</Option>
+            {classes?.map((item, i) => (
+              <Option key={item.key} value={item.key} lable={item.level + item.section}>{item.level + item.section}</Option>
+            ))}
           </Select>
         </div>
         <div className="course-search">
@@ -331,28 +415,7 @@ export default function AddTeacher() {
       </div>
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ? (
-        <View
-          handleCancel={handleViewCancel}
-          openView={openView}
-          data={viewData}
-          coursedata={coursedata}
-          sectionData={sectionData}
-        />
-      ) : null}
-      {updateData ? (
-        <Update
-          handleUpdateCancel={handleUpdateCancel}
-          openUpdate={openUpdate}
-          data={updateData}
-          setUpdateComplete={setUpdateComplete}
-          updateComplete={updateComplete}
-          coursedata={coursedata}
-          sectionData={sectionData}
-          sectionIdSingle={sectionIdSingle}
-          courseIdSingle={courseIdSingle}
-        />
-      ) : null}
+
     </div>
   );
 }

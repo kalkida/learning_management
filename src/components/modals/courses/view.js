@@ -26,9 +26,7 @@ function ViewCourse() {
       dataIndex: 'last_name',
       key: 'last_name',
     },
-
   ];
-
   const handleUpdate = () => {
     navigate('/update-course', { state: { data } });
   }

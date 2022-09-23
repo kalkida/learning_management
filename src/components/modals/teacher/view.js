@@ -9,78 +9,93 @@ function TeacherView() {
     const navigate = useNavigate();
     const { state } = useLocation();
     const { data } = state;
+    const [weekClass, setWeekClass] = useState();
+    const [age, setAge] = useState();
+    const [expriance, setExpriance] = useState()
 
-    console.log(data)
+    var getworkTime = new Date(JSON.parse(data.working_since));
+    const workTime = getworkTime.getFullYear() + "-" + getworkTime.getMonth() + "-" + getworkTime.getDay()
+
+    useEffect(() => {
+        var weekClassSum = 0;
+        data.course?.map((item, i) => {
+            weekClassSum += item.schedule.length;
+        })
+
+        var today = new Date();
+
+        var birthDate = new Date(JSON.parse(data.DOB));
+        var calage = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            calage--;
+        }
+
+
+        var workDate = new Date(JSON.parse(data.working_since));
+        var calwork = today.getFullYear() - workDate.getFullYear();
+        var m = today.getMonth() - workDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < workDate.getDate())) {
+            calwork--;
+        }
+
+        setWeekClass(weekClassSum);
+        setAge(calage);
+        setExpriance(calwork)
+    }, [])
 
     const handleUpdate = () => {
         navigate('/update-teacher', { state: { data } })
     }
 
-    const teacherCourse = [{
-        subject: "Math",
-        Grade: "8",
-        Section: "A",
-        Class_week: "4",
-        Branch: "4 Kilo"
-    },
-    {
-        subject: "Chemistry",
-        Grade: "8",
-        Section: "B",
-        Class_week: "2",
-        Branch: "Bole"
-    },
-    {
-        subject: "Biology",
-        Grade: "9",
-        Section: "B",
-        Class_week: "3",
-        Branch: "Gerji"
-    },
-    {
-        subject: "History",
-        Grade: "7",
-        Section: "D",
-        Class_week: "1",
-        Branch: "Legehar"
-    },
-    {
-        subject: "Physics",
-        Grade: "11",
-        Section: "A",
-        Class_week: "4",
-        Branch: "Saris"
-    }]
-
     const columns = [
+        {
+            title: 'Course',
+            dataIndex: 'course_name',
+            key: 'course_name'
+
+
+        },
         {
             title: 'Subject',
             dataIndex: 'subject',
-            key: 'subject'
+            key: 'subject',
+            render: (item) => {
+                return (
+                    <div>
+                        {item.name}
 
-
+                    </div>
+                );
+            },
         },
         {
+            title: "Class",
+            dataIndex: "class",
+            key: "class",
+            render: (item) => {
+                return (
+                    <div>
+                        {item.level}
+                        {"   "}
+                        {item.section}
+                    </div>
+                );
+            },
+        },
+    ]
+
+    const classColumns = [
+        {
             title: 'Grade',
-            dataIndex: 'Grade',
-            key: 'Grade',
+            dataIndex: 'level',
+            key: 'course_name'
+
         },
         {
             title: 'Section',
-            dataIndex: 'Section',
-            key: 'Section'
-
-
-        },
-        {
-            title: 'Class/Week',
-            dataIndex: 'Class_week',
-            key: 'Class_week',
-        },
-        {
-            title: 'Branch',
-            dataIndex: 'Branch',
-            key: 'Branch',
+            dataIndex: 'section',
+            key: 'secticon',
         },
 
     ]
@@ -93,18 +108,19 @@ function TeacherView() {
                         <img src={data.avater ? data.avater : "img-5.jpg"} alt="profile" />
                         <div className="profile-info">
                             <h2>{data.first_name + " " + data.last_name}</h2>
-                            <h3>ID: {data.id}</h3>
+                            <h3>Contact</h3>
                         </div>
                     </div>
-                    <div className="header-extra">
+                    <div className="header-extra-th">
                         <div>
-                            <h3>Assigned Subject</h3>
-                            <h4>{data.course?.map((item, i) => <Tag key={i} color={"orange"}>{item}</Tag>)}</h4>
+                            <h3>Class</h3>
+                            <h4>{data.class?.map((item, i) => item.level + item.section + ",")}</h4>
                         </div>
                         <div>
-                            <h3>Assigned Class</h3>
-                            <h4>{data.class?.map((item, i) => <Tag key={i} color={"orange"}>{item}</Tag>)}</h4>
+                            <h3>Subject</h3>
+                            <h4>{data.course?.map((item, i) => item.course_name + ",")}</h4>
                         </div>
+
                     </div>
                 </div>
                 <div className="tab-content">
@@ -113,7 +129,7 @@ function TeacherView() {
                             <Button className="btn-confirm" onClick={handleUpdate}>Edit Profile</Button>
                             <div className='teacher-static'>
                                 <div>
-                                    <h1>7.8</h1>
+                                    <h1>7,8</h1>
                                     <span>Assigned Grade</span>
                                 </div>
                                 <div>
@@ -125,7 +141,7 @@ function TeacherView() {
                                     <span>Course</span>
                                 </div>
                                 <div>
-                                    <h1>6</h1>
+                                    <h1>{weekClass}</h1>
                                     <span>Classes/Week</span>
                                 </div>
                             </div>
@@ -136,11 +152,11 @@ function TeacherView() {
                                         <div className='col'>
                                             <div>
                                                 <h3>Age</h3>
-                                                <span>2</span>
+                                                <span>{age}</span>
                                             </div>
                                             <div>
                                                 <h3>Sex</h3>
-                                                <span>Male</span>
+                                                <span>{data.sex}</span>
                                             </div>
                                             <div>
                                                 <h3>Phone number</h3>
@@ -151,97 +167,46 @@ function TeacherView() {
                                                 <span>{data.email}</span>
                                             </div>
                                         </div>
-                                        <div className='col'>
-                                            <div>
-                                                <h3>Address</h3>
-                                                <span>Nifas Silk Lafto</span>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div className='career-profile'>
                                     <h1>Career Profile</h1>
                                     <div>
                                         <h3>Working Since</h3>
-                                        <span>2018</span>
+                                        <span>{workTime}</span>
                                     </div>
                                     <div>
                                         <h3>Speciality</h3>
-                                        <span>Teacher,Engineer</span>
+                                        <span>Teacher</span>
                                     </div>
                                     <div>
                                         <h3>Work Expirence</h3>
-                                        <span>4 year</span>
+                                        <span>{expriance} year</span>
                                     </div>
                                 </div>
                             </div>
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="Course" key="2">
+                            <Button className="btn-confirm" onClick={handleUpdate}>Edit Profile</Button>
                             <div className='teacher-course-list'>
                                 <div className='tch-cr-list'>
                                     <h1>Assigned Courses</h1>
-                                    <Button>Add/Remove</Button>
                                 </div>
-                                <Table dataSource={teacherCourse} columns={columns} />
+                                <Table dataSource={data.course} columns={columns} />
                             </div>
                         </Tabs.TabPane>
-                        <Tabs.TabPane tab="Course" key="3">
-                            Content of Tab Pane 3
+                        <Tabs.TabPane tab="Class" key="3">
+                            <Button className="btn-confirm" onClick={handleUpdate}>Edit Profile</Button>
+                            <div className='teacher-course-list'>
+                                <div className='tch-cr-list'>
+                                    <h1>Assigned Classes</h1>
+                                </div>
+                                <Table dataSource={data.class} columns={classColumns} />
+                            </div>
                         </Tabs.TabPane>
                     </Tabs>
                 </div>
-
             </div>
-            {/* {data && openView ?
-                <Modal
-                    visible={openView}
-                    title="View Teacher"
-                    onCancel={handleCancel}
-                    width={756}
-                    footer={[
-                        <Button key="back" onClick={handleCancel}>
-                            Return
-                        </Button>,
-                    ]}
-                >
-
-<Row>               
-               <Col style={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <img src={data.avater} alt="" style={{ width: "330px" }} />
-                    </Col>
-                    <Col style={{ width: "50%", padding: "20px" }}>
-                    <Form
-                        labelCol={{ span: 12 }}
-                        wrapperCol={{ span: 24 }}
-                        layout="horizontal"
-
-                    >
-                         <Form.Item label="first name">
-                            <Input value={data.first_name} />
-                        </Form.Item>
-                        <Form.Item label="last name">
-                            <Input value={data.last_name} />
-                        </Form.Item>
-                        <Form.Item label="phone">
-                            <Input value={data.phone} />
-                        </Form.Item>
-                        <Form.Item label="Email">
-                            <Input value={data.email} />
-                        </Form.Item>
-                        <Form.Item label="Courses">
-                        <Input value={data.course} />
-                        </Form.Item>
-                        
-                        <Form.Item label="class">
-                        <Input value={data.class} />
-                        </Form.Item>
-
-                    </Form>
-                    </Col>
-                </Row>
-
-                </Modal>
-                : null} */}
         </>
     )
 }
