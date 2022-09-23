@@ -11,7 +11,7 @@ import {
   faMicrophone,
   faBook,
 } from "@fortawesome/free-solid-svg-icons";
-
+import ListAnnouncment from "./subComponents/ListAnnouncment";
 import BookOnline from "@mui/icons-material/BookOnline";
 
 import ContentCopy from "@mui/icons-material/ContentCopy";
@@ -446,8 +446,7 @@ const Layouts = () => {
               <Route path="/update-teacher" element={<TeacherUpdate />} />
               <Route path="/view-class" element={<ViewClass />} />
               <Route path="/update-class" element={<UpdateClass />} />
-
-
+              <Route path="/announcment" element={<ListAnnouncment />} />
             </Routes>
           </Content>
         </Layout>
