@@ -42,7 +42,6 @@ function UpdateClass() {
         section: data.section,
         school_id: data.school_id,
         course: data.course,
-        schedule:[],
     });
 
     const [datas, setData] = useState([]);
@@ -207,7 +206,7 @@ function UpdateClass() {
                 setLoading(false);
                 message.success("Data is updated successfuly");
                 setUpdateComplete(!updateComplete);
-                navigate('/list-class')
+                navigate('/list-classes')
             })
             .catch((error) => {
                 message.error("Data is not updated");
@@ -302,7 +301,7 @@ function UpdateClass() {
         const q = query(
             collection(firestoreDb, "students"),
             where("school_id", "==", uid.school),
-            where("level", "==", level)
+            where("level", "==", data.level)
         );
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
@@ -362,14 +361,21 @@ function UpdateClass() {
     useEffect(() => {
         getClass();
         getStudents(data.level);
-        getCourse(data.course);
+       // getCourse(data.course);
     }, []);
 
     const handleClass = (e) => {
         if (e.target.name === "level") {
             getStudents(e.target.value);
         }
+        setUpdateClass({...updateClass, level: e.target.value});
     }
+
+    const handleSection = (e) => {
+    
+      setUpdateClass({...updateClass, section: e.target.value});
+  }
+
 
     const handleCoursse = (value) =>{
       value.map(async (item, i) => {
@@ -443,20 +449,12 @@ function UpdateClass() {
                   fontSize:24,
                   fontWeight: "bold",
                 }} >Assigned Courses</h1>
-                 <Select
-                                placeholder="select Students"
-                                onChange={handleStudent}
-                                defaultValue={data.student}
-                                optionLabelProp="label"
-                                mode="multiple"
-                                maxTagCount={2}
-                            >
-                                {students.map((item, index) => (
-                                    <Option value={item.key} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
-                                        {item.first_name + " " + (item.last_name ? item.last_name : "")}
-                                    </Option>
-                                ))}
-                            </Select>
+                <div style={{ alignSelf:'flex-end' , width:'30%'}}>
+                  <text>level</text>
+                 <Input  defaultValue={data.level} onChange={(e) => handleClass(e)} />
+                 <text>section</text>
+                 <Input  defaultValue={data.section} onChange={(e) => handleSection(e)} />
+                 </div>
                     </div>    
                 <Table dataSource={datas} columns={courseColumns} />
               </div>
@@ -533,10 +531,10 @@ function UpdateClass() {
                   style={{ float: "right" }}
                   onClick={() => {
                     setInput([...input, 0]);
-                    setUpdateClass({
-                      ...updateClass,
-                      schedule: [...updateClass.schedule, { day: "", time: [] }],
-                    });
+                    // setUpdateClass({
+                    //   ...updateClass,
+                    //   schedule: [...updateClass.schedule, { day: "", time: [] }],
+                    // });
                   }}
                 >
                   Add New
