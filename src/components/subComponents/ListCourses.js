@@ -38,6 +38,7 @@ export default function ListCourses() {
   const [classes, setClasses] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [loading, setLoading] = useState(true);
   const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -225,11 +226,10 @@ export default function ListCourses() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data)
+      temporary.push(data);
     });
     setClasses(temporary);
-  }
-
+  };
 
   const getsubject = async () => {
     var branches = await getSchool();
@@ -242,10 +242,10 @@ export default function ListCourses() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data)
+      temporary.push(data);
     });
     setSubject(temporary);
-  }
+  };
 
   const handleView = (data) => {
     navigate("/view-course", { state: { data } });
@@ -261,49 +261,54 @@ export default function ListCourses() {
       dataIndex: "course_name",
       key: "course_name",
       ...getColumnSearchProps("course_name"),
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Class",
-      dataIndex: "class",
-      key: "class",
-      render: (item) => {
-        return (
-          <div>
-            {item.level}
-            {"   "}
-            {item.section}
-          </div>
-        );
+      render: (text, data) => {
+        console.log(data);
+        return <div>{text}</div>;
       },
     },
     {
-      title: "Teachers",
-      dataIndex: "teachers",
-      key: "teachers",
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
+      ...getColumnSearchProps("subject"),
+      render: (text) => <a>{text.name}</a>,
+    },
+    {
+      title: "Grade",
+      dataIndex: "class",
+      key: "class",
       render: (item) => {
-        return (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {item.map((item) => (
-              <h1>
-                {item.first_name}
-                {"   "}
-                {item.last_name}
-              </h1>
-            ))}
-          </div>
-        );
+        return <div>{item.level}</div>;
+      },
+    },
+    {
+      title: "Section",
+      dataIndex: "class",
+      key: "class",
+      render: (item) => {
+        return <div>{item.section}</div>;
       },
     },
 
     {
       title: "Action",
       key: "action",
+      width: "12%",
       render: (_, record) => (
-        <Space size="middle">
-          <a onClick={() => handleView(record)}>View </a>
-          <a onClick={() => handleUpdate(record)}>Update</a>
-        </Space>
+        <div className="flex flex-row justify-around">
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleView(record)}
+          >
+            View{" "}
+          </a>
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleUpdate(record)}
+          >
+            Update
+          </a>
+        </div>
       ),
     },
   ];
@@ -346,8 +351,8 @@ export default function ListCourses() {
   }
 
   const onSearch = (value) => {
-    console.log("search Value: " + value)
-  }
+    console.log("search Value: " + value);
+  };
 
   useEffect(() => {
     getCourses();
@@ -369,7 +374,9 @@ export default function ListCourses() {
             onChange={handleFilterSubject}
           >
             {subject?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.name}>{item.name}</Option>
+              <Option key={item.key} value={item.key} lable={item.name}>
+                {item.name}
+              </Option>
             ))}
           </Select>
           <Select
@@ -378,7 +385,13 @@ export default function ListCourses() {
             onChange={handleFilterClass}
           >
             {classes?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.level + item.section}>{item.level + item.section}</Option>
+              <Option
+                key={item.key}
+                value={item.key}
+                lable={item.level + item.section}
+              >
+                {item.level + item.section}
+              </Option>
             ))}
           </Select>
         </div>

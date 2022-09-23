@@ -1,5 +1,6 @@
 import React from "react";
-
+import Liner from "../graph/Liner";
+import BarGraph from "../graph/BarGraph";
 import { useSelector } from "react-redux";
 import { Card, Progress } from "antd";
 
@@ -11,71 +12,106 @@ export default function AdminDash() {
       style={{
         display: "flex",
         flexDirection: "column",
+        overflow: "hidden",
+        justifyContent: "space-between",
+        width: "100%",
         height: "100vh",
-
-        // backgroundColor: "red",
-        // justifyContent: "center",
-        // alignItems: "center",
       }}
     >
+      <div className="bg-[#F2F4F7] border-[#98A2B3] w-[84%] flex-row flex-1 absolute top-0 h-[8vh] border-[1px]">
+        <h1 className="text-lg p-5 text-[#344054] font-bold">{schools.name}</h1>
+      </div>
+      <div className="flex w-[100%] flex-row overflow-hidden justify-between">
+        <Card
+          bordered={true}
+          style={{
+            width: 400,
+            height: 300,
+            marginTop: 50,
+            borderWidth: 2,
+          }}
+        >
+          <h1 style={{ fontWeight: "bold", marginBottom: 10 }}>
+            Todays Attendance
+          </h1>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <div>
+              <Progress
+                type="circle"
+                strokeColor={"gray"}
+                percent={75}
+                width={70}
+              />
+            </div>
+            <div style={{ marginTop: 10, marginLeft: 19 }}>
+              <h1 style={{ fontSize: 14 }}>7 Absent Students</h1>
+              <h1 style={{ fontSize: 14 }}>2 Absent Teachers</h1>
+            </div>
+          </div>
+          <h1 style={{ fontWeight: "bold", marginBottom: 40, marginTop: 30 }}>
+            Average Attendance
+          </h1>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <div>
+                <Progress type="circle" percent={30} width={40} />
+                <h1 className="text-center">Weekly</h1>
+              </div>
+              <div>
+                <Progress type="circle" percent={70} width={40} />
+                <h1 className="text-center">Monthly</h1>
+              </div>
+              <div>
+                <Progress type="circle" percent={90} width={40} />
+                <h1 className="text-center">Yearly</h1>
+              </div>
+            </div>
+          </div>
+        </Card>
+        <Card
+          bordered={true}
+          style={{
+            width: 400,
+            height: 300,
+
+            marginTop: 50,
+            borderWidth: 2,
+          }}
+        >
+          <Liner />
+        </Card>
+        <Card
+          bordered={true}
+          style={{
+            width: 400,
+            height: 300,
+            marginTop: 50,
+            borderWidth: 2,
+          }}
+        >
+          <Liner />
+        </Card>
+      </div>
       <Card
-        // title={<h1 style={{ fontWeight: "bold" }}>Todays Attendance</h1>}
         bordered={true}
         style={{
-          width: 400,
-          marginTop: 50,
+          width: "53%",
+          marginTop: 10,
           borderWidth: 2,
+          position: "absolute",
+          bottom: -40,
+          right: 50,
         }}
       >
-        <h1 style={{ fontWeight: "bold", marginBottom: 40 }}>
-          Todays Attendance
-        </h1>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <div>
-            <Progress type="circle" strokeColor={"gray"} percent={75} />
-          </div>
-          <div style={{ marginTop: 30, marginLeft: 19 }}>
-            <h1 style={{ fontSize: 20 }}>7 Absent Students</h1>
-            <h1 style={{ fontSize: 20 }}>2 Absent Teachers</h1>
-          </div>
-        </div>
-        <h1 style={{ fontWeight: "bold", marginBottom: 40, marginTop: 40 }}>
-          Average Attendance
-        </h1>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
-            <div>
-              <Progress type="circle" percent={30} width={80} />
-              <h1 className="text-center">Weekly</h1>
-            </div>
-            <div>
-              <Progress type="circle" percent={70} width={80} />
-              <h1 className="text-center">Monthly</h1>
-            </div>
-            <div>
-              <Progress type="circle" percent={90} width={80} />
-              <h1 className="text-center">Yearly</h1>
-            </div>
-          </div>
-
-          {/* <div style={{ marginTop: 30, marginLeft: 19 }}>
-            <h1 style={{ fontSize: 20 }}>7 Absent Students</h1>
-            <h1 style={{ fontSize: 20 }}>2 Absent Teachers</h1>
-          </div> */}
-        </div>
+        <BarGraph />
       </Card>
-      {/* <h1>School Information</h1>
-      <img src={schools.logo} style={{ width: 100, height: 100 }} />
-      <h1>{schools.name}</h1>
-      <h1>{schools.email}</h1>
-      <h1>{schools.website}</h1> */}
     </div>
   );
 }
