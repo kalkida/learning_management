@@ -122,7 +122,7 @@ const Layouts = () => {
               </div>
               <div>
                 <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
+                  className="hover:bg-[#FCF0E8] text-lg open:bg-[#FCF0E8]"
                   style={{
                     color: currentURL === "/admin" ? "#E7752B" : "#2c5886",
                   }}

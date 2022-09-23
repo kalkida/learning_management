@@ -15,11 +15,11 @@ export default function AdminDash() {
         overflow: "hidden",
         justifyContent: "space-between",
         width: "100%",
-        height: "90vh",
+        height: "100vh",
       }}
     >
-      <div className="bg-[#98A2B3] w-[84%] flex-row flex-1 absolute top-0 h-[8vh]">
-        <h1 className="text-lg p-5 text-[white] font-bold">{schools.name}</h1>
+      <div className="bg-[#F2F4F7] border-[#98A2B3] w-[84%] flex-row flex-1 absolute top-0 h-[8vh] border-[1px]">
+        <h1 className="text-lg p-5 text-[#344054] font-bold">{schools.name}</h1>
       </div>
       <div className="flex w-[100%] flex-row overflow-hidden justify-between">
         <Card
@@ -102,11 +102,11 @@ export default function AdminDash() {
       <Card
         bordered={true}
         style={{
-          width: 700,
+          width: "53%",
           marginTop: 10,
           borderWidth: 2,
           position: "absolute",
-          bottom: 0,
+          bottom: -40,
           right: 50,
         }}
       >
