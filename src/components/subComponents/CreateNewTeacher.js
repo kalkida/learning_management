@@ -33,11 +33,9 @@ const CreateNewTeacher = () => {
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
-  const [images, setImages] = useState(null);
 
   const [classData, setClassData] = useState([]);
   const [coursesData, setCourseData] = useState([]);
-  const [personData, setPersonData] = useState([]);
   const [secData, setSecData] = useState([]);
 
   const [searchText, setSearchText] = useState("");
@@ -335,23 +333,6 @@ const CreateNewTeacher = () => {
     setClassData(children);
   };
 
-  const getSection = async () => {
-    const sec = [];
-    const q = query(
-      collection(firestoreDb, "sections"),
-      where("school_id", "==", uid.school)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      var datas = doc.data();
-      sec.push({
-        ...datas,
-        key: doc.id,
-      });
-    });
-    setSecData(sec);
-  };
-
   const getClassData = async (ID) => {
     const docRef = doc(firestoreDb, "class", ID);
     var data = "";
@@ -413,22 +394,7 @@ const CreateNewTeacher = () => {
     setSubject(coursess);
   };
 
-  const getid = async () => {
-    const Teacher = [];
-    const q = query(
-      collection(firestoreDb, "users"),
-      where("role.isTeacher", "==", true)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      var datas = doc.data();
-      Teacher.push({
-        ...datas,
-        key: doc.id,
-      });
-    });
-    setPersonData(Teacher);
-  };
+
 
   const createNewTeacher = async () => {
     await handleUpload();
@@ -545,8 +511,6 @@ const CreateNewTeacher = () => {
   useEffect(() => {
     getClass();
     getCourse();
-    getid();
-    getSection();
     getSubject();
   }, []);
 

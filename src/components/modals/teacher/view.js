@@ -13,7 +13,7 @@ function TeacherView() {
     const [age, setAge] = useState();
     const [expriance, setExpriance] = useState()
 
-    var getworkTime = new Date(JSON.parse(data.working_since));
+    var getworkTime = data.working_since ? new Date(JSON.parse(data.working_since)) : new Date();
     const workTime = getworkTime.getFullYear() + "-" + getworkTime.getMonth() + "-" + getworkTime.getDay()
 
     useEffect(() => {
@@ -24,7 +24,7 @@ function TeacherView() {
 
         var today = new Date();
 
-        var birthDate = new Date(JSON.parse(data.DOB));
+        var birthDate = data.DOB ? new Date(JSON.parse(data.DOB)) : new Date();
         var calage = today.getFullYear() - birthDate.getFullYear();
         var m = today.getMonth() - birthDate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
@@ -32,7 +32,7 @@ function TeacherView() {
         }
 
 
-        var workDate = new Date(JSON.parse(data.working_since));
+        var workDate = data.working_since ? new Date(JSON.parse(data.working_since)) : new Date();
         var calwork = today.getFullYear() - workDate.getFullYear();
         var m = today.getMonth() - workDate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < workDate.getDate())) {

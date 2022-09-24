@@ -9,6 +9,7 @@ import {
     collection,
     where,
     query,
+    getDoc,
     updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -20,21 +21,18 @@ const { Option } = Select;
 const { Search } = Input;
 const gender = ["Male", "Female", "Other"]
 
-function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpdateComplete }) {
+function TeacherUpdate() {
 
     const navigate = useNavigate();
     const { state } = useLocation();
     const { data } = state;
 
-    const dateFormat = 'YYYY/MM/DD';
     const valueRef = useRef();
 
-    const [loading, setLoading] = useState(false);
     const [classOption, setClassOption] = useState([]);
     const [courseOption, setCourseOption] = useState([]);
-    const [percent, setPercent] = useState(0);
     const [file, setFile] = useState("");
-    const [updateCourseView, setUpdateCourseView] = useState(true);
+    const [subject, setSubject] = useState([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [selectedClassKeys, setSelectedClassKeys] = useState([])
 
@@ -54,14 +52,13 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
 
     const handleUpdate = () => {
 
-        setLoading(true);
+
         if (!file) {
+            console.log(updateTeacher)
             setDoc(doc(firestoreDb, "teachers", data.key), updateTeacher, { merge: true }).then(
                 response => {
-                    setLoading(false)
                     message.success("Data is updated successfuly")
-                    setUpdateComplete(!updateComplete)
-                    handleUpdateCancel()
+                    navigate('/list-teacher')
                 })
                 .catch(error => {
                     message.error("Data is not updated")
@@ -72,14 +69,6 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(
                 "state_changed",
-                (snapshot) => {
-                    const percentR = Math.round(
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-
-                    // update progress
-                    setPercent(percentR);
-                },
                 (err) => console.log(err),
                 () => {
                     // download url
@@ -93,7 +82,6 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
                                 console.log(updateTeacher)
                                 setDoc(doc(firestoreDb, "teachers", data.key), updateTeacher, { merge: true }).then(
                                     response => {
-                                        setLoading(false)
                                         message.success("Data is updated successfuly")
                                         navigate('/list-teacher')
                                     })
@@ -112,20 +100,8 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
 
     };
 
-    const handleCourse = (value) => {
-        setUpdateTeacher({ ...updateTeacher, class: value });
-    };
-
-    const handleCourseItem = (value) => {
-        setUpdateTeacher({ ...updateTeacher, course: value });
-    };
-
-
-    const onChange = (e) => {
-        setUpdateTeacher({ ...updateTeacher, [e.target.name]: e.target.value })
-    }
-
     const handleChangeTeacher = (e) => {
+        console.log(e.target.name)
         setUpdateTeacher({ ...updateTeacher, [e.target.name]: e.target.value });
     };
 
@@ -145,7 +121,6 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
     const getClass = async () => {
 
         const children = [];
-
         const q = query(
             collection(firestoreDb, "class"),
             where("school_id", "==", data.school_id)
@@ -153,10 +128,8 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
         const Snapshot = await getDocs(q);
         Snapshot.forEach((doc) => {
             var datas = doc.data();
-            children.push({
-                ...datas,
-                key: doc.id,
-            });
+            datas.key = doc.id;
+            children.push(datas)
         });
         setClassOption(children);
     };
@@ -172,12 +145,12 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
         const Snapshot = await getDocs(q);
         Snapshot.forEach((doc) => {
             var datas = doc.data();
-            children.push({
-                ...datas,
-                key: doc.id,
-            });
+            datas.key = doc.id;
+            getData(datas).then((response) => children.push(response));
         });
-        setCourseOption(children);
+        setTimeout(() => {
+            setCourseOption(children);
+        }, 2000);
     };
 
     const getID = () => {
@@ -194,6 +167,192 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
         setSelectedClassKeys(classArr);
         setSelectedRowKeys(courseArr);
     }
+
+    const getSubject = async () => {
+        const coursess = [];
+        const q = query(
+            collection(firestoreDb, "subject"),
+            where("school_id", "==", data.school_id)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            var datas = doc.data();
+            coursess.push({
+                ...datas,
+                key: doc.id,
+            });
+        });
+        setSubject(coursess);
+    };
+
+    const getClassData = async (ID) => {
+        const docRef = doc(firestoreDb, "class", ID);
+        var data = "";
+        await getDoc(docRef).then((response) => {
+            data = response.data();
+            data.key = response.id;
+        });
+        return data;
+    };
+
+    const getSubjectData = async (ID) => {
+        const docRef = doc(firestoreDb, "subject", ID);
+        var data = "";
+        await getDoc(docRef).then((response) => {
+            data = response.data();
+            data.key = response.id;
+        });
+        return data;
+    };
+
+    const getData = async (data) => {
+        data.class = await getClassData(data.class);
+        data.subject = await getSubjectData(data.subject);
+        return data;
+    }
+
+    const handleFilterSubject = async (value) => {
+
+        if (value) {
+            const q = query(
+                collection(firestoreDb, "courses"),
+                where("school_id", "==", data.school_id), where("subject", "==", value)
+            );
+            var temporary = [];
+            const snap = await getDocs(q);
+            snap.forEach(async (doc) => {
+                var data = doc.data();
+                data.key = doc.id;
+                getData(data).then((response) => temporary.push(response));
+            })
+            setTimeout(() => {
+                setCourseOption(temporary);
+            }, 2000);
+        }
+    };
+
+    const handleFilterClass = async (value) => {
+        if (value) {
+            const q = query(collection(firestoreDb, "courses"), where("school_id", "==", data.school_id), where("class", "==", value));
+            var temporary = [];
+            const snap = await getDocs(q);
+            snap.forEach(async (doc) => {
+                var data = doc.data();
+                data.key = doc.id;
+                getData(data).then((response) => temporary.push(response));
+            })
+            setTimeout(() => {
+                setCourseOption(temporary);
+            }, 2000);
+        }
+    }
+
+    function HandleBrowseClick() {
+        var fileinput = document.getElementById("browse");
+        fileinput.click();
+    }
+
+    function handleFile(event) {
+        var fileinput = document.getElementById("browse");
+        var textinput = document.getElementById("filename");
+        textinput.value = fileinput.value;
+        setFile(event.target.files[0]);
+    }
+
+
+    const onSelectChange = (newSelectedRowKeys) => {
+        setUpdateTeacher({ ...updateTeacher, course: newSelectedRowKeys });
+        setSelectedRowKeys(newSelectedRowKeys);
+    };
+
+    const onSelectChangeClass = (newSelectedRowKeys) => {
+        setUpdateTeacher({ ...updateTeacher, class: newSelectedRowKeys });
+        setSelectedClassKeys(newSelectedRowKeys);
+    };
+
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChangeClass,
+        selections: [
+            Table.SELECTION_ALL,
+            Table.SELECTION_INVERT,
+            Table.SELECTION_NONE,
+            {
+                key: 'odd',
+                text: 'Select Odd Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return false;
+                        }
+
+                        return true;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+            {
+                key: 'even',
+                text: 'Select Even Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return true;
+                        }
+
+                        return false;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+        ],
+    };
+
+
+    const rowSelectionClass = {
+        selectedRowKeys: selectedClassKeys,
+        onChange: onSelectChange,
+        selections: [
+            Table.SELECTION_ALL,
+            Table.SELECTION_INVERT,
+            Table.SELECTION_NONE,
+            {
+                key: 'odd',
+                text: 'Select Odd Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return false;
+                        }
+
+                        return true;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+            {
+                key: 'even',
+                text: 'Select Even Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return true;
+                        }
+
+                        return false;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+        ],
+    };
+
+
+
 
     const columns = [
         {
@@ -246,116 +405,14 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
             key: 'secticon',
 
         },
-
     ]
 
-    const onSelectChange = (newSelectedRowKeys) => {
-        setUpdateTeacher({ ...updateTeacher, course: newSelectedRowKeys });
-        setSelectedRowKeys(newSelectedRowKeys);
-    };
-
-    const onSelectChangeClass = (newSelectedRowKeys) => {
-        setUpdateTeacher({ ...updateTeacher, class: newSelectedRowKeys });
-        setSelectedClassKeys(newSelectedRowKeys);
-    };
-
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: onSelectChange,
-        selections: [
-            Table.SELECTION_ALL,
-            Table.SELECTION_INVERT,
-            Table.SELECTION_NONE,
-            {
-                key: 'odd',
-                text: 'Select Odd Row',
-                onSelect: (changableRowKeys) => {
-                    let newSelectedRowKeys = [];
-                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-                        if (index % 2 !== 0) {
-                            return false;
-                        }
-
-                        return true;
-                    });
-                    setSelectedRowKeys(newSelectedRowKeys);
-                },
-            },
-            {
-                key: 'even',
-                text: 'Select Even Row',
-                onSelect: (changableRowKeys) => {
-                    let newSelectedRowKeys = [];
-                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-                        if (index % 2 !== 0) {
-                            return true;
-                        }
-
-                        return false;
-                    });
-                    setSelectedRowKeys(newSelectedRowKeys);
-                },
-            },
-        ],
-    };
-
-
-    const rowSelectionClass = {
-        selectedClassKeys,
-        onChange: onSelectChangeClass,
-        selections: [
-            Table.SELECTION_ALL,
-            Table.SELECTION_INVERT,
-            Table.SELECTION_NONE,
-            {
-                key: 'odd',
-                text: 'Select Odd Row',
-                onSelect: (changableRowKeys) => {
-                    let newSelectedRowKeys = [];
-                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-                        if (index % 2 !== 0) {
-                            return false;
-                        }
-
-                        return true;
-                    });
-                    setSelectedClassKeys(newSelectedRowKeys);
-                },
-            },
-            {
-                key: 'even',
-                text: 'Select Even Row',
-                onSelect: (changableRowKeys) => {
-                    let newSelectedRowKeys = [];
-                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-                        if (index % 2 !== 0) {
-                            return true;
-                        }
-
-                        return false;
-                    });
-                    setSelectedClassKeys(newSelectedRowKeys);
-                },
-            },
-        ],
-    };
-
-    function HandleBrowseClick() {
-        var fileinput = document.getElementById("browse");
-        fileinput.click();
-    }
-
-    function handleFile(event) {
-        var fileinput = document.getElementById("browse");
-        var textinput = document.getElementById("filename");
-        textinput.value = fileinput.value;
-        setFile(event.target.files[0]);
-    }
 
     useEffect(() => {
         getClass();
         getCourse();
         getID()
+        getSubject();
     }, []);
 
     return (
@@ -411,22 +468,22 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
                                         <div className='col'>
                                             <div>
                                                 <label>First Name</label>
-                                                <Input defaultValue={updateTeacher.first_name} onChange={(e) => handleChangeTeacher(e)} />
+                                                <Input defaultValue={updateTeacher.first_name} name="first_name" onChange={(e) => handleChangeTeacher(e)} />
                                             </div>
                                             <div>
                                                 <label>Last Name</label>
-                                                <Input defaultValue={updateTeacher.last_name} onChange={(e) => handleChangeTeacher(e)} />
+                                                <Input defaultValue={updateTeacher.last_name} name="last_name" onChange={(e) => handleChangeTeacher(e)} />
                                             </div>
                                         </div>
                                         <div className='col'>
 
                                             <div>
                                                 <label>Phone</label>
-                                                <Input defaultValue={updateTeacher.phone} onChange={(e) => handleChangeTeacher(e)} />
+                                                <Input defaultValue={updateTeacher.phone} name="phone" onChange={(e) => handleChangeTeacher(e)} />
                                             </div>
                                             <div>
                                                 <label>Email</label>
-                                                <Input defaultValue={updateTeacher.email} onChange={(e) => handleChangeTeacher(e)} />
+                                                <Input defaultValue={updateTeacher.email} name="email" onChange={(e) => handleChangeTeacher(e)} />
                                             </div>
                                         </div>
                                         <div className='col'>
@@ -470,8 +527,22 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
                                     <h1>Add/Remove Courses</h1>
                                     <div className='tch-cr-list'>
                                         <div>
-                                            <Select defaultValue={"Subject"} />
-                                            <Select defaultValue={"Class"} />
+                                            <Select
+                                                placeholder={"Subject"}
+                                                onChange={handleFilterSubject}
+                                            >
+                                                {subject?.map((item, i) => (
+                                                    <Option key={item.key} value={item.key}>{item.name}</Option>
+                                                ))}
+                                            </Select>
+                                            <Select
+                                                placeholder={"Class"}
+                                                onChange={handleFilterClass}
+                                            >
+                                                {classOption?.map((item, i) => (
+                                                    <Option key={item.key} value={item.key}>{item.level + item.section}</Option>
+                                                ))}
+                                            </Select>
                                         </div>
                                         <div>
                                             <Search
@@ -503,100 +574,7 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
                         </Tabs.TabPane>
                     </Tabs>
                 </div>
-
             </div>
-            {/* {data && openUpdate ?
-                <Modal
-                    visible={openUpdate}
-                    title="Update Teacher Profile"
-                    onOk={handleUpdate}
-                    width={756}
-                    onCancel={handleUpdateCancel}
-                    footer={[
-                        <Button key="back" onClick={handleUpdateCancel}>
-                            Return
-                        </Button>,
-                        <Button key="submit" type="primary" loading={loading} onClick={handleUpdate}>
-                            {percent ? percent + "%" : null}  Update
-                        </Button>
-                    ]}
-                >
-                    <Row>
-                        <Col style={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <img src={file ? URL.createObjectURL(file) : data.avater} alt="" style={{ width: "330px" }} />
-                        </Col>
-                        <Col style={{ width: "50%", padding: "10px" }}>
-                            <Form
-                                labelCol={{ span: 7 }}
-                                wrapperCol={{ span: 18 }}
-                                layout="horizontal"
-                            >
-                                <Form.Item label="First Name" name="First Name" rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}>
-                                    <Input name="first_name" defaultValue={data.first_name} onChange={(e) => onChange(e)} />
-                                </Form.Item>
-                                <Form.Item label="Last Name">
-                                    <Input name='last_name' defaultValue={data.last_name} onChange={(e) => onChange(e)} />
-                                </Form.Item>
-                                <Form.Item label="Email">
-                                    <Input name="email" defaultValue={data.email} onChange={(e) => onChange(e)} />
-                                </Form.Item>
-                                <Form.Item label="Phone" name="Phone" rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}>
-                                    <Input name="phone" defaultValue={data.phone} onChange={(e) => onChange(e)} />
-
-                                </Form.Item>
-                                <Form.Item label="Class">
-                                    <Select
-                                        style={{
-                                            width: "100%",
-                                        }}
-                                        placeholder="select all courses"
-                                        defaultValue={data.class}
-                                        onChange={handleCourse}
-                                        optionLabelProp="label"
-                                        mode="multiple"
-                                    >
-                                        {classOption.map((item, index) => (
-                                            <Option value={item.level + item.section} label={item.level + item.section}>
-                                                {item.level + item.section}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item label="Course">
-                                    <Select
-                                        style={{
-                                            width: "100%",
-                                        }}
-                                        placeholder="select all courses"
-                                        defaultValue={data.course}
-                                        onChange={handleCourseItem}
-                                        optionLabelProp="label"
-                                        mode="multiple"
-                                        maxTagCount={2}
-                                    >
-                                        {courseOption.map((item, index) => (
-                                            <Option value={item.course_name} label={item.course_name}>
-                                                {item.course_name}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item label="Student Picture" valuePropName="fileList">
-                                    <input type="file" onChange={handleChange} accept="/image/*" />
-                                </Form.Item>
-                            </Form>
-                        </Col>
-                    </Row>
-                </Modal>
-                : null} */}
         </>
     );
 }
