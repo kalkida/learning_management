@@ -9,65 +9,56 @@ import {
     collection,
     where,
     query,
+    getDoc,
     updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
 import './style.css'
-import {
-    InfoCircleOutlined,
-    UserOutlined,
-    PlusOutlined,
-} from "@ant-design/icons";
-import { Tooltip } from "antd";
+import { getIdToken } from 'firebase/auth';
 
 const { Option } = Select;
+const { Search } = Input;
+const gender = ["Male", "Female", "Other"]
 
-function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpdateComplete }) {
+function TeacherUpdate() {
 
     const navigate = useNavigate();
     const { state } = useLocation();
     const { data } = state;
 
-    const dateFormat = 'YYYY/MM/DD';
     const valueRef = useRef();
 
-    const [loading, setLoading] = useState(false);
-    const [allPhone, setAllPhone] = useState(data.phone);
-    const [input, setInputs] = useState(data.phone);
-    const [phone, setPhones] = useState("");
     const [classOption, setClassOption] = useState([]);
     const [courseOption, setCourseOption] = useState([]);
-    const [percent, setPercent] = useState(0);
     const [file, setFile] = useState("");
-    const [updateCourseView, setUpdateCourseView] = useState(true);
+    const [subject, setSubject] = useState([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [selectedClassKeys, setSelectedClassKeys] = useState([])
+
     const [updateTeacher, setUpdateTeacher] = useState({
         avater: data.avater,
         email: data.email,
         first_name: data.first_name,
         last_name: data.last_name,
         class: data.class,
-        level: data.level,
         course: data.course,
         phone: data.phone,
+        DOB: data.DOB,
+        sex: data.sex,
+        working_since: data.working_since,
         school_id: data.school_id,
     })
 
-    const handleChange = (event) => {
-        setFile(event.target.files[0]);
-    }
-
     const handleUpdate = () => {
 
-        setLoading(true);
+
         if (!file) {
+            console.log(updateTeacher)
             setDoc(doc(firestoreDb, "teachers", data.key), updateTeacher, { merge: true }).then(
                 response => {
-                    setLoading(false)
                     message.success("Data is updated successfuly")
-                    setUpdateComplete(!updateComplete)
-                    handleUpdateCancel()
+                    navigate('/list-teacher')
                 })
                 .catch(error => {
                     message.error("Data is not updated")
@@ -78,14 +69,6 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
             const uploadTask = uploadBytesResumable(storageRef, file);
             uploadTask.on(
                 "state_changed",
-                (snapshot) => {
-                    const percentR = Math.round(
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-
-                    // update progress
-                    setPercent(percentR);
-                },
                 (err) => console.log(err),
                 () => {
                     // download url
@@ -96,12 +79,11 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
                             updateTeacher.avater = valueRef.current;
 
                             if (updateTeacher.avater !== null) {
+                                console.log(updateTeacher)
                                 setDoc(doc(firestoreDb, "teachers", data.key), updateTeacher, { merge: true }).then(
                                     response => {
-                                        setLoading(false)
                                         message.success("Data is updated successfuly")
-                                        setUpdateComplete(!updateComplete)
-                                        handleUpdateCancel()
+                                        navigate('/list-teacher')
                                     })
                                     .catch(error => {
                                         message.error("Data is not updated")
@@ -118,23 +100,27 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
 
     };
 
-    const handleCourse = (value) => {
-        setUpdateTeacher({ ...updateTeacher, class: value });
+    const handleChangeTeacher = (e) => {
+        console.log(e.target.name)
+        setUpdateTeacher({ ...updateTeacher, [e.target.name]: e.target.value });
     };
 
-    const handleCourseItem = (value) => {
-        setUpdateTeacher({ ...updateTeacher, course: value });
+    const handleGender = (value) => {
+        setUpdateTeacher({ ...updateTeacher, sex: value });
+    };
+    const handleDob = (value) => {
+        setUpdateTeacher({ ...updateTeacher, DOB: JSON.stringify(value) });
+    };
+    const handleWork = (value) => {
+        setUpdateTeacher({ ...updateTeacher, working_since: JSON.stringify(value) });
     };
 
-
-    const onChange = (e) => {
-        setUpdateTeacher({ ...updateTeacher, [e.target.name]: e.target.value })
+    const onRemove = () => {
+        setFile('');
     }
-
     const getClass = async () => {
 
         const children = [];
-
         const q = query(
             collection(firestoreDb, "class"),
             where("school_id", "==", data.school_id)
@@ -142,10 +128,8 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
         const Snapshot = await getDocs(q);
         Snapshot.forEach((doc) => {
             var datas = doc.data();
-            children.push({
-                ...datas,
-                key: doc.id,
-            });
+            datas.key = doc.id;
+            children.push(datas)
         });
         setClassOption(children);
     };
@@ -161,95 +145,174 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
         const Snapshot = await getDocs(q);
         Snapshot.forEach((doc) => {
             var datas = doc.data();
-            children.push({
+            datas.key = doc.id;
+            getData(datas).then((response) => children.push(response));
+        });
+        setTimeout(() => {
+            setCourseOption(children);
+        }, 2000);
+    };
+
+    const getID = () => {
+        var classArr = [];
+        var courseArr = [];
+        data.class?.map((item) => {
+            classArr.push(item.key)
+        })
+        data.course?.map((item) => {
+            courseArr.push(item.key)
+        })
+        setUpdateTeacher({ ...updateTeacher, class: classArr });
+        setUpdateTeacher({ ...updateTeacher, course: courseArr });
+        setSelectedClassKeys(classArr);
+        setSelectedRowKeys(courseArr);
+    }
+
+    const getSubject = async () => {
+        const coursess = [];
+        const q = query(
+            collection(firestoreDb, "subject"),
+            where("school_id", "==", data.school_id)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            var datas = doc.data();
+            coursess.push({
                 ...datas,
                 key: doc.id,
             });
         });
-        setCourseOption(children);
+        setSubject(coursess);
     };
 
-    const teacherCourse = [{
-        subject: "Math",
-        Grade: "8",
-        Section: "A",
-        Class_week: "4",
-        Branch: "4 Kilo",
-        key: 1
-    },
-    {
-        subject: "Chemistry",
-        Grade: "8",
-        Section: "B",
-        Class_week: "2",
-        Branch: "Bole",
-        key: 2
-    },
-    {
-        subject: "Biology",
-        Grade: "9",
-        Section: "B",
-        Class_week: "3",
-        Branch: "Gerji",
-        key: 3
-    },
-    {
-        subject: "History",
-        Grade: "7",
-        Section: "D",
-        Class_week: "1",
-        Branch: "Legehar",
-        key: 4
-    },
-    {
-        subject: "Physics",
-        Grade: "11",
-        Section: "A",
-        Class_week: "4",
-        Branch: "Saris",
-        key: 5
-    }]
+    const getClassData = async (ID) => {
+        const docRef = doc(firestoreDb, "class", ID);
+        var data = "";
+        await getDoc(docRef).then((response) => {
+            data = response.data();
+            data.key = response.id;
+        });
+        return data;
+    };
 
-    const columns = [
-        {
-            title: 'Subject',
-            dataIndex: 'subject',
-            key: 'subject'
+    const getSubjectData = async (ID) => {
+        const docRef = doc(firestoreDb, "subject", ID);
+        var data = "";
+        await getDoc(docRef).then((response) => {
+            data = response.data();
+            data.key = response.id;
+        });
+        return data;
+    };
 
+    const getData = async (data) => {
+        data.class = await getClassData(data.class);
+        data.subject = await getSubjectData(data.subject);
+        return data;
+    }
 
-        },
-        {
-            title: 'Grade',
-            dataIndex: 'Grade',
-            key: 'Grade',
-        },
-        {
-            title: 'Section',
-            dataIndex: 'Section',
-            key: 'Section'
+    const handleFilterSubject = async (value) => {
 
+        if (value) {
+            const q = query(
+                collection(firestoreDb, "courses"),
+                where("school_id", "==", data.school_id), where("subject", "==", value)
+            );
+            var temporary = [];
+            const snap = await getDocs(q);
+            snap.forEach(async (doc) => {
+                var data = doc.data();
+                data.key = doc.id;
+                getData(data).then((response) => temporary.push(response));
+            })
+            setTimeout(() => {
+                setCourseOption(temporary);
+            }, 2000);
+        }
+    };
 
-        },
-        {
-            title: 'Class/Week',
-            dataIndex: 'Class_week',
-            key: 'Class_week',
-        },
-        {
-            title: 'Branch',
-            dataIndex: 'Branch',
-            key: 'Branch',
-        },
+    const handleFilterClass = async (value) => {
+        if (value) {
+            const q = query(collection(firestoreDb, "courses"), where("school_id", "==", data.school_id), where("class", "==", value));
+            var temporary = [];
+            const snap = await getDocs(q);
+            snap.forEach(async (doc) => {
+                var data = doc.data();
+                data.key = doc.id;
+                getData(data).then((response) => temporary.push(response));
+            })
+            setTimeout(() => {
+                setCourseOption(temporary);
+            }, 2000);
+        }
+    }
 
-    ]
+    function HandleBrowseClick() {
+        var fileinput = document.getElementById("browse");
+        fileinput.click();
+    }
+
+    function handleFile(event) {
+        var fileinput = document.getElementById("browse");
+        var textinput = document.getElementById("filename");
+        textinput.value = fileinput.value;
+        setFile(event.target.files[0]);
+    }
+
 
     const onSelectChange = (newSelectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        setUpdateTeacher({ ...updateTeacher, course: newSelectedRowKeys });
         setSelectedRowKeys(newSelectedRowKeys);
+    };
+
+    const onSelectChangeClass = (newSelectedRowKeys) => {
+        setUpdateTeacher({ ...updateTeacher, class: newSelectedRowKeys });
+        setSelectedClassKeys(newSelectedRowKeys);
     };
 
     const rowSelection = {
         selectedRowKeys,
+        onChange: onSelectChangeClass,
+        selections: [
+            Table.SELECTION_ALL,
+            Table.SELECTION_INVERT,
+            Table.SELECTION_NONE,
+            {
+                key: 'odd',
+                text: 'Select Odd Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return false;
+                        }
+
+                        return true;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+            {
+                key: 'even',
+                text: 'Select Even Row',
+                onSelect: (changableRowKeys) => {
+                    let newSelectedRowKeys = [];
+                    newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+                        if (index % 2 !== 0) {
+                            return true;
+                        }
+
+                        return false;
+                    });
+                    setSelectedRowKeys(newSelectedRowKeys);
+                },
+            },
+        ],
+    };
+
+
+    const rowSelectionClass = {
+        selectedRowKeys: selectedClassKeys,
         onChange: onSelectChange,
         selections: [
             Table.SELECTION_ALL,
@@ -288,9 +351,68 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
         ],
     };
 
+
+
+
+    const columns = [
+        {
+            title: 'Course',
+            dataIndex: 'course_name',
+            key: 'course_name'
+
+
+        },
+        {
+            title: 'Subject',
+            dataIndex: 'subject',
+            key: 'subject',
+            render: (item) => {
+                return (
+                    <div>
+                        {item.name}
+
+                    </div>
+                );
+            },
+        },
+        {
+            title: "Class",
+            dataIndex: "class",
+            key: "class",
+            render: (item) => {
+                return (
+                    <div>
+                        {item.level}
+                        {"   "}
+                        {item.section}
+                    </div>
+                );
+            },
+        },
+    ]
+
+    const classColumns = [
+        {
+            title: 'Grade',
+            dataIndex: 'level',
+            key: 'level'
+
+
+        },
+        {
+            title: 'Section',
+            dataIndex: 'section',
+            key: 'secticon',
+
+        },
+    ]
+
+
     useEffect(() => {
         getClass();
         getCourse();
+        getID()
+        getSubject();
     }, []);
 
     return (
@@ -298,213 +420,161 @@ function TeacherUpdate({ openUpdate, handleUpdateCancel, updateComplete, setUpda
             <div>
                 <div className="profile-header" >
                     <div className="teacher-avater" >
-                        <img src="img-5.jpg" alt="profile" />
+                        <img src={updateTeacher.avater ? updateTeacher.avater : "img-5.jpg"} alt="profile" />
                         <div className="profile-info">
-                            <h2>Teacher Name</h2>
-                            <h3>ID: 1334</h3>
+                            <h2>{updateTeacher.first_name + " " + updateTeacher.last_name}</h2>
+                            <h3>Contact</h3>
                         </div>
                     </div>
-                    <div className="header-extra">
+                    <div className="header-extra-th">
                         <div>
-                            <h3>Assigned Subject</h3>
-                            <h4>Math,Physics</h4>
+                            <h3>Class</h3>
+                            <h4>{data.class?.map((item, i) => item.level + item.section + ",")}</h4>
                         </div>
                         <div>
-                            <h3>Assigned Class</h3>
-                            <h4>Math,Physics</h4>
+                            <h3>Subject</h3>
+                            <h4>{data.course?.map((item, i) => item.course_name + ",")}</h4>
                         </div>
+
                     </div>
                 </div>
                 <div className="tab-content">
                     <Tabs defaultActiveKey="1">
                         <Tabs.TabPane tab="Profile" key="1">
                             <Button className="btn-confirm" onClick={handleUpdate}>Confirm</Button>
-                            <div className='edit-teacher'>
+                            <div className='add-teacher'>
                                 <h1>Edit Profile</h1>
-                                <div className='update-card'>
-                                    <div className='avater-img'>
-                                        <h2>Profile Picture</h2>
-                                        <img src='img-5.jpg' />
-                                        <div className='img-btn'>
-                                            <Button>Add</Button>
-                                            <Button>Remove</Button>
+                                <div>
+                                    <div className="avater-img">
+                                        <div>
+                                            <h2>Profile Picture</h2>
+                                            <img src={file ? URL.createObjectURL(file) : data.avater ? data.avater : "img-5.jpg"} />
+                                        </div>
+                                        <div className="file-content">
+                                            <span>This will be displayed to you when you view this profile</span>
+
+                                            <div className="img-btn">
+                                                {/* <input type="file" onChange={handleChange} accept="/image/*" /> */}
+                                                <button>
+                                                    <input type="file" id="browse" name="files" style={{ display: "none" }} onChange={handleFile} accept="/image/*" />
+                                                    <input type="hidden" id="filename" readonly="true" />
+                                                    <input type="button" value="Add Photo" id="fakeBrowse" onClick={HandleBrowseClick} />
+                                                </button>
+                                                <button onClick={onRemove}>Remove</button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className='col'>
-                                        <div>
-                                            <label>First</label>
-                                            <Input defaultValue={"melaku"} />
+                                    <div className='add-form'>
+                                        <div className='col'>
+                                            <div>
+                                                <label>First Name</label>
+                                                <Input defaultValue={updateTeacher.first_name} name="first_name" onChange={(e) => handleChangeTeacher(e)} />
+                                            </div>
+                                            <div>
+                                                <label>Last Name</label>
+                                                <Input defaultValue={updateTeacher.last_name} name="last_name" onChange={(e) => handleChangeTeacher(e)} />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label>Sex</label>
-                                            <Input defaultValue={"Mail"} />
+                                        <div className='col'>
+
+                                            <div>
+                                                <label>Phone</label>
+                                                <Input defaultValue={updateTeacher.phone} name="phone" onChange={(e) => handleChangeTeacher(e)} />
+                                            </div>
+                                            <div>
+                                                <label>Email</label>
+                                                <Input defaultValue={updateTeacher.email} name="email" onChange={(e) => handleChangeTeacher(e)} />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label>Branch</label>
-                                            <Input defaultValue={"Saris"} />
-                                        </div>
-                                        <div>
-                                            <label>Phone</label>
-                                            <Input defaultValue={"+25192546546"} />
-                                        </div>
-                                    </div>
-                                    <div className='col'>
-                                        <div>
-                                            <label>Last Name</label>
-                                            <Input defaultValue={"melaku"} />
-                                        </div>
-                                        <div>
-                                            <label>ID</label>
-                                            <Input defaultValue={"0354"} />
-                                        </div>
-                                        <div>
-                                            <label>Date Of Birth</label>
-                                            <Input defaultValue={"1996"} />
-                                        </div>
-                                        <div>
-                                            <label>Email</label>
-                                            <Input defaultValue={"teacher@gmail.com"} />
+                                        <div className='col'>
+                                            <div >
+                                                <label>Date Of Birth</label>
+                                                <DatePicker style={{ width: "100%" }} onChange={handleDob} defaultValue={updateTeacher.DOB ? moment(JSON.parse(updateTeacher.DOB)) : ''} />
+                                            </div>
+                                            <div>
+                                                <label>Sex</label>
+                                                <Select defaultValue={updateTeacher.sex} placeholder="Select Gender"
+                                                    onChange={handleGender}
+                                                    optionLabelProp="label"
+                                                    style={{
+                                                        width: "100%",
+                                                    }}
+                                                >
+                                                    {gender.map((item, index) => (
+                                                        <Option
+                                                            key={item.index}
+                                                            value={item}
+                                                            label={item}
+                                                        >
+                                                            {item}
+                                                        </Option>
+                                                    ))}</Select>
+                                            </div>
+                                            <div>
+                                                <label>Working Since</label>
+                                                <DatePicker style={{ width: "100%" }} onChange={handleWork} defaultValue={updateTeacher.working_since ? moment(JSON.parse(updateTeacher.working_since)) : ''} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="Course" key="2">
-                            {updateCourseView ?
+                            <Button className="btn-confirm" onClick={handleUpdate}>Confirm</Button>
+
+                            <div>
                                 <div className='teacher-course-list'>
+                                    <h1>Add/Remove Courses</h1>
                                     <div className='tch-cr-list'>
-                                        <h1>Assigned Courses</h1>
-                                        <Button onClick={() => setUpdateCourseView(false)}>Add/Remove</Button>
-                                    </div>
-                                    <Table dataSource={teacherCourse} columns={columns} />
-                                </div> :
-                                <div>
-                                    <div className='teacher-course-list'>
-                                        <h1>Add/Remove Courses</h1>
-                                        <div className='tch-cr-list'>
-                                            <div>
-                                                <Select defaultValue={"Subject"} />
-                                                <Select defaultValue={"Grade"} />
-                                                <Select defaultValue={"Section"} />
-                                            </div>
-                                            <div>
-                                                <Input
-                                                    style={{ width: 200, marginRight: 10 }}
-                                                    placeholder="Search"
-                                                    prefix={<UserOutlined className="site-form-item-icon" />}
-                                                    suffix={
-                                                        <Tooltip title="Extra information">
-                                                            <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-                                                        </Tooltip>
-                                                    }
-                                                />
-                                                <Button onClick={() => setUpdateCourseView(true)}>confirm</Button>
-                                            </div>
+                                        <div>
+                                            <Select
+                                                placeholder={"Subject"}
+                                                onChange={handleFilterSubject}
+                                            >
+                                                {subject?.map((item, i) => (
+                                                    <Option key={item.key} value={item.key}>{item.name}</Option>
+                                                ))}
+                                            </Select>
+                                            <Select
+                                                placeholder={"Class"}
+                                                onChange={handleFilterClass}
+                                            >
+                                                {classOption?.map((item, i) => (
+                                                    <Option key={item.key} value={item.key}>{item.level + item.section}</Option>
+                                                ))}
+                                            </Select>
                                         </div>
-                                        <Table rowSelection={rowSelection} dataSource={teacherCourse} columns={columns} />
+                                        <div>
+                                            <Search
+                                                placeholder="input search text"
+                                                allowClear
+                                                // onSearch={onSearch}
+                                                style={{
+                                                    width: 200,
+                                                }}
+                                            />
+
+                                        </div>
                                     </div>
+                                    <Table rowSelection={rowSelection} dataSource={courseOption} columns={columns} />
                                 </div>
-                            }
+                            </div>
+
                         </Tabs.TabPane>
-                        <Tabs.TabPane tab="Course" key="3">
-                            Content of Tab Pane 3
+                        <Tabs.TabPane tab="Class" key="3">
+                            <Button className="btn-confirm" onClick={handleUpdate}>Confirm</Button>
+
+                            <div>
+                                <div className='teacher-course-list'>
+                                    <h1>Add/Remove Class</h1>
+
+                                    <Table rowSelection={rowSelectionClass} dataSource={classOption} columns={classColumns} />
+                                </div>
+                            </div>
                         </Tabs.TabPane>
                     </Tabs>
                 </div>
-
             </div>
-            {/* {data && openUpdate ?
-                <Modal
-                    visible={openUpdate}
-                    title="Update Teacher Profile"
-                    onOk={handleUpdate}
-                    width={756}
-                    onCancel={handleUpdateCancel}
-                    footer={[
-                        <Button key="back" onClick={handleUpdateCancel}>
-                            Return
-                        </Button>,
-                        <Button key="submit" type="primary" loading={loading} onClick={handleUpdate}>
-                            {percent ? percent + "%" : null}  Update
-                        </Button>
-                    ]}
-                >
-                    <Row>
-                        <Col style={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <img src={file ? URL.createObjectURL(file) : data.avater} alt="" style={{ width: "330px" }} />
-                        </Col>
-                        <Col style={{ width: "50%", padding: "10px" }}>
-                            <Form
-                                labelCol={{ span: 7 }}
-                                wrapperCol={{ span: 18 }}
-                                layout="horizontal"
-                            >
-                                <Form.Item label="First Name" name="First Name" rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}>
-                                    <Input name="first_name" defaultValue={data.first_name} onChange={(e) => onChange(e)} />
-                                </Form.Item>
-                                <Form.Item label="Last Name">
-                                    <Input name='last_name' defaultValue={data.last_name} onChange={(e) => onChange(e)} />
-                                </Form.Item>
-                                <Form.Item label="Email">
-                                    <Input name="email" defaultValue={data.email} onChange={(e) => onChange(e)} />
-                                </Form.Item>
-                                <Form.Item label="Phone" name="Phone" rules={[
-                                    {
-                                        required: true,
-                                    },
-                                ]}>
-                                    <Input name="phone" defaultValue={data.phone} onChange={(e) => onChange(e)} />
-
-                                </Form.Item>
-                                <Form.Item label="Class">
-                                    <Select
-                                        style={{
-                                            width: "100%",
-                                        }}
-                                        placeholder="select all courses"
-                                        defaultValue={data.class}
-                                        onChange={handleCourse}
-                                        optionLabelProp="label"
-                                        mode="multiple"
-                                    >
-                                        {classOption.map((item, index) => (
-                                            <Option value={item.level + item.section} label={item.level + item.section}>
-                                                {item.level + item.section}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item label="Course">
-                                    <Select
-                                        style={{
-                                            width: "100%",
-                                        }}
-                                        placeholder="select all courses"
-                                        defaultValue={data.course}
-                                        onChange={handleCourseItem}
-                                        optionLabelProp="label"
-                                        mode="multiple"
-                                        maxTagCount={2}
-                                    >
-                                        {courseOption.map((item, index) => (
-                                            <Option value={item.course_name} label={item.course_name}>
-                                                {item.course_name}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item label="Student Picture" valuePropName="fileList">
-                                    <input type="file" onChange={handleChange} accept="/image/*" />
-                                </Form.Item>
-                            </Form>
-                        </Col>
-                    </Row>
-                </Modal>
-                : null} */}
         </>
     );
 }

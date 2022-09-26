@@ -13,8 +13,6 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
-import View from "../modals/courses/view";
-import Update from "../modals/courses/update";
 import CreateSubject from "../modals/subject/createSubject";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
@@ -26,8 +24,6 @@ import {
   UserOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { Tooltip } from "antd";
-import { async } from "@firebase/util";
 import "../modals/courses/style.css";
 
 const { Option } = Select;
@@ -38,15 +34,13 @@ export default function ListCourses() {
 
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-  const [openView, setOpenView] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [updateComplete, setUpdateComplete] = useState(false);
   const [subject, setSubject] = useState([]);
   const [classes, setClasses] = useState([]);
-  const [viewData, setViewData] = useState();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [loading, setLoading] = useState(true);
   const searchInput = useRef(null);
+  const [tableLoading, setTableTextLoading] = useState(true);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -214,13 +208,13 @@ export default function ListCourses() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      console.log(data);
       getData(data).then((response) => temporary.push(response));
     });
 
     setTimeout(() => {
       setData(temporary);
-    }, 5000);
+      setTableTextLoading(false);
+    }, 2000);
   };
 
   const getClass = async () => {
@@ -234,11 +228,10 @@ export default function ListCourses() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data)
+      temporary.push(data);
     });
     setClasses(temporary);
-  }
-
+  };
 
   const getsubject = async () => {
     var branches = await getSchool();
@@ -251,29 +244,17 @@ export default function ListCourses() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data)
+      temporary.push(data);
     });
     setSubject(temporary);
-  }
-
-  const handleViewCancel = () => {
-    setOpenView(false);
   };
 
   const handleView = (data) => {
     navigate("/view-course", { state: { data } });
-    // setViewData(data);
-    // setOpenView(true);
-  };
-
-  const handleUpdateCancel = () => {
-    setOpenUpdate(false);
   };
 
   const handleUpdate = (data) => {
     navigate("/update-course", { state: { data } });
-    // setViewData(data);
-    // setOpenUpdate(true);
   };
 
   const columns = [
@@ -282,67 +263,108 @@ export default function ListCourses() {
       dataIndex: "course_name",
       key: "course_name",
       ...getColumnSearchProps("course_name"),
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Class",
-      dataIndex: "class",
-      key: "class",
-      render: (item) => {
-        return (
-          <div>
-            {item.level}
-            {"   "}
-            {item.section}
-          </div>
-        );
+      render: (text, data) => {
+        console.log(data);
+        return <div>{text}</div>;
       },
     },
     {
-      title: "Teachers",
-      dataIndex: "teachers",
-      key: "teachers",
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
+      ...getColumnSearchProps("subject"),
+      render: (text) => <a>{text.name}</a>,
+    },
+    {
+      title: "Grade",
+      dataIndex: "class",
+      key: "class",
       render: (item) => {
-        return (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {item.map((item) => (
-              <h1>
-                {item.first_name}
-                {"   "}
-                {item.last_name}
-              </h1>
-            ))}
-          </div>
-        );
+        return <div>{item.level}</div>;
+      },
+    },
+    {
+      title: "Section",
+      dataIndex: "class",
+      key: "class",
+      render: (item) => {
+        return <div>{item.section}</div>;
       },
     },
 
     {
       title: "Action",
       key: "action",
+      width: "12%",
       render: (_, record) => (
-        <Space size="middle">
-          <a onClick={() => handleView(record)}>View </a>
-          <a onClick={() => handleUpdate(record)}>Update</a>
-          {/* <a>View {record.name}</a>
-          <a>Update</a> */}
-        </Space>
+        <div className="flex flex-row justify-around">
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleView(record)}
+          >
+           View{" "}
+          </a>
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleUpdate(record)}
+          >
+            Update
+          </a>
+        </div>
       ),
     },
   ];
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
+  const handleFilterSubject = async (value) => {
+    if (value) {
+      var branches = await getSchool();
+      const q = query(
+        collection(firestoreDb, "courses"),
+        where("school_id", "in", branches.branches),
+        where("subject", "==", value)
+      );
+      var temporary = [];
+      const snap = await getDocs(q);
+      snap.forEach(async (doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        getData(data).then((response) => temporary.push(response));
+      });
+      setTimeout(() => {
+        setData(temporary);
+      }, 2000);
+    }
+  };
+
+  const handleFilterClass = async (value) => {
+    if (value) {
+      var branches = await getSchool();
+      const q = query(
+        collection(firestoreDb, "courses"),
+        where("school_id", "in", branches.branches),
+        where("class", "==", value)
+      );
+      var temporary = [];
+      const snap = await getDocs(q);
+      snap.forEach(async (doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        getData(data).then((response) => temporary.push(response));
+      });
+      setTimeout(() => {
+        setData(temporary);
+      }, 2000);
+    }
   };
 
   const onSearch = (value) => {
-    console.log("search Value: " + value)
-  }
+    console.log("search Value: " + value);
+  };
 
   useEffect(() => {
     getCourses();
     getClass();
     getsubject();
-  }, [updateComplete]);
+  }, []);
 
   return (
     <div>
@@ -355,19 +377,27 @@ export default function ListCourses() {
           <Select
             defaultValue="Subject"
             style={{ width: 120 }}
-            onChange={handleChange}
+            onChange={handleFilterSubject}
           >
             {subject?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.name}>{item.name}</Option>
+              <Option key={item.key} value={item.key} lable={item.name}>
+                {item.name}
+              </Option>
             ))}
           </Select>
           <Select
             style={{ width: 120 }}
             defaultValue="Class"
-            onChange={handleChange}
+            onChange={handleFilterClass}
           >
             {classes?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.level + item.section}>{item.level + item.section}</Option>
+              <Option
+                key={item.key}
+                value={item.key}
+                lable={item.level + item.section}
+              >
+                {item.level + item.section}
+              </Option>
             ))}
           </Select>
         </div>
@@ -393,23 +423,12 @@ export default function ListCourses() {
 
       <br />
 
-      <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ? (
-        <View
-          handleCancel={handleViewCancel}
-          openView={openView}
-          data={viewData}
-        />
-      ) : null}
-      {viewData ? (
-        <Update
-          handleCancel={handleUpdateCancel}
-          openUpdate={openUpdate}
-          data={viewData}
-          setUpdateComplete={setUpdateComplete}
-          updateComplete={updateComplete}
-        />
-      ) : null}
+      <Table
+        loading={tableLoading}
+        style={{ marginTop: 20 }}
+        columns={columns}
+        dataSource={datas}
+      />
     </div>
   );
 }

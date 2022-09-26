@@ -10,7 +10,9 @@ export default function Dashboard() {
     <Box sx={{ flexGrow: 1, backgroundColor: "white" }}>
       <AppBar
         position="static"
+        elevation={0}
         style={{
+          width: "10vw",
           backgroundColor: "white",
         }}
       >

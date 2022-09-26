@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation, Outlet } from "react-router-dom";
 import Laba from "../components/subComponents/Laba";
-import Welcome from  "../Auth/Welcome"
+import Welcome from "../Auth/Welcome";
 
 import Dashboard from "../components/Dashboard";
 import LandingPage from "../components/LandingPage";

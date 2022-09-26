@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Modal, Form, Input, Button, Select, TimePicker, Tabs, Table } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Button,
+  Select,
+  TimePicker,
+  Tabs,
+  Table,
+} from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import './style.css';
+import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
 import {
   collection,
@@ -15,7 +24,6 @@ import {
 } from "firebase/firestore";
 import { firebaseAuth, firestoreDb } from "../../../firebase";
 
-
 const { Option } = Select;
 
 function ViewClass() {
@@ -23,115 +31,91 @@ function ViewClass() {
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   const { data } = state;
-  const [coursesData , setCourseData] = useState([])
-  console.log( data)
+  const [coursesData, setCourseData] = useState([]);
+  console.log(data);
 
   const navigate = useNavigate();
 
-  const dataschedule = [
+  const dataschedule = [{}];
+
+  const scheduleColumn = [
     {
-
-    }
-  ]
-
-  const scheduleColumn =[
-    {
-      title: 'Period',
-      dataIndex: 'period',
-      key: 'period'
-
-
+      title: "Period",
+      dataIndex: "period",
+      key: "period",
     },
     {
-      title: 'Monday',
-      dataIndex: 'monday',
-      key: 'monday',
+      title: "Monday",
+      dataIndex: "monday",
+      key: "monday",
     },
     {
-      title: 'Tuesday',
-      dataIndex: 'tuesday',
-      key: 'tuesday',
+      title: "Tuesday",
+      dataIndex: "tuesday",
+      key: "tuesday",
     },
     {
-      title: 'Wednesday',
-      dataIndex: 'wednesday',
-      key: 'wednesday',
+      title: "Wednesday",
+      dataIndex: "wednesday",
+      key: "wednesday",
     },
     {
-      title: 'Thursday',
-      dataIndex: 'thursday',
-      key: 'thursday',
+      title: "Thursday",
+      dataIndex: "thursday",
+      key: "thursday",
     },
     {
-      title: 'Friday',
-      dataIndex: 'friday',
-      key: 'friday',
+      title: "Friday",
+      dataIndex: "friday",
+      key: "friday",
     },
-
-
-
-  ]
+  ];
   const columns = [
     {
-      title: 'First Name',
-      dataIndex: 'first_name',
-      key: 'first_name'
-
-
+      title: "First Name",
+      dataIndex: "first_name",
+      key: "first_name",
     },
     {
-      title: 'Last Name',
-      dataIndex: 'last_name',
-      key: 'last_name',
+      title: "Last Name",
+      dataIndex: "last_name",
+      key: "last_name",
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: 'Level',
-      dataIndex: 'level',
-      key: 'level',
+      title: "Level",
+      dataIndex: "level",
+      key: "level",
     },
   ];
 
   const courseColumns = [
     {
-      title: 'Subject',
-      dataIndex: 'subject',
-      key: 'subject',
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
       render: (item) => {
-        return (
-          <div>
-            {item.name}
-          </div>
-        );
-      },
-
-    },
-    {
-      title: 'Level',
-      dataIndex: 'class',
-      key: 'class',
-      render: (item) => {
-        return (
-          <div>
-            {item.level}
-          </div>
-        );
+        return <div>{item.name}</div>;
       },
     },
     {
-      title: 'Section',
-      dataIndex: 'class',
-      key: 'class',
+      title: "Level",
+      dataIndex: "class",
+      key: "class",
       render: (item) => {
-        return (
-          <div>
-            {item.section}
-          </div>
-        );
+        return <div>{item.level}</div>;
+      },
+    },
+    {
+      title: "Section",
+      dataIndex: "class",
+      key: "class",
+      render: (item) => {
+        return <div>{item.section}</div>;
       },
     },
   ];
@@ -147,92 +131,96 @@ function ViewClass() {
   };
 
   const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID)
-    
+    const docRef = doc(firestoreDb, "class", ID);
+
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const getSubjectData = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID)
+    const docRef = doc(firestoreDb, "subject", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
 
   const getTeacherData = async (ID) => {
-    const docRef = doc(firestoreDb, "teachers", ID)
+    const docRef = doc(firestoreDb, "teachers", ID);
     var data = "";
-    await getDoc(docRef).then(response => {
+    await getDoc(docRef).then((response) => {
       data = response.data();
       data.key = response.id;
-    })
+    });
     return data;
-  }
+  };
   const getData = async (data) => {
-
-    data.class = await getClassData(data.class)
-    data.subject = await getSubjectData(data.subject)
+    data.class = await getClassData(data.class);
+    data.subject = await getSubjectData(data.subject);
 
     data.teachers?.map(async (item, index) => {
-      data.teachers[index] = await getTeacherData(item)
-    })
+      data.teachers[index] = await getTeacherData(item);
+    });
     return data;
-  }
+  };
 
   const getCourses = async () => {
     var branches = await getSchool();
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "in", branches.branches));
+      where("school_id", "in", branches.branches)
+    );
     var temporary = [];
     const snap = await getDocs(q);
-    console.log("dataaa     ",data.course.length)
-for (var i = 0; i < data.course.length; i++) {
-    snap.forEach(async (doc) => {
-      var datause = doc.data();
-      datause.key = doc.id;
-    if(datause.key == data.course[i]) {
-      console.log("==============================")
-      console.log(data.course[i]);
-      console.log("==============================")
-      getData(datause).then(response => temporary.push(response))
+    console.log("dataaa     ", data.course.length);
+    for (var i = 0; i < data.course.length; i++) {
+      snap.forEach(async (doc) => {
+        var datause = doc.data();
+        datause.key = doc.id;
+        if (datause.key == data.course[i]) {
+          console.log("==============================");
+          console.log(data.course[i]);
+          console.log("==============================");
+          getData(datause).then((response) => temporary.push(response));
+        }
+      });
     }
-    });
-}
     setTimeout(() => {
       setData(temporary);
     }, 2000);
   };
 
   const handleUpdate = () => {
-    navigate('/update-class', { state: { data } });
-  }
+    navigate("/update-class", { state: { data } });
+  };
 
   useEffect(() => {
     getCourses();
   }, []);
   return (
     <div>
-      <div className="profile-header" >
-        <div className="course-avater" >
-          <img src="logo512.png" alt="profile" />
-          <div className="profile-info">
+      <div className="flex flex-row justify-between align-bottom border-[2px] p-10 -mt-20 rounded-md">
+        <div className="flex flex-row justify-center align-middle">
+          <img
+            className="w-20 border-[black] border-[2px]"
+            src="logo512.png"
+            alt="profile"
+          />
+          <div className="flex flex-row mt-8 ml-2">
             <h2>{data?.level}</h2>
-            <h3>{data ?.section}</h3>
+            <h3>{data?.section}</h3>
           </div>
         </div>
         <div className="header-extra">
           <div>
             <h3>Assigned Students</h3>
-            <h4>{data ?.student.length}</h4>
+            <h4>{data?.student.length}</h4>
           </div>
           {/* <div>
             <h3>Assigned Course</h3>
@@ -243,13 +231,15 @@ for (var i = 0; i < data.course.length; i++) {
       <div className="tab-content">
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="Profile" key="1">
-            <Button className="btn-confirm" onClick={handleUpdate}>Edit Class</Button>
+            <Button className="btn-confirm" onClick={handleUpdate}>
+              Edit Class
+            </Button>
             <div className="asssign-teacher">
-              <h4>Assigned Students</h4>
+              <h4 className="text-[24px] mb-10">Assigned Students</h4>
               <Table dataSource={data.student} columns={columns} />
             </div>
-            <div className="asssign-teacher">
-              <h4>Assigned Courses</h4>
+            <div className="asssign-teacher -mt-10">
+              <h4 className="text-[24px]">Assigned Courses</h4>
               <Table dataSource={datas} columns={courseColumns} />
             </div>
             <div className="asssign-teacher">
@@ -293,20 +283,14 @@ for (var i = 0; i < data.course.length; i++) {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Attendance" key="2">
             <AttendanceList />
-
           </Tabs.TabPane>
         </Tabs>
       </div>
-
     </div>
   );
 }
 
 export default ViewClass;
-
-
-
-
 
 // import React, { useEffect, useState } from "react";
 // import { Modal, Form, Input, Button, Select } from "antd";
