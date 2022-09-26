@@ -40,6 +40,7 @@ export default function ListCourses() {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [loading, setLoading] = useState(true);
   const searchInput = useRef(null);
+  const [tableLoading, setTableTextLoading] = useState(true);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -212,6 +213,7 @@ export default function ListCourses() {
 
     setTimeout(() => {
       setData(temporary);
+      setTableTextLoading(false);
     }, 2000);
   };
 
@@ -313,12 +315,12 @@ export default function ListCourses() {
     },
   ];
   const handleFilterSubject = async (value) => {
-
     if (value) {
       var branches = await getSchool();
       const q = query(
         collection(firestoreDb, "courses"),
-        where("school_id", "in", branches.branches), where("subject", "==", value)
+        where("school_id", "in", branches.branches),
+        where("subject", "==", value)
       );
       var temporary = [];
       const snap = await getDocs(q);
@@ -326,7 +328,7 @@ export default function ListCourses() {
         var data = doc.data();
         data.key = doc.id;
         getData(data).then((response) => temporary.push(response));
-      })
+      });
       setTimeout(() => {
         setData(temporary);
       }, 2000);
@@ -336,19 +338,23 @@ export default function ListCourses() {
   const handleFilterClass = async (value) => {
     if (value) {
       var branches = await getSchool();
-      const q = query(collection(firestoreDb, "courses"), where("school_id", "in", branches.branches), where("class", "==", value));
+      const q = query(
+        collection(firestoreDb, "courses"),
+        where("school_id", "in", branches.branches),
+        where("class", "==", value)
+      );
       var temporary = [];
       const snap = await getDocs(q);
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
         getData(data).then((response) => temporary.push(response));
-      })
+      });
       setTimeout(() => {
         setData(temporary);
       }, 2000);
     }
-  }
+  };
 
   const onSearch = (value) => {
     console.log("search Value: " + value);
@@ -417,7 +423,12 @@ export default function ListCourses() {
 
       <br />
 
-      <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
+      <Table
+        loading={tableLoading}
+        style={{ marginTop: 20 }}
+        columns={columns}
+        dataSource={datas}
+      />
     </div>
   );
 }
