@@ -13,8 +13,6 @@ import { Button } from "antd";
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import View from "../modals/teacher/view";
-import Update from "../modals/teacher/update";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 import { useRef } from "react";
@@ -28,6 +26,7 @@ import {
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 const { Option } = Select;
+const { Search } = Input;
 
 export default function AddTeacher() {
   const navigate = useNavigate();
@@ -394,15 +393,13 @@ export default function AddTeacher() {
         </div>
         <div className="course-search">
           <div>
-            <Input
-              style={{ width: 200 }}
-              placeholder="Search"
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              suffix={
-                <Tooltip title="Extra information">
-                  <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-                </Tooltip>
-              }
+            <Search
+              placeholder="input search text"
+              allowClear
+              // onSearch={onSearch}
+              style={{
+                width: 200,
+              }}
             />
           </div>
           <div>
