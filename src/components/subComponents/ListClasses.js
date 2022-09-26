@@ -16,7 +16,7 @@ import { async } from "@firebase/util";
 import View from "../modals/classes/view";
 import Update from "../modals/classes/update";
 import CreateSection from "../modals/section/createSection";
-import '../modals/courses/style.css'
+import "../modals/courses/style.css";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 import { useRef } from "react";
@@ -28,15 +28,12 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import '../modals/courses/style.css'
+import "../modals/courses/style.css";
 
 const { Option } = Select;
 
-
-
 export default function ListClasses() {
-
-const navigate= useNavigate();
+  const navigate = useNavigate();
 
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
@@ -47,7 +44,8 @@ const navigate= useNavigate();
   const [viewData, setViewData] = useState();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const [rerender, setRerender] = useState(false)
+  const [rerender, setRerender] = useState(false);
+  const [tableLoading, setTableLoading] = useState(true);
   const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -169,7 +167,7 @@ const navigate= useNavigate();
   };
 
   const handleView = (data) => {
-    navigate('/view-class', { state: { data } });
+    navigate("/view-class", { state: { data } });
     // setViewData(data);
     // setOpenView(true);
   };
@@ -179,7 +177,7 @@ const navigate= useNavigate();
   };
 
   const handleUpdate = (data) => {
-    navigate('/update-class', { state: { data } });
+    navigate("/update-class", { state: { data } });
     // setViewData(data);
     // setOpenUpdate(true);
   };
@@ -199,9 +197,22 @@ const navigate= useNavigate();
       temporary.push(data);
     });
     setData(temporary);
+    setTableLoading(false);
   };
 
   const columns = [
+    {
+      title: "Class",
+      dataIndex: "class",
+      key: "class",
+      render: (text, data) => (
+        <a>
+          {data.level}
+          {""}
+          {data.section}
+        </a>
+      ),
+    },
     {
       title: "Level",
       dataIndex: "level",
@@ -218,10 +229,21 @@ const navigate= useNavigate();
     {
       title: "Action",
       key: "action",
+      width: "10%",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleView(record)}>View </a>
-          <a onClick={() => handleUpdate(record)}>Update</a>
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleView(record)}
+          >
+            View{" "}
+          </a>
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleUpdate(record)}
+          >
+            Update
+          </a>
         </Space>
       ),
     },
@@ -236,12 +258,11 @@ const navigate= useNavigate();
 
   return (
     <div>
-        <div className="list-header">
+      <div className="list-header">
         <h1 style={{ fontSize: 28 }}>List Of Class</h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">
-
           <Select
             defaultValue="Subject"
             style={{ width: 120 }}
@@ -283,7 +304,7 @@ const navigate= useNavigate();
             />
           </div>
           <div>
-            <Link to={"/add-class"} >
+            <Link to={"/add-class"}>
               <PlusOutlined className="site-form-item-icon" />
               Add Classes
             </Link>
@@ -293,22 +314,28 @@ const navigate= useNavigate();
       {/* <CreateSection /> */}
       <br />
 
-      <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
+      <Table
+        loading={tableLoading}
+        style={{ marginTop: 20 }}
+        columns={columns}
+        dataSource={datas}
+      />
       {openView ? (
         <View
           handleCancel={handleViewCancel}
           openView={openView}
           data={viewData}
-        />) : null}
-      {openUpdate ?
+        />
+      ) : null}
+      {openUpdate ? (
         <Update
           handleCancel={handleUpdateCancel}
           openUpdate={openUpdate}
           data={viewData}
           setUpdateComplete={setUpdateComplete}
           updateComplete={updateComplete}
-
-        /> : null}
+        />
+      ) : null}
     </div>
   );
 }
