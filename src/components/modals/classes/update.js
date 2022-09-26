@@ -238,7 +238,7 @@ function UpdateClass() {
     //   const response = await getStudentID(item);
     //   value[i] = response;
     // });
-    setUpdateClass({ ...updateClass, student: value });
+    setUpdateClass({ ...updateClass, course: value });
   };
 
   return (
