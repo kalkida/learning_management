@@ -15,22 +15,9 @@ import moment from "moment";
 import { firestoreDb, storage } from "../../../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Modal,
-  Form,
-  Input,
-  Button,
-  Select,
-  TimePicker,
-  Tabs,
-  Table,
-  message,
-  Spin,
-} from "antd";
+import { Button, Select, TimePicker, Tabs, Table, message, Spin } from "antd";
 import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
-import uuid from "react-uuid";
-import { async } from "@firebase/util";
 
 const { Option } = Select;
 
@@ -44,7 +31,6 @@ function UpdateClass() {
   const [sectionMainData, setSectionMainData] = useState([]);
   const { state } = useLocation();
   const { data } = state;
-  console.log(data);
 
   const [updateClass, setUpdateClass] = useState({
     level: data.level,
@@ -55,38 +41,15 @@ function UpdateClass() {
     schedule: [],
   });
 
-  const [datas, setData] = useState([]);
-  const [coursesData, setCourseData] = useState([]);
   const [updateComplete, setUpdateComplete] = useState([]);
-  //  console.log( data)
 
   const navigate = useNavigate();
 
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
 
-  const handleScheduler = (value, i) => {
-    // if (typeof value === "string") {
-    //   updateCourse.schedule[i].day = value;
-    // } else {
-    //   const timeValue = [];
-    //   value.map((item, i) => {
-    //     timeValue.push(JSON.stringify(item._d));
-    //   });
-    //   updateCourse.schedule[i].day = timeValue;
-    // }
-  };
+  const handleScheduler = (value, i) => {};
 
-  const handleNewScheduler = (value, i) => {
-    // if (typeof value === "string") {
-    //   updateCourse.schedule[data.schedule.length + i].day = value;
-    // } else {
-    //   const timeValue = [];
-    //   value.map((item, i) => {
-    //     timeValue.push(JSON.stringify(item._d));
-    //   });
-    //   updateCourse.schedule[data.schedule.length + i].time = timeValue;
-    // }
-  };
+  const handleNewScheduler = (value, i) => {};
 
   const handleDelete = () => {
     deleteDoc(doc(firestoreDb, "class", data.key), updateClass)
@@ -100,38 +63,7 @@ function UpdateClass() {
         console.log(error);
       });
   };
-  const scheduleColumn = [
-    {
-      title: "Period",
-      dataIndex: "period",
-      key: "period",
-    },
-    {
-      title: "Monday",
-      dataIndex: "monday",
-      key: "monday",
-    },
-    {
-      title: "Tuesday",
-      dataIndex: "tuesday",
-      key: "tuesday",
-    },
-    {
-      title: "Wednesday",
-      dataIndex: "wednesday",
-      key: "wednesday",
-    },
-    {
-      title: "Thursday",
-      dataIndex: "thursday",
-      key: "thursday",
-    },
-    {
-      title: "Friday",
-      dataIndex: "friday",
-      key: "friday",
-    },
-  ];
+
   const columns = [
     {
       title: "First Name",
@@ -190,7 +122,7 @@ function UpdateClass() {
         setLoading(false);
         message.success("Data is updated successfuly");
         setUpdateComplete(!updateComplete);
-        navigate("/list-class");
+        navigate("/list-classes");
       })
       .catch((error) => {
         message.error("Data is not updated");
@@ -212,8 +144,8 @@ function UpdateClass() {
 
   const getCourse = async (course) => {
     const q = query(
-      collection(firestoreDb, "courses"),
-      where("course_id", "in", course)
+      collection(firestoreDb, "courses")
+      // where("course_id", "in", course)
     );
     let temporary = [];
     const snap = await getDocs(q);
@@ -222,30 +154,22 @@ function UpdateClass() {
       var course = await getClassCourse(datause.class);
       datause.key = doc.id;
       datause.class = course;
-      console.log("docs", datause);
-
       temporary.push(datause);
     });
     await setItem(temporary);
-
-    // setTimeout(() => {}, 2000);
-    console.log(temporary);
   };
 
-  const getStudents = async (level) => {
+  const getStudents = async () => {
     const children = [];
     const q = query(
       collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school),
-      where("level", "==", level)
+      where("school_id", "==", uid.school)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-      children.push({
-        ...datas,
-        key: doc.id,
-      });
+      datas.key = doc.id;
+      children.push(datas);
     });
     setStudents(children);
   };
@@ -294,7 +218,7 @@ function UpdateClass() {
   };
   useEffect(() => {
     getClass();
-    getStudents(data.level);
+    getStudents();
     getCourse(data.course);
     setTimeout(() => {
       setLoading(true);
@@ -308,6 +232,14 @@ function UpdateClass() {
     });
     setUpdateClass({ ...updateClass, student: value });
   };
+  const handleCourse = (value) => {
+    console.log("dada", value);
+    // value.map(async (item, i) => {
+    //   const response = await getStudentID(item);
+    //   value[i] = response;
+    // });
+    setUpdateClass({ ...updateClass, student: value });
+  };
 
   return (
     <div>
@@ -315,13 +247,14 @@ function UpdateClass() {
         <>
           {" "}
           <div>
+            <h1 className="text-4xl -mt-14">Class Update</h1>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
                 <Tabs.TabPane tab="Profile" key="1">
                   <Button className="btn-confirm" onClick={handleUpdate}>
                     Edit Class
                   </Button>
-                  <div className="asssign-teacher">
+                  <div className="">
                     <div className="flex flex-row justify-between">
                       <div>
                         <h1
@@ -333,54 +266,47 @@ function UpdateClass() {
                           Assigned Students
                         </h1>
                       </div>
-                      <div>
-                        <Select
-                          placeholder="select Students"
-                          width={"100%"}
-                          onChange={handleStudent}
-                          defaultValue={data.student}
-                          optionLabelProp="label"
-                          mode="multiple"
-                          maxTagCount={2}
-                        >
-                          {students.map((item, index) => (
-                            <Option
-                              value={item.key}
-                              label={
-                                item.first_name +
-                                " " +
-                                (item.last_name ? item.last_name : "")
-                              }
-                            >
-                              {item.first_name +
-                                " " +
-                                (item.last_name ? item.last_name : "")}
-                            </Option>
-                          ))}
-                        </Select>
-                      </div>
+                      <Select
+                        style={{ width: "20%" }}
+                        placeholder="select Students"
+                        onChange={handleStudent}
+                        defaultValue={data.student}
+                        optionLabelProp="label"
+                        mode="multiple"
+                        maxTagCount={2}
+                      >
+                        {students.map((item, index) => (
+                          <Option value={item.key} label={item.first_name}>
+                            {item.first_name +
+                              " " +
+                              (item.last_name ? item.last_name : "")}
+                          </Option>
+                        ))}
+                      </Select>
                     </div>
                     <Table dataSource={data.student} columns={columns} />
                   </div>
-                  <div className="asssign-teacher">
-                    <div className="assign-header">
+                  <div className="mb-8">
+                    <div className="flex flex-row justify-between">
                       <h1
                         style={{
                           fontSize: 24,
                           fontWeight: "bold",
+                          paddingBottom: "10px",
                         }}
                       >
                         Assigned Courses
                       </h1>
                       <Select
-                        placeholder="select Students"
-                        onChange={handleStudent}
-                        defaultValue={item}
+                        style={{ width: "20%" }}
+                        placeholder="Asign Courses"
+                        onChange={handleCourse}
+                        defaultValue={data.course}
                         optionLabelProp="label"
                         mode="multiple"
-                        maxTagCount={2}
+                        maxTagCount={4}
                       >
-                        {item.map((item, index) => (
+                        {courses.map((item, index) => (
                           <Option
                             value={item.course_id}
                             label={item.course_name}
