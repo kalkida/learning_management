@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker, message } from "antd";
+import { Form, Input, Button, Select, DatePicker, message ,Space } from "antd";
 import {
   doc,
   setDoc,
@@ -8,13 +8,23 @@ import {
   collection,
   where,
   query,
+  getDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { SearchOutlined } from "@ant-design/icons";
+import "../../css/teacher.css";
+import Highlighter from "react-highlight-words";
+import "../modals/courses/style.css";
+import "../modals/teacher/style.css";
 
 const { Option } = Select;
+const { Search } = Input;
+
+const gender = ["Male", "Female", "Other"]
 
 const CreateNewStudnet = () => {
   const [allPhone, setAllPhone] = useState([]);
@@ -34,11 +44,11 @@ const CreateNewStudnet = () => {
     DOB: "",
     avater: null,
     email: "",
+    sex:"",
     first_name: "",
     last_name: "",
-    class: "",
-    parent_id: [],
     level: "",
+    section: "",
     phone: [],
     school_id: uid.school,
   });
@@ -93,6 +103,10 @@ const CreateNewStudnet = () => {
       );
     }
   }
+
+ 
+
+
   const getClass = async () => {
     const q = query(
       collection(firestoreDb, "class"),
@@ -107,8 +121,11 @@ const CreateNewStudnet = () => {
       });
     });
     setClassData(children);
-
   };
+
+  const onRemove = () => {
+    setFile('');
+  }
 
   const createNewStudent = async () => {
 
@@ -122,16 +139,19 @@ const CreateNewStudnet = () => {
     // }
   };
   const children = [];
-  const handleCourse = (value) => {
-    const classData = JSON.parse(value);
-    setNewUser({ ...newUser, class: classData });
-  };
-  const setAge = (value) => {
-    setNewUser({ ...newUser, DOB: JSON.stringify(value._d) });
+  const handlelevel = (value) => {
+    setNewUser({ ...newUser, level: value });
   };
 
+  const handlesection = (value) => {
+    setNewUser({ ...newUser, section: value });
+  };
   const handleStudent = (e) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  };
+
+  const handleDob = (value) => {
+    setNewUser({ ...newUser, DOB: JSON.stringify(value) });
   };
   const setPhone = (e) => {
     setPhones(e.target.value);
@@ -140,13 +160,181 @@ const CreateNewStudnet = () => {
   const handleCancle = () => {
     navigate("/list-student")
   }
+  function HandleBrowseClick() {
+    var fileinput = document.getElementById("browse");
+    fileinput.click();
+  }
+
+  function handleFile(event) {
+    var fileinput = document.getElementById("browse");
+    var textinput = document.getElementById("filename");
+    textinput.value = fileinput.value;
+    setFile(event.target.files[0]);
+  }
+
+  const handleGender = (value) => {
+    setNewUser({ ...newUser, sex: value });
+  };
+
 
   useEffect(() => {
     getClass();
   }, []);
   return (
     <>
-      <Form
+      <div className="add-header">
+          <h1>Add Students</h1>
+          {/* <button onClick={async () => await CreateNewStudnet()}>Confirm</button> */}
+        </div>
+        <div className="add-teacher">
+          <div className="avater-img">
+            <div>
+              <h2>Profile Picture</h2>
+              <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
+            </div>
+            <div className="file-content">
+              <span>This will be displayed to you when you view this profile</span>
+
+              <div className="img-btn">
+                <button>
+                  <input type="file" id="browse" name="files" style={{ display: "none" }} onChange={handleFile} accept="/image/*" />
+                  <input type="hidden" id="filename" readonly="true" />
+                  <input type="button" value="Add Photo" id="fakeBrowse" onClick={HandleBrowseClick} />
+                </button>
+                <button onClick={onRemove}>Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="add-form">
+            <div className="col"> 
+              <div>
+                <label>First Name</label>
+                <Input name="first_name" onChange={(e) => handleStudent(e)} />
+              </div>
+            <div style={{ flexDirection:'row'  , justifyContent: 'space-between',display:'flex' }} >
+              <div style={{ marginRight:'5%'}}>
+                <label>Grade</label>
+                <Select
+                  placeholder="Select Grade"
+                  onChange={handlelevel}
+                  optionLabelProp="label"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {classData.map((item, index) => (
+                    <Option
+                      key={item.key}
+                      value={item.key}
+                      label={item.level}
+                    >
+                      {item.level}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <label>Section</label>
+                <Select
+                  placeholder="Select Section"
+                  onChange={handlesection}
+                  optionLabelProp="label"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {classData.map((item, index) => (
+                    <Option
+                      key={item.key}
+                      value={item.section}
+                      label={item.section}
+                    >
+                      {item.section}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              </div>
+              <div>
+                <label>Date of Birth</label>
+                <DatePicker style={{ width: "100%" }} onChange={handleDob} />
+              </div>
+              <div className="add-header">
+              <button onClick={async () => await createNewStudent()}>Submit</button>
+            
+              
+              {/* <button onClick={handleCancle}>Cancel</button> */}
+              {/* <Button
+          type="primary"
+          loading={loadingbutton}
+          onClick={async () => await createNewStudent()}
+        >
+          Save
+        </Button> */}
+
+              </div>
+            </div>
+            <div className="col">
+            <div>
+                <label>Last Name</label>
+                <Input name="last_name" onChange={(e) => handleStudent(e)} />
+              </div>
+              <div>
+                <label>Sex </label>
+                <Select
+                  placeholder="Select Gender"
+                  onChange={handleGender}
+                  optionLabelProp="label"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {gender.map((item, index) => (
+                    <Option
+                      key={item.index}
+                      value={item}
+                      label={item}
+                    >
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <label>Email</label>
+                <Input name="email" onChange={(e) => handleStudent(e)} />
+              </div>
+            </div>
+            <div className="col">
+            <div>
+                <label>Guardian Contact</label>
+                {input.map((_, index) => {
+                  return <Input onChange={(e) => setPhone(e)} />;
+                 })}
+               {phone !== "" ? (
+               <Button
+                 onClick={() => {
+                 setInputs([...input, 0]);
+                 setAllPhone([...allPhone, phone]);
+              }}
+             >
+              Add New
+             </Button>
+          ) : null}
+              </div>
+              <div>
+              <Button className="btn-dlt" style={{ marginTop:'60%'}} onClick={handleCancle}  type="primary" danger >Cancel</Button>
+              </div>
+            </div>
+            <div>
+              
+            </div>
+           
+          </div>
+        </div>
+
+      {/* <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
         layout="horizontal"
@@ -234,16 +422,9 @@ const CreateNewStudnet = () => {
         <Form.Item label="Student Pictue" valuePropName="fileList">
           <input type="file" onChange={handleChange} accept="/image/*" />
         </Form.Item>
-      </Form>
+      </Form> */}
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}>
-        <Button
-          type="primary"
-          loading={loadingbutton}
-          onClick={async () => await createNewStudent()}
-        >
-          Save
-        </Button>
-        <Button onClick={handleCancle}>Cancel</Button>
+      
       </div>
     </>
   );
