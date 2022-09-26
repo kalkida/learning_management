@@ -33,6 +33,7 @@ const { Search } = Input;
 
 export default function AddStudnets() {
   const uid = useSelector((state) => state.user.profile);
+  const navigate = useNavigate()
   const shcool = useSelector((state) => state.user.shcool);
   const [datas, setData] = useState([]);
   const [viewLoading, setViewLoading] = useState(false);
@@ -173,24 +174,13 @@ export default function AddStudnets() {
   //   return data;
   // };
 
-  const showViewModal = async (data) => {
-    setViewData(data);
-    setViewOpen(true);
-    setViewLoading(false);
-    setViewLoading(false);
+  const handleView = (data) => {
+    navigate("/view-student", { state: { data } });
+
   };
 
-  const showUpdateModal = (data) => {
-    setUpdateData(data);
-    setOpenUpdate(true);
-  };
-
-  const handleUpdateCancel = () => {
-    setOpenUpdate(false);
-  };
-
-  const handleViewCancel = () => {
-    setViewOpen(false);
+  const handleUpdate = (data) => {
+    navigate("/update-student", { state: { data } });
   };
 
   const getSchool = async () => {
@@ -257,7 +247,6 @@ export default function AddStudnets() {
         getData(data).then((response) => temporary.push(response));
       })
        //setData(temporary);
-
       setTimeout(() => {
         setData(temporary);
       }, 2000);
@@ -355,8 +344,8 @@ export default function AddStudnets() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => showViewModal(record)}>View {record.name}</a>
-          <a onClick={() => showUpdateModal(record)}>Update</a>
+          <a onClick={() => handleView(record)}>View {record.name}</a>
+          <a onClick={() => handleUpdate(record)}>Update</a>
         </Space>
       ),
     },
@@ -416,7 +405,7 @@ export default function AddStudnets() {
       
 
       <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {viewData ? (
+      {/* {viewData ? (
         <View
           openView={openView}
           handleViewCancel={handleViewCancel}
@@ -430,7 +419,7 @@ export default function AddStudnets() {
           data={updateData}
           setUpdateComplete={setUpdateComplete}
         />
-      ) : null}
+      ) : null} */}
     </div>
   );
 }
