@@ -31,6 +31,7 @@ function UpdateClass() {
   const [sectionMainData, setSectionMainData] = useState([]);
   const { state } = useLocation();
   const { data } = state;
+  console.log("data", data);
 
   const [updateClass, setUpdateClass] = useState({
     level: data.level,
@@ -114,6 +115,7 @@ function UpdateClass() {
       },
     },
   ];
+  var empity = [];
 
   const handleUpdate = async () => {
     setLoading(true);
@@ -158,7 +160,23 @@ function UpdateClass() {
     });
     await setItem(temporary);
   };
+  const getStudent = async () => {
+    const children = [];
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school)
+    );
+    const querySnapshot = await getDocs(q);
 
+    querySnapshot.forEach((doc) => {
+      var datas = doc.data();
+      console.log("lets stop", datas);
+
+      datas.key = doc.id;
+      children.push(datas);
+    });
+    setStudents(children);
+  };
   const getStudents = async () => {
     const children = [];
     const q = query(
@@ -168,9 +186,13 @@ function UpdateClass() {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-      datas.key = doc.id;
-      children.push(datas);
+      console.log("here we go", datas, data);
+      if (data.student.includes(datas.student_id)) {
+        datas.key = doc.id;
+        children.push("fine tuning", datas);
+      }
     });
+    console.log("childrens", children);
     setStudents(children);
   };
 
@@ -203,6 +225,7 @@ function UpdateClass() {
         key: doc.id,
       });
     });
+    console.log("courses are not ow", children);
     setcourse(children);
     setSectionMainData(sectionArray);
   };
@@ -222,13 +245,18 @@ function UpdateClass() {
     getCourse(data.course);
     setTimeout(() => {
       setLoading(true);
+      console.log("fuckert", data.student.length);
+      if (data.student.length <= 0) {
+        getStudent();
+      }
     }, 2000);
   }, []);
 
   const handleStudent = (value) => {
     value.map(async (item, i) => {
       const response = await getStudentID(item);
-      value[i] = response;
+      console.log("data finding", response.key);
+      value[i] = response.key;
     });
     setUpdateClass({ ...updateClass, student: value });
   };
@@ -247,7 +275,9 @@ function UpdateClass() {
         <>
           {" "}
           <div>
-            <h1 className="text-4xl -mt-14">Class Update</h1>
+            <h1 className="text-4xl -mt-14">
+              Edit Class {data.level} - {data.section}
+            </h1>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
                 <Tabs.TabPane tab="Profile" key="1">
@@ -284,7 +314,11 @@ function UpdateClass() {
                         ))}
                       </Select>
                     </div>
-                    <Table dataSource={data.student} columns={columns} />
+                    {data.student.length <= 0 ? (
+                      <Table dataSource={empity} columns={columns} />
+                    ) : (
+                      <Table dataSource={students} columns={columns} />
+                    )}
                   </div>
                   <div className="mb-8">
                     <div className="flex flex-row justify-between">
@@ -301,7 +335,7 @@ function UpdateClass() {
                         style={{ width: "20%" }}
                         placeholder="Asign Courses"
                         onChange={handleCourse}
-                        defaultValue={data.course}
+                        defaultValue={courses}
                         optionLabelProp="label"
                         mode="multiple"
                         maxTagCount={4}
