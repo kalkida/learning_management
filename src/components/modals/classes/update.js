@@ -28,10 +28,11 @@ function UpdateClass() {
   const [courses, setcourse] = useState([]);
   const [item, setItem] = useState([]);
   const [students, setStudents] = useState([]);
+  const [selected, setSelected] = useState([]);
   const [sectionMainData, setSectionMainData] = useState([]);
   const { state } = useLocation();
   const { data } = state;
-  console.log("data", data);
+  console.log("data", data.student);
 
   const [updateClass, setUpdateClass] = useState({
     level: data.level,
@@ -167,14 +168,12 @@ function UpdateClass() {
       where("school_id", "==", uid.school)
     );
     const querySnapshot = await getDocs(q);
-
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-      console.log("lets stop", datas);
-
       datas.key = doc.id;
       children.push(datas);
     });
+    console.log("childrens are from ", children);
     setStudents(children);
   };
   const getStudents = async () => {
@@ -189,10 +188,9 @@ function UpdateClass() {
       console.log("here we go", datas, data);
       if (data.student.includes(datas.student_id)) {
         datas.key = doc.id;
-        children.push("fine tuning", datas);
+        children.push(datas);
       }
     });
-    console.log("childrens", children);
     setStudents(children);
   };
 
@@ -229,8 +227,21 @@ function UpdateClass() {
     setcourse(children);
     setSectionMainData(sectionArray);
   };
+  const getStudenters = async () => {
+    var temp = [];
+    var students = data.student;
+    console.log("getStudenters", students);
+    data.student.map((student) => {
+      var studnetnd = getStudentID(student);
+      temp.push(studnetnd);
+    });
+    console.log(temp);
+    setSelected(temp);
+  };
 
   const getStudentID = async (ID) => {
+    console.log("dat", ID);
+
     const docRef = doc(firestoreDb, "students", ID);
     var data = "";
     await getDoc(docRef).then((response) => {
@@ -240,15 +251,14 @@ function UpdateClass() {
     return data;
   };
   useEffect(() => {
+    getStudenters();
     getClass();
     getStudents();
     getCourse(data.course);
     setTimeout(() => {
       setLoading(true);
-      console.log("fuckert", data.student.length);
-      if (data.student.length <= 0) {
-        getStudent();
-      }
+
+      getStudent();
     }, 2000);
   }, []);
 
@@ -314,11 +324,8 @@ function UpdateClass() {
                         ))}
                       </Select>
                     </div>
-                    {data.student.length <= 0 ? (
-                      <Table dataSource={empity} columns={columns} />
-                    ) : (
-                      <Table dataSource={students} columns={columns} />
-                    )}
+                    {/* {data.student.length <= 0 ? ( */}
+                    <Table dataSource={selected} columns={columns} />
                   </div>
                   <div className="mb-8">
                     <div className="flex flex-row justify-between">
