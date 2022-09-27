@@ -16,6 +16,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
 import './style.css'
 import { getIdToken } from 'firebase/auth';
+import { useSelector } from "react-redux";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -25,16 +26,20 @@ function UpdateStudents() {
 
     const dateFormat = 'YYYY/MM/DD';
     const valueRef = useRef();
+    
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
-    const [allPhone, setAllPhone] = useState(data.phone);
-    const [input, setInputs] = useState(data.phone);
     const [phone, setPhones] = useState("");
     const [classOption, setClassOption] = useState([]);
     const [percent, setPercent] = useState(0);
     const [file, setFile] = useState("");
+    
+     const [classData, setClassData] = useState([]);
     const { state } = useLocation();
     const { data } = state;
+    const [allPhone, setAllPhone] = useState(data.phone);
+    const [input, setInputs] = useState(data.phone);
     const [updateStudent, setUpdateStudent] = useState({
         DOB: data.DOB,
         avater: data.avater,
@@ -60,8 +65,7 @@ function UpdateStudents() {
                 response => {
                     setLoading(false)
                     message.success("Data is updated successfuly")
-                    setUpdateComplete(!updateComplete)
-                    handleUpdateCancel()
+                    navigate('/list-student')
                 })
                 .catch(error => {
                     message.error("Data is not updated")
@@ -94,8 +98,8 @@ function UpdateStudents() {
                                     response => {
                                         setLoading(false)
                                         message.success("Data is updated successfuly")
-                                        setUpdateComplete(!updateComplete)
-                                        handleUpdateCancel()
+                                        navigate('/list-student')
+                              
                                     })
                                     .catch(error => {
                                         message.error("Data is not updated")
@@ -121,14 +125,25 @@ function UpdateStudents() {
         return data;
     }
 
+    const handleGender = (value) => {
+      setUpdateStudent({ ...updateStudent, sex: value });
+  };
+
     const handleCourse = async (value) => {
         const classData = await getClassID(value);
         setUpdateStudent({ ...updateStudent, class: classData });
 
     };
-    const setAge = (value) => {
-        setUpdateStudent({ ...updateStudent, DOB: JSON.stringify(value._d) });
-    };
+    const handleDob = (value) => {
+      setUpdateStudent({ ...updateStudent, DOB: JSON.stringify(value) });
+  };
+
+    const onRemove = () => {
+      setFile('');
+  }
+    // const setAge = (value) => {
+    //     setUpdateStudent({ ...updateStudent, DOB: JSON.stringify(value._d) });
+    // };
 
     const setPhone = (e, index) => {
         allPhone[index] = e.target.value;
@@ -157,6 +172,44 @@ function UpdateStudents() {
         });
         setClassOption(children);
     };
+
+    
+    const getClassData = async (ID) => {
+      const docRef = doc(firestoreDb, "class", ID);
+      var data = "";
+      await getDoc(docRef).then((response) => {
+          data = response.data();
+          data.key = response.id;
+      });
+      return data;
+  };
+
+
+  const handlelevel = (value) => {
+    setUpdateStudent({ ...updateStudent, level: value });
+  };
+
+  const handlesection = (value) => {
+    setUpdateStudent({ ...updateStudent, section: value });
+  };
+
+  //   const getData = async (data) => {
+  //     data.class = await getClassData(data.class);
+  //     data.subject = await getSubjectData(data.subject);
+  //     return data;
+  // }
+
+  function HandleBrowseClick() {
+    var fileinput = document.getElementById("browse");
+    fileinput.click();
+}
+
+function handleFile(event) {
+    var fileinput = document.getElementById("browse");
+    var textinput = document.getElementById("filename");
+    textinput.value = fileinput.value;
+    setFile(event.target.files[0]);
+}
 
     useEffect(() => {
         getClass();
@@ -191,14 +244,14 @@ function UpdateStudents() {
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="Profile" key="1">
               <Button className="btn-confirm" onClick={handleUpdate}>
-                Edit Profile
+                Confirm Profile
               </Button>
               <div className="add-header">
-          <h1>Add Students</h1>
-          {/* <button onClick={async () => await CreateNewStudnet()}>Confirm</button> */}
+          <h1>Student Profile</h1>
+
         </div>
         <div className="add-teacher">
-          <div className="avater-img">
+          {/* <div className="avater-img">
             <div>
               <h2>Profile Picture</h2>
               <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
@@ -215,87 +268,52 @@ function UpdateStudents() {
                 <button onClick={onRemove}>Remove</button>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="add-form">
+
+            <div className="col">
+
+            <div style={{marginTop:"30%"}}>
+            <div className='avatar-img'>
+              <h2>Student Picture</h2>
+              <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
+            </div>
+            <div>
+            <div className="file-content">
+              {/* <span>This will be displayed to you when you view this profile</span> */}
+              <div className="img-btn">
+                <button>
+                  <input type="file" id="browse" name="files" style={{ display: "none" }} onChange={handleFile} accept="/image/*" />
+                  <input type="hidden" id="filename" readonly="true" />
+                  <input type="button" value="Add Photo" id="fakeBrowse" onClick={HandleBrowseClick} />
+                </button>
+                <button onClick={onRemove}>Remove</button>
+              </div>
+            </div>
+          </div>
+          </div>
+            </div>
             <div className="col"> 
               <div>
                 <label>First Name</label>
-                <Input name="first_name" onChange={(e) => handleStudent(e)} />
+                <Input defaultValue={updateStudent.first_name} name="first_name" onChange={(e) => onChange(e)} />
               </div>
-            <div style={{ flexDirection:'row'  , justifyContent: 'space-between',display:'flex' }} >
-              <div style={{ marginRight:'5%'}}>
-                <label>Grade</label>
-                <Select
-                  placeholder="Select Grade"
-                  onChange={handlelevel}
-                  optionLabelProp="label"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {classData.map((item, index) => (
-                    <Option
-                      key={item.key}
-                      value={item.key}
-                      label={item.level}
-                    >
-                      {item.level}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-              <div>
-                <label>Section</label>
-                <Select
-                  placeholder="Select Section"
-                  onChange={handlesection}
-                  optionLabelProp="label"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {classData.map((item, index) => (
-                    <Option
-                      key={item.key}
-                      value={item.section}
-                      label={item.section}
-                    >
-                      {item.section}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-              </div>
+           
               <div>
                 <label>Date of Birth</label>
-                <DatePicker style={{ width: "100%" }} onChange={handleDob} />
+                <DatePicker style={{ width: "100%" }} onChange={handleDob} defaultValue={updateStudent.DOB ? moment(JSON.parse(updateStudent.DOB)) : ''} />
               </div>
-              <div className="add-header">
-              <button onClick={async () => await createNewStudent()}>Submit</button>
-            
-              
-              {/* <button onClick={handleCancle}>Cancel</button> */}
-              {/* <Button
-          type="primary"
-          loading={loadingbutton}
-          onClick={async () => await createNewStudent()}
-        >
-          Save
-        </Button> */}
-
-              </div>
-            </div>
-            <div className="col">
-            <div>
+              <div>
                 <label>Last Name</label>
-                <Input name="last_name" onChange={(e) => handleStudent(e)} />
+                <Input   defaultValue={updateStudent.last_name}name="last_name" onChange={(e) => onChange(e)} />
               </div>
               <div>
                 <label>Sex </label>
                 <Select
                   placeholder="Select Gender"
                   onChange={handleGender}
+                  defaultValue={updateStudent.sex}
                   optionLabelProp="label"
                   style={{
                     width: "100%",
@@ -312,14 +330,59 @@ function UpdateStudents() {
                   ))}
                 </Select>
               </div>
-              <div>
-                <label>Email</label>
-                <Input name="email" onChange={(e) => handleStudent(e)} />
-              </div>
             </div>
             <div className="col">
+            <div style={{ flexDirection:'row'  , justifyContent: 'space-between',display:'flex' }} >
+              <div style={{ marginRight:'5%'}}>
+                <label>Grade</label>
+                <Select
+                  placeholder="Select Grade"
+                  defaultValue={updateStudent.level}
+                  onChange={handlelevel}
+                  optionLabelProp="label"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {classOption.map((item, index) => (
+                    <Option
+                      key={item.key}
+                      value={item.key}
+                      label={item.level}
+                    >
+                      {item.level}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <label>Section</label>
+                <Select
+                  placeholder="Select Section"
+                  defaultValue={updateStudent.section}
+                  onChange={handlesection}
+                  optionLabelProp="label"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {classOption.map((item, index) => (
+                    <Option
+                      key={item.key}
+                      value={item.section}
+                      label={item.section}
+                    >
+                      {item.section}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              </div>
             <div>
                 <label>Guardian Contact</label>
+                {updateStudent.phone.map((item, index) => {
+       return <Input defaultValue={item} name="phone" onChange={(e) => onChange(e)} />;
+                   })} 
                 {input.map((_, index) => {
                   return <Input onChange={(e) => setPhone(e)} />;
                  })}
@@ -335,6 +398,10 @@ function UpdateStudents() {
           ) : null}
               </div>
               <div>
+                <label>Email</label>
+                <Input defaultValue={updateStudent.email} name="email" onChange={(e) => onChange(e)} />
+              </div>
+              <div>
               </div>
             </div>
             <div>
@@ -343,29 +410,7 @@ function UpdateStudents() {
            
           </div>
         </div>
-              <h1  style={{ fontSize:22 , fontWeight:'bold' , marginTop:'10%' , marginBottom:'2%'}}>Student Information</h1>
-              <div className="teacher-static">
-                <div>
-                <span>Age</span>
-                <h2 style={{ fontSize:14 , fontWeight:'bold'}}>{age}</h2>
-                </div>
-                <div>
-                <span>Sex</span>
-                <h2 style={{ fontSize:14 , fontWeight:'bold'}}>{data.sex}</h2>
-                </div>
-                <div>
-                <span>phoneNumber</span>
-                <h2 style={{ fontSize:14 , fontWeight:'bold'}}>{data.phone[0]}</h2>
-                </div>
-                <div>
-                  <span>Email</span>
-                  <h2 style={{ fontSize:14 , fontWeight:'bold'}}>{data.email}</h2>
-                </div>
-                <div>
-                  <span>Location</span>
-                  <h2 style={{ fontSize:14 , fontWeight:'bold'}}>Lideta</h2>
-                </div>
-              </div>
+              <h1  style={{ fontSize:22 , fontWeight:'bold' , marginTop:'10%' , marginBottom:'2%'}}>Guardian</h1>
               <div className="teacher-profile">
                 <div className="career-profile">
                   <h1>Guardian Information</h1>
@@ -392,7 +437,7 @@ function UpdateStudents() {
                 <div className="tch-cr-list">
                   <h1>Assigned Courses</h1>
                 </div>
-                <Table dataSource={data.course} columns={columns} />
+                {/* <Table dataSource={data.course} columns={columns} /> */}
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Class" key="3">
@@ -403,7 +448,7 @@ function UpdateStudents() {
                 <div className="tch-cr-list">
                   <h1>Assigned Classes</h1>
                 </div>
-                <Table dataSource={data.class} columns={classColumns} />
+                {/* <Table dataSource={data.class} columns={classColumns} /> */}
               </div>
             </Tabs.TabPane>
           </Tabs>
