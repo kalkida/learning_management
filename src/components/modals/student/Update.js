@@ -146,7 +146,10 @@ function UpdateStudents() {
     // };
 
     const setPhone = (e, index) => {
+      console.log(index);
+      console.log('setPhone', e.target.value);
         allPhone[index] = e.target.value;
+        console.log('setPhone', allPhone);
         setUpdateStudent({ ...updateStudent, phone: allPhone });
     };
 
@@ -380,11 +383,11 @@ function handleFile(event) {
               </div>
             <div>
                 <label>Guardian Contact</label>
-                {updateStudent.phone.map((item, index) => {
-       return <Input defaultValue={item} name="phone" onChange={(e) => onChange(e)} />;
-                   })} 
-                {input.map((_, index) => {
-                  return <Input onChange={(e) => setPhone(e)} />;
+                {/* {data.phone.map((item, index) => {
+       return (<Input disabled={true} defaultValue={item} name="phone" onChange={(e) => onChange(e)} />);
+                   })}  */}
+                {data.phone.map((item, index) => {
+                  return (<Input  defaultValue={item} name="phone" onChange={(e) => setPhone(e ,index)} />);
                  })}
                {phone !== "" ? (
                <Button
