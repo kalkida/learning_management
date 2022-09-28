@@ -39,7 +39,7 @@ function UpdateStudents() {
     const { state } = useLocation();
     const { data } = state;
     const [allPhone, setAllPhone] = useState(data.phone);
-    const [input, setInputs] = useState(data.phone);
+    const [input, setInputs] = useState([0]);
     const [updateStudent, setUpdateStudent] = useState({
         DOB: data.DOB,
         avater: data.avater,
@@ -387,9 +387,12 @@ function handleFile(event) {
        return (<Input disabled={true} defaultValue={item} name="phone" onChange={(e) => onChange(e)} />);
                    })}  */}
                 {data.phone.map((item, index) => {
-                  return (<Input  defaultValue={item} name="phone" onChange={(e) => setPhone(e ,index)} />);
+                  return (<Input  disabled={true} defaultValue={item} name="phone" onChange={(e) => setPhone(e ,index)} />);
+                 })}   
+              {input.map((_, index) => {
+                  return <Input onChange={(e) => setPhone(e , index)} />;
                  })}
-               {phone !== "" ? (
+            {phone.length !== "" ? (
                <Button
                  onClick={() => {
                  setInputs([...input, 0]);
@@ -398,8 +401,8 @@ function handleFile(event) {
              >
               Add New
              </Button>
-          ) : null}
-              </div>
+          ) : null}            
+            </div>
               <div>
                 <label>Email</label>
                 <Input defaultValue={updateStudent.email} name="email" onChange={(e) => onChange(e)} />

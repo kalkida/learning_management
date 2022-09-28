@@ -370,7 +370,6 @@ function TeacherUpdate() {
                 return (
                     <div>
                         {item.name}
-
                     </div>
                 );
             },

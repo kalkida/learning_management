@@ -28,6 +28,7 @@ const { Option } = Select;
 
 function ViewClass() {
   const [datas, setData] = useState([]);
+  const[classData , setClassData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   const { data } = state;
@@ -40,35 +41,115 @@ function ViewClass() {
 
   const scheduleColumn = [
     {
+      title: "Course",
+      dataIndex: "subject",
+      key: "subject",
+      render: (item) => {
+        return <div>{item.name}</div>;
+      },
+
+
+    },
+ 
+    {
       title: "Period",
-      dataIndex: "period",
-      key: "period",
+      dataIndex: "schedule",
+      key: "schedule",
+      render: (value) => {
+        moment.locale('en')
+        return (
+          <>
+            {value?.map((item, i) => (
+               <h1>
+                 {/* {moment(item.time[0]).format('d MMM')} */}
+                {(item.time + "    ,   ")} 
+             </h1>
+            ))}
+          </>
+        );
+      },
     },
     {
-      title: "Monday",
-      dataIndex: "monday",
-      key: "monday",
+      title: "Day",
+      dataIndex: "schedule",
+      key: "schedule",
+      render: (value) => {
+        return (
+          <>
+            {value?.map((item, i) => (
+               <h1>
+               {(item.day)}
+             </h1>
+            ))}
+          </>
+        );
+      },
     },
-    {
-      title: "Tuesday",
-      dataIndex: "tuesday",
-      key: "tuesday",
-    },
-    {
-      title: "Wednesday",
-      dataIndex: "wednesday",
-      key: "wednesday",
-    },
-    {
-      title: "Thursday",
-      dataIndex: "thursday",
-      key: "thursday",
-    },
-    {
-      title: "Friday",
-      dataIndex: "friday",
-      key: "friday",
-    },
+ 
+    // {
+    //   title: "Tuesday",
+    //   dataIndex: "schedule",
+    //   key: "schedule",
+    //   render: (value) => {
+    //     return (
+    //       <>
+    //         {value?.map((item, i) => (
+    //            <h1>
+    //            {item.day}
+    //          </h1>
+    //         ))}
+    //       </>
+    //     );
+    //   },
+    // },
+    // {
+    //   title: "Wednesday",
+    //   dataIndex: "schedule",
+    //   key: "schedule",
+    //   render: (value) => {
+    //     return (
+    //       <>
+    //         {value?.map((item, i) => (
+    //            <h1>
+    //            {item.day}
+    //          </h1>
+    //         ))}
+    //       </>
+    //     );
+    //   },
+    // },
+    // {
+    //   title: "Thursday",
+    //   dataIndex: "schedule",
+    //   key: "schedule",
+    //   render: (value) => {
+    //     return (
+    //       <>
+    //         {value?.map((item, i) => (
+    //            <h1>
+    //            {item.day}
+    //          </h1>
+    //         ))}
+    //       </>
+    //     );
+    //   },
+    // },
+    // {
+    //   title: "Friday",
+    //   dataIndex: "schedule",
+    //   key: "schedule",
+    //   render: (value) => {
+    //     return (
+    //       <>
+    //         {value?.map((item, i) => (
+    //            <h1>
+    //            {item.day}
+    //          </h1>
+    //         ))}
+    //       </>
+    //     );
+    //   },
+    // },
   ];
   const columns = [
     {
@@ -129,6 +210,15 @@ function ViewClass() {
     } else {
     }
   };
+  // const getStudent = async () =>{
+  //   const docRef = doc(firestoreDb, "student", data.St);
+  //   var data = "";
+  //   await getDoc(docRef).then((response) => {
+  //     data = response.data();
+  //     data.key = response.id;
+  //   });
+  //   return data;
+  // }
 
   const getClassData = async (ID) => {
     const docRef = doc(firestoreDb, "class", ID);
@@ -163,13 +253,13 @@ function ViewClass() {
   const getData = async (data) => {
     data.class = await getClassData(data.class);
     data.subject = await getSubjectData(data.subject);
-
     data.teachers?.map(async (item, index) => {
       data.teachers[index] = await getTeacherData(item);
     });
     return data;
   };
 
+  
   const getCourses = async () => {
     var branches = await getSchool();
     const q = query(
