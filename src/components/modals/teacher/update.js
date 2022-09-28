@@ -272,7 +272,7 @@ function TeacherUpdate() {
 
     const rowSelection = {
         selectedRowKeys,
-        onChange: onSelectChangeClass,
+        onChange: onSelectChange,
         selections: [
             Table.SELECTION_ALL,
             Table.SELECTION_INVERT,
@@ -313,7 +313,7 @@ function TeacherUpdate() {
 
     const rowSelectionClass = {
         selectedRowKeys: selectedClassKeys,
-        onChange: onSelectChange,
+        onChange: onSelectChangeClass,
         selections: [
             Table.SELECTION_ALL,
             Table.SELECTION_INVERT,

@@ -9,7 +9,6 @@ import {
   TimePicker,
   Tabs,
   Table,
-  Spin,
 } from "antd";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -127,7 +126,6 @@ function UpdateCourse() {
         key: doc.id,
       });
     });
-    console.log(teachersArrary);
     setClasses(children);
     setTeachers(teachersArrary);
     setSubject(subjectArrary);
