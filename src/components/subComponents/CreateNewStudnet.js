@@ -153,7 +153,10 @@ const CreateNewStudnet = () => {
   const handleDob = (value) => {
     setNewUser({ ...newUser, DOB: JSON.stringify(value) });
   };
-  const setPhone = (e) => {
+  const setPhone = (e , index) => {
+    console.log(index);
+    console.log('setPhone', e.target.value);
+      allPhone[index] = e.target.value;
     setPhones(e.target.value);
     setNewUser({ ...newUser, ["phone"]: allPhone });
   };
@@ -310,7 +313,7 @@ const CreateNewStudnet = () => {
             <div>
                 <label>Guardian Contact</label>
                 {input.map((_, index) => {
-                  return <Input onChange={(e) => setPhone(e)} />;
+                  return <Input onChange={(e) => setPhone(e , index)} />;
                  })}
                {phone !== "" ? (
                <Button
