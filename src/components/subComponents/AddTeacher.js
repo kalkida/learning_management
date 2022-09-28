@@ -37,6 +37,7 @@ export default function AddTeacher() {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [course, setCourse] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [tableLoading, setTableTextLoading] = useState(true);
   const searchInput = useRef(null);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -201,6 +202,7 @@ export default function AddTeacher() {
     });
     setTimeout(() => {
       setData(temporary);
+      setTableTextLoading(false);
     }, 2000);
 
   };
@@ -260,11 +262,8 @@ export default function AddTeacher() {
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
-        // temporary.push(data)
         getData(data).then((response) => temporary.push(response));
       })
-      // console.log(temporary)
-      // setData(temporary);
 
       setTimeout(() => {
         setData(temporary);
@@ -284,8 +283,6 @@ export default function AddTeacher() {
         temporary.push(data)
         getData(data).then((response) => temporary.push(response));
       })
-      // setData(temporary);
-
       setTimeout(() => {
         setData(temporary);
       }, 2000);
@@ -411,7 +408,7 @@ export default function AddTeacher() {
         </div>
       </div>
 
-      <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
+      <Table style={{ marginTop: 20 }} loading={tableLoading} columns={columns} dataSource={datas} />
 
     </div>
   );
