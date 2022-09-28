@@ -164,48 +164,40 @@ function ViewClass() {
       where("school_id", "in", branches.branches)
     );
     var temporary = [];
+    console.log(data.course);
     const snap = await getDocs(q);
-    console.log("dataaa     ", data.course.length);
     for (var i = 0; i < data.course.length; i++) {
       snap.forEach(async (doc) => {
         var datause = doc.data();
+        console.log(datause);
         datause.key = doc.id;
         if (datause.key == data.course[i]) {
           getData(datause).then((response) => temporary.push(response));
         }
       });
     }
+    console.log(temporary);
     setTimeout(() => {
       setData(temporary);
     }, 2000);
   };
 
   const getStudents = async (ids) => {
-    console.log(ids);
-    const q = query(
-      collection(firestoreDb, "students"),
-      where("student_id", "in", ids)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-    });
-
-    // const q = query(
-    //   collection(firestoreDb, "students"),
-    //   where("students.key", "in", ids)
-    // );
-    // var temporary = [];
-    // var snap = await getDocs(q);
-    // console.log(snap.data());
-    // snap.forEach((doc) => {
-    //   var datause = doc.data();
-    //   console.log(datause);
-    //   temporary.push(datause);
-    // });
-    // setStudents(temporary);
-    // console.log(students);
+    var temporary = [];
+    if (ids.length > 0) {
+      const q = query(
+        collection(firestoreDb, "students")
+        // where("student_id", "in", ids)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        var data = doc.data();
+        if (ids.includes(doc.id)) {
+          temporary.push(data);
+        }
+      });
+      setStudents(temporary);
+    }
   };
 
   const handleUpdate = () => {
@@ -249,14 +241,14 @@ function ViewClass() {
             </Button>
             <div className="asssign-teacher">
               <h4 className="text-[24px] mb-10">Assigned Students</h4>
-              <Table dataSource={data.student} columns={columns} />
+              <Table dataSource={students} columns={columns} />
             </div>
             <div className="asssign-teacher -mt-10">
               <h4 className="text-[24px]">Assigned Courses</h4>
               <Table dataSource={datas} columns={courseColumns} />
             </div>
             <div className="asssign-teacher">
-              <h4>Weekly Schedule</h4>
+              <h4 className="text-[24px]">Weekly Schedule</h4>
               <Table dataSource={datas} columns={scheduleColumn} />
             </div>
           </Tabs.TabPane>
