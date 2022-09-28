@@ -18,6 +18,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Select, TimePicker, Tabs, Table, message, Spin } from "antd";
 import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
+import { async } from "@firebase/util";
 
 const { Option } = Select;
 
@@ -32,7 +33,6 @@ function UpdateClass() {
   const [sectionMainData, setSectionMainData] = useState([]);
   const { state } = useLocation();
   const { data } = state;
-  console.log("data", data.student);
 
   const [updateClass, setUpdateClass] = useState({
     level: data.level,
@@ -99,24 +99,14 @@ function UpdateClass() {
       },
     },
     {
-      title: "Level",
-      dataIndex: "class",
-      key: "class",
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
       render: (item) => {
-        console.log(item);
-        return <div>{item.level}</div>;
-      },
-    },
-    {
-      title: "Section",
-      dataIndex: "class",
-      key: "class",
-      render: (item) => {
-        return <div>{item.section}</div>;
+        // return <div>{item.level}</div>;
       },
     },
   ];
-  var empity = [];
 
   const handleUpdate = async () => {
     setLoading(true);
@@ -133,32 +123,38 @@ function UpdateClass() {
       });
     // }
   };
-  const getClassCourse = async (index) => {
-    var data = doc(firestoreDb, "class", index);
+  const getCousreSubject = async (index) => {
+    var data = doc(firestoreDb, "subjects", index);
     var response = await getDoc(data);
     if (response.exists()) {
       var dats = response.data();
       return dats;
     } else {
-      // doc.data() will be undefined in this case
       return "";
     }
   };
 
   const getCourse = async (course) => {
     const q = query(
-      collection(firestoreDb, "courses")
-      // where("course_id", "in", course)
+      collection(firestoreDb, "courses"),
+      where("course_id", "in", course)
     );
+
+    const querySnapshot = await getDocs(q);
     let temporary = [];
-    const snap = await getDocs(q);
-    snap.forEach(async (doc) => {
+    await querySnapshot.forEach((doc) => {
       var datause = doc.data();
-      var course = await getClassCourse(datause.class);
       datause.key = doc.id;
-      datause.class = course;
+      // var subject = getCousreSubject(datause.subject).then((subject) => {
+      //   alert(subject);
+      // });
+      // console.log("data", subject);
+
+      // datause.subject = subject;
       temporary.push(datause);
     });
+
+    console.log("datause", temporary);
     await setItem(temporary);
   };
   const getStudent = async () => {
@@ -173,7 +169,6 @@ function UpdateClass() {
       datas.key = doc.id;
       children.push(datas);
     });
-    console.log("childrens are from ", children);
     setStudents(children);
   };
   const getStudents = async () => {
@@ -185,7 +180,6 @@ function UpdateClass() {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-      console.log("here we go", datas, data);
       if (data.student.includes(datas.student_id)) {
         datas.key = doc.id;
         children.push(datas);
@@ -223,7 +217,6 @@ function UpdateClass() {
         key: doc.id,
       });
     });
-    console.log("courses are not ow", children);
     setcourse(children);
     setSectionMainData(sectionArray);
   };
@@ -231,11 +224,12 @@ function UpdateClass() {
     var temp = [];
     var students = data.student;
     console.log("getStudenters", students);
-    data.student.map((student) => {
-      var studnetnd = getStudentID(student);
-      temp.push(studnetnd);
+    data.student.map((id) => {
+      getStudentID(id).then((students) => {
+        console.log("students", students);
+        temp.push(students);
+      });
     });
-    console.log(temp);
     setSelected(temp);
   };
 
@@ -265,13 +259,12 @@ function UpdateClass() {
   const handleStudent = (value) => {
     value.map(async (item, i) => {
       const response = await getStudentID(item);
-      console.log("data finding", response.key);
       value[i] = response.key;
     });
     setUpdateClass({ ...updateClass, student: value });
   };
   const handleCourse = (value) => {
-    console.log("dada", value);
+    // console.log("dada", value);
     // value.map(async (item, i) => {
     //   const response = await getStudentID(item);
     //   value[i] = response;
@@ -342,7 +335,7 @@ function UpdateClass() {
                         style={{ width: "20%" }}
                         placeholder="Asign Courses"
                         onChange={handleCourse}
-                        defaultValue={courses}
+                        defaultValue={data.course}
                         optionLabelProp="label"
                         mode="multiple"
                         maxTagCount={4}

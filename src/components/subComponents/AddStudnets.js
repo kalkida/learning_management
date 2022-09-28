@@ -233,6 +233,7 @@ export default function AddStudnets() {
 
   const handleFilterClass = async (value) => {
     console.log(value)
+    setData("")
     if (value) {
       var branches = await getSchool();
       const q = query(collection(firestoreDb, "students"),
@@ -342,10 +343,21 @@ export default function AddStudnets() {
     {
       title: "Action",
       key: "action",
+      width: "10%",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleView(record)}>View {record.name}</a>
-          <a onClick={() => handleUpdate(record)}>Update</a>
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleView(record)}
+          >
+            View{" "}
+          </a>
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleUpdate(record)}
+          >
+            Update
+          </a>
         </Space>
       ),
     },
