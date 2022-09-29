@@ -83,7 +83,7 @@ function UpdateClass() {
       key: "email",
     },
     {
-      title: "Level",
+      title: "class",
       dataIndex: "level",
       key: "level",
     },
@@ -127,7 +127,7 @@ function UpdateClass() {
     var data = doc(firestoreDb, "subjects", index);
     var response = await getDoc(data);
     if (response.exists()) {
-      var dats = response.data();
+      var dats = await response.data();
       return dats;
     } else {
       return "";
@@ -142,13 +142,11 @@ function UpdateClass() {
 
     const querySnapshot = await getDocs(q);
     let temporary = [];
-    await querySnapshot.forEach((doc) => {
+    await querySnapshot.forEach(async (doc) => {
       var datause = doc.data();
       datause.key = doc.id;
-      // var subject = getCousreSubject(datause.subject).then((subject) => {
-      //   alert(subject);
-      // });
-      // console.log("data", subject);
+      var subject = await getCousreSubject(datause.subject);
+      console.log("data", subject);
 
       // datause.subject = subject;
       temporary.push(datause);
@@ -237,11 +235,12 @@ function UpdateClass() {
     console.log("dat", ID);
 
     const docRef = doc(firestoreDb, "students", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
+    var data = { first_name: "removed", last_name: "removed" };
+    if (docRef.exists()) {
+      await getDoc(docRef).then((response) => {
+        data = response.data();
+      });
+    }
     return data;
   };
   useEffect(() => {

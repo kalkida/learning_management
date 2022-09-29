@@ -1,16 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import {
-  Form,
-  Input,
-  Button,
-  Select,
-  DatePicker,
-  message,
-  TimePicker,
-  Table,
-  Tag,
-} from "antd";
+import { useEffect, useState } from "react";
+import { Input, Button, Select, message, TimePicker, Table, Tag } from "antd";
 import {
   doc,
   setDoc,
@@ -19,15 +8,14 @@ import {
   where,
   query,
   getDoc,
-  deleteDoc,
 } from "firebase/firestore";
-import { firestoreDb, storage } from "../../firebase";
+import { firestoreDb } from "../../firebase";
 import uuid from "react-uuid";
 
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import moment from "moment";
 import "../modals/courses/style.css";
+
 const { Option } = Select;
 
 const CreateClasses = () => {
@@ -233,9 +221,14 @@ const CreateClasses = () => {
   return (
     <>
       <div>
-        <div className="create-header">
-          <h1>Add Classes</h1>
-          <Button onClick={() => createNewClass()}>Submit</Button>
+        <div className="flex flex-row justify-between mb-2">
+          <h1 className="text-3xl">Create Class</h1>
+          <Button
+            className="text-[#E7752B] border-[1px] border-[#E7752B]  hover:bg-[#E7752B]"
+            onClick={() => createNewClass()}
+          >
+            <h1 className="text-black">Submit</h1>
+          </Button>
         </div>
         <div
           style={{
@@ -246,9 +239,8 @@ const CreateClasses = () => {
           }}
         >
           <div className="course-content">
-            {/* <div className="course-category"> */}
             <div>
-              <div>
+              <div className="py-2">
                 <span>Class</span>
                 <Input
                   name="level"
@@ -286,11 +278,7 @@ const CreateClasses = () => {
                 {/* </div> */}
               </div>
             </div>
-            <div
-              style={{
-                marginLeft: "20px",
-              }}
-            >
+            <div className="py-2 ml-10">
               <span>Section</span>
               <Input name="section" onChange={(e) => handleClass(e)} />
             </div>
