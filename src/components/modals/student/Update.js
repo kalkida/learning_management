@@ -58,8 +58,8 @@ function UpdateStudents() {
     first_name: data.first_name,
     last_name: data.last_name,
     sex: data.sex,
-    section: data.section,
-    level: data.level,
+    class: data.class,
+    courses: data.courses,
     phone: data.phone,
     school_id: data.school_id,
   });
@@ -69,6 +69,7 @@ function UpdateStudents() {
   };
 
   const handleUpdate = () => {
+    console.log(data);
     setLoading(true);
     if (!file) {
       setDoc(doc(firestoreDb, "students", data.key), updateStudent, {
@@ -155,10 +156,7 @@ function UpdateStudents() {
   // };
 
   const setPhone = (e, index) => {
-    console.log(index);
-    console.log("setPhone", e.target.value);
     allPhone[index] = e.target.value;
-    console.log("setPhone", allPhone);
     setUpdateStudent({ ...updateStudent, phone: allPhone });
   };
 
@@ -181,6 +179,7 @@ function UpdateStudents() {
         key: doc.id,
       });
     });
+    console.log("classes: ", children);
     setClassOption(children);
   };
 
@@ -199,14 +198,9 @@ function UpdateStudents() {
   };
 
   const handlesection = (value) => {
-    setUpdateStudent({ ...updateStudent, section: value });
+    console.log(value);
+    setUpdateStudent({ ...updateStudent, class: value });
   };
-
-  //   const getData = async (data) => {
-  //     data.class = await getClassData(data.class);
-  //     data.subject = await getSubjectData(data.subject);
-  //     return data;
-  // }
 
   function HandleBrowseClick() {
     var fileinput = document.getElementById("browse");
@@ -221,6 +215,7 @@ function UpdateStudents() {
   }
 
   useEffect(() => {
+    console.log(data);
     getClass();
   }, []);
 
@@ -232,22 +227,21 @@ function UpdateStudents() {
             <img src={data.avater ? data.avater : "img-5.jpg"} alt="profile" />
             <div className="profile-info">
               <h2>{data.first_name + " " + data.last_name}</h2>
-              <h3>Contact</h3>
+              <h3>Contacts</h3>
             </div>
           </div>
           <div className="header-extra">
             <div>
               <h3>Class</h3>
-              <h4>{data.level.level + data.level.section}</h4>
-              {/* 
-            <h4>{data.level?.map((item, i) => item.level + item.section + ",")}</h4> */}
+              <h4>{data.class.level + data.class.section}</h4>
             </div>
-            {/* <div>
-            <h3>Assigned Course</h3>
-            <h4>{data?.course.length}</h4>
-          </div> */}
+            <div>
+              <h3>Assigned Course</h3>
+              <h4>{data.courses.length}</h4>
+            </div>
           </div>
         </div>
+
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="Profile" key="1">
@@ -258,25 +252,6 @@ function UpdateStudents() {
                 <h1>Student Profile</h1>
               </div>
               <div className="add-teacher">
-                {/* <div className="avater-img">
-            <div>
-              <h2>Profile Picture</h2>
-              <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
-            </div>
-            <div className="file-content">
-              <span>This will be displayed to you when you view this profile</span>
-
-              <div className="img-btn">
-                <button>
-                  <input type="file" id="browse" name="files" style={{ display: "none" }} onChange={handleFile} accept="/image/*" />
-                  <input type="hidden" id="filename" readonly="true" />
-                  <input type="button" value="Add Photo" id="fakeBrowse" onClick={HandleBrowseClick} />
-                </button>
-                <button onClick={onRemove}>Remove</button>
-              </div>
-            </div>
-          </div> */}
-
                 <div className="add-form">
                   <div className="col">
                     <div style={{ marginTop: "30%" }}>
@@ -374,33 +349,11 @@ function UpdateStudents() {
                         display: "flex",
                       }}
                     >
-                      <div style={{ marginRight: "5%" }}>
-                        <label>Grade</label>
-                        <Select
-                          placeholder="Select Grade"
-                          defaultValue={updateStudent.level}
-                          onChange={handlelevel}
-                          optionLabelProp="label"
-                          style={{
-                            width: "100%",
-                          }}
-                        >
-                          {classOption.map((item, index) => (
-                            <Option
-                              key={item.key}
-                              value={item.key}
-                              label={item.level}
-                            >
-                              {item.level}
-                            </Option>
-                          ))}
-                        </Select>
-                      </div>
                       <div>
-                        <label>Section</label>
+                        <label>Class</label>
                         <Select
                           placeholder="Select Section"
-                          defaultValue={updateStudent.section}
+                          defaultValue={data.class}
                           onChange={handlesection}
                           optionLabelProp="label"
                           style={{
@@ -410,10 +363,10 @@ function UpdateStudents() {
                           {classOption.map((item, index) => (
                             <Option
                               key={item.key}
-                              value={item.section}
-                              label={item.section}
+                              value={item.key}
+                              label={item.level + item.section}
                             >
-                              {item.section}
+                              {item.level + item.section}
                             </Option>
                           ))}
                         </Select>

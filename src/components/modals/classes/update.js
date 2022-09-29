@@ -31,6 +31,7 @@ function UpdateClass() {
   const [students, setStudents] = useState([]);
   const [selected, setSelected] = useState([]);
   const [sectionMainData, setSectionMainData] = useState([]);
+  const [studentLoading, setStudentLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
 
@@ -221,26 +222,28 @@ function UpdateClass() {
   const getStudenters = async () => {
     var temp = [];
     var students = data.student;
-    console.log("getStudenters", students);
-    data.student.map((id) => {
-      getStudentID(id).then((students) => {
-        console.log("students", students);
-        temp.push(students);
+    students.map((id) => {
+      getStudentID(id).then((stud) => {
+        console.log("students", stud);
+        temp.push(stud);
       });
     });
-    setSelected(temp);
+    console.log("temporary", temp);
+    await setSelected(temp);
   };
 
   const getStudentID = async (ID) => {
     console.log("dat", ID);
 
     const docRef = doc(firestoreDb, "students", ID);
-    var data = { first_name: "removed", last_name: "removed" };
-    if (docRef.exists()) {
-      await getDoc(docRef).then((response) => {
-        data = response.data();
-      });
+    var data = "";
+    var response = await getDoc(docRef);
+    if (response.exists()) {
+      data = response.data();
     }
+
+    setStudentLoading(false);
+
     return data;
   };
   useEffect(() => {
@@ -317,7 +320,11 @@ function UpdateClass() {
                       </Select>
                     </div>
                     {/* {data.student.length <= 0 ? ( */}
-                    <Table dataSource={selected} columns={columns} />
+                    <Table
+                      loading={studentLoading}
+                      dataSource={selected}
+                      columns={columns}
+                    />
                   </div>
                   <div className="mb-8">
                     <div className="flex flex-row justify-between">

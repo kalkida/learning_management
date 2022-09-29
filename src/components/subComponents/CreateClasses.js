@@ -88,7 +88,6 @@ const CreateClasses = () => {
   const handleDelete = () => {};
 
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
     setNewClass({ ...newClass, course: newSelectedRowKeys });
   };
