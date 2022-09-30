@@ -47,7 +47,6 @@ export default function ListAnnouncment() {
   const datas = useRef("");
 
   const uploadData = async (datar) => {
-    console.log(anounceData);
     await addDoc(collection(firestoreDb, "announcment"), anounceData).then(response => {
       getBlog();
       message.success("Announce Poseted")
@@ -55,7 +54,6 @@ export default function ListAnnouncment() {
     }).catch(error =>
       message.error("Something is wrong, Try Again")
     )
-    // getBlog();
   };
 
   const getBlog = async () => {
@@ -167,7 +165,6 @@ export default function ListAnnouncment() {
   };
 
   const EditData = () => {
-    console.log(editData)
     setDoc(doc(firestoreDb, "announcment", editData.key), editData, { merge: true })
       .then((response) => {
         setShowEdit(false)
