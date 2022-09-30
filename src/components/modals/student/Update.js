@@ -223,10 +223,16 @@ function UpdateStudents() {
     <>
       <div>
         <div className="profile-header">
-          <div className="teacher-avater">
-            <img src={data.avater ? data.avater : "img-5.jpg"} alt="profile" />
-            <div className="profile-info">
-              <h2>{data.first_name + " " + data.last_name}</h2>
+          <div className="flex flex-row align-middle">
+            <img
+              className="w-[8vw] h-[15vh] rounded-full"
+              src={data.avater ? data.avater : "img-5.jpg"}
+              alt="profile"
+            />
+            <div className="flex flex-col justify-center ml-4">
+              <h2 className="text-xl">
+                {data.first_name + " " + data.last_name}
+              </h2>
               <h3>Contacts</h3>
             </div>
           </div>
@@ -237,7 +243,7 @@ function UpdateStudents() {
             </div>
             <div>
               <h3>Assigned Course</h3>
-              <h4>{data.courses.length}</h4>
+              <h4>{data.courses?.length}</h4>
             </div>
           </div>
         </div>
@@ -420,22 +426,22 @@ function UpdateStudents() {
               >
                 Guardian
               </h1>
-              <div className="teacher-profile">
-                <div className="career-profile">
-                  <h1>Guardian Information</h1>
-                  <div>
-                    <h3> Full Name</h3>
-                    <span> Guardian Name</span>
+              <div className="mt-8">
+                {data.phone.map((item, index) => (
+                  <div className="border-b-[1px] mt-2 flex flex-row justify-between w-[40vw] p-2">
+                    <div>
+                      <h1 className="font-bold">Guardian {index + 1}</h1>
+                    </div>
+                    <div>
+                      <span className="font-light text-xs">Phone Number</span>
+                      <h1>{item}</h1>
+                    </div>
+                    <div>
+                      <span className="font-light text-xs">Email</span>
+                      <h1>john@gmail.com</h1>
+                    </div>
                   </div>
-                  <div>
-                    <h3>Phone Number</h3>
-                    <span>{data.phone[1]}</span>
-                  </div>
-                  <div>
-                    <h3>Email</h3>
-                    <span>{data.email}</span>
-                  </div>
-                </div>
+                ))}
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Course" key="2">

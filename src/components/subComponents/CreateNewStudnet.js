@@ -9,6 +9,7 @@ import {
   where,
   query,
   getDoc,
+  arrayUnion,
   updateDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../firebase";
@@ -81,8 +82,10 @@ const CreateNewStudnet = () => {
               //    setNewUser({ ...newUser, avater: valueRef.current })
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
-                setDoc(doc(firestoreDb, "students", uuid()), newUser)
-                  .then((reponse) =>
+                var newUID = uuid();
+                setDoc(doc(firestoreDb, "students", newUID), newUser)
+                  .then(
+                    (reponse) => modifyClassWithStudent(newUID, newUser.class),
                     message.success("Student Added Successfuly")
                   )
                   .catch((error) => {
@@ -130,6 +133,12 @@ const CreateNewStudnet = () => {
   const onRemove = () => {
     setFile("");
   };
+  const modifyClassWithStudent = async (studnetId, classID) => {
+    const washingtonRef = doc(firestoreDb, "class", classID);
+    await updateDoc(washingtonRef, {
+      student: arrayUnion(studnetId),
+    });
+  };
 
   const createNewStudent = async () => {
     setLoadingButton(true);
@@ -138,11 +147,10 @@ const CreateNewStudnet = () => {
   };
   const handlelevel = async (value) => {
     var data = await getCourses(value);
-    console.log("curcuse ", value);
     await setNewUser({ ...newUser, courses: data });
     await setNewUser({ ...newUser, class: value });
 
-    console.log(newUser);
+    modifyClassWithStudent(value);
   };
 
   const handleStudent = (e) => {

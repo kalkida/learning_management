@@ -110,6 +110,7 @@ function UpdateClass() {
   ];
 
   const handleUpdate = async () => {
+    console.log(updateClass);
     setLoading(true);
     setDoc(doc(firestoreDb, "class", data.key), updateClass, { merge: true })
       .then((response) => {
@@ -259,10 +260,11 @@ function UpdateClass() {
   }, []);
 
   const handleStudent = (value) => {
-    value.map(async (item, i) => {
-      const response = await getStudentID(item);
-      value[i] = response.key;
-    });
+    console.log("value", value);
+    // value.map(async (item, i) => {
+    //   const response = await getStudentID(item);
+    //   value[i] = response.key;
+    // });
     setUpdateClass({ ...updateClass, student: value });
   };
   const handleCourse = (value) => {

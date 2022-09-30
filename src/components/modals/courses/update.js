@@ -60,6 +60,8 @@ function UpdateCourse() {
 
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
 
+  const addToclass = async (id) => {};
+
   useEffect(() => {
     getCourseData();
     setTimeout(() => {

@@ -175,7 +175,6 @@ export default function AddTeacher() {
   };
 
   const getData = async (data) => {
-
     data.class?.map(async (item, index) => {
       data.class[index] = await getClassData(item);
     });
@@ -204,15 +203,14 @@ export default function AddTeacher() {
       setData(temporary);
       setTableTextLoading(false);
     }, 2000);
-
   };
 
   const handleView = (data) => {
     navigate("/view-teacher", { state: { data } });
-
   };
 
   const handleUpdate = (data) => {
+    console.log(data);
     navigate("/update-teacher", { state: { data } });
   };
 
@@ -227,11 +225,10 @@ export default function AddTeacher() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data)
+      temporary.push(data);
     });
     setClasses(temporary);
-  }
-
+  };
 
   const getCourse = async () => {
     var branches = await getSchool();
@@ -244,18 +241,18 @@ export default function AddTeacher() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data)
+      temporary.push(data);
     });
     setCourse(temporary);
-  }
+  };
 
   const handleFilterSubject = async (value) => {
-
     if (value) {
       var branches = await getSchool();
       const q = query(
         collection(firestoreDb, "teachers"),
-        where("school_id", "in", branches.branches), where("course", "array-contains", value)
+        where("school_id", "in", branches.branches),
+        where("course", "array-contains", value)
       );
       var temporary = [];
       const snap = await getDocs(q);
@@ -263,7 +260,7 @@ export default function AddTeacher() {
         var data = doc.data();
         data.key = doc.id;
         getData(data).then((response) => temporary.push(response));
-      })
+      });
 
       setTimeout(() => {
         setData(temporary);
@@ -274,20 +271,24 @@ export default function AddTeacher() {
   const handleFilterClass = async (value) => {
     if (value) {
       var branches = await getSchool();
-      const q = query(collection(firestoreDb, "teachers"), where("school_id", "in", branches.branches), where("class", "array-contains", value));
+      const q = query(
+        collection(firestoreDb, "teachers"),
+        where("school_id", "in", branches.branches),
+        where("class", "array-contains", value)
+      );
       var temporary = [];
       const snap = await getDocs(q);
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
-        temporary.push(data)
+        temporary.push(data);
         getData(data).then((response) => temporary.push(response));
-      })
+      });
       setTimeout(() => {
         setData(temporary);
       }, 2000);
     }
-  }
+  };
 
   const columns = [
     {
@@ -304,10 +305,7 @@ export default function AddTeacher() {
         return (
           <>
             {value.map((item) => (
-              <h1>
-                {item.course_name}
-              </h1>
-
+              <h1>{item.course_name}</h1>
             ))}
           </>
         );
@@ -334,9 +332,7 @@ export default function AddTeacher() {
         return (
           <>
             {value?.map((item, i) => (
-              <h1>
-                {item.level + item.section}
-              </h1>
+              <h1>{item.level + item.section}</h1>
             ))}
           </>
         );
@@ -374,9 +370,10 @@ export default function AddTeacher() {
             onChange={handleFilterSubject}
           >
             {course?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.course_name}>{item.course_name}</Option>
+              <Option key={item.key} value={item.key} lable={item.course_name}>
+                {item.course_name}
+              </Option>
             ))}
-
           </Select>
           <Select
             style={{ width: 120 }}
@@ -384,7 +381,13 @@ export default function AddTeacher() {
             onChange={handleFilterClass}
           >
             {classes?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.level + item.section}>{item.level + item.section}</Option>
+              <Option
+                key={item.key}
+                value={item.key}
+                lable={item.level + item.section}
+              >
+                {item.level + item.section}
+              </Option>
             ))}
           </Select>
         </div>
@@ -408,8 +411,12 @@ export default function AddTeacher() {
         </div>
       </div>
 
-      <Table style={{ marginTop: 20 }} loading={tableLoading} columns={columns} dataSource={datas} />
-
+      <Table
+        style={{ marginTop: 20 }}
+        loading={tableLoading}
+        columns={columns}
+        dataSource={datas}
+      />
     </div>
   );
 }
