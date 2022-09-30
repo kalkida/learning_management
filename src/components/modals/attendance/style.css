@@ -1,0 +1,16 @@
+.at-filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.at-filters div:nth-child(1),
+.at-filters div:nth-child(2) {
+    margin-right: 10px;
+}
+
+.view-header {
+    margin-bottom: 25px;
+    font-weight: 600;
+    font-size: 28px;
+}
