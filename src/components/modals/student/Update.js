@@ -68,45 +68,53 @@ function UpdateStudents() {
     setFile(event.target.files[0]);
   };
 
-  const handleUpdate = () => {
-    setLoading(true);
-    if (!file) {
-      setDoc(doc(firestoreDb, "students", data.key), updateStudent, {
-        merge: true,
-      })
-        .then((response) => {
-          setLoading(false);
-          message.success("Data is updated successfuly");
-          navigate("/list-student");
-        })
-        .catch((error) => {
-          message.error("Data is not updated");
-          console.log(error);
-        });
-    } else {
-      const storageRef = ref(storage, file.name);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const percentR = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
 
-          // update progress
-          setPercent(percentR);
-        },
-        (err) => console.log(err),
-        () => {
-          // download url
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            valueRef.current = url;
-            if (valueRef.current != null) {
-              updateStudent.avater = valueRef.current;
+    const dateFormat = 'YYYY/MM/DD';
+    const valueRef = useRef();
+    
+    const navigate = useNavigate();
 
-              if (updateStudent.avater !== null) {
-                setDoc(doc(firestoreDb, "students", data.key), updateStudent, {
-                  merge: true,
+    const [loading, setLoading] = useState(false);
+    const [phone, setPhones] = useState("");
+    const [classOption, setClassOption] = useState([]);
+    const [percent, setPercent] = useState(0);
+    const [file, setFile] = useState("");
+    
+     const [classData, setClassData] = useState([]);
+    const { state } = useLocation();
+    const { data } = state;
+    const [allPhone, setAllPhone] = useState(data.phone);
+    const [input, setInputs] = useState([0]);
+    const [updateStudent, setUpdateStudent] = useState({
+        DOB: data.DOB,
+        avater: data.avater,
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        sex: data.sex,
+        section: data.section,
+        level: data.level,
+        phone: data.phone,
+        school_id: data.school_id,
+    })
+
+    const handleChange = (event) => {
+        setFile(event.target.files[0]);
+    }
+
+    const handleUpdate = () => {
+
+        setLoading(true);
+        if (!file) {
+            setDoc(doc(firestoreDb, "students", data.key), updateStudent, { merge: true }).then(
+                response => {
+                    setLoading(false)
+                    message.success("Data is updated successfuly")
+                    navigate('/list-student')
+                })
+                .catch(error => {
+                    message.error("Data is not updated")
+                    console.log(error)
                 })
                   .then((response) => {
                     setLoading(false);
@@ -424,38 +432,30 @@ function UpdateStudents() {
                       {/* {data.phone.map((item, index) => {
        return (<Input disabled={true} defaultValue={item} name="phone" onChange={(e) => onChange(e)} />);
                    })}  */}
-                      {data.phone.map((item, index) => {
-                        return (
-                          <Input
-                            defaultValue={item}
-                            name="phone"
-                            onChange={(e) => setPhone(e, index)}
-                          />
-                        );
-                      })}
-                      {phone !== "" ? (
-                        <Button
-                          onClick={() => {
-                            setInputs([...input, 0]);
-                            setAllPhone([...allPhone, phone]);
-                          }}
-                        >
-                          Add New
-                        </Button>
-                      ) : null}
-                    </div>
-                    <div>
-                      <label>Email</label>
-                      <Input
-                        defaultValue={updateStudent.email}
-                        name="email"
-                        onChange={(e) => onChange(e)}
-                      />
-                    </div>
-                    <div></div>
-                  </div>
-                  <div></div>
-                </div>
+
+                {data.phone.map((item, index) => {
+                  return (<Input  disabled={true} defaultValue={item} name="phone" onChange={(e) => setPhone(e ,index)} />);
+                 })}   
+              {input.map((_, index) => {
+                  return <Input onChange={(e) => setPhone(e , index)} />;
+                 })}
+            {phone.length !== "" ? (
+               <Button
+                 onClick={() => {
+                 setInputs([...input, 0]);
+                 setAllPhone([...allPhone, phone]);
+              }}
+             >
+              Add New
+             </Button>
+          ) : null}            
+            </div>
+              <div>
+                <label>Email</label>
+                <Input defaultValue={updateStudent.email} name="email" onChange={(e) => onChange(e)} />
+              </div>
+              <div>
+
               </div>
               <h1
                 style={{
