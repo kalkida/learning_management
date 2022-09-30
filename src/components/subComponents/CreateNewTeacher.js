@@ -25,7 +25,7 @@ import "../modals/teacher/style.css";
 const { Option } = Select;
 const { Search } = Input;
 
-const gender = ["Male", "Female", "Other"]
+const gender = ["Male", "Female", "Other"];
 
 const CreateNewTeacher = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const CreateNewTeacher = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [selectedClassKeys, setSelectedClassKeys] = useState([])
+  const [selectedClassKeys, setSelectedClassKeys] = useState([]);
   const [subject, setSubject] = useState();
   const searchInput = useRef(null);
   const schools = useSelector((state) => state.user.profile.school);
@@ -54,7 +54,7 @@ const CreateNewTeacher = () => {
     class: "",
     course: [],
     DOB: "",
-    sex: '',
+    sex: "",
     working_since: "",
     phone: "",
     school_id: uid.school,
@@ -171,6 +171,7 @@ const CreateNewTeacher = () => {
   };
 
   const onSelectChangeClass = (newSelectedRowKeys) => {
+    console.log("its me ", newSelectedRowKeys);
     setNewUser({ ...newUser, class: newSelectedRowKeys });
     setSelectedClassKeys(newSelectedRowKeys);
   };
@@ -183,8 +184,8 @@ const CreateNewTeacher = () => {
       Table.SELECTION_INVERT,
       Table.SELECTION_NONE,
       {
-        key: 'odd',
-        text: 'Select Odd Row',
+        key: "odd",
+        text: "Select Odd Row",
         onSelect: (changableRowKeys) => {
           let newSelectedRowKeys = [];
           newSelectedRowKeys = changableRowKeys.filter((_, index) => {
@@ -198,8 +199,8 @@ const CreateNewTeacher = () => {
         },
       },
       {
-        key: 'even',
-        text: 'Select Even Row',
+        key: "even",
+        text: "Select Even Row",
         onSelect: (changableRowKeys) => {
           let newSelectedRowKeys = [];
           newSelectedRowKeys = changableRowKeys.filter((_, index) => {
@@ -215,7 +216,6 @@ const CreateNewTeacher = () => {
     ],
   };
 
-
   const rowSelectionClass = {
     selectedClassKeys,
     onChange: onSelectChangeClass,
@@ -224,8 +224,8 @@ const CreateNewTeacher = () => {
       Table.SELECTION_INVERT,
       Table.SELECTION_NONE,
       {
-        key: 'odd',
-        text: 'Select Odd Row',
+        key: "odd",
+        text: "Select Odd Row",
         onSelect: (changableRowKeys) => {
           let newSelectedRowKeys = [];
           newSelectedRowKeys = changableRowKeys.filter((_, index) => {
@@ -239,8 +239,8 @@ const CreateNewTeacher = () => {
         },
       },
       {
-        key: 'even',
-        text: 'Select Even Row',
+        key: "even",
+        text: "Select Even Row",
         onSelect: (changableRowKeys) => {
           let newSelectedRowKeys = [];
           newSelectedRowKeys = changableRowKeys.filter((_, index) => {
@@ -256,10 +256,9 @@ const CreateNewTeacher = () => {
     ],
   };
 
-
   async function handleUpload() {
     if (!file) {
-      console.log(newUser)
+      console.log(newUser);
       setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
       setDoc(doc(firestoreDb, "users", uuid()), {
         phoneNumber: newUser.phone,
@@ -309,7 +308,6 @@ const CreateNewTeacher = () => {
                 setLoading(false);
               }
             }
-
           });
         }
       );
@@ -394,8 +392,6 @@ const CreateNewTeacher = () => {
     setSubject(coursess);
   };
 
-
-
   const createNewTeacher = async () => {
     await handleUpload();
   };
@@ -415,11 +411,11 @@ const CreateNewTeacher = () => {
   };
 
   const handleFilterSubject = async (value) => {
-
     if (value) {
       const q = query(
         collection(firestoreDb, "courses"),
-        where("school_id", "==", uid.school), where("subject", "==", value)
+        where("school_id", "==", uid.school),
+        where("subject", "==", value)
       );
       var temporary = [];
       const snap = await getDocs(q);
@@ -427,7 +423,7 @@ const CreateNewTeacher = () => {
         var data = doc.data();
         data.key = doc.id;
         getData(data).then((response) => temporary.push(response));
-      })
+      });
       setTimeout(() => {
         setCourseData(temporary);
       }, 2000);
@@ -436,43 +432,40 @@ const CreateNewTeacher = () => {
 
   const handleFilterClass = async (value) => {
     if (value) {
-      const q = query(collection(firestoreDb, "courses"), where("school_id", "==", uid.school), where("class", "==", value));
+      const q = query(
+        collection(firestoreDb, "courses"),
+        where("school_id", "==", uid.school),
+        where("class", "==", value)
+      );
       var temporary = [];
       const snap = await getDocs(q);
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
         getData(data).then((response) => temporary.push(response));
-      })
+      });
       setTimeout(() => {
         setCourseData(temporary);
       }, 2000);
     }
-  }
+  };
 
   const onRemove = () => {
-    setFile('');
-  }
+    setFile("");
+  };
 
   const columns = [
     {
-      title: 'Course',
-      dataIndex: 'course_name',
-      key: 'course_name'
-
-
+      title: "Course",
+      dataIndex: "course_name",
+      key: "course_name",
     },
     {
-      title: 'Subject',
-      dataIndex: 'subject',
-      key: 'subject',
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
       render: (item) => {
-        return (
-          <div>
-            {item.name}
-
-          </div>
-        );
+        return <div>{item.name}</div>;
       },
     },
     {
@@ -489,24 +482,20 @@ const CreateNewTeacher = () => {
         );
       },
     },
-  ]
+  ];
 
   const classColumns = [
     {
-      title: 'Grade',
-      dataIndex: 'level',
-      key: 'course_name'
-
-
+      title: "Grade",
+      dataIndex: "level",
+      key: "course_name",
     },
     {
-      title: 'Section',
-      dataIndex: 'section',
-      key: 'secticon',
-
+      title: "Section",
+      dataIndex: "section",
+      key: "secticon",
     },
-
-  ]
+  ];
 
   useEffect(() => {
     getClass();
@@ -530,7 +519,9 @@ const CreateNewTeacher = () => {
       <div>
         <div className="add-header">
           <h1>Add Teacher</h1>
-          <button onClick={async () => await createNewTeacher()}>Confirm</button>
+          <button onClick={async () => await createNewTeacher()}>
+            Confirm
+          </button>
         </div>
         <div className="add-teacher">
           <div className="avater-img">
@@ -539,13 +530,27 @@ const CreateNewTeacher = () => {
               <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
             </div>
             <div className="file-content">
-              <span>This will be displayed to you when you view this profile</span>
+              <span>
+                This will be displayed to you when you view this profile
+              </span>
 
               <div className="img-btn">
                 <button>
-                  <input type="file" id="browse" name="files" style={{ display: "none" }} onChange={handleFile} accept="/image/*" />
+                  <input
+                    type="file"
+                    id="browse"
+                    name="files"
+                    style={{ display: "none" }}
+                    onChange={handleFile}
+                    accept="/image/*"
+                  />
                   <input type="hidden" id="filename" readonly="true" />
-                  <input type="button" value="Add Photo" id="fakeBrowse" onClick={HandleBrowseClick} />
+                  <input
+                    type="button"
+                    value="Add Photo"
+                    id="fakeBrowse"
+                    onClick={HandleBrowseClick}
+                  />
                 </button>
                 <button onClick={onRemove}>Remove</button>
               </div>
@@ -556,11 +561,17 @@ const CreateNewTeacher = () => {
             <div className="col">
               <div>
                 <label>First Name</label>
-                <Input name="first_name" onChange={(e) => handleChangeTeacher(e)} />
+                <Input
+                  name="first_name"
+                  onChange={(e) => handleChangeTeacher(e)}
+                />
               </div>
               <div>
                 <label>Last Name</label>
-                <Input name="last_name" onChange={(e) => handleChangeTeacher(e)} />
+                <Input
+                  name="last_name"
+                  onChange={(e) => handleChangeTeacher(e)}
+                />
               </div>
             </div>
             <div className="col">
@@ -590,11 +601,7 @@ const CreateNewTeacher = () => {
                   }}
                 >
                   {gender.map((item, index) => (
-                    <Option
-                      key={item.index}
-                      value={item}
-                      label={item}
-                    >
+                    <Option key={item.index} value={item} label={item}>
                       {item}
                     </Option>
                   ))}
@@ -607,8 +614,8 @@ const CreateNewTeacher = () => {
             </div>
           </div>
         </div>
-        <div style={{ marginTop: 20, }}>
-          <div style={{ padding: 20, }}>
+        <div style={{ marginTop: 20 }}>
+          <div style={{ padding: 20 }}>
             <div className="list-header">
               <h1 style={{ fontSize: 28 }}>Add Course </h1>
             </div>
@@ -620,7 +627,9 @@ const CreateNewTeacher = () => {
                   onChange={handleFilterSubject}
                 >
                   {subject?.map((item, i) => (
-                    <Option key={item.key} value={item.key} label={item.name}>{item.name}</Option>
+                    <Option key={item.key} value={item.key} label={item.name}>
+                      {item.name}
+                    </Option>
                   ))}
                 </Select>
                 <Select
@@ -629,7 +638,13 @@ const CreateNewTeacher = () => {
                   onChange={handleFilterClass}
                 >
                   {classData?.map((item, i) => (
-                    <Option key={item.key} value={item.key} label={item.level + item.section}>{item.level + item.section}</Option>
+                    <Option
+                      key={item.key}
+                      value={item.key}
+                      label={item.level + item.section}
+                    >
+                      {item.level + item.section}
+                    </Option>
                   ))}
                 </Select>
               </div>
@@ -647,16 +662,24 @@ const CreateNewTeacher = () => {
               </div>
             </div>
             <br />
-            <Table rowSelection={rowSelection} dataSource={coursesData} columns={columns} />
+            <Table
+              rowSelection={rowSelection}
+              dataSource={coursesData}
+              columns={columns}
+            />
           </div>
         </div>
-        <div >
-          <div style={{ padding: 20, }}>
+        <div>
+          <div style={{ padding: 20 }}>
             <div className="list-header">
               <h1 style={{ fontSize: 28 }}>Add Class </h1>
             </div>
             <br />
-            <Table rowSelection={rowSelectionClass} dataSource={classData} columns={classColumns} />
+            <Table
+              rowSelection={rowSelectionClass}
+              dataSource={classData}
+              columns={classColumns}
+            />
           </div>
         </div>
       </div>

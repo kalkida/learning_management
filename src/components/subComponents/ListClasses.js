@@ -196,6 +196,7 @@ export default function ListClasses() {
       data.key = doc.id;
       temporary.push(data);
     });
+    console.log(temporary);
     setData(temporary);
     setTableLoading(false);
   };

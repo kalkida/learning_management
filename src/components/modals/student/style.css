@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
+    border-width: 2px;
 }
 
 .profile-info h3 {
@@ -11,6 +12,9 @@
 .teacher-avater {
     display: flex;
     align-items: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
 }
 
 .teacher-avater img {

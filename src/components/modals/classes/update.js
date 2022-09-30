@@ -31,6 +31,7 @@ function UpdateClass() {
   const [students, setStudents] = useState([]);
   const [selected, setSelected] = useState([]);
   const [sectionMainData, setSectionMainData] = useState([]);
+  const [studentLoading, setStudentLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
 
@@ -83,7 +84,7 @@ function UpdateClass() {
       key: "email",
     },
     {
-      title: "Level",
+      title: "class",
       dataIndex: "level",
       key: "level",
     },
@@ -109,6 +110,7 @@ function UpdateClass() {
   ];
 
   const handleUpdate = async () => {
+    console.log(updateClass);
     setLoading(true);
     setDoc(doc(firestoreDb, "class", data.key), updateClass, { merge: true })
       .then((response) => {
@@ -127,7 +129,7 @@ function UpdateClass() {
     var data = doc(firestoreDb, "subjects", index);
     var response = await getDoc(data);
     if (response.exists()) {
-      var dats = response.data();
+      var dats = await response.data();
       return dats;
     } else {
       return "";
@@ -142,13 +144,11 @@ function UpdateClass() {
 
     const querySnapshot = await getDocs(q);
     let temporary = [];
-    await querySnapshot.forEach((doc) => {
+    await querySnapshot.forEach(async (doc) => {
       var datause = doc.data();
       datause.key = doc.id;
-      // var subject = getCousreSubject(datause.subject).then((subject) => {
-      //   alert(subject);
-      // });
-      // console.log("data", subject);
+      var subject = await getCousreSubject(datause.subject);
+      console.log("data", subject);
 
       // datause.subject = subject;
       temporary.push(datause);
@@ -223,14 +223,14 @@ function UpdateClass() {
   const getStudenters = async () => {
     var temp = [];
     var students = data.student;
-    console.log("getStudenters", students);
-    data.student.map((id) => {
-      getStudentID(id).then((students) => {
-        console.log("students", students);
-        temp.push(students);
+    students.map((id) => {
+      getStudentID(id).then((stud) => {
+        console.log("students", stud);
+        temp.push(stud);
       });
     });
-    setSelected(temp);
+    console.log("temporary", temp);
+    await setSelected(temp);
   };
 
   const getStudentID = async (ID) => {
@@ -238,10 +238,13 @@ function UpdateClass() {
 
     const docRef = doc(firestoreDb, "students", ID);
     var data = "";
-    await getDoc(docRef).then((response) => {
+    var response = await getDoc(docRef);
+    if (response.exists()) {
       data = response.data();
-      data.key = response.id;
-    });
+    }
+
+    setStudentLoading(false);
+
     return data;
   };
   useEffect(() => {
@@ -257,10 +260,11 @@ function UpdateClass() {
   }, []);
 
   const handleStudent = (value) => {
-    value.map(async (item, i) => {
-      const response = await getStudentID(item);
-      value[i] = response.key;
-    });
+    console.log("value", value);
+    // value.map(async (item, i) => {
+    //   const response = await getStudentID(item);
+    //   value[i] = response.key;
+    // });
     setUpdateClass({ ...updateClass, student: value });
   };
   const handleCourse = (value) => {
@@ -318,7 +322,11 @@ function UpdateClass() {
                       </Select>
                     </div>
                     {/* {data.student.length <= 0 ? ( */}
-                    <Table dataSource={selected} columns={columns} />
+                    <Table
+                      loading={studentLoading}
+                      dataSource={selected}
+                      columns={columns}
+                    />
                   </div>
                   <div className="mb-8">
                     <div className="flex flex-row justify-between">

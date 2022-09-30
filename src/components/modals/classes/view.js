@@ -19,11 +19,8 @@ const { Option } = Select;
 
 function ViewClass() {
   const [datas, setData] = useState([]);
-
-  const[classData , setClassData] = useState([]);
-
-  //const [students, setStudents] = useState([]);
-
+  const [students, setStudents] = useState([]);
+  const [classData, setClassData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   var { data } = state;
@@ -37,23 +34,21 @@ function ViewClass() {
       render: (item) => {
         return <div>{item.name}</div>;
       },
-
-
     },
- 
+
     {
       title: "Period",
       dataIndex: "schedule",
       key: "schedule",
       render: (value) => {
-        moment.locale('en')
+        moment.locale("en");
         return (
           <>
             {value?.map((item, i) => (
-               <h1>
-                 {/* {moment(item.time[0]).format('d MMM')} */}
-                {(item.time + "    ,   ")} 
-             </h1>
+              <h1>
+                {/* {moment(item.time[0]).format('d MMM')} */}
+                {item.time + "    ,   "}
+              </h1>
             ))}
           </>
         );
@@ -67,15 +62,13 @@ function ViewClass() {
         return (
           <>
             {value?.map((item, i) => (
-               <h1>
-               {(item.day)}
-             </h1>
+              <h1>{item.day}</h1>
             ))}
           </>
         );
       },
     },
- 
+
     // {
     //   title: "Tuesday",
     //   dataIndex: "schedule",
@@ -249,7 +242,6 @@ function ViewClass() {
     return data;
   };
 
-  
   const getCourses = async () => {
     var branches = await getSchool();
     const q = query(

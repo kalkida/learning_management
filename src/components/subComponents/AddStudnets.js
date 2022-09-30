@@ -10,7 +10,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { Button } from "antd";
-import { firebaseAuth, firestoreDb } from "../../firebase";
+import { firestoreDb } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
@@ -19,35 +19,22 @@ import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
 import "../modals/courses/style.css";
-import {
-  InfoCircleOutlined,
-  UserOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import View from "../modals/student/View";
-import Update from "../modals/student/Update";
-import { Tooltip } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+
 const { Option } = Select;
 const { Search } = Input;
 
-
 export default function AddStudnets() {
   const uid = useSelector((state) => state.user.profile);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const shcool = useSelector((state) => state.user.shcool);
   const [datas, setData] = useState([]);
-  const [viewLoading, setViewLoading] = useState(false);
-  const [openView, setViewOpen] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const [course, setCourse] = useState([]);
   const [classes, setClasses] = useState([]);
   const searchInput = useRef(null);
-  const [viewData, setViewData] = useState();
-  const [updateData, setUpdateData] = useState();
   const [updateComplete, setUpdateComplete] = useState(false);
-
+  const [loading, setLoading] = useState(true);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -60,7 +47,6 @@ export default function AddStudnets() {
     setSearchText("");
   };
 
-  
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -153,30 +139,9 @@ export default function AddStudnets() {
       ),
   });
 
-  // const getSchool = async () => {
-  //   const docRef = doc(firestoreDb, "schools", uid.school);
-  //   const docSnap = await getDoc(docRef);
-
-  //   if (docSnap.exists()) {
-  //     var dataset = docSnap.data();
-  //     return dataset;
-  //   } else {
-  //   }
-  // };
-
-  // const getClassData = async (ID) => {
-  //   const docRef = doc(firestoreDb, "class", ID);
-  //   var data = "";
-  //   await getDoc(docRef).then((response) => {
-  //     data = response.data();
-  //     data.key = response.id;
-  //   });
-  //   return data;
-  // };
-
   const handleView = (data) => {
+    console.log(data);
     navigate("/view-student", { state: { data } });
-
   };
 
   const handleUpdate = (data) => {
@@ -193,7 +158,14 @@ export default function AddStudnets() {
     } else {
     }
   };
-
+  const getClassDataOne = async (id) => {
+    const docRef = doc(firestoreDb, "class", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      var dataset = docSnap.data();
+      return dataset;
+    }
+  };
   const getStudents = async () => {
     const q = query(
       collection(firestoreDb, "students"),
@@ -204,74 +176,73 @@ export default function AddStudnets() {
     snap.forEach((doc) => {
       var data = doc.data();
       data.key = doc.id;
+      getClassDataOne(data.class).then((res) => {
+        data.class = res;
+      });
       temporary.push(data);
-      getData(data).then((response) => temporary.push(response));
     });
-    //setData(temporary);
-    setTimeout(() => {
-      setData(temporary);
-    }, 2000);
+    setLoading(false);
+    setData(temporary);
   };
 
   const getClassData = async (ID) => {
     const docRef = doc(firestoreDb, "class", ID);
     var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
+    var response = await getDoc(docRef);
+    data = response.data();
+    data.key = response.id;
     return data;
   };
 
   const getData = async (data) => {
-    data.level = await getClassData(data.level);
-    // data.level?.map(async (item, index) => {
-    //   data.level[0] = await getClassData(item);
-    // });
+    console.log("data is ", data);
+    data.class = await getClassData(data.class);
     return data;
   };
 
   const handleFilterClass = async (value) => {
-    console.log(value)
-    setData("")
+    setData("");
     if (value) {
       var branches = await getSchool();
-      const q = query(collection(firestoreDb, "students"),
-       where("level", "==", value));
+      const q = query(
+        collection(firestoreDb, "students"),
+        where("level", "==", value)
+      );
       var temporary = [];
       const snap = await getDocs(q);
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
-        temporary.push(data)
-        console.log(doc.data())
+        temporary.push(data);
+        console.log(doc.data());
         getData(data).then((response) => temporary.push(response));
-      })
-       //setData(temporary);
+      });
+      //setData(temporary);
       setTimeout(() => {
         setData(temporary);
       }, 2000);
     }
-  }
+  };
 
   const handleFilterSection = async (value) => {
     if (value) {
       var branches = await getSchool();
-      const q = query(collection(firestoreDb, "students"), where("school_id", "in", branches.branches), where("section", "array-contains", value));
+      const q = query(
+        collection(firestoreDb, "students"),
+        where("school_id", "in", branches.branches),
+        where("section", "array-contains", value)
+      );
       var temporary = [];
       const snap = await getDocs(q);
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
-        temporary.push(data)
+        temporary.push(data);
         getData(data).then((response) => temporary.push(response));
-      })
-       setData(temporary);
-      // setTimeout(() => {
-      //   setData(temporary);
-      // }, 2000);
+      });
+      setData(temporary);
     }
-  }
+  };
 
   const getClass = async () => {
     var branches = await getSchool();
@@ -284,12 +255,10 @@ export default function AddStudnets() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      temporary.push(data)
+      temporary.push(data);
     });
     setClasses(temporary);
-  }
-
-
+  };
 
   const columns = [
     {
@@ -306,9 +275,7 @@ export default function AddStudnets() {
         return (
           <>
             {value?.map((item, i) => (
-               <h1>
-               {item}
-             </h1>
+              <h1>{item}</h1>
             ))}
           </>
         );
@@ -320,24 +287,17 @@ export default function AddStudnets() {
       key: "email",
     },
     {
-      title: "Level",
-      dataIndex: "level",
-      key: "level",
+      title: "Class",
+      dataIndex: "class",
+      key: "class",
       render: (item) => {
-        return  <h1>
-        {item.level}
-      </h1>;
+        return (
+          <h1>
+            {item.section}
+            {item.level}
+          </h1>
+        );
       },
-    },
-    {
-      title: "Section",
-      dataIndex: "section",
-      key: "section",
-      // render: (item) => {
-      //   return  <h1>
-      //   {item.section}
-      // </h1>;
-      // },
     },
 
     {
@@ -370,7 +330,7 @@ export default function AddStudnets() {
 
   return (
     <div>
-        <div className="list-header">
+      <div className="list-header">
         <h1 style={{ fontSize: 28 }}>List Of Students</h1>
       </div>
       <div className="list-sub">
@@ -381,9 +341,10 @@ export default function AddStudnets() {
             onChange={handleFilterClass}
           >
             {classes?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.level}>{item.level}</Option>
+              <Option key={item.key} value={item.key} lable={item.level}>
+                {item.level}
+              </Option>
             ))}
-
           </Select>
           <Select
             style={{ width: 120 }}
@@ -391,7 +352,9 @@ export default function AddStudnets() {
             onChange={handleFilterSection}
           >
             {classes?.map((item, i) => (
-              <Option key={item.key} value={item.section} lable={item.section}>{item.section}</Option>
+              <Option key={item.key} value={item.section} lable={item.section}>
+                {item.section}
+              </Option>
             ))}
           </Select>
         </div>
@@ -414,24 +377,13 @@ export default function AddStudnets() {
           </div>
         </div>
       </div>
-      
 
-      <Table style={{ marginTop: 20 }} columns={columns} dataSource={datas} />
-      {/* {viewData ? (
-        <View
-          openView={openView}
-          handleViewCancel={handleViewCancel}
-          data={viewData}
-        />
-      ) : null}
-      {openUpdate ? (
-        <Update
-          openUpdate={openUpdate}
-          handleUpdateCancel={handleUpdateCancel}
-          data={updateData}
-          setUpdateComplete={setUpdateComplete}
-        />
-      ) : null} */}
+      <Table
+        loading={loading}
+        style={{ marginTop: 20 }}
+        columns={columns}
+        dataSource={datas}
+      />
     </div>
   );
 }

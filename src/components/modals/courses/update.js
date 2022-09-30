@@ -60,6 +60,8 @@ function UpdateCourse() {
 
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
 
+  const addToclass = async (id) => {};
+
   useEffect(() => {
     getCourseData();
     setTimeout(() => {
@@ -488,7 +490,6 @@ function UpdateCourse() {
             className="text-[#E7752B] "
             wrapperClassName="text-[#E7752B]"
           />
-          {/* <h1 className="ml-20">Loading Course</h1> */}
         </div>
       )}
     </>
