@@ -1,4 +1,4 @@
-.profile-header {
+.st-profile-header {
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
@@ -334,4 +334,32 @@
     border-color: #e66937 !important;
     outline: 0;
     -webkit-box-shadow: 0 0 0 2px rgba(233, 170, 87, 0.2) !important;
+}
+
+
+.st-at-tags {
+    display: flex;
+    float: right;
+    margin-top: -50px;
+    color: #31b6eb;
+}
+
+.st-at-tags div .ant-tag:nth-child(1) {
+    margin-right: 0 !important;
+}
+
+.site-calendar-card {
+    width: 25%;
+    margin: 15px;
+    border: 1px solid #f0f0f0;
+    border-radius: 2px;
+}
+
+.calender-card {
+    display: flex;
+}
+
+.st-at h1 {
+    font-size: 28px;
+    font-weight: 600;
 }

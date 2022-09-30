@@ -31,7 +31,7 @@ const CreateNewTeacher = () => {
   const navigate = useNavigate();
   const [percent, setPercent] = useState(0);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [file, setFile] = useState("");
 
   const [classData, setClassData] = useState([]);
@@ -258,7 +258,6 @@ const CreateNewTeacher = () => {
 
   async function handleUpload() {
     if (!file) {
-      console.log(newUser);
       setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
       setDoc(doc(firestoreDb, "users", uuid()), {
         phoneNumber: newUser.phone,
@@ -270,7 +269,6 @@ const CreateNewTeacher = () => {
         school: schools,
       });
       navigate("/list-teacher");
-      setLoading(false);
     } else {
       const storageRef = ref(storage, file.name);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -291,7 +289,6 @@ const CreateNewTeacher = () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             valueRef.current = url;
             if (valueRef.current != null) {
-              setLoading(true);
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
                 setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
@@ -305,7 +302,6 @@ const CreateNewTeacher = () => {
                   school: schools,
                 });
                 navigate("/list-teacher");
-                setLoading(false);
               }
             }
           });
@@ -367,11 +363,17 @@ const CreateNewTeacher = () => {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      getData(data).then((response) => temporary.push(response));
+      getData(data).then((response) => {
+        temporary.push(response)
+        console.log(response)
+      }
+
+      );
     });
 
     setTimeout(() => {
       setCourseData(temporary);
+      setLoading(false)
     }, 2000);
   };
 
@@ -663,6 +665,7 @@ const CreateNewTeacher = () => {
             </div>
             <br />
             <Table
+              loading={loading}
               rowSelection={rowSelection}
               dataSource={coursesData}
               columns={columns}

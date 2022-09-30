@@ -222,7 +222,7 @@ function UpdateStudents() {
   return (
     <>
       <div>
-        <div className="profile-header">
+        <div className="st-profile-header">
           <div className="flex flex-row align-middle">
             <img
               className="w-[8vw] h-[15vh] rounded-full"
