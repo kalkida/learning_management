@@ -18,6 +18,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Select, TimePicker, Tabs, Table, message, Spin } from "antd";
 import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
+import { async } from "@firebase/util";
 
 const { Option } = Select;
 
@@ -28,6 +29,7 @@ function UpdateClass() {
   const [courses, setcourse] = useState([]);
   const [item, setItem] = useState([]);
   const [students, setStudents] = useState([]);
+  const [selected, setSelected] = useState([]);
   const [sectionMainData, setSectionMainData] = useState([]);
   const { state } = useLocation();
   const { data } = state;
@@ -97,20 +99,11 @@ function UpdateClass() {
       },
     },
     {
-      title: "Level",
-      dataIndex: "class",
-      key: "class",
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
       render: (item) => {
-        console.log(item);
-        return <div>{item.level}</div>;
-      },
-    },
-    {
-      title: "Section",
-      dataIndex: "class",
-      key: "class",
-      render: (item) => {
-        return <div>{item.section}</div>;
+        // return <div>{item.level}</div>;
       },
     },
   ];
@@ -130,36 +123,41 @@ function UpdateClass() {
       });
     // }
   };
-  const getClassCourse = async (index) => {
-    var data = doc(firestoreDb, "class", index);
+  const getCousreSubject = async (index) => {
+    var data = doc(firestoreDb, "subjects", index);
     var response = await getDoc(data);
     if (response.exists()) {
       var dats = response.data();
       return dats;
     } else {
-      // doc.data() will be undefined in this case
       return "";
     }
   };
 
   const getCourse = async (course) => {
     const q = query(
-      collection(firestoreDb, "courses")
-      // where("course_id", "in", course)
+      collection(firestoreDb, "courses"),
+      where("course_id", "in", course)
     );
+
+    const querySnapshot = await getDocs(q);
     let temporary = [];
-    const snap = await getDocs(q);
-    snap.forEach(async (doc) => {
+    await querySnapshot.forEach((doc) => {
       var datause = doc.data();
-      var course = await getClassCourse(datause.class);
       datause.key = doc.id;
-      datause.class = course;
+      // var subject = getCousreSubject(datause.subject).then((subject) => {
+      //   alert(subject);
+      // });
+      // console.log("data", subject);
+
+      // datause.subject = subject;
       temporary.push(datause);
     });
+
+    console.log("datause", temporary);
     await setItem(temporary);
   };
-
-  const getStudents = async () => {
+  const getStudent = async () => {
     const children = [];
     const q = query(
       collection(firestoreDb, "students"),
@@ -170,6 +168,22 @@ function UpdateClass() {
       var datas = doc.data();
       datas.key = doc.id;
       children.push(datas);
+    });
+    setStudents(children);
+  };
+  const getStudents = async () => {
+    const children = [];
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      var datas = doc.data();
+      if (data.student.includes(datas.student_id)) {
+        datas.key = doc.id;
+        children.push(datas);
+      }
     });
     setStudents(children);
   };
@@ -206,8 +220,22 @@ function UpdateClass() {
     setcourse(children);
     setSectionMainData(sectionArray);
   };
+  const getStudenters = async () => {
+    var temp = [];
+    var students = data.student;
+    console.log("getStudenters", students);
+    data.student.map((id) => {
+      getStudentID(id).then((students) => {
+        console.log("students", students);
+        temp.push(students);
+      });
+    });
+    setSelected(temp);
+  };
 
   const getStudentID = async (ID) => {
+    console.log("dat", ID);
+
     const docRef = doc(firestoreDb, "students", ID);
     var data = "";
     await getDoc(docRef).then((response) => {
@@ -217,28 +245,31 @@ function UpdateClass() {
     return data;
   };
   useEffect(() => {
+    getStudenters();
     getClass();
     getStudents();
     getCourse(data.course);
     setTimeout(() => {
       setLoading(true);
+
+      getStudent();
     }, 2000);
   }, []);
 
   const handleStudent = (value) => {
     value.map(async (item, i) => {
       const response = await getStudentID(item);
-      value[i] = response;
+      value[i] = response.key;
     });
     setUpdateClass({ ...updateClass, student: value });
   };
   const handleCourse = (value) => {
-    console.log("dada", value);
+    // console.log("dada", value);
     // value.map(async (item, i) => {
     //   const response = await getStudentID(item);
     //   value[i] = response;
     // });
-    setUpdateClass({ ...updateClass, student: value });
+    setUpdateClass({ ...updateClass, course: value });
   };
 
   return (
@@ -247,7 +278,9 @@ function UpdateClass() {
         <>
           {" "}
           <div>
-            <h1 className="text-4xl -mt-14">Class Update</h1>
+            <h1 className="text-4xl -mt-14">
+              Edit Class {data.level} - {data.section}
+            </h1>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
                 <Tabs.TabPane tab="Profile" key="1">
@@ -284,7 +317,8 @@ function UpdateClass() {
                         ))}
                       </Select>
                     </div>
-                    <Table dataSource={data.student} columns={columns} />
+                    {/* {data.student.length <= 0 ? ( */}
+                    <Table dataSource={selected} columns={columns} />
                   </div>
                   <div className="mb-8">
                     <div className="flex flex-row justify-between">

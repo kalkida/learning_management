@@ -45,6 +45,8 @@ import ViewClass from "./modals/classes/view";
 import UpdateClass from "./modals/classes/update";
 import ViewStudent from "./modals/student/View";
 import UpdateStudent from "./modals/student/Update";
+import AttendanceList from "./subComponents/AttendanceList";
+import AttendanceView from "./modals/attendance/view";
 
 const { Header, Content, Sider } = Layout;
 
@@ -451,6 +453,8 @@ const Layouts = () => {
               <Route path="/view-student" element={<ViewStudent />} />
               <Route path="/update-student" element={<UpdateStudent />} />
               <Route path="/announcment" element={<ListAnnouncment />} />
+              <Route path="/attendance" element={<AttendanceList />} />
+              <Route path="/view-attendance" element={<AttendanceView />} />
             </Routes>
           </Content>
         </Layout>

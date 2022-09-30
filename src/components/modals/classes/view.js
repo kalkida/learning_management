@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Modal,
-  Form,
-  Input,
-  Button,
-  Select,
-  TimePicker,
-  Tabs,
-  Table,
-} from "antd";
+import { Button, Select, Tabs, Table } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import "./style.css";
@@ -22,22 +13,21 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
-import { firebaseAuth, firestoreDb } from "../../../firebase";
+import { firestoreDb } from "../../../firebase";
 
 const { Option } = Select;
 
 function ViewClass() {
   const [datas, setData] = useState([]);
+
   const[classData , setClassData] = useState([]);
+
+  //const [students, setStudents] = useState([]);
+
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
-  const { data } = state;
-  const [coursesData, setCourseData] = useState([]);
-  console.log(data);
-
+  var { data } = state;
   const navigate = useNavigate();
-
-  const dataschedule = [{}];
 
   const scheduleColumn = [
     {
@@ -267,23 +257,40 @@ function ViewClass() {
       where("school_id", "in", branches.branches)
     );
     var temporary = [];
+    console.log(data.course);
     const snap = await getDocs(q);
-    console.log("dataaa     ", data.course.length);
     for (var i = 0; i < data.course.length; i++) {
       snap.forEach(async (doc) => {
         var datause = doc.data();
+        console.log(datause);
         datause.key = doc.id;
         if (datause.key == data.course[i]) {
-          console.log("==============================");
-          console.log(data.course[i]);
-          console.log("==============================");
           getData(datause).then((response) => temporary.push(response));
         }
       });
     }
+    console.log(temporary);
     setTimeout(() => {
       setData(temporary);
     }, 2000);
+  };
+
+  const getStudents = async (ids) => {
+    var temporary = [];
+    if (ids.length > 0) {
+      const q = query(
+        collection(firestoreDb, "students")
+        // where("student_id", "in", ids)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        var data = doc.data();
+        if (ids.includes(doc.id)) {
+          temporary.push(data);
+        }
+      });
+      setStudents(temporary);
+    }
   };
 
   const handleUpdate = () => {
@@ -291,6 +298,7 @@ function ViewClass() {
   };
 
   useEffect(() => {
+    getStudents(data.student);
     getCourses();
   }, []);
   return (
@@ -326,50 +334,16 @@ function ViewClass() {
             </Button>
             <div className="asssign-teacher">
               <h4 className="text-[24px] mb-10">Assigned Students</h4>
-              <Table dataSource={data.student} columns={columns} />
+              <Table dataSource={students} columns={columns} />
             </div>
             <div className="asssign-teacher -mt-10">
               <h4 className="text-[24px]">Assigned Courses</h4>
               <Table dataSource={datas} columns={courseColumns} />
             </div>
             <div className="asssign-teacher">
-              <h4>Weekly Schedule</h4>
+              <h4 className="text-[24px]">Weekly Schedule</h4>
               <Table dataSource={datas} columns={scheduleColumn} />
             </div>
-            {/* <div className="schedule">
-              <h4>Weekly Schedule</h4>
-              <div className="card-schedule">
-                <h2 >Class {data.class ? data.class.level + data.class.section : ""}</h2>
-                <div className="schedule-header">
-                  <div>
-                    <p> Period</p>
-                  </div>
-                  <div>
-                    <p> Start time</p>
-                    <p> End time</p>
-                  </div>
-                </div>
-                {data.schedule?.map((item) => (
-                  <>
-                    <Input value={item.day} style={{ width: "40%" }} />
-                    <TimePicker.RangePicker
-                      style={{ width: "60%" }}
-                      use12Hours
-                      format={"hh:mm"}
-                      value={
-                        item.time?.length
-                          ? [
-                            moment(JSON.parse(item?.time[0])),
-                            moment(JSON.parse(item?.time[1])),
-                          ]
-                          : []
-                      }
-                    />
-                  </>
-                ))}
-
-              </div>
-            </div> */}
           </Tabs.TabPane>
           <Tabs.TabPane tab="Attendance" key="2">
             <AttendanceList />
@@ -381,68 +355,3 @@ function ViewClass() {
 }
 
 export default ViewClass;
-
-// import React, { useEffect, useState } from "react";
-// import { Modal, Form, Input, Button, Select } from "antd";
-
-// const { Option } = Select;
-
-// function View({ handleCancel, openView, data }) {
-//   return (
-//     <>
-//       {data && openView ? (
-//         <Modal
-//           visible={openView}
-//           title="View Class"
-//           onCancel={handleCancel}
-//           footer={[
-//             <Button key="back" onClick={handleCancel}>
-//               Return
-//             </Button>,
-//           ]}
-//         >
-//           <Form
-//             labelCol={{ span: 4 }}
-//             wrapperCol={{ span: 14 }}
-//             layout="horizontal"
-//           >
-//             <Form.Item label="Grade">
-//               <Input value={data?.level} />
-//             </Form.Item>
-//             <Form.Item label="Section">
-//               <Input value={data?.section} />
-//             </Form.Item>
-//             <Form.Item label="Students">
-//               <Select
-//                 style={{
-//                   width: "100%",
-//                 }}
-//                 defaultValue={data?.student}
-//                 maxTagCount={2}
-//                 optionLabelProp="label"
-//                 mode="multiple"
-//               >
-//                 {data.student?.map((item, index) => (
-//                   <Option
-//                     key={item.key}
-//                     label={
-//                       item.first_name +
-//                       " " +
-//                       (item.last_name ? item.last_name : "")
-//                     }
-//                   >
-//                     {item.first_name +
-//                       " " +
-//                       (item.last_name ? item.last_name : "")}
-//                   </Option>
-//                 ))}
-//               </Select>
-//             </Form.Item>
-//           </Form>
-//         </Modal>
-//       ) : null}
-//     </>
-//   );
-// }
-
-// export default View;

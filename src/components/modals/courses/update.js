@@ -217,12 +217,12 @@ function UpdateCourse() {
 
   const columns = [
     {
-      title: "Teacher",
+      title: "First Name",
       dataIndex: "first_name",
       key: "first_name",
     },
     {
-      title: "",
+      title: "Last Name",
       dataIndex: "last_name",
       key: "last_name",
     },
@@ -343,7 +343,7 @@ function UpdateCourse() {
                 </div>
                 <div className="asssign-teacher">
                   <div className="assign-header">
-                    <h4>Assigned Teachers</h4>
+                    <h4 className="text-xl">Assigned Teachers</h4>
                     <Select
                       style={{ width: "30%" }}
                       showArrow={true}
@@ -372,7 +372,7 @@ function UpdateCourse() {
                     </Select>
                   </div>
                   {teacherView ? (
-                    <Table dataSource={teacherData} columns={columns} />
+                    <Table dataSource={teachers} columns={columns} />
                   ) : null}
                 </div>
                 <div className="schedule">
