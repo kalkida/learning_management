@@ -36,6 +36,7 @@ const CreateCrouse = () => {
     subject: "",
     schedule: [{ day: "", time: [] }],
     description: "",
+    course_id: "",
     school_id: uid.school,
   });
 
@@ -96,7 +97,11 @@ const CreateCrouse = () => {
     const checkIsExist = (await getDocs(q)).empty;
 
     if (checkIsExist) {
-      setDoc(doc(firestoreDb, "courses", uuid()), newCourse)
+      var courseId = uuid();
+      setDoc(doc(firestoreDb, "courses", courseId), {
+        ...newCourse,
+        course_id: courseId,
+      })
         .then((reponse) => {
           message.success("Course Created");
           navigate("/list-Course");
