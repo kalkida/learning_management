@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Form, Input, Button, Select, DatePicker, Space, Table } from "antd";
-import { Link } from "react-router-dom";
+import { addSingleTeacherToCourse } from "../modals/funcs";
 import {
   doc,
   setDoc,
@@ -17,8 +17,6 @@ import uuid from "react-uuid";
 import "../../css/teacher.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { SearchOutlined } from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
 import "../modals/courses/style.css";
 import "../modals/teacher/style.css";
 
@@ -36,14 +34,12 @@ const CreateNewTeacher = () => {
 
   const [classData, setClassData] = useState([]);
   const [coursesData, setCourseData] = useState([]);
-  const [secData, setSecData] = useState([]);
+  const [courseLoading, setCourseLoading] = useState(true);
+  const [classLoading, setClassLoading] = useState(true);
 
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedClassKeys, setSelectedClassKeys] = useState([]);
   const [subject, setSubject] = useState();
-  const searchInput = useRef(null);
   const schools = useSelector((state) => state.user.profile.school);
   const uid = useSelector((state) => state.user.profile);
   const [newUser, setNewUser] = useState({
@@ -61,109 +57,6 @@ const CreateNewTeacher = () => {
   });
 
   const valueRef = useRef();
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
-
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
-
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div
-        style={{
-          padding: 8,
-        }}
-      >
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{
-            marginBottom: 8,
-            display: "block",
-          }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined
-        style={{
-          color: filtered ? "#1890ff" : undefined,
-        }}
-      />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{
-            backgroundColor: "#ffc069",
-            padding: 0,
-          }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
 
   const onSelectChange = (newSelectedRowKeys) => {
     setNewUser({ ...newUser, course: newSelectedRowKeys });
@@ -258,8 +151,9 @@ const CreateNewTeacher = () => {
 
   async function handleUpload() {
     if (!file) {
-      setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
-      setDoc(doc(firestoreDb, "users", uuid()), {
+      var newUserUUID = uuid();
+      setDoc(doc(firestoreDb, "teachers", newUserUUID), newUser);
+      setDoc(doc(firestoreDb, "users", newUserUUID), {
         phoneNumber: newUser.phone,
         role: {
           isAdmin: false,
@@ -267,6 +161,9 @@ const CreateNewTeacher = () => {
           isParent: false,
         },
         school: schools,
+      });
+      newUser.course.map((item) => {
+        addSingleTeacherToCourse(newUserUUID, item);
       });
       navigate("/list-teacher");
     } else {
@@ -325,6 +222,7 @@ const CreateNewTeacher = () => {
       });
     });
     setClassData(children);
+    setClassLoading(false);
   };
 
   const getClassData = async (ID) => {
@@ -364,16 +262,15 @@ const CreateNewTeacher = () => {
       var data = doc.data();
       data.key = doc.id;
       getData(data).then((response) => {
-        temporary.push(response)
-        console.log(response)
-      }
-
-      );
+        temporary.push(response);
+        console.log(response);
+      });
     });
 
     setTimeout(() => {
       setCourseData(temporary);
-      setLoading(false)
+      setCourseLoading(false);
+      setClassLoading(false);
     }, 2000);
   };
 
@@ -424,11 +321,11 @@ const CreateNewTeacher = () => {
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
-        getData(data).then((response) => temporary.push(response));
+        getData(data).then((response) => {
+          temporary.push(response);
+        });
       });
-      setTimeout(() => {
-        setCourseData(temporary);
-      }, 2000);
+      setCourseData(temporary);
     }
   };
 
@@ -665,7 +562,7 @@ const CreateNewTeacher = () => {
             </div>
             <br />
             <Table
-              loading={loading}
+              loading={courseLoading}
               rowSelection={rowSelection}
               dataSource={coursesData}
               columns={columns}
@@ -679,6 +576,7 @@ const CreateNewTeacher = () => {
             </div>
             <br />
             <Table
+              loading={classLoading}
               rowSelection={rowSelectionClass}
               dataSource={classData}
               columns={classColumns}

@@ -140,11 +140,12 @@ export default function AddStudnets() {
   });
 
   const handleView = (data) => {
-    console.log(data);
+    console.log("course", data);
     navigate("/view-student", { state: { data } });
   };
 
   const handleUpdate = (data) => {
+    console.log("data is set", data);
     navigate("/update-student", { state: { data } });
   };
 
@@ -163,6 +164,7 @@ export default function AddStudnets() {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       var dataset = docSnap.data();
+      dataset.key = id;
       return dataset;
     }
   };
@@ -187,15 +189,13 @@ export default function AddStudnets() {
 
   const getClassData = async (ID) => {
     const docRef = doc(firestoreDb, "class", ID);
-    var data = "";
     var response = await getDoc(docRef);
-    data = response.data();
+    var data = response.data();
     data.key = response.id;
     return data;
   };
 
   const getData = async (data) => {
-    console.log("data is ", data);
     data.class = await getClassData(data.class);
     return data;
   };
@@ -214,13 +214,9 @@ export default function AddStudnets() {
         var data = doc.data();
         data.key = doc.id;
         temporary.push(data);
-        console.log(doc.data());
         getData(data).then((response) => temporary.push(response));
       });
-      //setData(temporary);
-      setTimeout(() => {
-        setData(temporary);
-      }, 2000);
+      setData(temporary);
     }
   };
 
@@ -293,8 +289,8 @@ export default function AddStudnets() {
       render: (item) => {
         return (
           <h1>
-            {item.section}
-            {item.level}
+            {item?.section}
+            {item?.level}
           </h1>
         );
       },
