@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Tabs, Table, Tag, Calendar } from "antd";
+import { Button, Tabs, Table, Tag, Calendar, Col, Radio, Row, Select, Typography } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import BarGraphe from "../../graph/BarGraph";
+import moment from 'moment';
+
 
 import "./style.css";
 
@@ -14,6 +16,7 @@ function ViewStudent() {
   const { state } = useLocation();
   const [courses, setCourses] = useState([]);
   const [loadingCourse, setLoadingCourse] = useState(true);
+  const value = moment('2017-01-25');
   const { data } = state;
   const [age, setAge] = useState();
 
@@ -70,6 +73,122 @@ function ViewStudent() {
       },
     },
   ];
+
+  const getListData = (value) => {
+    let listData;
+    const Dates = new Date(value);
+    console.log(typeof Dates.getDate())
+    switch (Dates.getDate()) {
+      case 31:
+        listData = [
+          {
+            type: "#eb3131",
+            content: 'A',
+          },
+
+        ];
+        break;
+
+      case 10:
+        listData = [
+          {
+            type: "#eb3131",
+            content: '10',
+          },
+        ];
+        break;
+
+      case 15:
+        listData = [
+          {
+            type: "#eb3131",
+            content: '15',
+          },
+        ];
+        break;
+      case 4:
+        listData = [
+          {
+            type: "#9beb31",
+            content: '04',
+          },
+        ];
+        break;
+      default:
+    }
+
+    return listData || [];
+  };
+
+
+  const dateCellRender = (value) => {
+    console.log(value)
+    value.forEach(element => {
+      const listData = getListData(element);
+      console.log(listData)
+      return (
+        <ul className="events">
+          {listData.map((item) => (
+            <li key={item.content}>
+              <Tag color={item.type} >{item.content}</Tag>
+            </li>
+          ))}
+        </ul>
+      );
+    });
+
+  };
+
+  const attendanceData = [
+    {
+      month: "January",
+      absentDays: ["2022-1-15", "2022--11", "2022-1-19", "2022-1-5", "2022-1-25", "2022-1-31"]
+    },
+    {
+      month: "February",
+      absentDays: ["2022-2-15", "2022-2-11", "2022-2-19", "2022-2-5", "2022-2-25", "2022-2-31"]
+    },
+    {
+      month: "March",
+      absentDays: ["2022-3-15", "2022-3-11", "2022-3-19", "2022-3-5", "2022-3-25", "2022-3-31"]
+    },
+    {
+      month: "April",
+      absentDays: ["2022-4-15", "2022-4-11", "2022-4-19", "2022-4-5", "2022-4-25", "2022-4-31"]
+    },
+    {
+      month: "May",
+      absentDays: ["2022-5-15", "2022-5-11", "2022-5-19", "2022-5-5", "2022-5-25", "2022-5-31"]
+    },
+    {
+      month: "June",
+      absentDays: ["2022-6-15", "2022-6-11", "2022-6-19", "2022-6-5", "2022-6-25", "2022-6-31"]
+    },
+    {
+      month: "July",
+      absentDays: ["2022-7-15", "2022-7-11", "2022-7-19", "2022-7-5", "2022-7-25", "2022-7-31"]
+    },
+    {
+      month: "Augest",
+      absentDays: ["2022-8-15", "2022-8-11", "2022-8-19", "2022-8-5", "2022-8-25", "2022-8-31"]
+    },
+    {
+      month: "September",
+      absentDays: ["2022-9-15", "2022-9-11", "2022-9-19", "2022-9-5", "2022-9-25", "2022-9-31"]
+    },
+    {
+      month: "October",
+      absentDays: ["2022-10-15", "2022-10-11", "2022-10-19", "2022-10-5", "2022-10-25", "2022-10-31"]
+    },
+    {
+      month: "November",
+      absentDays: ["2022-11-15", "2022-11-11", "2022-11-19", "2022-11-5", "2022-11-25", "2022-11-31"]
+    },
+    {
+      month: "December",
+      absentDays: ["2022-12-15", "2022-12-11", "2022-12-19", "2022-12-5", "2022-12-25", "2022-12-31"]
+    },
+  ]
 
   return (
     <div className="-mt-[7%]">
@@ -275,62 +394,27 @@ function ViewStudent() {
                       </div>
                       <div>
                         <Tag color="#31b6eb">0</Tag>
-                        <Tag color="blue">Days wittut Records</Tag>
+                        <Tag color="blue">Days without Records</Tag>
                       </div>
                     </div>
+
                     <div className="calender-card">
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                    </div>
-                    <div className="calender-card">
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                    </div> <div className="calender-card">
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                    </div> <div className="calender-card">
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
+                      {attendanceData?.map((item, index) => (
+                        <div className="site-calendar-card">
+                          <Calendar
+                            // value={value}
+                            headerRender={() => {
+                              return (
+                                <div style={{ padding: 8, textAlign: "center" }}>
+                                  <Typography.Title level={4}> {item.month}</Typography.Title>
+                                </div>
+                              );
+                            }}
+                            dateCellRender={() => dateCellRender(item.absentDays)} fullscreen={false} />
+                        </div>
+
+                      ))}
+
                     </div>
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Yearly" key='2'>
