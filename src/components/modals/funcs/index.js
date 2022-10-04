@@ -113,7 +113,24 @@ const removeSingleClassToTeacher = async (classId, teacherId) => {
   });
 };
 
+// Teachers
+const addSingleTeacherToCourse = async (teacherId, courseId) => {
+  await checkClassExists(teacherId);
+  const teacherRef = doc(firestoreDb, "courses", courseId);
+  await updateDoc(teacherRef, {
+    teachers: arrayUnion(teacherId),
+  });
+};
+const removeTeacherClassfromCourse = async (teacherId, courseId) => {
+  const teacherRef = doc(firestoreDb, "courses", courseId);
+  await updateDoc(teacherRef, {
+    teachers: arrayRemove(teacherId),
+  });
+};
+
 export {
+  addSingleTeacherToCourse,
+  removeTeacherClassfromCourse,
   addSingleCourseToClass,
   removeSingleCourseFromClass,
   addSingleClassToCourse,
