@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Tabs, Table } from "antd";
+import { Button, Tabs, Table, Tag, Calendar } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -97,7 +97,7 @@ function ViewStudent() {
         <div className="header-extra"></div>
       </div>
       <div className="tab-content">
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="0">
           <Tabs.TabPane tab="Overview" key="0">
             <div className="flex flex-row flex-wrap justify-between align-middle text-[#344054]">
               <div className="border-[#D0D5DD] border-[2px] w-[30%] h-[40vh] mb-2">
@@ -249,6 +249,95 @@ function ViewStudent() {
                 dataSource={courses}
                 columns={columns}
               />
+            </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Attendance" key="3">
+            <Button className="btn-confirm" onClick={handleUpdate}>
+              Edit Profile
+            </Button>
+            <div className="st-at">
+              <h1> Attendance</h1>
+              <div>
+                <Tabs defaultActiveKey="1">
+                  <Tabs.TabPane tab="Monthly" key='1'>
+                    <div className="st-at-tags">
+                      <div>
+                        <Tag color="#eb3131">5</Tag>
+                        <Tag color="red">Days Absent</Tag>
+                      </div>
+                      <div>
+                        <Tag color="#ebb031">3</Tag>
+                        <Tag color="gold">Days Late</Tag>
+                      </div>
+                      <div>
+                        <Tag color="#9beb31">4</Tag>
+                        <Tag color="lime">Days Present</Tag>
+                      </div>
+                      <div>
+                        <Tag color="#31b6eb">0</Tag>
+                        <Tag color="blue">Days wittut Records</Tag>
+                      </div>
+                    </div>
+                    <div className="calender-card">
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                    </div>
+                    <div className="calender-card">
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                    </div> <div className="calender-card">
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                    </div> <div className="calender-card">
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                      <div className="site-calendar-card">
+                        <Calendar fullscreen={false} />
+                      </div>
+                    </div>
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab="Yearly" key='2'>
+                    <h1>Yearly</h1>
+                  </Tabs.TabPane>
+                </Tabs>
+              </div>
             </div>
           </Tabs.TabPane>
         </Tabs>

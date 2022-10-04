@@ -29,7 +29,7 @@ const CreateNewTeacher = () => {
   const navigate = useNavigate();
   const [percent, setPercent] = useState(0);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [file, setFile] = useState("");
 
   const [classData, setClassData] = useState([]);
@@ -166,7 +166,6 @@ const CreateNewTeacher = () => {
         addSingleTeacherToCourse(newUserUUID, item);
       });
       navigate("/list-teacher");
-      setLoading(false);
     } else {
       const storageRef = ref(storage, file.name);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -187,7 +186,6 @@ const CreateNewTeacher = () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             valueRef.current = url;
             if (valueRef.current != null) {
-              setLoading(true);
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
                 setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
@@ -201,7 +199,6 @@ const CreateNewTeacher = () => {
                   school: schools,
                 });
                 navigate("/list-teacher");
-                setLoading(false);
               }
             }
           });
@@ -264,7 +261,10 @@ const CreateNewTeacher = () => {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      getData(data).then((response) => temporary.push(response));
+      getData(data).then((response) => {
+        temporary.push(response);
+        console.log(response);
+      });
     });
 
     setTimeout(() => {
