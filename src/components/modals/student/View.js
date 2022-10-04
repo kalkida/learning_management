@@ -102,12 +102,12 @@ function ViewStudent() {
             <div className="flex flex-row flex-wrap justify-between align-middle text-[#344054]">
               <div className="border-[#D0D5DD] border-[2px] w-[30%] h-[40vh] mb-2">
                 <div className="mt-10 flex flex-row justify-around">
-                  <h1 className="text-lg">Class {data.class.level}</h1>
-                  <h1 className="text-lg">Section {data.class.section}</h1>
+                  <h1 className="text-lg">Class {data.class?.level}</h1>
+                  <h1 className="text-lg">Section {data.class?.section}</h1>
                 </div>
                 <div className="mt-10 flex flex-row justify-around">
-                  <h1 className="text-lg">Class {data.class.level}</h1>
-                  <h1 className="text-lg">Section {data.class.section}</h1>
+                  <h1 className="text-lg">Class {data.class?.level}</h1>
+                  <h1 className="text-lg">Section {data.class?.section}</h1>
                 </div>
               </div>
               <div className="border-[#D0D5DD] border-[2px] w-[30%] h-[40vh] mb-2">
@@ -149,7 +149,7 @@ function ViewStudent() {
             <div className="flex flex-row justify-around border-[0px] border-[#e5e5e5] p-4 text-[#344054]">
               <div className="flex flex-col justify-center align-middle text-[#344054]">
                 <h1 className="text-5xl text-center text-[#344054]">
-                  {data.class.level}
+                  {data.class?.level}
                 </h1>
                 <span className="text-lg text-center text-[#344054]">
                   Grade

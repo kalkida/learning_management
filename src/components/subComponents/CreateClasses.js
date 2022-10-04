@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Input, Button, Select, message, TimePicker, Table, Tag } from "antd";
+import { addSingleCourseToClass } from "../modals/funcs";
 import {
   doc,
   setDoc,
@@ -182,7 +183,8 @@ const CreateClasses = () => {
     const coursess = [];
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school)
+      where("school_id", "==", uid.school),
+      where("class", "==", newClass.class)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {

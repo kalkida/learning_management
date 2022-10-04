@@ -62,39 +62,52 @@ function ViewCourse() {
             >
               Edit Course
             </Button>
-            <div className="course-description">
+            <div className="course-description rounded-lg border-[2px]">
               <h4>Coures Description</h4>
               <Input.TextArea
+                className="border-[1px] rounded-lg"
                 width="100%"
                 rows={4}
                 defaultValue={data.description}
               />
             </div>
-            <div className="asssign-teacher">
-              <h4>Assigned Teachers</h4>
-              <Table dataSource={data.teachers} columns={columns} />
+            <div className="text-xl">
+              <h4 className="py-2">Assigned Teachers</h4>
+              <Table
+                className="p-2 bg-[#F9FAFB] rounded-lg border-[1px] border-[#D0D5DD]"
+                dataSource={data.teachers}
+                columns={columns}
+              />
             </div>
             <div className="schedule">
-              <h4>Weekly Schedule</h4>
-              <div className="card-schedule">
-                <h2>
+              <h4 className="text-xl pt-2 ">Weekly Schedule</h4>
+              <div className="card-schedule border-[2px]">
+                <h2 className="text-lg py-2">
                   Class{" "}
                   {data.class ? data.class.level + data.class.section : ""}
                 </h2>
-                <div className="schedule-header">
-                  <div>
+                <div className="flex flex-row justify-between">
+                  <div className="border-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
                     <p> Period</p>
                   </div>
-                  <div>
+                  <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
                     <p> Start time</p>
+                  </div>
+
+                  <div className="border-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
                     <p> End time</p>
                   </div>
                 </div>
                 {data.schedule?.map((item) => (
-                  <>
-                    <Input value={item.day} style={{ width: "40%" }} />
+                  <div className="border-[#E7752B] border-[2px] my-2 rounded-lg">
+                    <Input
+                      className="rounded-lg border-[0px]"
+                      value={item.day}
+                      style={{ width: "33%" }}
+                    />
                     <TimePicker.RangePicker
-                      style={{ width: "60%" }}
+                      style={{ width: "67%" }}
+                      className="rounded-lg border-[0px]"
                       use12Hours
                       format={"hh:mm"}
                       value={
@@ -106,7 +119,7 @@ function ViewCourse() {
                           : []
                       }
                     />
-                  </>
+                  </div>
                 ))}
               </div>
             </div>

@@ -27,29 +27,27 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
 import "./style.css";
-import { getIdToken } from "firebase/auth";
-import { useSelector } from "react-redux";
 
 const { Option } = Select;
 const { Search } = Input;
+
 const gender = ["Male", "Female", "Other"];
 
 function UpdateStudents() {
-  const dateFormat = "YYYY/MM/DD";
   const valueRef = useRef();
-
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [phone, setPhones] = useState("");
   const [classOption, setClassOption] = useState([]);
-  const [percent, setPercent] = useState(0);
   const [file, setFile] = useState("");
-
-  const [classData, setClassData] = useState([]);
+  const [courseData, setClassCourses] = useState([]);
+  const [courseLoading, setCourseLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
   const [allPhone, setAllPhone] = useState(data.phone);
+  const [selectedRowKeys, setSelectedRowKeys] = useState(data.course);
+
   const [input, setInputs] = useState(data.phone);
   const [updateStudent, setUpdateStudent] = useState({
     DOB: data.DOB,
@@ -59,23 +57,59 @@ function UpdateStudents() {
     last_name: data.last_name,
     sex: data.sex,
     class: data.class,
-    courses: data.courses,
+    course: selectedRowKeys,
     phone: data.phone,
     school_id: data.school_id,
   });
 
-  const handleChange = (event) => {
-    setFile(event.target.files[0]);
+  const isObject = (obj) => {
+    return Object.prototype.toString.call(obj) === "[object Object]";
   };
 
-  const handleUpdate = () => {
-    console.log(data);
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const columns = [
+    {
+      title: "Course",
+      dataIndex: "course_name",
+      key: "course_name",
+    },
+    {
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
+      render: (item) => {
+        return <div>{item.name}</div>;
+      },
+    },
+  ];
+
+  const handleUpdate = async () => {
+    var users;
+    if (isObject(updateStudent.class)) {
+      console.log("classes");
+      users = await getClassID(updateStudent.class.key);
+      updateStudent.class = updateStudent.class.key;
+    } else {
+      users = await getClassID(updateStudent.class);
+    }
+
     setLoading(true);
     if (!file) {
-      setDoc(doc(firestoreDb, "students", data.key), updateStudent, {
-        merge: true,
-      })
-        .then((response) => {
+      setDoc(
+        doc(firestoreDb, "students", data.key),
+        { ...updateStudent, course: users.course },
+        {
+          merge: true,
+        }
+      )
+        .then((_) => {
           setLoading(false);
           message.success("Data is updated successfuly");
           navigate("/list-student");
@@ -93,9 +127,6 @@ function UpdateStudents() {
           const percentR = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           );
-
-          // update progress
-          setPercent(percentR);
         },
         (err) => console.log(err),
         () => {
@@ -140,10 +171,6 @@ function UpdateStudents() {
     setUpdateStudent({ ...updateStudent, sex: value });
   };
 
-  const handleCourse = async (value) => {
-    const classData = await getClassID(value);
-    setUpdateStudent({ ...updateStudent, class: classData });
-  };
   const handleDob = (value) => {
     setUpdateStudent({ ...updateStudent, DOB: JSON.stringify(value) });
   };
@@ -151,9 +178,6 @@ function UpdateStudents() {
   const onRemove = () => {
     setFile("");
   };
-  // const setAge = (value) => {
-  //     setUpdateStudent({ ...updateStudent, DOB: JSON.stringify(value._d) });
-  // };
 
   const setPhone = (e, index) => {
     allPhone[index] = e.target.value;
@@ -163,7 +187,37 @@ function UpdateStudents() {
   const onChange = (e) => {
     setUpdateStudent({ ...updateStudent, [e.target.name]: e.target.value });
   };
-
+  const getSubjectData = async (ID) => {
+    const docRef = doc(firestoreDb, "subject", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+    return data;
+  };
+  const getCourses = async (courses) => {
+    const children = [];
+    const q = query(
+      collection(firestoreDb, "courses"),
+      where("course_id", "in", courses)
+    );
+    const Snapshot = await getDocs(q);
+    Snapshot.forEach((doc) => {
+      var datas = doc.data();
+      children.push({
+        ...datas,
+        key: doc.id,
+      });
+    });
+    for (var i = 0; i < children.length; i++) {
+      children[i] = {
+        ...children[i],
+        subject: await getSubjectData(children[i].subject),
+      };
+    }
+    setClassCourses(children);
+  };
   const getClass = async () => {
     const children = [];
 
@@ -179,26 +233,12 @@ function UpdateStudents() {
         key: doc.id,
       });
     });
-    console.log("classes: ", children);
     setClassOption(children);
+    getCourses(data.course);
+    setCourseLoading(false);
   };
 
-  const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
-  };
-
-  const handlelevel = (value) => {
-    setUpdateStudent({ ...updateStudent, level: value });
-  };
-
-  const handlesection = (value) => {
-    console.log(value);
+  const handlesection = async (value) => {
     setUpdateStudent({ ...updateStudent, class: value });
   };
 
@@ -215,7 +255,6 @@ function UpdateStudents() {
   }
 
   useEffect(() => {
-    console.log(data);
     getClass();
   }, []);
 
@@ -239,7 +278,7 @@ function UpdateStudents() {
           <div className="header-extra">
             <div>
               <h3>Class</h3>
-              <h4>{data.class.level + data.class.section}</h4>
+              <h4>{data.class?.level + data.class?.section}</h4>
             </div>
             <div>
               <h3>Assigned Course</h3>
@@ -350,39 +389,34 @@ function UpdateStudents() {
                   <div className="col">
                     <div
                       style={{
-                        flexDirection: "row",
+                        flexDirection: "column",
                         justifyContent: "space-between",
                         display: "flex",
                       }}
                     >
-                      <div>
-                        <label>Class</label>
-                        <Select
-                          placeholder="Select Section"
-                          defaultValue={data.class}
-                          onChange={handlesection}
-                          optionLabelProp="label"
-                          style={{
-                            width: "100%",
-                          }}
-                        >
-                          {classOption.map((item, index) => (
-                            <Option
-                              key={item.key}
-                              value={item.key}
-                              label={item.level + item.section}
-                            >
-                              {item.level + item.section}
-                            </Option>
-                          ))}
-                        </Select>
-                      </div>
+                      <label>Class</label>
+                      <Select
+                        placeholder="Select Section"
+                        defaultValue={data.class}
+                        onChange={handlesection}
+                        optionLabelProp="label"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        {classOption.map((item, index) => (
+                          <Option
+                            key={item.key}
+                            value={item.key}
+                            label={item.level + item.section}
+                          >
+                            {item.level + item.section}
+                          </Option>
+                        ))}
+                      </Select>
                     </div>
                     <div>
                       <label>Guardian Contact</label>
-                      {/* {data.phone.map((item, index) => {
-       return (<Input disabled={true} defaultValue={item} name="phone" onChange={(e) => onChange(e)} />);
-                   })}  */}
                       {data.phone.map((item, index) => {
                         return (
                           <Input
@@ -452,123 +486,18 @@ function UpdateStudents() {
                 <div className="tch-cr-list">
                   <h1>Assigned Courses</h1>
                 </div>
-                {/* <Table dataSource={data.course} columns={columns} /> */}
-              </div>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Class" key="3">
-              <Button className="btn-confirm" onClick={handleUpdate}>
-                Edit Profile
-              </Button>
-              <div className="teacher-course-list">
-                <div className="tch-cr-list">
-                  <h1>Assigned Classes</h1>
-                </div>
-                {/* <Table dataSource={data.class} columns={classColumns} /> */}
+                <Table
+                  rowSelection={rowSelection}
+                  loading={courseLoading}
+                  dataSource={courseData}
+                  columns={columns}
+                />
               </div>
             </Tabs.TabPane>
           </Tabs>
         </div>
       </div>
     </>
-
-    /* // <Modal
-                //     visible={openUpdate}
-                //     title="Update Student Profile"
-                //     onOk={handleUpdate}
-                //     width={756}
-                //     onCancel={handleUpdateCancel}
-                //     footer={[
-                //         <Button key="back" onClick={handleUpdateCancel}>
-                //             Return
-                //         </Button>,
-                //         <Button key="submit" type="primary" loading={loading} onClick={handleUpdate}>
-                //             {percent ? percent + "%" : null}  Update
-                //         </Button>
-                //     ]}
-                // >
-                //     <Row>
-                //         <Col style={{ width: "50%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                //             <img src={file ? URL.createObjectURL(file) : data.avater} alt="" style={{ width: "330px" }} />
-                //         </Col>
-                //         <Col style={{ width: "50%", padding: "10px" }}>
-                //             <Form
-                //                 labelCol={{ span: 7 }}
-                //                 wrapperCol={{ span: 18 }}
-                //                 layout="horizontal"
-                //             >
-                //                 <Form.Item label="First Name" name="First Name" rules={[
-                //                     {
-                //                         required: true,
-                //                     },
-                //                 ]}>
-                //                     <Input name="first_name" defaultValue={data.first_name} onChange={(e) => onChange(e)} />
-                //                 </Form.Item>
-                //                 <Form.Item label="Last Name">
-                //                     <Input name='last_name' defaultValue={data.last_name} onChange={(e) => onChange(e)} />
-                //                 </Form.Item>
-                //                 <Form.Item label="Email">
-                //                     <Input name="email" defaultValue={data.email} onChange={(e) => onChange(e)} />
-                //                 </Form.Item>
-                //                 <Form.Item label="Phone" name="Phone" rules={[
-                //                     {
-                //                         required: true,
-                //                     },
-                //                 ]}>
-                //                     {/* {data.phone.map((item, index) => {
-                //                         return <Input defaultValue={item} name="phone" onChange={(e) => onChange(e)} />;
-                //                     })} */
-    //                    //</> //input.map((item, index) => {
-    //                         return <Input defaultValue={item} onChange={(e) => setPhone(e, index)} />;
-    //                     })}
-    //                     <Button
-    //                         onClick={() => {
-    //                             setInputs([...input, 0]);
-    //                             setAllPhone([...allPhone, phone]);
-    //                         }}
-    //                     >
-    //                         Add New
-    //                     </Button>
-
-    //                 </Form.Item>
-    //                 <Form.Item label="Level" name="Level" rules={[
-    //                     {
-    //                         required: true,
-    //                     },
-    //                 ]}>
-    //                     <Input defaultValue={data.level} name="level" onChange={(e) => onChange(e)} />
-    //                 </Form.Item>
-    //                 <Form.Item label="Date Of Birth" name="Date of Birth" rules={[
-    //                     {
-    //                         required: true,
-    //                     },
-    //                 ]}>
-    //                     <DatePicker defaultValue={moment(data.DOB, dateFormat)} onChange={setAge} />
-    //                 </Form.Item>
-
-    //                 <Form.Item label="Class">
-    //                     <Select
-    //                         style={{
-    //                             width: "100%",
-    //                         }}
-    //                         placeholder="select all class"
-    //                         defaultValue={data.class}
-    //                         onChange={handleCourse}
-    //                         optionLabelProp="label"
-    //                     >
-    //                         {classOption.map((item, index) => (
-    //                             <Option value={item.key} label={item.level + item.section}>
-    //                                 {item.level + item.section}
-    //                             </Option>
-    //                         ))}
-    //                     </Select>
-    //                 </Form.Item>
-    //                 <Form.Item label="Student Picture" valuePropName="fileList">
-    //                     <input type="file" onChange={handleChange} accept="/image/*" />
-    //                 </Form.Item>
-    //             </Form>
-    //         </Col>
-    //     </Row>
-    // </Modal> */}
   );
 }
 

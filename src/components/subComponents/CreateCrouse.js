@@ -3,6 +3,11 @@ import { Form, Input, Button, Select, TimePicker, message } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import {
+  addSingleCourseToClass,
+  addSingleCourseToTeacher,
+  addSingleClassToTeacher,
+} from "../modals/funcs";
+import {
   doc,
   setDoc,
   getDocs,
@@ -10,12 +15,11 @@ import {
   where,
   query,
 } from "firebase/firestore";
-import { firestoreDb, storage } from "../../firebase";
+import { firestoreDb } from "../../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import _default from "antd/lib/time-picker";
-import { NodeExpandOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
@@ -102,7 +106,13 @@ const CreateCrouse = () => {
         ...newCourse,
         course_id: courseId,
       })
-        .then((reponse) => {
+        .then((_) => {
+          addSingleCourseToClass(newCourse.class, courseId);
+
+          newCourse.teachers.map((teacher) => {
+            addSingleCourseToTeacher(courseId, teacher);
+            addSingleClassToTeacher(newCourse.class, teacher);
+          });
           message.success("Course Created");
           navigate("/list-Course");
         })
@@ -167,7 +177,7 @@ const CreateCrouse = () => {
           </Button>
         </div>
       </div>
-      <div className="bg-[#F9FAFB] border-[1px] border-[#D0D5DD] p-[43px]">
+      <div className="bg-[#F9FAFB] border-[1px] border-[#D0D5DD] p-[43px] rounded-lg">
         <div>
           <h1 className="text-[24px] mb-3">Coures Information</h1>
           <h3>Description</h3>
@@ -256,28 +266,30 @@ const CreateCrouse = () => {
           </div>
         </div>
       </div>
-      <div className="w-[60%] border-[1px] border-[#D0D5DD] mt-[56px] p-[24px]">
-        <div className="">
+      <div className="w-[60%] border-[1px] border-[#D0D5DD] bg-[#F9FAFB] mt-[56px] p-10 rounded-lg">
+        <div className="pb-10">
           <h1 className="text-[24px]">Schedule</h1>
           <h2 className="text-[20px] pt-[24px] pb-[24px] text-[#EA8848]">
             Class {selectedLevel ? selectedLevel : ""}
           </h2>
-          <div className="schedule-header mb-4 rounded-sm">
-            <div>
-              <p className="text-[16px] font-semibold"> Period</p>
+          <div className="flex flex-row justify-between">
+            <div className="border-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
+              <p> Period</p>
             </div>
-            <div>
-              <p className="text-[16px] font-semibold"> Start time</p>
-              <p className="text-[16px] font-semibold"> End time</p>
+            <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
+              <p> Start time</p>
+            </div>
+
+            <div className="border-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
+              <p> End time</p>
             </div>
           </div>
 
           {input.map((item, i) => (
-            <>
+            <div className="border-[#E7752B] border-[2px] my-2 rounded-lg">
               <Select
-                style={{
-                  width: "40%",
-                }}
+                style={{ width: "33%" }}
+                className="rounded-lg border-[0px]"
                 placeholder="First Select Days"
                 onChange={(e) => handleScheduler(e, i)}
               >
@@ -288,19 +300,18 @@ const CreateCrouse = () => {
                 ))}
               </Select>
               <TimePicker.RangePicker
-                style={{
-                  width: "60%",
-                }}
+                style={{ width: "67%" }}
+                className="rounded-lg border-[0px]"
+                status="warning"
                 format={"hh:mm"}
                 use12Hours
                 onChange={(e) => handleScheduler(e, i)}
               />
-            </>
+            </div>
           ))}
           <Button
             style={{
               float: "right",
-              marginTop: "30px",
             }}
             onClick={() => {
               setInput([...input, 7]);

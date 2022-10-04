@@ -153,8 +153,6 @@ function UpdateClass() {
       // datause.subject = subject;
       temporary.push(datause);
     });
-
-    console.log("datause", temporary);
     await setItem(temporary);
   };
   const getStudent = async () => {
@@ -194,7 +192,8 @@ function UpdateClass() {
 
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school)
+      where("school_id", "==", uid.school),
+      where("class", "==", data.key)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -260,19 +259,9 @@ function UpdateClass() {
   }, []);
 
   const handleStudent = (value) => {
-    console.log("value", value);
-    // value.map(async (item, i) => {
-    //   const response = await getStudentID(item);
-    //   value[i] = response.key;
-    // });
     setUpdateClass({ ...updateClass, student: value });
   };
   const handleCourse = (value) => {
-    // console.log("dada", value);
-    // value.map(async (item, i) => {
-    //   const response = await getStudentID(item);
-    //   value[i] = response;
-    // });
     setUpdateClass({ ...updateClass, course: value });
   };
 

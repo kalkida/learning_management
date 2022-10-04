@@ -27,7 +27,7 @@ import {
 import { firestoreDb, storage } from "../../../firebase";
 import AttendanceList from "../../subComponents/AttendanceList";
 import moment from "moment";
-import { async } from "@firebase/util";
+import { removeSingleCourseFromClass } from "../funcs";
 
 const { Option } = Select;
 
@@ -60,8 +60,6 @@ function UpdateCourse() {
 
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
 
-  const addToclass = async (id) => {};
-
   useEffect(() => {
     getCourseData();
     setTimeout(() => {
@@ -80,6 +78,8 @@ function UpdateCourse() {
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
       .then((response) => {
         setLoading(false);
+        console.log("courses updated", data);
+        removeSingleCourseFromClass(data.class.key, data.key);
         message.success("Data is updated successfuly");
         navigate("/list-course");
       })
@@ -194,15 +194,16 @@ function UpdateCourse() {
     }, 2000);
   };
   const handleScheduler = (value, i) => {
-    if (typeof value === "string") {
-      updateCourse.schedule[i].day = value;
-    } else {
-      const timeValue = [];
-      value.map((item, i) => {
-        timeValue.push(JSON.stringify(item._d));
-      });
-      updateCourse.schedule[i].day = timeValue;
-    }
+    updateCourse.schedule[i].day = value;
+    console.log(updateCourse);
+  };
+  const handleSchedulerTime = (value, i) => {
+    console.log(value, i);
+    const timeValue = [];
+    value.map((item, i) => {
+      timeValue.push(JSON.stringify(item._d));
+    });
+    updateCourse.schedule[i].time = timeValue;
   };
 
   const handleNewScheduler = (value, i) => {
@@ -280,13 +281,14 @@ function UpdateCourse() {
           <div className="tab-content">
             <Tabs defaultActiveKey="1">
               <Tabs.TabPane tab="Profile" key="1">
-                <div className="course-information">
-                  <h1>Course Information</h1>
-                  <div className="course-content">
-                    <div className="course-category">
+                <div className="course-description rounded-lg border-[2px] ">
+                  <h1 className="text-lg">Course Information</h1>
+                  <div className="course-content flex flex-row justify-between">
+                    <div className="py-2 flex flex-col justify-around">
                       <div>
                         <span>Subject</span>
                         <Select
+                          className="rounded-xl"
                           style={{
                             width: "100%",
                           }}
@@ -335,6 +337,7 @@ function UpdateCourse() {
                       <h4>Coures Description</h4>
                       <Input.TextArea
                         name="description"
+                        className="border-[1px] rounded-lg"
                         width="100%"
                         rows={6}
                         defaultValue={updateCourse.description}
@@ -374,36 +377,43 @@ function UpdateCourse() {
                     </Select>
                   </div>
                   {teacherView ? (
-                    <Table dataSource={teachers} columns={columns} />
+                    <Table
+                      className="p-2 bg-[#F9FAFB] rounded-lg border-[1px] border-[#D0D5DD]"
+                      dataSource={teachers}
+                      columns={columns}
+                    />
                   ) : null}
                 </div>
                 <div className="schedule">
-                  <h4>Weekly Schedule</h4>
-                  <div className="up-card-schedule">
-                    <h2>
+                  <h4 className="text-xl pt-2">Weekly Schedule</h4>
+                  <div className="up-card-schedule pb-10 border-[2px]">
+                    <h2 className="text-lg py-2">
                       Class{" "}
                       {updateCourse.class
                         ? updateCourse.class.level + updateCourse.class.section
                         : null}
                     </h2>
-                    <div className="schedule-header">
-                      <div>
+                    <div className="flex flex-row justify-between">
+                      <div className="border-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
                         <p> Period</p>
                       </div>
-                      <div>
+                      <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
                         <p> Start time</p>
+                      </div>
+
+                      <div className="border-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
                         <p> End time</p>
                       </div>
                     </div>
 
                     {data.schedule?.map((item, i) => (
-                      <>
+                      <div className="border-[#E7752B] border-[2px] my-2 rounded-lg">
                         <Select
-                          style={{ width: "40%" }}
+                          style={{ width: "33%" }}
+                          className="rounded-lg border-[0px]"
                           placeholder="First Select Days"
                           onChange={(e) => handleScheduler(e, i)}
                           defaultValue={item.day}
-                          in
                         >
                           {days.map((item, index) => (
                             <Option key={index} value={item} label={item}>
@@ -412,7 +422,8 @@ function UpdateCourse() {
                           ))}
                         </Select>
                         <TimePicker.RangePicker
-                          style={{ width: "60%" }}
+                          style={{ width: "67%" }}
+                          className="rounded-lg border-[0px]"
                           format={"hh:mm"}
                           use12Hours
                           defaultValue={
@@ -423,14 +434,14 @@ function UpdateCourse() {
                                 ]
                               : []
                           }
-                          onChange={(e) => handleScheduler(e, i)}
+                          onChange={(e) => handleSchedulerTime(e, i)}
                         />
-                      </>
+                      </div>
                     ))}
                     {input.map((item, i) => (
-                      <>
+                      <div className="border-[#E7752B] border-[2px] my-2 rounded-lg">
                         <Select
-                          style={{ width: "40%" }}
+                          style={{ width: "33%" }}
                           placeholder="First Select Days"
                           onChange={(e) => handleNewScheduler(e, i)}
                         >
@@ -441,12 +452,14 @@ function UpdateCourse() {
                           ))}
                         </Select>
                         <TimePicker.RangePicker
-                          style={{ width: "60%" }}
+                          status="warning"
+                          style={{ width: "67%" }}
+                          className="rounded-lg border-[0px] active:border-[0px] outline-none selection:border-[#E7752B]"
                           format={"hh:mm"}
                           use12Hours
                           onChange={(e) => handleNewScheduler(e, i)}
                         />
-                      </>
+                      </div>
                     ))}
                     <Button
                       style={{ float: "right" }}
