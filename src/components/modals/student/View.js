@@ -84,7 +84,7 @@ function ViewStudent() {
             <h2 className="text-2xl font-bold capitalize text-[#344054]">
               {data.first_name + " " + data.last_name}
             </h2>
-            <p className="text-[14px] text-[gray] p-1">ID 000000</p>
+            <p className="text-[14px] text-[gray] p-1">{data.studentId}</p>
             <a className="border-[2px] border-[#E7752B] p-2 rounded-lg flex flex-row justify-around hover:text-[#E7752B] w-[8vw]">
               <FontAwesomeIcon
                 icon={faMessage}
@@ -259,7 +259,7 @@ function ViewStudent() {
               <h1> Attendance</h1>
               <div>
                 <Tabs defaultActiveKey="1">
-                  <Tabs.TabPane tab="Monthly" key='1'>
+                  <Tabs.TabPane tab="Monthly" key="1">
                     <div className="st-at-tags">
                       <div>
                         <Tag color="#eb3131">5</Tag>
@@ -305,7 +305,8 @@ function ViewStudent() {
                       <div className="site-calendar-card">
                         <Calendar fullscreen={false} />
                       </div>
-                    </div> <div className="calender-card">
+                    </div>{" "}
+                    <div className="calender-card">
                       <div className="site-calendar-card">
                         <Calendar fullscreen={false} />
                       </div>
@@ -318,7 +319,8 @@ function ViewStudent() {
                       <div className="site-calendar-card">
                         <Calendar fullscreen={false} />
                       </div>
-                    </div> <div className="calender-card">
+                    </div>{" "}
+                    <div className="calender-card">
                       <div className="site-calendar-card">
                         <Calendar fullscreen={false} />
                       </div>
@@ -333,7 +335,7 @@ function ViewStudent() {
                       </div>
                     </div>
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Yearly" key='2'>
+                  <Tabs.TabPane tab="Yearly" key="2">
                     <h1>Yearly</h1>
                   </Tabs.TabPane>
                 </Tabs>

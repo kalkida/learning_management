@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Form, Input, Button, Select, DatePicker, message, Space } from "antd";
+import { Input, Button, Select, DatePicker, message, Space } from "antd";
 import {
   doc,
   setDoc,
@@ -16,9 +16,10 @@ import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { SearchOutlined } from "@ant-design/icons";
+import { CloseCircleFilled } from "@ant-design/icons";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 import "../../css/teacher.css";
-import Highlighter from "react-highlight-words";
 import "../modals/courses/style.css";
 import "../modals/teacher/style.css";
 
@@ -43,6 +44,7 @@ const CreateNewStudnet = () => {
   const uid = useSelector((state) => state.user.profile);
   var [newUser, setNewUser] = useState({
     DOB: "",
+    studentId: "",
     avater: null,
     email: "",
     sex: "",
@@ -161,8 +163,8 @@ const CreateNewStudnet = () => {
     setNewUser({ ...newUser, DOB: JSON.stringify(value) });
   };
   const setPhone = (e, index) => {
-    allPhone[index] = e.target.value;
-    setPhones(e.target.value);
+    allPhone[index] = e;
+    setPhones(e);
     setNewUser({ ...newUser, ["phone"]: allPhone });
   };
   const handleCancle = () => {
@@ -188,11 +190,10 @@ const CreateNewStudnet = () => {
     getClass();
   }, []);
   return (
-    <>
-      <div className="add-header">
-        <h1>Add Students</h1>
-      </div>
+    <div className="">
       <div className="add-teacher">
+        <h1 className="text-[1.5rem] font-bold ">Add Students</h1>
+
         <div className="avater-img">
           <div>
             <h2>Profile Picture</h2>
@@ -226,42 +227,31 @@ const CreateNewStudnet = () => {
           </div>
         </div>
 
-        <div className="add-form">
-          <div className="col">
-            <div>
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-col w-[40%] mr-10">
+            <div className="py-4">
               <label>First Name</label>
               <Input name="first_name" onChange={(e) => handleStudent(e)} />
             </div>
-            <div
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                display: "flex",
-              }}
-            >
-              <div style={{ marginRight: "5%" }}>
-                <label>Class</label>
-                <Select
-                  placeholder="Select Class"
-                  onChange={handlelevel}
-                  optionLabelProp="label"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {classData.map((item, index) => (
-                    <Option
-                      key={item.id}
-                      value={item.id}
-                      label={item.className}
-                    >
-                      {item.className}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-            </div>
+
             <div>
+              <label>Class</label>
+              <Select
+                placeholder="Select Class"
+                onChange={handlelevel}
+                optionLabelProp="label"
+                style={{
+                  width: "100%",
+                }}
+              >
+                {classData.map((item, index) => (
+                  <Option key={item.id} value={item.id} label={item.className}>
+                    {item.className}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+            <div className="py-4">
               <label>Date of Birth</label>
               <DatePicker style={{ width: "100%" }} onChange={handleDob} />
             </div>
@@ -271,8 +261,8 @@ const CreateNewStudnet = () => {
               </button>
             </div>
           </div>
-          <div className="col">
-            <div>
+          <div className="flex flex-col w-[40%]  mr-10">
+            <div className="py-4">
               <label>Last Name</label>
               <Input name="last_name" onChange={(e) => handleStudent(e)} />
             </div>
@@ -293,16 +283,23 @@ const CreateNewStudnet = () => {
                 ))}
               </Select>
             </div>
-            <div>
+            <div className="py-4">
               <label>Email</label>
               <Input name="email" onChange={(e) => handleStudent(e)} />
             </div>
           </div>
-          <div className="col">
-            <div>
+          <div className="flex flex-col w-[40%] mr-10">
+            <div className="py-4">
               <label>Guardian Contact</label>
               {input.map((_, index) => {
-                return <Input onChange={(e) => setPhone(e, index)} />;
+                return (
+                  <PhoneInput
+                    placeholder="Enter Guardian Contact"
+                    className="py-1 border-[1px] bg-white px-2 mb-2"
+                    country="ET"
+                    onChange={(e) => setPhone(e, index)}
+                  />
+                );
               })}
               {phone !== "" ? (
                 <Button
@@ -316,13 +313,15 @@ const CreateNewStudnet = () => {
               ) : null}
             </div>
             <div>
+              <label>Student Id</label>
+              <Input name="studentId" onChange={(e) => handleStudent(e)} />
+            </div>
+            <div>
               <Button
-                className="btn-dlt"
-                style={{ marginTop: "60%" }}
+                className="float-right -bottom-[5.5vh] border-[2px] border-[#E7752B] text-[#E7752B] rounded-lg flex flex-row  "
                 onClick={handleCancle}
-                type="primary"
-                danger
               >
+                <CloseCircleFilled className="mt-[1px]" />
                 Cancel
               </Button>
             </div>
@@ -332,7 +331,7 @@ const CreateNewStudnet = () => {
       </div>
 
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}></div>
-    </>
+    </div>
   );
 };
 

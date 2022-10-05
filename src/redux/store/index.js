@@ -2,7 +2,10 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "../user";
 import studentReducer from "../student";
 import coursesReducer, { listCourse } from "../courses";
-import { persistStore, persistReducer } from "redux-persist";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { setupListeners } from "@reduxjs/toolkit/query";
+
 import {
   FLUSH,
   REHYDRATE,
@@ -14,7 +17,7 @@ import {
 
 const persistConfig = {
   key: "user",
-  storage: window.localStorage,
+  storage: storage,
 };
 
 const store = configureStore({
@@ -32,6 +35,6 @@ const store = configureStore({
 });
 
 store.dispatch(listCourse());
-// export const persist = persistStore(store);
+setupListeners(store.dispatch);
 
 export default store;
