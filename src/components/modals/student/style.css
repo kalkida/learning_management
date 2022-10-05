@@ -349,17 +349,64 @@
 }
 
 .site-calendar-card {
-    width: 25%;
-    margin: 15px;
+    width: 100%;
+    /* margin: 15px; */
     border: 1px solid #f0f0f0;
     border-radius: 2px;
 }
 
 .calender-card {
-    display: flex;
+    display: grid;
+    gap: 25px;
+    grid-template-columns: auto auto auto auto;
+
 }
 
 .st-at h1 {
     font-size: 28px;
     font-weight: 600;
+}
+
+
+.events {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    top: -4px;
+}
+
+.events .ant-badge-status {
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.notes-month {
+    font-size: 28px;
+    text-align: center;
+}
+
+.notes-month section {
+    font-size: 28px;
+}
+
+@media screen and (max-width:1025px) {
+    .calender-card {
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media screen and (max-width:769px) {
+    .calender-card {
+        grid-template-columns: auto auto;
+    }
+}
+
+@media screen and (max-width:426px) {
+    .calender-card {
+        grid-template-columns: auto;
+    }
 }

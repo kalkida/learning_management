@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Button, Tabs, Table, Tag, Calendar } from "antd";
+import {
+  Button,
+  Tabs,
+  Table,
+  Tag,
+  Calendar,
+  Col,
+  Radio,
+  Row,
+  Select,
+  Typography,
+} from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import BarGraphe from "../../graph/BarGraph";
+import moment from "moment";
 
 import "./style.css";
 
@@ -14,7 +26,9 @@ function ViewStudent() {
   const { state } = useLocation();
   const [courses, setCourses] = useState([]);
   const [loadingCourse, setLoadingCourse] = useState(true);
+  const value = moment("2017-01-25");
   const { data } = state;
+  console.log(data);
   const [age, setAge] = useState();
 
   const getClassData = async (id) => {
@@ -49,7 +63,30 @@ function ViewStudent() {
     } else {
       setLoadingCourse(false);
     }
+
+    getAttendace();
   }, []);
+
+  const getAttendace = async () => {
+    const q = query(
+      collection(
+        firestoreDb,
+        "attendanceanddaily",
+        "478a6e0-d5e8-e242-7473-1843eb3bb385/attendace"
+      )
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+      // if (data) {
+      // }
+    });
+  };
 
   const handleUpdate = () => {
     navigate("/update-student", { state: { data } });
@@ -68,6 +105,87 @@ function ViewStudent() {
       render: (item) => {
         return <div>{item.name}</div>;
       },
+    },
+  ];
+
+  const getListData = (currentDate, value) => {
+    let listData;
+    // value.forEach(element => {
+    //   const Dates = new Date(element);
+
+    //   if (Dates.getDate() === currentDate.date() && Dates.getMonth() === currentDate.month()) {
+    //     listData = [
+    //       {
+    //         type: "#eb3131",
+    //         content: Dates.getDate(),
+    //       },
+    //     ]
+    //   }
+    // });
+    return listData || [];
+  };
+
+  const dateCellRender = (date, value) => {
+    const listData = getListData(date, value);
+    return (
+      <ul className="events">
+        {listData.map((item) => (
+          <li key={item.content}>
+            <Tag color={item.type}>{item.content}</Tag>
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  const attendanceData = [
+    {
+      month: "January",
+      absentDays: new Date().getFullYear() + "-1-1",
+    },
+    {
+      month: "February",
+      absentDays: new Date().getFullYear() + "-2-1",
+    },
+    {
+      month: "March",
+      absentDays: new Date().getFullYear() + "-3-1",
+    },
+    {
+      month: "April",
+      absentDays: new Date().getFullYear() + "-4-1",
+    },
+    {
+      month: "May",
+      absentDays: new Date().getFullYear() + "-5-1",
+    },
+    {
+      month: "June",
+      absentDays: new Date().getFullYear() + "-6-1",
+    },
+    {
+      month: "July",
+      absentDays: new Date().getFullYear() + "-7-1",
+    },
+    {
+      month: "Augest",
+      absentDays: new Date().getFullYear() + "-8-1",
+    },
+    {
+      month: "September",
+      absentDays: new Date().getFullYear() + "-9-1",
+    },
+    {
+      month: "October",
+      absentDays: new Date().getFullYear() + "-10-1",
+    },
+    {
+      month: "November",
+      absentDays: new Date().getFullYear() + "-11-1",
+    },
+    {
+      month: "December",
+      absentDays: new Date().getFullYear() + "-12-1",
     },
   ];
 
@@ -275,64 +393,34 @@ function ViewStudent() {
                       </div>
                       <div>
                         <Tag color="#31b6eb">0</Tag>
-                        <Tag color="blue">Days wittut Records</Tag>
+                        <Tag color="blue">Days without Records</Tag>
                       </div>
                     </div>
+
                     <div className="calender-card">
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                    </div>
-                    <div className="calender-card">
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                    </div>{" "}
-                    <div className="calender-card">
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                    </div>{" "}
-                    <div className="calender-card">
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
-                      <div className="site-calendar-card">
-                        <Calendar fullscreen={false} />
-                      </div>
+                      {attendanceData?.map((item, index) => (
+                        <div key={index} className="site-calendar-card">
+                          <Calendar
+                            value={moment(item.absentDays)}
+                            headerRender={() => {
+                              return (
+                                <div
+                                  style={{ padding: 8, textAlign: "center" }}
+                                >
+                                  <Typography.Title level={4}>
+                                    {" "}
+                                    {item.month}
+                                  </Typography.Title>
+                                </div>
+                              );
+                            }}
+                            dateCellRender={(date) =>
+                              dateCellRender(date, item.absentDays)
+                            }
+                            fullscreen={false}
+                          />
+                        </div>
+                      ))}
                     </div>
                   </Tabs.TabPane>
                   <Tabs.TabPane tab="Yearly" key="2">
