@@ -16,8 +16,9 @@ function ViewStudent() {
   const { state } = useLocation();
   const [courses, setCourses] = useState([]);
   const [loadingCourse, setLoadingCourse] = useState(true);
-  const value = moment('2017-01-25');
+  const value = moment("2017-01-25");
   const { data } = state;
+  console.log(data)
   const [age, setAge] = useState();
 
   const getClassData = async (id) => {
@@ -52,7 +53,26 @@ function ViewStudent() {
     } else {
       setLoadingCourse(false);
     }
+
+    getAttendace();
   }, []);
+
+  const getAttendace = async () => {
+    const q = query(
+      collection(firestoreDb, "attendanceanddaily", "478a6e0-d5e8-e242-7473-1843eb3bb385/attendace")
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+      // if (data) {
+      // } 
+    });
+  }
 
   const handleUpdate = () => {
     navigate("/update-student", { state: { data } });
@@ -74,121 +94,91 @@ function ViewStudent() {
     },
   ];
 
-  const getListData = (value) => {
+  const getListData = (currentDate, value) => {
     let listData;
-    const Dates = new Date(value);
-    console.log(typeof Dates.getDate())
-    switch (Dates.getDate()) {
-      case 31:
-        listData = [
-          {
-            type: "#eb3131",
-            content: 'A',
-          },
+    // value.forEach(element => {
+    //   const Dates = new Date(element);
 
-        ];
-        break;
-
-      case 10:
-        listData = [
-          {
-            type: "#eb3131",
-            content: '10',
-          },
-        ];
-        break;
-
-      case 15:
-        listData = [
-          {
-            type: "#eb3131",
-            content: '15',
-          },
-        ];
-        break;
-      case 4:
-        listData = [
-          {
-            type: "#9beb31",
-            content: '04',
-          },
-        ];
-        break;
-      default:
-    }
-
+    //   if (Dates.getDate() === currentDate.date() && Dates.getMonth() === currentDate.month()) {
+    //     listData = [
+    //       {
+    //         type: "#eb3131",
+    //         content: Dates.getDate(),
+    //       },
+    //     ]
+    //   }
+    // });
     return listData || [];
   };
 
 
-  const dateCellRender = (value) => {
-    console.log(value)
-    value.forEach(element => {
-      const listData = getListData(element);
-      console.log(listData)
-      return (
-        <ul className="events">
-          {listData.map((item) => (
-            <li key={item.content}>
-              <Tag color={item.type} >{item.content}</Tag>
-            </li>
-          ))}
-        </ul>
-      );
-    });
+  const dateCellRender = (date, value) => {
+    const listData = getListData(date, value);
+    return (
+      <ul className="events">
+        {listData.map((item) => (
+          <li key={item.content}>
+            <Tag color={item.type} >{item.content}</Tag>
+          </li>
+        ))}
+      </ul>
+    );
 
   };
 
   const attendanceData = [
     {
       month: "January",
-      absentDays: ["2022-1-15", "2022--11", "2022-1-19", "2022-1-5", "2022-1-25", "2022-1-31"]
+      absentDays: new Date().getFullYear() + "-1-1"
     },
     {
       month: "February",
-      absentDays: ["2022-2-15", "2022-2-11", "2022-2-19", "2022-2-5", "2022-2-25", "2022-2-31"]
+      absentDays: new Date().getFullYear() + "-2-1"
     },
     {
       month: "March",
-      absentDays: ["2022-3-15", "2022-3-11", "2022-3-19", "2022-3-5", "2022-3-25", "2022-3-31"]
+      absentDays: new Date().getFullYear() + "-3-1"
     },
     {
       month: "April",
-      absentDays: ["2022-4-15", "2022-4-11", "2022-4-19", "2022-4-5", "2022-4-25", "2022-4-31"]
+      absentDays: new Date().getFullYear() + "-4-1"
     },
     {
       month: "May",
-      absentDays: ["2022-5-15", "2022-5-11", "2022-5-19", "2022-5-5", "2022-5-25", "2022-5-31"]
+      absentDays: new Date().getFullYear() + "-5-1"
     },
     {
       month: "June",
-      absentDays: ["2022-6-15", "2022-6-11", "2022-6-19", "2022-6-5", "2022-6-25", "2022-6-31"]
+      absentDays: new Date().getFullYear() + "-6-1"
     },
     {
       month: "July",
-      absentDays: ["2022-7-15", "2022-7-11", "2022-7-19", "2022-7-5", "2022-7-25", "2022-7-31"]
+      absentDays: new Date().getFullYear() + "-7-1"
     },
     {
       month: "Augest",
-      absentDays: ["2022-8-15", "2022-8-11", "2022-8-19", "2022-8-5", "2022-8-25", "2022-8-31"]
+      absentDays: new Date().getFullYear() + "-8-1"
     },
     {
       month: "September",
-      absentDays: ["2022-9-15", "2022-9-11", "2022-9-19", "2022-9-5", "2022-9-25", "2022-9-31"]
+      absentDays: new Date().getFullYear() + "-9-1"
     },
     {
       month: "October",
-      absentDays: ["2022-10-15", "2022-10-11", "2022-10-19", "2022-10-5", "2022-10-25", "2022-10-31"]
+      absentDays: new Date().getFullYear() + "-10-1"
     },
     {
       month: "November",
-      absentDays: ["2022-11-15", "2022-11-11", "2022-11-19", "2022-11-5", "2022-11-25", "2022-11-31"]
+      absentDays: new Date().getFullYear() + "-11-1"
     },
     {
       month: "December",
-      absentDays: ["2022-12-15", "2022-12-11", "2022-12-19", "2022-12-5", "2022-12-25", "2022-12-31"]
+      absentDays: new Date().getFullYear() + "-12-1"
     },
   ]
+
+
+
 
   return (
     <div className="-mt-[7%]">
@@ -400,9 +390,10 @@ function ViewStudent() {
 
                     <div className="calender-card">
                       {attendanceData?.map((item, index) => (
-                        <div className="site-calendar-card">
+                        <div key={index} className="site-calendar-card">
+
                           <Calendar
-                            // value={value}
+                            value={moment(item.absentDays)}
                             headerRender={() => {
                               return (
                                 <div style={{ padding: 8, textAlign: "center" }}>
@@ -410,7 +401,7 @@ function ViewStudent() {
                                 </div>
                               );
                             }}
-                            dateCellRender={() => dateCellRender(item.absentDays)} fullscreen={false} />
+                            dateCellRender={(date) => dateCellRender(date, item.absentDays)} fullscreen={false} />
                         </div>
 
                       ))}

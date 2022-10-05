@@ -185,6 +185,7 @@ export default function ListCourses() {
     });
     return data;
   };
+
   const getData = async (data) => {
     if (data.class) {
       data.class = await getClassData(data.class);
@@ -302,7 +303,7 @@ export default function ListCourses() {
             className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
           >
-           View{" "}
+            View{" "}
           </a>
           <a
             className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
