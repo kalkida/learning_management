@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Tabs,
-  Table,
-  Tag,
-  Calendar,
-  Col,
-  Radio,
-  Row,
-  Select,
-  Typography,
-} from "antd";
+import { Button, Tabs, Table, Tag, Calendar, Typography } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import BarGraphe from "../../graph/BarGraph";
+import { fetchSubject, fetchParents } from "../funcs";
 import moment from "moment";
 
 import "./style.css";
@@ -25,14 +15,12 @@ function ViewStudent() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [courses, setCourses] = useState([]);
+  const [guardian, setGuardian] = useState([]);
   const [loadingCourse, setLoadingCourse] = useState(true);
-  const value = moment("2017-01-25");
   const { data } = state;
-  console.log(data);
   const [age, setAge] = useState();
 
   const getClassData = async (id) => {
-    console.log("ids", id);
     const q = query(
       collection(firestoreDb, "courses"),
       where("course_id", "in", id)
@@ -43,8 +31,14 @@ function ViewStudent() {
       var data = doc.data();
       temporary.push(data);
     });
-    console.log(id);
+    var fil = temporary.filter(async function (doc) {
+      doc.subject = await fetchSubject(doc.subject);
+      return doc;
+    });
+    console.log("temporary: " + fil);
     setCourses(temporary);
+    var guardians = await fetchParents(data.phone);
+    setGuardian(guardians);
     setLoadingCourse(false);
   };
 
@@ -56,14 +50,8 @@ function ViewStudent() {
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       calage--;
     }
-
+    getClassData(data.class.course);
     setAge(calage);
-    if (data.courses) {
-      getClassData(data.courses);
-    } else {
-      setLoadingCourse(false);
-    }
-
     getAttendace();
   }, []);
 
@@ -83,8 +71,6 @@ function ViewStudent() {
       var data = doc.data();
       data.key = doc.id;
       temporary.push(data);
-      // if (data) {
-      // }
     });
   };
 
@@ -190,20 +176,20 @@ function ViewStudent() {
   ];
 
   return (
-    <div className="-mt-[7%]">
-      <div className="flex flex-row justify-between border-[2px] py-10 px-2">
+    <div className="-mt-[7%] h-[100vh] overflow-scroll main scroll-smooth">
+      <div className="flex flex-row justify-between border-b-[2px] py-10 px-2">
         <div className="flex flex-row w-[30%] justify-between">
           <img
-            className="rounded-full w-[8vw] h-[15vh]"
+            className="rounded-full w-[8vw] border-[2px]"
             src={data.avater ? data.avater : "img-5.jpg"}
             alt="profile"
           />
-          <div className="flex flex-col mt-2 ">
+          <div className="flex flex-col justify-start align-baseline mt-2 w-[13vw] ">
             <h2 className="text-2xl font-bold capitalize text-[#344054]">
               {data.first_name + " " + data.last_name}
             </h2>
-            <p className="text-[14px] text-[gray] p-1">{data.studentId}</p>
-            <a className="border-[2px] border-[#E7752B] p-2 rounded-lg flex flex-row justify-around hover:text-[#E7752B] w-[8vw]">
+            <p className="text-[14px] text-[gray] p-1">ID: {data.studentId}</p>
+            <a className="border-[0px] border-[#E7752B]  rounded-lg flex flex-row  text-[#E7752B] hover:text-[#E7752B] ">
               <FontAwesomeIcon
                 icon={faMessage}
                 className="p-1 text-[#E7752B]"
@@ -218,7 +204,7 @@ function ViewStudent() {
         <Tabs defaultActiveKey="0">
           <Tabs.TabPane tab="Overview" key="0">
             <div className="flex flex-row flex-wrap justify-between align-middle text-[#344054]">
-              <div className="border-[#D0D5DD] border-[2px] w-[30%] h-[40vh] mb-2">
+              <div className="border-[#D0D5DD] border-[1px] w-[30%] h-[40vh] mb-2 rounded-sm bg-[#FCFCFD]">
                 <div className="mt-10 flex flex-row justify-around">
                   <h1 className="text-lg">Class {data.class?.level}</h1>
                   <h1 className="text-lg">Section {data.class?.section}</h1>
@@ -228,17 +214,17 @@ function ViewStudent() {
                   <h1 className="text-lg">Section {data.class?.section}</h1>
                 </div>
               </div>
-              <div className="border-[#D0D5DD] border-[2px] w-[30%] h-[40vh] mb-2">
+              <div className="border-[#D0D5DD] border-[1px] w-[30%] h-[40vh] mb-2 rounded-sm bg-[#FCFCFD]">
                 <div className="p-10 text-lg font-bold">
                   <h1>Conduct Board</h1>
                 </div>
               </div>
-              <div className="border-[#D0D5DD] border-[2px] w-[30%] h-[40vh] mb-2">
+              <div className="border-[#D0D5DD] border-[1px] w-[30%] h-[40vh] mb-2 rounded-sm bg-[#FCFCFD]">
                 <div className="p-10 text-lg font-bold">
                   <h1>Grade Board</h1>
                 </div>
               </div>
-              <div className="border-[#D0D5DD] border-[2px] w-[30%]  mb-2">
+              <div className="border-[#D0D5DD] border-[1px] w-[30%]  mb-2 mt-10 bg-[#FCFCFD]">
                 <div className="p-10 ">
                   <h1 className="mb-4 text-lg font-bold">Daily Report</h1>
                   <div className="flex flex-col justify-between overflow-scroll">
@@ -254,7 +240,7 @@ function ViewStudent() {
                   </div>
                 </div>
               </div>
-              <div className="border-[#D0D5DD] border-[2px] w-[65%]  mb-2 h-[50vh]">
+              <div className="border-[#D0D5DD] border-[1px] w-[65%]  mb-2 h-[50vh] mt-10 bg-[#FCFCFD]">
                 <BarGraphe />
               </div>
             </div>
@@ -266,7 +252,7 @@ function ViewStudent() {
             </Button>
             <div className="flex flex-row justify-around border-[0px] border-[#e5e5e5] p-4 text-[#344054]">
               <div className="flex flex-col justify-center align-middle text-[#344054]">
-                <h1 className="text-5xl text-center text-[#344054]">
+                <h1 className="text-[48px] text-center text-[#344054] font-bold">
                   {data.class?.level}
                 </h1>
                 <span className="text-lg text-center text-[#344054]">
@@ -274,15 +260,15 @@ function ViewStudent() {
                 </span>
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054] ">
-                <h1 className="text-5xl text-center ">2</h1>
+                <h1 className="text-[48px] text-center font-bold ">2</h1>
                 <span className="text-lg">Sibilings</span>
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054]">
-                <h1 className="text-5xl text-center">4</h1>
+                <h1 className="text-[48px] text-center font-bold">4</h1>
                 <span className="text-lg">Rank</span>
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054]">
-                <h1 className="text-5xl text-center">A</h1>
+                <h1 className="text-[48px] text-center font-bold">A</h1>
                 <span className="text-lg">Conduct</span>
               </div>
             </div>
@@ -297,36 +283,36 @@ function ViewStudent() {
             >
               Student Information
             </h1>
-            <div className="flex flex-row justify-around border-[1px] border-[#e2e2e2] py-2">
+            <div className="flex flex-row justify-between border-b-[2px] border-[#e2e2e2] py-2 px-2">
               <div>
-                <span className="text-[16px] text-center text-[#344054]">
+                <span className="text-[16px] text-left text-[#344054]">
                   Age
                 </span>
-                <h2 className="text-center text-[14px] font-bold">{age}</h2>
+                <h2 className="text-left text-[16px] font-bold">{age}</h2>
               </div>
               <div>
-                <span className="text-[16px] text-center text-[#344054]">
+                <span className="text-[16px] text-left text-[#344054]">
                   Sex
                 </span>
-                <h2 className="text-center text-[14px] font-bold text-[#344054]">
+                <h2 className="text-left text-[14px] font-bold text-[#344054]">
                   {data.sex}
                 </h2>
               </div>
               <div>
-                <span className="text-[16px] text-center text-[#344054]">
+                <span className="text-[16px] text-left text-[#344054]">
                   Phone Number
                 </span>
                 {data.phone.map((item, index) => (
-                  <h2 className="text-center text-[14px] font-bold text-[#344054]">
+                  <h2 className="text-left text-[14px] font-bold text-[#344054]">
                     {item}
                   </h2>
                 ))}
               </div>
               <div>
-                <span className="text-[16px] text-center text-[#344054]">
+                <span className="text-[16px] text-left text-[#344054]">
                   Email
                 </span>
-                <h2 className="text-center text-[14px] font-bold">
+                <h2 className="text-left text-[14px] font-bold">
                   {data.email}
                 </h2>
               </div>
@@ -335,20 +321,30 @@ function ViewStudent() {
                 <h2 style={{ fontSize: 14, fontWeight: "bold" }}>Lideta</h2>
               </div>
             </div>
-            <div className="mt-8">
-              <h1 className="text-xl font-bold">Guardian Information</h1>
-              {data.phone.map((item, index) => (
-                <div className="border-b-[1px] mt-2 flex flex-row justify-between w-[40vw] p-2">
+            <div className="mt-10 mb-10">
+              <h1 className="text-xl font-bold mb-10">Guardian Information</h1>
+              {guardian.map((item, index) => (
+                <div className="border-b-[2px] mt-2 flex flex-row justify-between w-[50vw] py-2">
                   <div>
-                    <h1 className="font-bold">Guardian {index + 1}</h1>
+                    <h1 className="text-lg">Guardian {index + 1}</h1>
                   </div>
                   <div>
                     <span className="font-light text-xs">Phone Number</span>
-                    <h1>{item}</h1>
+                    <h1>{item.phoneNumber}</h1>
                   </div>
                   <div>
                     <span className="font-light text-xs">Email</span>
-                    <h1>john@gmail.com</h1>
+                    <h1>{item.email}</h1>
+                  </div>
+                  <div>
+                    <span className="font-light text-xs text-left">
+                      Full Name
+                    </span>
+                    <h1>{item.fullName}</h1>
+                  </div>
+                  <div>
+                    <span className="font-light text-xs">Type</span>
+                    <h1>{item.type}</h1>
                   </div>
                 </div>
               ))}

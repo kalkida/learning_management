@@ -1,18 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Button,
-  Modal,
-  Form,
-  Select,
-  Input,
-  DatePicker,
-  Row,
-  Col,
-  message,
-  Tabs,
-  Table,
-} from "antd";
+import { Button, Select, Input, DatePicker, message, Tabs, Table } from "antd";
 import moment from "moment";
 import {
   doc,
@@ -22,10 +10,10 @@ import {
   where,
   query,
   getDoc,
-  updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
+import { fetchParents } from "../funcs";
 import "./style.css";
 
 const { Option } = Select;
@@ -36,7 +24,7 @@ const gender = ["Male", "Female", "Other"];
 function UpdateStudents() {
   const valueRef = useRef();
   const navigate = useNavigate();
-
+  const [parents, setParents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [phone, setPhones] = useState("");
   const [classOption, setClassOption] = useState([]);
@@ -59,6 +47,7 @@ function UpdateStudents() {
     class: data.class,
     course: selectedRowKeys,
     phone: data.phone,
+    studentId: data.studentId,
     school_id: data.school_id,
   });
 
@@ -93,7 +82,6 @@ function UpdateStudents() {
   const handleUpdate = async () => {
     var users;
     if (isObject(updateStudent.class)) {
-      console.log("classes");
       users = await getClassID(updateStudent.class.key);
       updateStudent.class = updateStudent.class.key;
     } else {
@@ -137,9 +125,13 @@ function UpdateStudents() {
               updateStudent.avater = valueRef.current;
 
               if (updateStudent.avater !== null) {
-                setDoc(doc(firestoreDb, "students", data.key), updateStudent, {
-                  merge: true,
-                })
+                setDoc(
+                  doc(firestoreDb, "students", data.key),
+                  { ...updateStudent, course: users.course },
+                  {
+                    merge: true,
+                  }
+                )
                   .then((response) => {
                     setLoading(false);
                     message.success("Data is updated successfuly");
@@ -216,6 +208,8 @@ function UpdateStudents() {
         subject: await getSubjectData(children[i].subject),
       };
     }
+    var parentsAre = await fetchParents(data.phone);
+    setParents(parentsAre);
     setClassCourses(children);
   };
   const getClass = async () => {
@@ -261,8 +255,8 @@ function UpdateStudents() {
   return (
     <>
       <div>
-        <div className="st-profile-header">
-          <div className="flex flex-row align-middle">
+        <div className="st-profile-header border-t-[0px] border-l-[0px] border-r-[0px] -mt-10 border-b-[0px]">
+          <div className="flex flex-row align-middle -ml-5">
             <img
               className="w-[8vw] h-[15vh] rounded-full"
               src={data.avater ? data.avater : "img-5.jpg"}
@@ -272,7 +266,6 @@ function UpdateStudents() {
               <h2 className="text-xl">
                 {data.first_name + " " + data.last_name}
               </h2>
-              <h3>Contacts</h3>
             </div>
           </div>
           <div className="header-extra">
@@ -282,7 +275,7 @@ function UpdateStudents() {
             </div>
             <div>
               <h3>Assigned Course</h3>
-              <h4>{data.courses?.length}</h4>
+              <h4>{data.course?.length}</h4>
             </div>
           </div>
         </div>
@@ -428,8 +421,9 @@ function UpdateStudents() {
                       })}
                       {phone !== "" ? (
                         <Button
+                          className="mt-2"
                           onClick={() => {
-                            setInputs([...input, 0]);
+                            setInputs(...input, 0);
                             setAllPhone([...allPhone, phone]);
                           }}
                         >
@@ -445,34 +439,50 @@ function UpdateStudents() {
                         onChange={(e) => onChange(e)}
                       />
                     </div>
-                    <div></div>
+                    <div>
+                      <label>Student Id</label>
+                      <Input
+                        defaultValue={updateStudent.studentId}
+                        name="studentId"
+                        onChange={(e) => onChange(e)}
+                      />
+                    </div>
                   </div>
                   <div></div>
                 </div>
               </div>
               <h1
+                id="gardian"
                 style={{
                   fontSize: 22,
                   fontWeight: "bold",
-                  marginTop: "10%",
-                  marginBottom: "2%",
+                  marginTop: "2%",
+                  marginBottom: "0%",
                 }}
               >
                 Guardian
               </h1>
-              <div className="mt-8">
-                {data.phone.map((item, index) => (
+              <div className="mt-8 border-[1px] bg-[#F9FAFB] rounded-lg">
+                {parents.map((item, index) => (
                   <div className="border-b-[1px] mt-2 flex flex-row justify-between w-[40vw] p-2">
                     <div>
                       <h1 className="font-bold">Guardian {index + 1}</h1>
                     </div>
                     <div>
+                      <span className="font-light text-xs">Full Name</span>
+                      <h1>{item.fullName}</h1>
+                    </div>
+                    <div>
                       <span className="font-light text-xs">Phone Number</span>
-                      <h1>{item}</h1>
+                      <h1>{item.phoneNumber}</h1>
                     </div>
                     <div>
                       <span className="font-light text-xs">Email</span>
-                      <h1>john@gmail.com</h1>
+                      <h1>{item.email}</h1>
+                    </div>
+                    <div>
+                      <span className="font-light text-xs">Type</span>
+                      <h1>{item.type}</h1>
                     </div>
                   </div>
                 ))}

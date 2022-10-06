@@ -9,17 +9,16 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
-import { Button } from "antd";
 import { firestoreDb } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 import { useRef } from "react";
-import Highlighter from "react-highlight-words";
 import { Select } from "antd";
 import "../modals/courses/style.css";
 import { PlusOutlined } from "@ant-design/icons";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -27,117 +26,11 @@ const { Search } = Input;
 export default function AddStudnets() {
   const uid = useSelector((state) => state.user.profile);
   const navigate = useNavigate();
-  const shcool = useSelector((state) => state.user.shcool);
   const [datas, setData] = useState([]);
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
+
   const [classes, setClasses] = useState([]);
-  const searchInput = useRef(null);
   const [updateComplete, setUpdateComplete] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
-
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
-
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div
-        style={{
-          padding: 8,
-        }}
-      >
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{
-            marginBottom: 8,
-            display: "block",
-          }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined
-        style={{
-          color: filtered ? "#1890ff" : undefined,
-        }}
-      />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{
-            backgroundColor: "#ffc069",
-            padding: 0,
-          }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
 
   const handleView = (data) => {
     console.log("course", data);
@@ -185,14 +78,6 @@ export default function AddStudnets() {
     });
     setLoading(false);
     setData(temporary);
-  };
-
-  const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
-    var response = await getDoc(docRef);
-    var data = response.data();
-    data.key = response.id;
-    return data;
   };
 
   const handleFilterClass = async (value) => {
@@ -246,7 +131,12 @@ export default function AddStudnets() {
         return (
           <>
             {value?.map((item, i) => (
-              <h1 className="p-2 ">{item}</h1>
+              <PhoneInput
+                placeholder="Enter Guardian Contact"
+                className=" bg-white px-2"
+                value={item}
+                disabled
+              />
             ))}
           </>
         );
