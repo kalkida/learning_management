@@ -18,7 +18,7 @@ export default function AdminDash() {
         height: "100vh",
       }}
     >
-      <div className="bg-[#F2F4F7] border-[#98A2B3] w-[84%] flex-row flex-1 absolute top-0 h-[8vh] border-[1px]">
+      <div className="bg-[#F2F4F7] border-[#98A2B3] w-[84%] flex-row flex-1 absolute top-0 h-[8vh] border-[1px] rounded-lg">
         <h1 className="text-lg p-5 text-[#344054] font-bold">{schools.name}</h1>
       </div>
       <div className="flex w-[100%] flex-row overflow-hidden justify-between">
