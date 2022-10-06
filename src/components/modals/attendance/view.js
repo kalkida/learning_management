@@ -5,6 +5,7 @@ import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { async } from '@firebase/util';
 
+
 const { Search } = Input;
 
 function AttendanceView() {
@@ -18,6 +19,7 @@ function AttendanceView() {
         Students?.map(async (item, index) => {
             if (item.key) {
                 Students[index].attendace = await getAttendace(item.key)
+
             }
         })
         setTimeout(() => {
@@ -28,6 +30,22 @@ function AttendanceView() {
     const getAttendace = async (ID) => {
         const q = query(
             collection(firestoreDb, "attendanceanddaily", `${data.key}/attendace`), where("studentId", "==", ID)
+        );
+        var temporary = [];
+
+        const snap = await getDocs(q);
+        snap.forEach((doc) => {
+            var data = doc.data();
+            data.key = doc.id;
+            temporary.push(data);
+
+        });
+        return temporary;
+    }
+
+    const getAttendaceFilter = async (date, ID) => {
+        const q = query(
+            collection(firestoreDb, "attendanceanddaily", `${data.key}/attendace`), where("date", "==", date), where("studentId", "==", ID)
         );
         var temporary = [];
 
@@ -68,8 +86,21 @@ function AttendanceView() {
     ];
 
     const onFilter = (value) => {
-        console.log(value)
-        console.log(value.year() + "-" + (value.month() + 1) + "-" + value.date());
+        setLoading(true)
+        setStudents(data.class.student);
+
+        const date = value.date() < 10 ? "0" + value.date() : value.date()
+        const month = value.month() + 1 < 10 ? "0" + (value.month() + 1) : value.month() + 1
+        const year = value.year()
+
+        const filterDate = year + "-" + month + "-" + date
+
+        Students.map(async (item, index) => {
+            Students[index].attendace = await getAttendaceFilter(filterDate, item.key)
+        })
+        setTimeout(() => {
+            setLoading(false)
+        }, 500);
     }
 
     return (
@@ -78,7 +109,6 @@ function AttendanceView() {
             <div className='at-filters'>
                 <div>
                     <DatePicker onChange={onFilter} placeholder={"Selecet Date"} />
-
                 </div>
                 <div>
                     <Search

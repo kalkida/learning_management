@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Button, Select, Table, Input } from "antd";
+import { Button, Select, Table, Input, DatePicker } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   collection,
@@ -13,8 +13,10 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 
 import "../modals/attendance/style.css";
+import { async } from "@firebase/util";
 
 const { Search } = Input;
+const { Option } = Select;
 
 function AttendanceList() {
 
@@ -22,6 +24,8 @@ function AttendanceList() {
   const uid = useSelector((state) => state.user.profile);
 
   const [courseData, setData] = useState();
+  const [classes, setClasses] = useState([]);
+  const [subject, setSubject] = useState([]);
   const [tableLoading, setTableTextLoading] = useState(true);
 
   const onView = (data) => {
@@ -78,6 +82,50 @@ function AttendanceList() {
     return data;
   };
 
+  const getfilterData = async (data, date) => {
+    if (data.class) {
+      data.class = await getClassData(data.class);
+    }
+    data.attendace = await getFilterAttendace(data.key, date);
+
+    data.class.student?.map(async (item, index) => {
+      data.class.student[index] = await getStudentData(item);
+    });
+
+    return data;
+  };
+
+  const getsubject = async () => {
+    const q = query(
+      collection(firestoreDb, "subject"),
+      where("school_id", "==", uid.school)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    setSubject(temporary);
+  };
+
+  const getClass = async () => {
+
+    const q = query(
+      collection(firestoreDb, "class"),
+      where("school_id", "==", uid.school)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    setClasses(temporary);
+  };
+
   const getStudentData = async (ID) => {
     const docRef = doc(firestoreDb, "students", ID);
     var data = {};
@@ -113,22 +161,26 @@ function AttendanceList() {
     return temporary;
   }
 
-  const getSchool = async () => {
-    const docRef = doc(firestoreDb, "schools", uid.school);
-    const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset;
-    } else {
-    }
-  };
+  const getFilterAttendace = async (courseID, date) => {
+    const q = query(
+      collection(firestoreDb, "attendanceanddaily", `${courseID}/attendace`), where("date", "==", date)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    return temporary;
+  }
 
   const getCourses = async () => {
-    var branches = await getSchool();
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "in", branches.branches)
+      where("school_id", "==", uid.school)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -147,15 +199,104 @@ function AttendanceList() {
 
   useEffect(() => {
     getCourses();
+    getsubject();
+    getClass();
   }, [])
+
+  const handleFilterSubject = async (value) => {
+    if (value) {
+      const q = query(
+        collection(firestoreDb, "courses"),
+        where("school_id", "==", uid.school),
+        where("subject", "==", value)
+      );
+      var temporary = [];
+      const snap = await getDocs(q);
+      snap.forEach(async (doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        getData(data).then((response) => temporary.push(response));
+      });
+      setTimeout(() => {
+        setData(temporary);
+      }, 2000);
+    }
+  };
+
+  const handleFilterClass = async (value) => {
+    if (value) {
+      const q = query(
+        collection(firestoreDb, "courses"),
+        where("school_id", "==", uid.school),
+        where("class", "==", value)
+      );
+      var temporary = [];
+      const snap = await getDocs(q);
+      snap.forEach(async (doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        getData(data).then((response) => temporary.push(response));
+      });
+      setTimeout(() => {
+        setData(temporary);
+      }, 2000);
+    }
+  };
+
+  const handlefilterAttenance = async (value) => {
+
+    const date = value.date() < 10 ? "0" + value.date() : value.date()
+    const month = value.month() + 1 < 10 ? "0" + (value.month() + 1) : value.month() + 1
+    const year = value.year()
+
+    const filterDate = year + "-" + month + "-" + date
+
+    const q = query(
+      collection(firestoreDb, "courses"),
+      where("school_id", "==", uid.school)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      getfilterData(data, filterDate).then((response) => temporary.push(response));
+    });
+
+    setTimeout(() => {
+      setData(temporary);
+      setTableTextLoading(false);
+    }, 2000);
+  }
 
   return (
     <>
       <div className="at-filters">
         <div>
-          <Select defaultValue={"Today"} />
-          <Select defaultValue={"Period"} />
-          <Select defaultValue={"Course"} />
+          <Select placeholder={"Select class"}
+            onChange={handleFilterClass}
+          >
+            {classes?.map((item, i) => (
+              <Option
+                key={item.key}
+                value={item.key}
+                lable={item.level + item.section}
+              >
+                {item.level + item.section}
+              </Option>
+            ))}
+          </Select>
+          <Select
+            placeholder={"Select subject"}
+            onChange={handleFilterSubject}
+          >
+            {subject?.map((item, i) => (
+              <Option key={item.key} value={item.key} lable={item.name}>
+                {item.name}
+              </Option>
+            ))}
+          </Select>
+          <DatePicker onChange={handlefilterAttenance} placeholder="Select date" />
         </div>
         <div>
           <Search
