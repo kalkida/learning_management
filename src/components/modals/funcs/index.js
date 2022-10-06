@@ -4,8 +4,14 @@ import {
   arrayUnion,
   arrayRemove,
   getDoc,
+  where,
+  query,
+  collection,
+  getDocs,
+  setDoc,
 } from "firebase/firestore";
 import { firestoreDb } from "../../../firebase";
+import uuid from "react-uuid";
 
 // check if class Exists and remove
 const existanceCheck = async (id) => {
@@ -128,6 +134,48 @@ const removeTeacherClassfromCourse = async (teacherId, courseId) => {
   });
 };
 
+// parents
+const createParentwhithStudent = async (phoneNumber, schoolId) => {
+  var parent = {
+    phoneNumber: phoneNumber,
+    role: {
+      isAdmin: false,
+      isParent: true,
+      isTeacher: false,
+    },
+
+    school: schoolId,
+  };
+  const uid = uuid();
+  await setDoc(doc(firestoreDb, "users", uid), parent);
+};
+// fetchParents
+const fetchParents = async (phons) => {
+  var temporary = [];
+  const q = query(
+    collection(firestoreDb, "users"),
+    where("phoneNumber", "in", phons)
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    var datas = doc.data();
+    temporary.push(datas);
+    console.log(datas);
+  });
+
+  return temporary;
+};
+// fetchSection
+const fetchSubject = async (sectionId) => {
+  const teacherRef = doc(firestoreDb, "subject", sectionId);
+  const docSnap = await getDoc(teacherRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return "";
+  }
+};
+
 export {
   addSingleTeacherToCourse,
   removeTeacherClassfromCourse,
@@ -139,4 +187,7 @@ export {
   removeSingleCourseToTeacher,
   addSingleClassToTeacher,
   removeSingleClassToTeacher,
+  createParentwhithStudent,
+  fetchParents,
+  fetchSubject,
 };

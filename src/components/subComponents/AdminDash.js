@@ -25,10 +25,11 @@ export default function AdminDash() {
         <Card
           bordered={true}
           style={{
-            width: 400,
+            width: "35%",
             height: 300,
             marginTop: 50,
             borderWidth: 2,
+            marginRight: 10,
           }}
         >
           <h1 style={{ fontWeight: "bold", marginBottom: 10 }}>
@@ -78,8 +79,9 @@ export default function AdminDash() {
         <Card
           bordered={true}
           style={{
-            width: 400,
+            width: "35%",
             height: 300,
+            marginRight: 10,
 
             marginTop: 50,
             borderWidth: 2,
@@ -90,7 +92,7 @@ export default function AdminDash() {
         <Card
           bordered={true}
           style={{
-            width: 400,
+            width: "35%",
             height: 300,
             marginTop: 50,
             borderWidth: 2,
@@ -103,10 +105,10 @@ export default function AdminDash() {
         bordered={true}
         style={{
           width: "53%",
-          marginTop: 10,
+          marginTop: "20%",
           borderWidth: 2,
           position: "absolute",
-          bottom: -40,
+          bottom: -70,
           right: 50,
         }}
       >

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { createParentwhithStudent } from "../modals/funcs";
 import { Input, Button, Select, DatePicker, message, Space } from "antd";
 import {
   doc,
@@ -38,7 +39,6 @@ const CreateNewStudnet = () => {
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState("");
-  const [images, setImages] = useState(null);
 
   const [classData, setClassData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
@@ -58,8 +58,24 @@ const CreateNewStudnet = () => {
   const valueRef = useRef();
 
   async function handleUpload() {
+    var newUID = uuid();
+    var data = await getCourses(newUser.class);
+
     if (!file) {
-      alert("Please choose a file first!");
+      setDoc(doc(firestoreDb, "students", newUID), { ...newUser, course: data })
+        .then(
+          (_) => modifyClassWithStudent(newUID, newUser.class),
+          newUser.phone.map((item) => {
+            createParentwhithStudent(item, uid.school);
+          }),
+          message.success("Student Added Successfuly")
+        )
+        .catch((error) => {
+          console.log(error);
+          message.error("Student is not added, Try Again");
+        });
+      navigate("/list-student");
+      setLoading(false);
     } else {
       const storageRef = ref(storage, file.name);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -84,10 +100,15 @@ const CreateNewStudnet = () => {
               //    setNewUser({ ...newUser, avater: valueRef.current })
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
-                var newUID = uuid();
-                setDoc(doc(firestoreDb, "students", newUID), newUser)
+                setDoc(doc(firestoreDb, "students", newUID), {
+                  ...newUser,
+                  course: data,
+                })
                   .then(
                     (reponse) => modifyClassWithStudent(newUID, newUser.class),
+                    newUser.phone.map((item) => {
+                      createParentwhithStudent(item, uid.school);
+                    }),
                     message.success("Student Added Successfuly")
                   )
                   .catch((error) => {
@@ -148,10 +169,7 @@ const CreateNewStudnet = () => {
     setLoadingButton(false);
   };
   const handlelevel = async (value) => {
-    var data = await getCourses(value);
-    await setNewUser({ ...newUser, courses: data });
     await setNewUser({ ...newUser, class: value });
-
     modifyClassWithStudent(value);
   };
 
