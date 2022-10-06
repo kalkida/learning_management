@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Button, Tabs, Table, Tag, Calendar, Col, Radio, Row, Select, Typography } from "antd";
+import {
+  Button,
+  Tabs,
+  Table,
+  Tag,
+  Calendar,
+  Col,
+  Radio,
+  Row,
+  Select,
+  Typography,
+} from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs, startAt, orderBy } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import BarGraphe from "../../graph/BarGraph";
-import moment from 'moment';
-
+import moment from "moment";
 
 import "./style.css";
 
@@ -18,7 +28,6 @@ function ViewStudent() {
   const [loadingCourse, setLoadingCourse] = useState(true);
   const value = moment("2017-01-25");
   const { data } = state;
-
   const [age, setAge] = useState();
 
   const getClassData = async (id) => {
@@ -58,6 +67,7 @@ function ViewStudent() {
   }, []);
 
   const getAttendace = async () => {
+
     var temporary = [];
     data.class.course?.map(async (item, i) => {
       const q = query(
@@ -118,19 +128,17 @@ function ViewStudent() {
     return listData || [];
   };
 
-
   const dateCellRender = (date, value) => {
     const listData = getListData(date, value);
     return (
       <ul className="events">
         {listData.map((item) => (
           <li key={item.content}>
-            <Tag color={item.type} >{item.content}</Tag>
+            <Tag color={item.type}>{item.content}</Tag>
           </li>
         ))}
       </ul>
     );
-
   };
 
   const [attendanceData, setAttendanceData] = useState([
@@ -209,7 +217,7 @@ function ViewStudent() {
             <h2 className="text-2xl font-bold capitalize text-[#344054]">
               {data.first_name + " " + data.last_name}
             </h2>
-            <p className="text-[14px] text-[gray] p-1">ID 000000</p>
+            <p className="text-[14px] text-[gray] p-1">{data.studentId}</p>
             <a className="border-[2px] border-[#E7752B] p-2 rounded-lg flex flex-row justify-around hover:text-[#E7752B] w-[8vw]">
               <FontAwesomeIcon
                 icon={faMessage}
@@ -384,7 +392,7 @@ function ViewStudent() {
               <h1> Attendance</h1>
               <div>
                 <Tabs defaultActiveKey="1">
-                  <Tabs.TabPane tab="Monthly" key='1'>
+                  <Tabs.TabPane tab="Monthly" key="1">
                     <div className="st-at-tags">
                       <div>
                         <Tag color="#eb3131">5</Tag>
@@ -411,20 +419,23 @@ function ViewStudent() {
                             value={moment(item.defaultDate)}
                             headerRender={() => {
                               return (
-                                <div style={{ padding: 8, textAlign: "center" }}>
-                                  <Typography.Title level={4}> {item.month}</Typography.Title>
+                                <div
+                                  style={{ padding: 8, textAlign: "center" }}
+                                >
+                                  <Typography.Title level={4}>
+                                    {" "}
+                                    {item.month}
+                                  </Typography.Title>
                                 </div>
                               );
                             }}
 
                             dateCellRender={(date) => dateCellRender(date, item.absentDays)} fullscreen={false} />
                         </div>
-
                       ))}
-
                     </div>
                   </Tabs.TabPane>
-                  <Tabs.TabPane tab="Yearly" key='2'>
+                  <Tabs.TabPane tab="Yearly" key="2">
                     <h1>Yearly</h1>
                   </Tabs.TabPane>
                 </Tabs>

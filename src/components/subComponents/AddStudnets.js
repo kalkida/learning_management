@@ -195,49 +195,24 @@ export default function AddStudnets() {
     return data;
   };
 
-  const getData = async (data) => {
-    data.class = await getClassData(data.class);
-    return data;
-  };
-
   const handleFilterClass = async (value) => {
-    setData("");
-    if (value) {
-      var branches = await getSchool();
-      const q = query(
-        collection(firestoreDb, "students"),
-        where("level", "==", value)
-      );
-      var temporary = [];
-      const snap = await getDocs(q);
-      snap.forEach(async (doc) => {
-        var data = doc.data();
-        data.key = doc.id;
-        temporary.push(data);
-        getData(data).then((response) => temporary.push(response));
-      });
-      setData(temporary);
-    }
+    await getStudents();
+    await getClass();
+    var newData = datas.filter(function (val) {
+      return val.class.level === value;
+    });
+    console.log(datas, newData);
+    setData(newData);
   };
 
   const handleFilterSection = async (value) => {
-    if (value) {
-      var branches = await getSchool();
-      const q = query(
-        collection(firestoreDb, "students"),
-        where("school_id", "in", branches.branches),
-        where("section", "array-contains", value)
-      );
-      var temporary = [];
-      const snap = await getDocs(q);
-      snap.forEach(async (doc) => {
-        var data = doc.data();
-        data.key = doc.id;
-        temporary.push(data);
-        getData(data).then((response) => temporary.push(response));
-      });
-      setData(temporary);
-    }
+    await getStudents();
+    await getClass();
+
+    var newData = datas.filter(function (val) {
+      return val.class.section === value;
+    });
+    setData(newData);
   };
 
   const getClass = async () => {
@@ -264,14 +239,14 @@ export default function AddStudnets() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Phone Number",
+      title: "Guardian Phone Number",
       key: "phone",
       dataIndex: "phone",
       render: (value) => {
         return (
           <>
             {value?.map((item, i) => (
-              <h1>{item}</h1>
+              <h1 className="p-2 ">{item}</h1>
             ))}
           </>
         );
@@ -327,7 +302,7 @@ export default function AddStudnets() {
   return (
     <div>
       <div className="list-header">
-        <h1 style={{ fontSize: 28 }}>List Of Students</h1>
+        <h1 className="text-[24px] font-bold">List Of Students</h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">
@@ -337,7 +312,7 @@ export default function AddStudnets() {
             onChange={handleFilterClass}
           >
             {classes?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.level}>
+              <Option key={item.key} value={item.level} lable={item.level}>
                 {item.level}
               </Option>
             ))}
@@ -365,12 +340,15 @@ export default function AddStudnets() {
               }}
             />
           </div>
-          <div>
-            <Link to={"/add-student"}>
-              <PlusOutlined className="site-form-item-icon" />
-              Add Students
-            </Link>
-          </div>
+          <Link
+            className="flex flex-col justify-center align-middle  h-8 w-[10vw] hover:text-[#E77528] border-[#E7752B] border-[2px] rounded-sm"
+            to={"/add-student"}
+          >
+            <div className="flex flex-row justify-around">
+              <PlusOutlined className="text-sm" />
+              <h1 className="text-[15px]">Add Students</h1>
+            </div>
+          </Link>
         </div>
       </div>
 
