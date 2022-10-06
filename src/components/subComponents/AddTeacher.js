@@ -292,9 +292,15 @@ export default function AddTeacher() {
 
   const columns = [
     {
-      title: "FirstName",
+      title: "First Name",
       dataIndex: "first_name",
       key: "first_name",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Last Name",
+      dataIndex: "last_name",
+      key: "last_name",
       render: (text) => <a>{text}</a>,
     },
     {
@@ -318,12 +324,6 @@ export default function AddTeacher() {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      render: (text) => <a>{text}</a>,
-    },
-    {
       title: "Class",
       dataIndex: "class",
       key: "class",
@@ -342,10 +342,21 @@ export default function AddTeacher() {
     {
       title: "Action",
       key: "action",
+      width: "10%",
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleView(record)}>View </a>
-          <a onClick={() => handleUpdate(record)}>Update</a>
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleView(record)}
+          >
+            View{" "}
+          </a>
+          <a
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            onClick={() => handleUpdate(record)}
+          >
+            Update
+          </a>
         </Space>
       ),
     },

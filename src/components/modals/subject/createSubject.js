@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input, message } from "antd";
 import { useSelector } from "react-redux";
-import { async } from "@firebase/util";
+import { PlusOutlined } from "@ant-design/icons";
 import {
   doc,
   setDoc,
@@ -64,9 +64,10 @@ function CreateSubject() {
         onClick={showModal}
         style={{
           padding: 10,
-          backgroundColor: "#E7752B",
+          borderColor: "#E7752B",
+          borderWidth: 2,
           // marginTop: 20,
-          color: "white",
+          color: "#E7752B",
           borderRadius: 5,
           // float: "right",
           display: "flex",
@@ -74,6 +75,7 @@ function CreateSubject() {
           alignItems: "center",
         }}
       >
+        <PlusOutlined />
         Add Subject
       </Button>
       {open ? (
