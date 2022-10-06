@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
-  Form,
   Input,
   Button,
   Select,
-  Modal,
   message,
   TimePicker,
   Tabs,
@@ -21,13 +19,17 @@ import {
   where,
   query,
   getDoc,
-  updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../../firebase";
 import AttendanceList from "../../subComponents/AttendanceList";
 import moment from "moment";
-import { removeSingleCourseFromClass } from "../funcs";
+import {
+  removeSingleCourseFromClass,
+  addSingleCourseToTeacher,
+  addSingleClassToTeacher,
+  removeSingleCourseToTeacher,
+} from "../funcs";
 
 const { Option } = Select;
 
@@ -76,9 +78,23 @@ function UpdateCourse() {
       }
     });
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
-      .then((response) => {
+      .then((_) => {
         setLoading(false);
-        console.log("courses updated", data);
+        //add Course To Teacher when updating
+        updateCourse.teachers.map((items) => {
+          if (!data.teachers.includes(items)) {
+            addSingleCourseToTeacher(data.key, items);
+            addSingleClassToTeacher(updateCourse.class, items);
+          }
+        });
+        // if teacher is in data but not in updateCourse then remove it from the teacher
+        data.teachers.map((items) => {
+          if (!updateCourse.teachers.includes(items)) {
+            console.log("removed", data.key, items.key);
+            removeSingleCourseToTeacher(data.key, items.key);
+          }
+        });
+
         removeSingleCourseFromClass(data.class.key, data.key);
         message.success("Data is updated successfuly");
         navigate("/list-course");
@@ -248,28 +264,30 @@ function UpdateCourse() {
     <>
       {loading ? (
         <div>
-          <div className="profile-header -mt-14">
-            <div className="course-avater -ml-6">
-              <img src="logo512.png" alt="profile" />
-              <div className="profile-info">
-                <h2>{data.course_name}</h2>
-                <h3>
-                  Grade{" "}
-                  {data.class ? data.class.level + data.class.section : ""}
-                </h3>
+          <div className="flex flex-row justify-between -mt-16">
+            <div className="flex flex-row justify-between align-middle ">
+              <div className="rounded-full border-[2px] border-[#E7752B] mr-10">
+                <img
+                  className="w-[7vw] rounded-full h-[7vw] "
+                  src="logo512.png"
+                  alt="profile"
+                />
+              </div>
+              <div className="flex flex-col justify-center align-middle">
+                <h2 className="text-xl font-bold"> {data.course_name}</h2>
               </div>
             </div>
-            <div className="header-extra">
+            <div className="header-extra flex flex-col justify-center align-middle w-[20vw]">
               <div>
-                <h3>Assigned Teachers</h3>
-                <h4>{data.teachers.length}</h4>
+                <h3 className="font-semibold">Assigned Teachers</h3>
+                <h4 className="font-bold">{data.teachers.length}</h4>
               </div>
               <div>
-                <h3>Class/week</h3>
-                <h4>{data.schedule.length}</h4>
+                <h3 className="font-semibold">Class/week</h3>
+                <h4 className="font-bold">{data.schedule.length}</h4>
               </div>
             </div>
-            <div className="flex justify-between flex-col mt-[10vh]">
+            <div className="flex justify-end flex-col  mt-[10vh]">
               <Button
                 className="btn-confirm bg-[#E7752B] text-white"
                 onClick={handleUpdate}
@@ -278,17 +296,18 @@ function UpdateCourse() {
               </Button>
             </div>
           </div>
+
           <div className="tab-content">
             <Tabs defaultActiveKey="1">
               <Tabs.TabPane tab="Profile" key="1">
                 <div className="course-description rounded-lg border-[2px] ">
-                  <h1 className="text-lg">Course Information</h1>
+                  <h1 className="text-xl font-bold">Course Information</h1>
                   <div className="course-content flex flex-row justify-between">
                     <div className="py-2 flex flex-col justify-around">
                       <div>
-                        <span>Subject</span>
+                        <h1>Subject</h1>
                         <Select
-                          className="rounded-xl"
+                          className="rounded-xl mt-2"
                           style={{
                             width: "100%",
                           }}
@@ -312,6 +331,7 @@ function UpdateCourse() {
                         <div>
                           <span>Class</span>
                           <Select
+                            className="mt-2"
                             style={{
                               width: "100%",
                             }}
@@ -334,7 +354,7 @@ function UpdateCourse() {
                       </div>
                     </div>
                     <div className="up-course-description">
-                      <h4>Coures Description</h4>
+                      <h4 className="mb-2">Coures Description</h4>
                       <Input.TextArea
                         name="description"
                         className="border-[1px] rounded-lg"
@@ -348,7 +368,7 @@ function UpdateCourse() {
                 </div>
                 <div className="asssign-teacher">
                   <div className="assign-header">
-                    <h4 className="text-xl">Assigned Teachers</h4>
+                    <h4 className="text-xl font-bold">Assigned Teachers</h4>
                     <Select
                       style={{ width: "30%" }}
                       showArrow={true}
@@ -478,14 +498,6 @@ function UpdateCourse() {
                     </Button>
                   </div>
                 </div>
-                <Button
-                  className="btn-dlt"
-                  type="primary"
-                  danger
-                  onClick={handleDelete}
-                >
-                  Delete
-                </Button>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Attendance" key="2">
                 <AttendanceList />
