@@ -2,58 +2,59 @@ import React, { useEffect, useState, useRef } from "react";
 import { EditorState, ContentState, convertFromHTML } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import DOMPurify from "dompurify";
-import {
-  FilterOutlined,
-  EditOutlined,
-  DeleteOutlined
-} from '@ant-design/icons';
-// import {
-//   FirestoreTextEditor,
-//   FirestoreTextEditorProvider,
-// } from "firestore-text-editor";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
   query,
   collection,
   getDocs,
-  setDocs,
   where,
   addDoc,
   deleteDoc,
-  doc, setDoc
+  doc,
+  setDoc,
 } from "firebase/firestore";
 import { firestoreDb } from "../../firebase";
 import { useSelector } from "react-redux";
 import { message } from "antd";
+
 export default function ListAnnouncment() {
   const [announcment, setAnnouncment] = useState([]);
   const [archivedAnnoumnet, setArchivedAnnouncement] = useState([]);
   const [showPost, setShowPost] = useState(false);
   const data = useSelector((state) => state.user.profile.school);
-  const [editorState, setEditorState] = useState();
+  const [editorState, setEditorState] = useState("");
   const [editData, setEditData] = useState({});
   const [showEdit, setShowEdit] = useState(false);
   const [anounceData, setAnmounceData] = useState({
     title: "",
-    body: '',
+    body: "",
     target: {
       toAll: true,
       toParents: false,
-      toTeachers: false
+      toTeachers: false,
     },
     school: data,
     archived: false,
-  })
-  const datas = useRef("");
+  });
 
+  const shownewPost = () => {
+    setEditorState("");
+
+    setShowPost(true);
+    setShowEdit(false);
+  };
   const uploadData = async (datar) => {
-    await addDoc(collection(firestoreDb, "announcment"), anounceData).then(response => {
-      getBlog();
-      message.success("Announce Poseted")
-      setShowPost(false)
-    }).catch(error =>
-      message.error("Something is wrong, Try Again")
-    )
+    await addDoc(collection(firestoreDb, "announcment"), anounceData)
+      .then((response) => {
+        getBlog();
+        message.success(
+          `Announce Poseted for
+          ${announcment.target.toParents ? "parents" : "teachers"}`
+        );
+        setShowPost(false);
+      })
+      .catch((error) => message.error("Something is wrong, Try Again"));
   };
 
   const getBlog = async () => {
@@ -85,7 +86,7 @@ export default function ListAnnouncment() {
   };
 
   const onChange = (e) => {
-    setAnmounceData({ ...anounceData, title: e.target.value })
+    setAnmounceData({ ...anounceData, title: e.target.value });
     // datas.current = e;
   };
 
@@ -98,59 +99,63 @@ export default function ListAnnouncment() {
   };
 
   const onEditorChange = (e) => {
-    setAnmounceData({ ...anounceData, body: e.blocks[0].text })
-  }
+    setAnmounceData({ ...anounceData, body: e.blocks[0].text });
+  };
 
   const onEditorEdit = (e) => {
-    setEditData({ ...editData, body: e.blocks[0].text })
-  }
+    setEditData({ ...editData, body: e.blocks[0].text });
+  };
 
   const onEdit = (e) => {
-    setEditData({ ...editData, title: e.target.value })
+    setEditData({ ...editData, title: e.target.value });
     // datas.current = e;
   };
 
   const onSelect = (e) => {
-    const value = e.target.value
+    const value = e.target.value;
     switch (value) {
       case "all":
         setAnmounceData({
-          ...anounceData, target: {
+          ...anounceData,
+          target: {
             toAll: true,
             toParents: false,
-            toTeachers: false
-          }
-        })
+            toTeachers: false,
+          },
+        });
         break;
       case "1":
         setAnmounceData({
-          ...anounceData, target: {
+          ...anounceData,
+          target: {
             toAll: false,
             toParents: true,
-            toTeachers: false
-          }
-        })
+            toTeachers: false,
+          },
+        });
         break;
       case "2":
         setAnmounceData({
-          ...anounceData, target: {
+          ...anounceData,
+          target: {
             toAll: false,
             toParents: false,
-            toTeachers: true
-          }
-        })
+            toTeachers: true,
+          },
+        });
         break;
       default:
         setAnmounceData({
-          ...anounceData, target: {
+          ...anounceData,
+          target: {
             toAll: true,
             toParents: false,
-            toTeachers: false
-          }
-        })
+            toTeachers: false,
+          },
+        });
         break;
     }
-  }
+  };
 
   const handleDelete = (id) => {
     deleteDoc(doc(firestoreDb, "announcment", id))
@@ -165,9 +170,11 @@ export default function ListAnnouncment() {
   };
 
   const EditData = () => {
-    setDoc(doc(firestoreDb, "announcment", editData.key), editData, { merge: true })
+    setDoc(doc(firestoreDb, "announcment", editData.key), editData, {
+      merge: true,
+    })
       .then((response) => {
-        setShowEdit(false)
+        setShowEdit(false);
         message.success("Data is updated successfuly");
         getBlog();
       })
@@ -175,50 +182,65 @@ export default function ListAnnouncment() {
         message.error("Data is not updated");
         console.log(error);
       });
-  }
+  };
 
   const openEdit = (data) => {
-    setShowEdit(false);
+    setShowEdit(true);
+    setShowPost(false);
     setEditData(data);
-    setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(`<p>${data.body}</p>`))));
+    setEditorState(
+      EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+          convertFromHTML(`<p>${data.body}</p>`)
+        )
+      )
+    );
     setTimeout(() => {
       setShowEdit(true);
     }, 100);
-  }
+  };
   return (
-    <div>
-      {!showPost ?
+    <div className="flex flex-col">
+      <div className="flex flex-row justify-end mb-2">
+        <select
+          title="Filter"
+          className="h-9 border-[#E7752B] outline-none border-[2px] rounded-sm mr-4 bg-transparent text-[#E7752B] w-[5rem] z-0"
+          onChange={(e) => onSelect(e)}
+          placeholder="Filter"
+        >
+          <option selected hidden>
+            Filter
+          </option>
+          <option key={1} value="all">
+            For All
+          </option>
+          <option key={2} value="1">
+            Parents
+          </option>
+          <option key={3} value="2">
+            Teacher
+          </option>
+        </select>
         <button
-          onClick={() => setShowPost(true)}
-          className="float-right px-3 w-25 mt-[-3rem] rounded-md py-2 text-[white] bg-[#E7752B]  right-0"
+          onClick={() => shownewPost()}
+          className="px-3 w-25 rounded-sm py-1 hover:text-[white] border-[2px] border-[#E7752B] text-[#E7752B] z-0"
         >
           Add Post
         </button>
-        : null}
-      {showPost ?
+      </div>
+
+      {showPost ? (
         <div>
           <div className="flex flex-row justify-between -mt-14">
-            <h1 className="text-4xl ">Post Announcment</h1>
-            <select
-              title="Filter"
-              className="h-9 border-[#E7752B] outline-none border-[2px] rounded-lg bg-transparent text-[#E7752B] w-[5rem]"
-              onChange={(e) => onSelect(e)}
-              placeholder="Filter"
-            >
-              <option selected hidden>Filter</option>
-              <option key={1} value="all">For All</option>
-              <option key={2} value="1">Parents</option>
-              <option key={3} value="2">Teacher</option>
-            </select>
+            <h1 className="text-3xl font-bold ">Post Announcment</h1>
           </div>
           <div className="flex flex-col">
             <input
               onChange={onChange}
               type="text"
-              className="mt-10 border-[2px] border-[lightgray] hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
+              className="mt-10 border-[2px] border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
               placeholder="Header"
             />
-            {/* <textarea className="w-[100%] h-40 border-[#E7752B] border-[2px]"></textarea> */}
             <Editor
               editorState={editorState}
               style={{ padding: 10 }}
@@ -238,29 +260,18 @@ export default function ListAnnouncment() {
             </div>
           </div>
         </div>
-        : null}
-      {showEdit ?
+      ) : null}
+      {showEdit ? (
         <div>
-          <div className="flex flex-row justify-between -mt-14">
-            <h1 className="text-4xl ">Edit Announcment</h1>
-            <select
-              title="Filter"
-              className="h-9 border-[#E7752B] outline-none border-[2px] rounded-lg bg-transparent text-[#E7752B] w-[5rem]"
-              onChange={(e) => onSelect(e)}
-              placeholder="Filter"
-            >
-              <option selected hidden>Filter</option>
-              <option key={1} value="all">For All</option>
-              <option key={2} value="1">Parents</option>
-              <option key={3} value="2">Teacher</option>
-            </select>
-          </div>
           <div className="flex flex-col">
+            <div className="flex flex-row justify-between -mt-14">
+              <h1 className="text-4xl ">Edit Announcment</h1>
+            </div>
             <input
               onChange={onEdit}
               type="text"
-              className="mt-10 border-[2px] border-[lightgray] hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
-              placeholder="Header"
+              className="mt-10 border-[2px] border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
+              placeholder="Title Of Post"
               defaultValue={editData.title}
             />
             <Editor
@@ -283,29 +294,65 @@ export default function ListAnnouncment() {
             </div>
           </div>
         </div>
-        : null}
+      ) : null}
       <div>
-        <h1 className="text-4xl my-10 bg-[#f0e5da]">Latest Announcements</h1>
+        <h1 className="text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054]">
+          Latest Announcements
+        </h1>
         <div>
           {announcment.map((item, index) => (
             <div key={index} className="mt-10">
-              <h1 className="text-lg mb-2 font-bold">{item.title}</h1>
+              <h1 className="text-lg mb-2 font-bold capitalize underline underline-offset-8 decoration-[#E7752B] ">
+                {item.title}
+              </h1>
 
               <div
                 className="preview"
                 dangerouslySetInnerHTML={createMarkup(item.body)}
+              ></div>
+              <div
+                style={{
+                  float: "right",
+                  width: 100,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
               >
-              </div>
-              <div style={{ float: 'right' }}>
-                <button onClick={() => openEdit(item)}><EditOutlined style={{ color: "#E7752B", marginRight: 5, fontSize: 22 }} /></button>
-                <button onClick={() => handleDelete(item.key)}><DeleteOutlined style={{ color: "#E7752B", fontSize: 22 }} /></button>
+                <button onClick={() => openEdit(item)}>
+                  <EditOutlined
+                    className="shadow-lg"
+                    style={{
+                      color: "#E7752B",
+                      marginRight: 5,
+                      fontSize: 22,
+                      borderWidth: 1,
+                      borderColor: "#E7752B",
+                      padding: 3,
+                    }}
+                  />
+                </button>
+                <button onClick={() => handleDelete(item.key)}>
+                  <DeleteOutlined
+                    className="shadow-lg"
+                    style={{
+                      color: "#E7752B",
+                      marginRight: 5,
+                      fontSize: 22,
+                      borderWidth: 1,
+                      borderColor: "#E7752B",
+                      padding: 3,
+                    }}
+                  />
+                </button>
               </div>
             </div>
           ))}
         </div>
       </div>
       <div>
-        <h1 className="text-4xl my-10 bg-[#f0e5da]">Archived Announcements</h1>
+        <h1 className="text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054] mt-10">
+          Archived Announcements
+        </h1>
         <div>
           {archivedAnnoumnet.map((item, index) => (
             <div key={index} className="mt-10">

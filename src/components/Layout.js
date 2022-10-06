@@ -10,6 +10,11 @@ import {
   faMessage,
   faMicrophone,
   faBook,
+  faCalendar,
+  faFile,
+  faFeather,
+  faGraduationCap,
+  faCity,
 } from "@fortawesome/free-solid-svg-icons";
 import ListAnnouncment from "./subComponents/ListAnnouncment";
 import BookOnline from "@mui/icons-material/BookOnline";
@@ -200,7 +205,7 @@ const Layouts = () => {
             <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
               <div>
                 <FontAwesomeIcon
-                  icon={faHome}
+                  icon={faCity}
                   className="text-xl px-5 text-[#2c5886]"
                 />
               </div>
@@ -220,7 +225,7 @@ const Layouts = () => {
             <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
               <div>
                 <FontAwesomeIcon
-                  icon={faHome}
+                  icon={faFeather}
                   className="text-xl px-5 text-[#2c5886]"
                 />
               </div>
@@ -240,7 +245,7 @@ const Layouts = () => {
             <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
               <div>
                 <FontAwesomeIcon
-                  icon={faHome}
+                  icon={faGraduationCap}
                   className="text-xl px-5 text-[#2c5886]"
                 />
               </div>
@@ -260,7 +265,7 @@ const Layouts = () => {
             <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
               <div>
                 <FontAwesomeIcon
-                  icon={faHome}
+                  icon={faCalendar}
                   className="text-xl px-5 text-[#2c5886]"
                 />
               </div>
@@ -279,7 +284,7 @@ const Layouts = () => {
             <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
               <div>
                 <FontAwesomeIcon
-                  icon={faHome}
+                  icon={faCalendar}
                   className="text-xl px-5 text-[#2c5886]"
                 />
               </div>

@@ -19,11 +19,7 @@ import { Input } from "antd";
 import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
-import {
-  InfoCircleOutlined,
-  UserOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import "../modals/courses/style.css";
 
 const { Option } = Select;
@@ -296,11 +292,11 @@ export default function ListCourses() {
     {
       title: "Action",
       key: "action",
-      width: "12%",
+      width: "10%",
       render: (_, record) => (
         <div className="flex flex-row justify-around">
           <a
-            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="p-2 mr-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
           >
             View{" "}
@@ -369,13 +365,14 @@ export default function ListCourses() {
 
   return (
     <div>
-      <div className="list-header">
-        <h1 style={{ fontSize: 28 }}>List Of Course</h1>
+      <div className="list-header -mt-10">
+        <h1 className="text-3xl font-bold">List Of Course</h1>
         <CreateSubject />
       </div>
       <div className="list-sub">
         <div className="list-filter">
           <Select
+            className="hover:border-[#E7752B] border-[#E7752B]"
             defaultValue="Subject"
             style={{ width: 120 }}
             onChange={handleFilterSubject}
@@ -415,7 +412,7 @@ export default function ListCourses() {
           </div>
           <div>
             <Link to={"/add-course"}>
-              <PlusOutlined className="site-form-item-icon" />
+              <PlusOutlined />
               Add Courses
             </Link>
           </div>

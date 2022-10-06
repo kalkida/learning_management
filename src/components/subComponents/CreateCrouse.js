@@ -167,10 +167,10 @@ const CreateCrouse = () => {
   return (
     <div>
       <div className="flex flex-row justify-between -mt-16 mb-10">
-        <h1 className="text-[24px]">Add Course</h1>
+        <h1 className="text-2xl font-bold">Add Course</h1>
         <div>
           <Button
-            className="bg-[#E7752B] text-[white]"
+            className="bg-[#E7752B] text-[white] rounded-lg shadow-md"
             onClick={createNewCourse}
           >
             Submit <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
@@ -179,8 +179,8 @@ const CreateCrouse = () => {
       </div>
       <div className="bg-[#F9FAFB] border-[1px] border-[#D0D5DD] p-[43px] rounded-lg">
         <div>
-          <h1 className="text-[24px] mb-3">Coures Information</h1>
-          <h3>Description</h3>
+          <h1 className="text-2xl font-bold mb-3">Coures Information</h1>
+          <h3 className="pb-2 font-semibold">Description</h3>
           <Input.TextArea
             placeholder="Course "
             rows={4}
@@ -325,9 +325,6 @@ const CreateCrouse = () => {
           </Button>
         </div>
       </div>
-      <Button className="btn-cancle" type="danger" onClick={onCancle}>
-        Cancle
-      </Button>
     </div>
   );
 };
