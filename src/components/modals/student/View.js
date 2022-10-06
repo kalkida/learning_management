@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Button, Tabs, Table, Tag, Calendar, Typography } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  startAt,
+  orderBy,
+} from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import BarGraphe from "../../graph/BarGraph";
@@ -56,22 +63,27 @@ function ViewStudent() {
   }, []);
 
   const getAttendace = async () => {
-    const q = query(
-      collection(
-        firestoreDb,
-        "attendanceanddaily",
-        "478a6e0-d5e8-e242-7473-1843eb3bb385/attendace"
-      )
-    );
     var temporary = [];
+    data.class.course?.map(async (item, i) => {
+      const q = query(
+        collection(firestoreDb, "attendanceanddaily", `${item}/attendace`),
+        where("studentId", "==", data.key)
+      );
+      const snap = await getDocs(q);
 
-    const snap = await getDocs(q);
-
-    snap.forEach((doc) => {
-      var data = doc.data();
-      data.key = doc.id;
-      temporary.push(data);
+      snap.forEach((doc) => {
+        var data = doc.data();
+        data.key = doc.id;
+        temporary.push(data);
+      });
     });
+
+    setTimeout(() => {
+      temporary?.map((item, index) => {
+        var month = new Date(item.date).getMonth();
+        attendanceData[month].absentDays.push(item.date);
+      });
+    }, 500);
   };
 
   const handleUpdate = () => {
@@ -96,18 +108,22 @@ function ViewStudent() {
 
   const getListData = (currentDate, value) => {
     let listData;
-    // value.forEach(element => {
-    //   const Dates = new Date(element);
+    // console.log(value)
+    value.forEach((element) => {
+      const Dates = new Date(element);
 
-    //   if (Dates.getDate() === currentDate.date() && Dates.getMonth() === currentDate.month()) {
-    //     listData = [
-    //       {
-    //         type: "#eb3131",
-    //         content: Dates.getDate(),
-    //       },
-    //     ]
-    //   }
-    // });
+      if (
+        Dates.getDate() === currentDate.date() &&
+        Dates.getMonth() === currentDate.month()
+      ) {
+        listData = [
+          {
+            type: "#eb3131",
+            content: Dates.getDate(),
+          },
+        ];
+      }
+    });
     return listData || [];
   };
 
@@ -124,56 +140,68 @@ function ViewStudent() {
     );
   };
 
-  const attendanceData = [
+  const [attendanceData, setAttendanceData] = useState([
     {
       month: "January",
-      absentDays: new Date().getFullYear() + "-1-1",
+      defaultDate: new Date().getFullYear() + "-1-1",
+      absentDays: [],
     },
     {
       month: "February",
-      absentDays: new Date().getFullYear() + "-2-1",
+      defaultDate: new Date().getFullYear() + "-2-1",
+      absentDays: [],
     },
     {
       month: "March",
-      absentDays: new Date().getFullYear() + "-3-1",
+      defaultDate: new Date().getFullYear() + "-3-1",
+      absentDays: [],
     },
     {
       month: "April",
-      absentDays: new Date().getFullYear() + "-4-1",
+      defaultDate: new Date().getFullYear() + "-4-1",
+      absentDays: [],
     },
     {
       month: "May",
-      absentDays: new Date().getFullYear() + "-5-1",
+      defaultDate: new Date().getFullYear() + "-5-1",
+      absentDays: [],
     },
     {
       month: "June",
-      absentDays: new Date().getFullYear() + "-6-1",
+      defaultDate: new Date().getFullYear() + "-6-1",
+      absentDays: [],
     },
     {
       month: "July",
-      absentDays: new Date().getFullYear() + "-7-1",
+      defaultDate: new Date().getFullYear() + "-7-1",
+      absentDays: [],
     },
     {
       month: "Augest",
-      absentDays: new Date().getFullYear() + "-8-1",
+      defaultDate: new Date().getFullYear() + "-8-1",
+      absentDays: [],
     },
     {
       month: "September",
-      absentDays: new Date().getFullYear() + "-9-1",
+      defaultDate: new Date().getFullYear() + "-9-1",
+      absentDays: [],
     },
     {
       month: "October",
-      absentDays: new Date().getFullYear() + "-10-1",
+      defaultDate: new Date().getFullYear() + "-10-1",
+      absentDays: [],
     },
     {
       month: "November",
-      absentDays: new Date().getFullYear() + "-11-1",
+      defaultDate: new Date().getFullYear() + "-11-1",
+      absentDays: [],
     },
     {
       month: "December",
-      absentDays: new Date().getFullYear() + "-12-1",
+      defaultDate: new Date().getFullYear() + "-12-1",
+      absentDays: [],
     },
-  ];
+  ]);
 
   return (
     <div className="-mt-[7%] h-[100vh] overflow-scroll main scroll-smooth">
@@ -397,7 +425,7 @@ function ViewStudent() {
                       {attendanceData?.map((item, index) => (
                         <div key={index} className="site-calendar-card">
                           <Calendar
-                            value={moment(item.absentDays)}
+                            value={moment(item.defaultDate)}
                             headerRender={() => {
                               return (
                                 <div

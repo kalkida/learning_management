@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Select, Table, Input } from "antd";
+import { Button, Select, Table, Input, DatePicker } from "antd";
 import { useLocation } from 'react-router-dom';
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -11,7 +11,7 @@ function AttendanceView() {
 
     const { state } = useLocation();
     const { data } = state;
-    const Students = data.class.student
+    const [Students, setStudents] = useState(data.class.student);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -66,14 +66,19 @@ function AttendanceView() {
         },
 
     ];
+
+    const onFilter = (value) => {
+        console.log(value)
+        console.log(value.year() + "-" + (value.month() + 1) + "-" + value.date());
+    }
+
     return (
         <>
             <h1 className='view-header' >{data.class.level + data.class.section} Attendance</h1>
             <div className='at-filters'>
                 <div>
-                    <Select defaultValue={"Today"} />
-                    <Select defaultValue={"Period"} />
-                    <Select defaultValue={"Course"} />
+                    <DatePicker onChange={onFilter} placeholder={"Selecet Date"} />
+
                 </div>
                 <div>
                     <Search
