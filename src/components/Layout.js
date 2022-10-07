@@ -1,9 +1,35 @@
+import { useSelector, useDispatch } from "react-redux";
+import { userAction } from "../redux/user";
+import React, { useEffect } from "react";
+import { Routes, Route, useNavigate, Link } from "react-router-dom";
+
+//////////////Styles///////////////////////
+import { styled, useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import BookOnline from "@mui/icons-material/BookOnline";
+import ContentCopy from "@mui/icons-material/ContentCopy";
+import ContentPaste from "@mui/icons-material/ContentPaste";
+import Cloud from "@mui/icons-material/Cloud";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -16,22 +42,15 @@ import {
   faGraduationCap,
   faCity,
 } from "@fortawesome/free-solid-svg-icons";
-import ListAnnouncment from "./subComponents/ListAnnouncment";
-import BookOnline from "@mui/icons-material/BookOnline";
-
-import ContentCopy from "@mui/icons-material/ContentCopy";
-import ContentPaste from "@mui/icons-material/ContentPaste";
-import Cloud from "@mui/icons-material/Cloud";
 import { Avatar, Breadcrumb, Layout, Menu } from "antd";
-import React, { useEffect } from "react";
-import { Routes, Route, useNavigate, Link } from "react-router-dom";
+
+//////////// Route Components /////////////////
+import ListAnnouncment from "./subComponents/ListAnnouncment";
 import AdminDash from "./subComponents/AdminDash";
 import TeacherDash from "./subComponents/TeacherDash";
 import ParentDash from "./subComponents/ParentDash";
 import Navigation from "./Navigation";
 import AddParent from "./subComponents/AddParent";
-import { useSelector, useDispatch } from "react-redux";
-import { userAction } from "../redux/user";
 import AddStudnets from "./subComponents/AddStudnets";
 import CreateNewStudnet from "./subComponents/CreateNewStudnet";
 import ListClasses from "./subComponents/ListClasses";
@@ -54,22 +73,100 @@ import AttendanceList from "./subComponents/AttendanceList";
 import AttendanceView from "./modals/attendance/view";
 
 const { Header, Content, Sider } = Layout;
+const drawerWidth = 240;
+
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }),
+);
+
 
 const Layouts = () => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user.profile);
   const user = useSelector((state) => state.user.value);
   const role = useSelector((state) => state.user.profile.role);
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
   const current = JSON.parse(user);
   const dispatch = useDispatch();
 
   const logout = () => {
     dispatch(userAction.logout());
   };
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   const SiderGenerator = () => {
     if (profile == undefined || profile == "undefined") {
       return (
-        <Paper sx={{ width: 320, maxWidth: "100%", backgroundColor: "white" }}>
+        <Paper sx={{ maxWidth: "100%", backgroundColor: "white" }}>
           <MenuList style={{ backgroundColor: "white" }}>
             <MenuItem>
               <ListItemIcon>
@@ -107,214 +204,144 @@ const Layouts = () => {
     if (profile.role["isAdmin"] == true) {
       const currentURL = window.location.pathname;
       return (
-        <Paper
-          elevation={0}
-          sx={{
-            display: "flex",
-            height: "100%",
-            width: "auto",
-            marginLeft: 1.5,
-          }}
-        >
-          <MenuList
-            style={{
-              borderBottomWidth: 0,
-              marginTop: 10,
-              borderWidth: 0,
-              borderColor: "white",
-            }}
-          >
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader />
+          <List sx={{ minHeight: "89.8vh" }}>
+            {[
+              {
+                text: 'Home',
+                Icon: <FontAwesomeIcon
                   icon={faHome}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg open:bg-[#FCF0E8]"
-                  style={{
-                    color: currentURL === "/admin" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/admin"
-                >
-                  Home
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+                  className="text-xl  text-[#2c5886]"
+                />,
+                link: "/admin"
+              },
+              {
+                text: 'Message',
+                Icon: <FontAwesomeIcon
                   icon={faMessage}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
-                  style={{
-                    color: currentURL === "/message" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/message"
-                >
-                  Messages
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+                  className="text-xl text-[#2c5886]"
+                />,
+                link: "/message"
+              }
+              , {
+                text: 'Announcment',
+                Icon: <FontAwesomeIcon
                   icon={faMicrophone}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
-                  style={{
-                    color:
-                      currentURL === "/announcment" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/announcment"
-                >
-                  Announcement
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+                  className="text-xl  text-[#2c5886]"
+                />,
+                link: "/announcment"
+              },
+              {
+                text: 'Course',
+                Icon: <FontAwesomeIcon
                   icon={faBook}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
-                  style={{
-                    color:
-                      currentURL === "/list-Course" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/list-Course"
-                >
-                  Courses
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+                  className="text-xl  text-[#2c5886]"
+                />,
+                link: "/list-course"
+              }, {
+                text: 'Classes',
+                Icon: <FontAwesomeIcon
                   icon={faCity}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
-                  style={{
-                    color:
-                      currentURL === "/list-classes" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/list-classes"
-                >
-                  Classes
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+                  className="text-xl text-[#2c5886]"
+                />,
+                link: "/list-classes"
+              }, {
+                text: 'Teacher',
+                Icon: <FontAwesomeIcon
                   icon={faFeather}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
-                  style={{
-                    color:
-                      currentURL === "/list-teacher" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/list-teacher"
-                >
-                  Teacher
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+                  className="text-xl  text-[#2c5886]"
+                />,
+                link: "/list-teacher"
+              },
+              {
+                text: 'Student',
+                Icon: <FontAwesomeIcon
                   icon={faGraduationCap}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
-                  style={{
-                    color:
-                      currentURL === "/list-student" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/list-student"
-                >
-                  Student
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+                  className="text-xl  text-[#2c5886]"
+                />,
+                link: "/list-student"
+              },
+              {
+                text: 'Attendance',
+                Icon: <FontAwesomeIcon
                   icon={faCalendar}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
-                  style={{
-                    color: currentURL === "/attendance" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/attendance"
-                >
-                  Attendance
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-row pt-3 h-[5vh] w-[100%] hover:bg-[#FCF0E8]">
-              <div>
-                <FontAwesomeIcon
+                  className="text-xl text-[#2c5886]"
+                />,
+                link: "/attendance"
+              },
+              {
+                text: 'Schedule',
+                Icon: <FontAwesomeIcon
                   icon={faCalendar}
-                  className="text-xl px-5 text-[#2c5886]"
-                />
-              </div>
-              <div>
-                <Link
-                  className="hover:bg-[#FCF0E8] text-lg"
-                  style={{
-                    color: currentURL === "/schedule" ? "#E7752B" : "#2c5886",
-                  }}
-                  to="/schedule"
-                >
-                  Schedule
+                  className="text-xl  text-[#2c5886]"
+                />,
+                link: "/schedule"
+              }
+            ].map((item, index) => (
+              <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
+                <Link to={item.link} >
+                  <ListItemButton
+                    sx={{
+                      ":hover": {
+                        backgroundColor: "#FCF0E8"
+                      },
+                      color: "#2c5886",
+                      minHeight: 48,
+                      justifyContent: open ? 'initial' : 'center',
+                      px: 2.5,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {item.Icon}
+                    </ListItemIcon>
+
+                    <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
                 </Link>
-              </div>
-            </div>
-          </MenuList>
-          <MenuItem style={{ bottom: 0, position: "fixed", bottom: 20 }}>
-            <ListItemIcon style={{ color: "#2c5886" }}>
-              <Avatar fontSize="small" />
-            </ListItemIcon>
-            <a onClick={() => logout()}>
-              {" "}
-              {role["isAdmin"] == true ? (
-                <h1 className="text-[#2c5886]">Admin</h1>
-              ) : (
-                <h1></h1>
-              )}
-            </a>
-          </MenuItem>
-        </Paper>
+              </ListItem>
+            ))}
+
+            <ListItem style={{ position: "fixed", bottom: 0, width: open ? 234 : 65 }} disablePadding sx={{ display: 'block' }}>
+              <Divider />
+              <a onClick={() => logout()} >
+                <ListItemButton
+                  sx={{
+                    ":hover": {
+                      backgroundColor: "#FCF0E8"
+                    },
+                    color: "#2c5886",
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    // px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Avatar style={{ padding: "none" }} fontSize="small" />
+                  </ListItemIcon>
+                  {role["isAdmin"] == true ? (
+                    <ListItemText primary="Admin" sx={{ opacity: open ? 1 : 0 }} />
+                  ) : (
+                    <h1></h1>
+                  )}
+                </ListItemButton>
+              </a>
+            </ListItem>
+          </List>
+
+        </Drawer >
       );
     }
     if (profile.role["isParent"] == true) {
@@ -414,21 +441,14 @@ const Layouts = () => {
 
   return (
     <Layout style={{ backgroundColor: "white" }}>
-      <Navigation />
-      <Layout className="bg-white">
-        <Sider width={200} className="bg-[white] ">
-          <SiderGenerator />
-        </Sider>
-        <Layout
-          style={{
-            padding: "0 24px 24px",
-          }}
-          className="bg-white"
-        >
+      <Box sx={{ display: 'flex' }}>
+        <Navigation handleDrawerOpen={handleDrawerOpen} open={open} handleDrawerClose={handleDrawerClose} theme={theme} AppBar={AppBar} />
+        <SiderGenerator />
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <DrawerHeader />
           <Content
             className="site-layout-background"
             style={{
-              padding: 24,
               margin: 0,
               minHeight: 280,
               backgroundColor: "white",
@@ -462,8 +482,8 @@ const Layouts = () => {
               <Route path="/view-attendance" element={<AttendanceView />} />
             </Routes>
           </Content>
-        </Layout>
-      </Layout>
+        </Box>
+      </Box>
     </Layout>
   );
 };
