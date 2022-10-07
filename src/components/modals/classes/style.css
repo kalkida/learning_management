@@ -212,10 +212,6 @@
     color: white !important;
 }
 
-.at-filters :nth-child(1),
-.at-filters :nth-child(2) {
-    margin-right: 15px;
-}
 
 .list-header {
     display: flex;
