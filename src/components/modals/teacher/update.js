@@ -168,18 +168,20 @@ function TeacherUpdate() {
   };
 
   const getID = () => {
-    var classArr = [];
-    var courseArr = [];
-    data.class?.map((item) => {
-      classArr.push(item.key);
-    });
-    data.course?.map((item) => {
-      courseArr.push(item.key);
-    });
-    setUpdateTeacher({ ...updateTeacher, class: classArr });
-    setUpdateTeacher({ ...updateTeacher, course: courseArr });
-    setSelectedClassKeys(classArr);
-    setSelectedRowKeysCourse(courseArr);
+    if (data?.class) {
+      var classArr = [];
+      var courseArr = [];
+      data?.class?.map((item) => {
+        classArr.push(item.key);
+      });
+      data?.course?.map((item) => {
+        courseArr.push(item.key);
+      });
+      setUpdateTeacher({ ...updateTeacher, class: classArr });
+      setUpdateTeacher({ ...updateTeacher, course: courseArr });
+      setSelectedClassKeys(classArr);
+      setSelectedRowKeysCourse(courseArr);
+    }
   };
 
   const getSubject = async () => {
@@ -436,13 +438,23 @@ function TeacherUpdate() {
           <div className="header-extra-th">
             <div>
               <h3>Class</h3>
-              <h4>
-                {data.class?.map((item, i) => item.level + item.section + ",")}
-              </h4>
+              {data?.class ? (
+                <h4>
+                  {data.class?.map(
+                    (item, i) => item.level + item.section + ","
+                  )}
+                </h4>
+              ) : (
+                <h4>Class Not Assigned</h4>
+              )}
             </div>
             <div>
               <h3>Subject</h3>
-              <h4>{data.course?.map((item, i) => item.course_name + ",")}</h4>
+              {data?.course ? (
+                <h4>{data.course?.map((item, i) => item.course_name + ",")}</h4>
+              ) : (
+                <h1>Course Not Assigned</h1>
+              )}{" "}
             </div>
           </div>
         </div>

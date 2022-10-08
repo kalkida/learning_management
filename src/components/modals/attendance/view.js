@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
-
 const { Search } = Input;
 
 function AttendanceView() {
@@ -24,26 +23,12 @@ function AttendanceView() {
     }, 1000);
   }, []);
 
-<<<<<<< HEAD
-    useEffect(() => {
-        Students?.map(async (item, index) => {
-            if (item.key) {
-                Students[index].attendace = await getAttendace(item.key)
-
-            }
-        })
-        setTimeout(() => {
-            setLoading(false)
-        }, 1000);
-    }, [])
-=======
   const getAttendace = async (ID) => {
     const q = query(
       collection(firestoreDb, "attendanceanddaily", `${data.key}/attendace`),
       where("studentId", "==", ID)
     );
     var temporary = [];
->>>>>>> bf7406dd721eb4b7b032afbd5e8cbfc00460099e
 
     const snap = await getDocs(q);
     snap.forEach((doc) => {
@@ -92,91 +77,6 @@ function AttendanceView() {
     },
   ];
 
-<<<<<<< HEAD
-    const getAttendaceFilter = async (date, ID) => {
-        const q = query(
-            collection(firestoreDb, "attendanceanddaily", `${data.key}/attendace`), where("date", "==", date), where("studentId", "==", ID)
-        );
-        var temporary = [];
-
-        const snap = await getDocs(q);
-        snap.forEach((doc) => {
-            var data = doc.data();
-            data.key = doc.id;
-            temporary.push(data);
-
-        });
-        return temporary;
-    }
-
-    const columns = [
-        {
-            title: 'Student Name',
-            dataIndex: 'class',
-            key: 'name',
-            render: (_, record) => (
-                <a >{record.first_name + " " + record.last_name}</a>
-            ),
-        },
-        {
-            title: 'Id',
-            dataIndex: 'id',
-            key: 'id',
-        },
-
-        {
-            title: 'Days Absent',
-            dataIndex: 'attendance',
-            key: 'attendance',
-            render: (_, record) => (
-                <a >{record.attendace ? record.attendace.length : 0}</a>
-            ),
-        },
-
-    ];
-
-    const onFilter = (value) => {
-        setLoading(true)
-        setStudents(data.class.student);
-
-        const date = value.date() < 10 ? "0" + value.date() : value.date()
-        const month = value.month() + 1 < 10 ? "0" + (value.month() + 1) : value.month() + 1
-        const year = value.year()
-
-        const filterDate = year + "-" + month + "-" + date
-
-        Students.map(async (item, index) => {
-            Students[index].attendace = await getAttendaceFilter(filterDate, item.key)
-        })
-        setTimeout(() => {
-            setLoading(false)
-        }, 500);
-    }
-
-    return (
-        <>
-            <h1 className='view-header' >{data.class.level + data.class.section} Attendance</h1>
-            <div className='at-filters'>
-                <div>
-                    <DatePicker onChange={onFilter} placeholder={"Selecet Date"} />
-                </div>
-                <div>
-                    <Search
-                        placeholder="Search "
-                        allowClear
-                        // onSearch={onSearch}
-                        style={{
-                            width: 200,
-                        }} />
-                </div>
-            </div>
-            <div>
-                <Table loading={loading} dataSource={Students} columns={columns} />
-            </div>
-        </>
-
-    )
-=======
   const onFilter = (value) => {
     console.log(value);
     console.log(value.year() + "-" + (value.month() + 1) + "-" + value.date());
@@ -207,7 +107,6 @@ function AttendanceView() {
       </div>
     </>
   );
->>>>>>> bf7406dd721eb4b7b032afbd5e8cbfc00460099e
 }
 
 export default AttendanceView;
