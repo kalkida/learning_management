@@ -213,6 +213,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faHome}
                   className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/admin"
               },
@@ -221,6 +222,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faMessage}
                   className="text-xl text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/message"
               }
@@ -229,6 +231,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faMicrophone}
                   className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/announcment"
               },
@@ -237,6 +240,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faBook}
                   className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/list-course"
               }, {
@@ -244,6 +248,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faCity}
                   className="text-xl text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/list-classes"
               }, {
@@ -251,6 +256,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faFeather}
                   className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/list-teacher"
               },
@@ -259,6 +265,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faGraduationCap}
                   className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/list-student"
               },
@@ -267,6 +274,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faCalendar}
                   className="text-xl text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/attendance"
               },
@@ -275,6 +283,7 @@ const Layouts = () => {
                 Icon: <FontAwesomeIcon
                   icon={faCalendar}
                   className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
                 />,
                 link: "/schedule"
               }

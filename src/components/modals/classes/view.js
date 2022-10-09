@@ -295,21 +295,21 @@ function ViewClass() {
   }, []);
   return (
     <div>
-      <div className="flex flex-row justify-between align-bottom border-[2px] p-10 -mt-20 rounded-md">
-        <div className="flex flex-row justify-center align-middle">
+      <div className="flex flex-row   justify-between align-bottom border-[2px] p-10  rounded-md">
+        <div className="flex flex-row justify-center align-middle ">
           <img
             className="w-20 border-[black] border-[2px]"
             src="logo512.png"
             alt="profile"
           />
           <div className="flex flex-row mt-8 ml-2">
-            <h2>{data?.level}</h2>
-            <h3>{data?.section}</h3>
+            <h2 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>{data?.level}</h2>
+            <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>{data?.section}</h3>
           </div>
         </div>
         <div className="header-extra">
           <div>
-            <h3>Assigned Students</h3>
+            <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>Assigned Students</h3>
             <h4>{data?.student.length}</h4>
           </div>
           {/* <div>
@@ -325,15 +325,15 @@ function ViewClass() {
               Edit Class
             </Button>
             <div className="asssign-teacher">
-              <h4 className="text-[24px] mb-10">Assigned Students</h4>
+              <h4 className="text-[24px] mb-10" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Assigned Students</h4>
               <Table dataSource={students} columns={columns} />
             </div>
             <div className="asssign-teacher -mt-10">
-              <h4 className="text-[24px]">Assigned Courses</h4>
+              <h4 className="text-[24px]" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Assigned Courses</h4>
               <Table dataSource={datas} columns={courseColumns} />
             </div>
             <div className="asssign-teacher">
-              <h4 className="text-[24px]">Weekly Schedule</h4>
+              <h4 className="text-[24px]" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Weekly Schedule</h4>
               <Table dataSource={datas} columns={scheduleColumn} />
             </div>
           </Tabs.TabPane>

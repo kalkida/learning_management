@@ -427,7 +427,7 @@ function TeacherUpdate() {
               alt="profile"
             />
             <div className="profile-info">
-              <h2>
+              <h2  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:20}}>
                 {updateTeacher.first_name + " " + updateTeacher.last_name}
               </h2>
               <h3>Contact</h3>
@@ -435,14 +435,16 @@ function TeacherUpdate() {
           </div>
           <div className="header-extra-th">
             <div>
-              <h3>Class</h3>
-              <h4>
+              <h3  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'28px',fontSize:14}}>Class</h3>
+              <h4
+               style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'28px',fontSize:14}}
+              >
                 {data.class?.map((item, i) => item.level + item.section + ",")}
               </h4>
             </div>
             <div>
-              <h3>Subject</h3>
-              <h4>{data.course?.map((item, i) => item.course_name + ",")}</h4>
+              <h3  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'28px',fontSize:14}}>Subject</h3>
+              <h4  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'28px',fontSize:14}}>{data.course?.map((item, i) => item.course_name + ",")}</h4>
             </div>
           </div>
         </div>
@@ -453,11 +455,11 @@ function TeacherUpdate() {
                 Confirm
               </Button>
               <div className="add-teacher">
-                <h1>Edit Profile</h1>
+                <h1  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}>Edit Profile</h1>
                 <div>
                   <div className="avater-img">
                     <div>
-                      <h2>Profile Picture</h2>
+                      <h2  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>Profile Picture</h2>
                       <img
                         src={
                           file

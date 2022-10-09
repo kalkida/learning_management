@@ -223,7 +223,7 @@ const CreateClasses = () => {
     <>
       <div>
         <div className="flex flex-row justify-between mb-2">
-          <h1 className="text-3xl">Create Class</h1>
+          <h1 className="text-3xl" style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24}}>Create Class</h1>
           <Button
             className="text-[#E7752B] border-[1px] border-[#E7752B]  hover:bg-[#E7752B]"
             onClick={() => createNewClass()}
@@ -242,7 +242,7 @@ const CreateClasses = () => {
           <div className="course-content">
             <div>
               <div className="py-2">
-                <span>Class</span>
+                <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Class</span>
                 <Input
                   name="level"
                   type={"number"}
@@ -250,7 +250,7 @@ const CreateClasses = () => {
                 />
               </div>
               <div>
-                <span>Student</span>
+                <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Student</span>
                 <Select
                   style={{
                     width: "100%",
@@ -280,13 +280,13 @@ const CreateClasses = () => {
               </div>
             </div>
             <div className="py-2 ml-10">
-              <span>Section</span>
+              <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Section</span>
               <Input name="section" onChange={(e) => handleClass(e)} />
             </div>
           </div>
         </div>
         <div className="list-header">
-          <h1 style={{ fontSize: 28, marginTop: 20 }}>Add Courses</h1>
+          <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24 ,marginTop:10}}>Add Courses</h1>
         </div>
         <div
           style={{
@@ -318,7 +318,7 @@ const CreateClasses = () => {
         ></div>
         <div className="schedule">
           <div className="up-card-schedule">
-            <h1 style={{ fontSize: 24, fontWeight: "bold", padding: 10 }}>
+            <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24 , padding:10}}>
               {" "}
               Schedule
             </h1>

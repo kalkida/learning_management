@@ -232,7 +232,7 @@ export default function ListAnnouncment() {
       {showPost ? (
         <div>
           <div className="flex flex-row justify-between -mt-14">
-            <h1 className="text-3xl font-bold ">Post Announcment</h1>
+            <h1 className="text-3xl font-bold font-sans ">Post Announcment</h1>
           </div>
           <div className="flex flex-col">
             <input
@@ -296,18 +296,19 @@ export default function ListAnnouncment() {
         </div>
       ) : null}
       <div>
-        <h1 className="text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054]">
+        <h1 className="text-3xl font-bold font-sans leading-10">
           Latest Announcements
         </h1>
         <div>
           {announcment.map((item, index) => (
             <div key={index} className="mt-10">
-              <h1 className="text-lg mb-2 font-bold capitalize underline underline-offset-8 decoration-[#E7752B] ">
+              <h1 className="text-lg mb-2 font-bold font-sans capitalize underline underline-offset-8 decoration-[#E7752B] ">
                 {item.title}
               </h1>
 
               <div
                 className="preview"
+                style={{ fontFamily:'Plus Jackarta Sans' , fontSize:16, fontWeight:'500'}}
                 dangerouslySetInnerHTML={createMarkup(item.body)}
               ></div>
               <div
@@ -350,14 +351,14 @@ export default function ListAnnouncment() {
         </div>
       </div>
       <div>
-        <h1 className="text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054] mt-10">
+        <h1 className="text-3xl font-bold font-sans leading-10">
           Archived Announcements
         </h1>
         <div>
           {archivedAnnoumnet.map((item, index) => (
             <div key={index} className="mt-10">
               <h1 className="text-lg mb-2 font-bold">{item.title}</h1>
-              <p>{item.body}</p>
+              <p style={{ fontFamily:'Plus Jackarta Sans' , fontSize:16, fontWeight:'500'}}>{item.body}</p>
             </div>
           ))}
         </div>

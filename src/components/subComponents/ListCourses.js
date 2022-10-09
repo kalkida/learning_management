@@ -366,7 +366,7 @@ export default function ListCourses() {
   return (
     <div>
       <div className="list-header -mt-15">
-        <h1 className="text-3xl font-bold">List Of Course</h1>
+        <h1 className="text-3xl font-bold"  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}>List Of Course</h1>
         <CreateSubject />
       </div>
       <div className="list-sub">
