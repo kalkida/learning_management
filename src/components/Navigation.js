@@ -48,7 +48,7 @@ export default function Dashboard({
             edge="start"
             sx={{
               marginRight: 5,
-              marginLeft: -2,
+              marginLeft: -1,
               ...(open && { display: "none" }),
             }}
           >

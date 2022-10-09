@@ -209,7 +209,7 @@ const Layouts = () => {
           open={open}
         >
           <DrawerHeader />
-          <List className="sm:invisible md:visible">
+          <List className="sm:invisible md:visible ">
             {[
               {
                 text: "Home",
