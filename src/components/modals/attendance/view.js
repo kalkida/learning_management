@@ -3,6 +3,7 @@ import { Button, Select, Table, Input, DatePicker, Tag } from "antd";
 import { useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { async } from "@firebase/util";
 
 const { Search } = Input;
 
@@ -77,9 +78,42 @@ function AttendanceView() {
     },
   ];
 
+  const getAttendaceFilter = async (date, ID) => {
+    const q = query(
+      collection(firestoreDb, "attendanceanddaily", `${data.key}/attendace`),
+      where("date", "==", date),
+      where("studentId", "==", ID)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    return temporary;
+  };
+
   const onFilter = (value) => {
-    console.log(value);
-    console.log(value.year() + "-" + (value.month() + 1) + "-" + value.date());
+    setLoading(true);
+
+    const date = value.date() < 10 ? "0" + value.date() : value.date();
+    const month =
+      value.month() + 1 < 10 ? "0" + (value.month() + 1) : value.month() + 1;
+    const year = value.year();
+
+    const filterDate = year + "-" + month + "-" + date;
+
+    Students.map(async (item, index) => {
+      Students[index].attendace = await getAttendaceFilter(
+        filterDate,
+        item.key
+      );
+    });
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   };
 
   return (

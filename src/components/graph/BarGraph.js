@@ -28,7 +28,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Chart.js Bar Chart",
+      text: "Student Population",
     },
   },
 };
@@ -39,14 +39,14 @@ export const data = {
   labels,
   datasets: [
     {
-      label: "Dataset 1",
+      label: "Male",
       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      backgroundColor: "#EA8848",
     },
     {
-      label: "Dataset 2",
+      label: "Female",
       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
+      backgroundColor: "#F6C9AC",
     },
   ],
 };
