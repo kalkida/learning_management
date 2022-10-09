@@ -30,12 +30,12 @@ function ViewCourse() {
     navigate("/update-course", { state: { data } });
   };
   return (
-    <div>
-      <div className="flex flex-row justify-between -mt-16">
+    <div className="bg-[#E8E8E8] h-[100vh] p-4">
+      <div className="flex flex-row justify-between -mt-16 ">
         <div className="flex flex-row justify-between align-middle ">
           <div className="rounded-full border-[2px] border-[#E7752B] mr-10">
             <img
-              className="w-[7vw] rounded-full h-[7vw] "
+              className="w-[7vw] rounded-full h-[7vw] bg-[white] "
               src="logo512.png"
               alt="profile"
             />
@@ -56,8 +56,11 @@ function ViewCourse() {
         </div>
       </div>
       <div className="tab-content">
-        <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="Profile" key="1">
+        <Tabs className="bg-[#E8E8E8]" defaultActiveKey="1">
+          <Tabs.TabPane
+            tab={<p className="text-xl font-bold text-center ml-5">Profile</p>}
+            key="1"
+          >
             <Button
               icon={<FontAwesomeIcon className="pr-2" icon={faPen} />}
               className="btn-confirm"
@@ -65,7 +68,7 @@ function ViewCourse() {
             >
               Edit Course
             </Button>
-            <div className="course-description rounded-lg border-[2px]">
+            <div className="course-description rounded-2xl border-[2px]">
               <h4 className="mb-2 font-bold text-lg">Coures Description</h4>
               <Input.TextArea
                 className="border-[1px] rounded-lg"
@@ -127,10 +130,20 @@ function ViewCourse() {
               </div>
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Attendance" key="2">
+          <Tabs.TabPane
+            tab={
+              <p className="text-xl font-bold text-center ml-5">Attendance</p>
+            }
+            key="2"
+          >
             <AttendanceList />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Assignment" key="3">
+          <Tabs.TabPane
+            tab={
+              <p className="text-xl font-bold text-center ml-5">Assignment</p>
+            }
+            key="3"
+          >
             Content of Tab Pane 3
           </Tabs.TabPane>
         </Tabs>

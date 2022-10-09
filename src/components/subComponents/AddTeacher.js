@@ -380,7 +380,7 @@ export default function AddTeacher() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-[#E8E8E8] h-[100vh]">
       <div className="list-header">
         <h1 style={{ fontSize: 28 }}>List Of Teachers</h1>
       </div>

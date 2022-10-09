@@ -139,7 +139,7 @@ function TeacherView() {
 
   return (
     <>
-      <div>
+      <div className="w-[100%]">
         <div className="flex flex-row justify-between border-b-[2px] pb-2 -mt-4">
           <div className="flex flex-row">
             <div className="rounded-full border-[2px]">
@@ -182,7 +182,7 @@ function TeacherView() {
           </div>
         </div>
         <div className="tab-content">
-          <Tabs defaultActiveKey="1">
+          <Tabs tabBarStyle={{ backgroundColor: "red" }} defaultActiveKey="1">
             <Tabs.TabPane tab="Profile" key="1">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Edit Profile

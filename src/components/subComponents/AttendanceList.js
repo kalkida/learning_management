@@ -19,7 +19,6 @@ const { Search } = Input;
 const { Option } = Select;
 
 function AttendanceList() {
-
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
 
@@ -53,19 +52,27 @@ function AttendanceList() {
       title: "Section",
       dataIndex: "class",
       key: "age",
-      render: (_, record) => <a onClick={() => onView(record)}>{record.class.section}</a>,
+      render: (_, record) => (
+        <a onClick={() => onView(record)}>{record.class.section}</a>
+      ),
     },
     {
       title: "Absent",
       dataIndex: "attendance",
       key: "sex",
-      render: (_, record) => <a onClick={() => onView(record)}>{record.attendace.length}</a>,
+      render: (_, record) => (
+        <a onClick={() => onView(record)}>{record.attendace.length}</a>
+      ),
     },
     {
       title: "Present",
       dataIndex: "attendance",
       key: "sex",
-      render: (_, record) => <a onClick={() => onView(record)}>{record.class.student.length - record.attendace.length}</a>,
+      render: (_, record) => (
+        <a onClick={() => onView(record)}>
+          {record.class.student.length - record.attendace.length}
+        </a>
+      ),
     },
   ];
 
@@ -111,7 +118,6 @@ function AttendanceList() {
   };
 
   const getClass = async () => {
-
     const q = query(
       collection(firestoreDb, "class"),
       where("school_id", "==", uid.school)
@@ -159,12 +165,12 @@ function AttendanceList() {
       temporary.push(data);
     });
     return temporary;
-  }
-
+  };
 
   const getFilterAttendace = async (courseID, date) => {
     const q = query(
-      collection(firestoreDb, "attendanceanddaily", `${courseID}/attendace`), where("date", "==", date)
+      collection(firestoreDb, "attendanceanddaily", `${courseID}/attendace`),
+      where("date", "==", date)
     );
     var temporary = [];
 
@@ -175,7 +181,7 @@ function AttendanceList() {
       temporary.push(data);
     });
     return temporary;
-  }
+  };
 
   const getCourses = async () => {
     const q = query(
@@ -194,14 +200,13 @@ function AttendanceList() {
       setData(temporary);
       setTableTextLoading(false);
     }, 2000);
-  }
-
+  };
 
   useEffect(() => {
     getCourses();
     getsubject();
     getClass();
-  }, [])
+  }, []);
 
   const handleFilterSubject = async (value) => {
     if (value) {
@@ -244,12 +249,12 @@ function AttendanceList() {
   };
 
   const handlefilterAttenance = async (value) => {
+    const date = value.date() < 10 ? "0" + value.date() : value.date();
+    const month =
+      value.month() + 1 < 10 ? "0" + (value.month() + 1) : value.month() + 1;
+    const year = value.year();
 
-    const date = value.date() < 10 ? "0" + value.date() : value.date()
-    const month = value.month() + 1 < 10 ? "0" + (value.month() + 1) : value.month() + 1
-    const year = value.year()
-
-    const filterDate = year + "-" + month + "-" + date
+    const filterDate = year + "-" + month + "-" + date;
 
     const q = query(
       collection(firestoreDb, "courses"),
@@ -260,22 +265,22 @@ function AttendanceList() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      getfilterData(data, filterDate).then((response) => temporary.push(response));
+      getfilterData(data, filterDate).then((response) =>
+        temporary.push(response)
+      );
     });
 
     setTimeout(() => {
       setData(temporary);
       setTableTextLoading(false);
     }, 2000);
-  }
+  };
 
   return (
     <>
       <div className="at-filters">
         <div>
-          <Select placeholder={"Select class"}
-            onChange={handleFilterClass}
-          >
+          <Select placeholder={"Select class"} onChange={handleFilterClass}>
             {classes?.map((item, i) => (
               <Option
                 key={item.key}
@@ -286,17 +291,17 @@ function AttendanceList() {
               </Option>
             ))}
           </Select>
-          <Select
-            placeholder={"Select subject"}
-            onChange={handleFilterSubject}
-          >
+          <Select placeholder={"Select subject"} onChange={handleFilterSubject}>
             {subject?.map((item, i) => (
               <Option key={item.key} value={item.key} lable={item.name}>
                 {item.name}
               </Option>
             ))}
           </Select>
-          <DatePicker onChange={handlefilterAttenance} placeholder="Select date" />
+          <DatePicker
+            onChange={handlefilterAttenance}
+            placeholder="Select date"
+          />
         </div>
         <div>
           <Search
@@ -310,7 +315,11 @@ function AttendanceList() {
         </div>
       </div>
       <div>
-        <Table loading={tableLoading} dataSource={courseData} columns={columns} />
+        <Table
+          loading={tableLoading}
+          dataSource={courseData}
+          columns={columns}
+        />
       </div>
     </>
   );

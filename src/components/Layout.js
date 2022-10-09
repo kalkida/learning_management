@@ -476,7 +476,7 @@ const Layouts = () => {
   }, []);
 
   return (
-    <Layout style={{ backgroundColor: "white" }}>
+    <Layout className="bg-[#E8E8E8]" style={{ backgroundColor: "white" }}>
       <Box sx={{ display: "flex", width: "100%" }}>
         <Navigation
           handleDrawerOpen={handleDrawerOpen}
@@ -489,10 +489,11 @@ const Layouts = () => {
         <Box
           component="main"
           sx={{ flexGrow: 1, p: 1 }}
-          className="bg-[#F9FAFB]"
+          className="bg-[#E8E8E8]"
         >
           <DrawerHeader />
           <Content
+            className="bg-[#E8E8E8] h-[100vh]"
             style={{
               margin: 0,
               minHeight: 280,

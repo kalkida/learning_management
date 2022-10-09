@@ -165,10 +165,10 @@ const CreateCrouse = () => {
   }, []);
 
   return (
-    <div>
-      <div className="flex flex-row justify-between -mt-16 mb-10">
-        <h1 className="text-2xl font-bold">Add Course</h1>
-        <div>
+    <div className="bg-[#E8E8E8] h-[auto] pb-20">
+      <div className="flex flex-row justify-between -mt-10 mb-10">
+        <h1 className="text-2xl font-bold ml-12">Add Course</h1>
+        <div className="pr-10">
           <Button
             className="bg-[#E7752B] text-[white] rounded-lg shadow-md"
             onClick={createNewCourse}
@@ -310,6 +310,7 @@ const CreateCrouse = () => {
             </div>
           ))}
           <Button
+            className="border-[2px] border-[#E7752B] text-[#E7752B]"
             style={{
               float: "right",
             }}
