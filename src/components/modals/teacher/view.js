@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Form,
-  Input,
-  Button,
-  Select,
-  Row,
-  Col,
-  Tabs,
-  Table,
-  Tag,
-} from "antd";
+import { Button, Select, Tabs, Table, Tag } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
+import { MailFilled } from "@ant-design/icons";
+import moment from "moment";
 import "./style.css";
 
 const { Option } = Select;
@@ -20,17 +11,24 @@ function TeacherView() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { data } = state;
+  const [teacherData, setTeacherData] = useState([data]);
+
   const [weekClass, setWeekClass] = useState();
   const [age, setAge] = useState();
   const [expriance, setExpriance] = useState();
 
   var getworkTime = new Date(JSON.parse(data.working_since));
-  const workTime = getworkTime.getFullYear() + "-" + getworkTime.getMonth() + "-" + getworkTime.getDay()
+  const workTime =
+    getworkTime.getFullYear() +
+    "-" +
+    getworkTime.getMonth() +
+    "-" +
+    getworkTime.getDay();
 
   useEffect(() => {
     var weekClassSum = 0;
-    data.course.map((item, i) => {
-      weekClassSum += item.schedule.length;
+    data?.course.map((item, i) => {
+      weekClassSum += item.schedule?.length;
     });
     var today = new Date();
     var birthDate = new Date(JSON.parse(data.DOB));
@@ -53,6 +51,40 @@ function TeacherView() {
   const handleUpdate = () => {
     navigate("/update-teacher", { state: { data } });
   };
+  const teacherColumn = [
+    {
+      title: "Age",
+      dataIndex: "DOB",
+      key: "DOB",
+      render: (item) => {
+        return <span>{moment(JSON.parse(item)).format("DD-MMMM-YYYY")}</span>;
+      },
+    },
+    {
+      title: "Sex",
+      dataIndex: "sex",
+      key: "sex",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+
+    {
+      title: "Working Since",
+      dataIndex: "working_since",
+      key: "working_since",
+      render: (item) => {
+        return <span>{moment(JSON.parse(item)).format("DD-MMMM-YYYY")}</span>;
+      },
+    },
+  ];
 
   const columns = [
     {
@@ -65,7 +97,11 @@ function TeacherView() {
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
-        return <div>{item.name}</div>;
+        if (item?.name) {
+          return <div>{item.name}</div>;
+        } else {
+          return <Tag>Teacher Not Assigned To class</Tag>;
+        }
       },
     },
     {
@@ -73,13 +109,17 @@ function TeacherView() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return (
-          <div>
-            {item.level}
-            {"   "}
-            {item.section}
-          </div>
-        );
+        if (item?.level) {
+          return (
+            <div>
+              {item.level}
+              {"   "}
+              {item.section}
+            </div>
+          );
+        } else {
+          return <Tag>Teacher is Not Assigned</Tag>;
+        }
       },
     },
   ];
@@ -100,24 +140,44 @@ function TeacherView() {
   return (
     <>
       <div>
-        <div className="profile-header">
-          <div className="teacher-avater">
-            <img src={data.avater ? data.avater : "img-5.jpg"} alt="profile" />
-            <div className="profile-info">
-              <h2>{data.first_name + " " + data.last_name}</h2>
-              <h3>Contact</h3>
+        <div className="flex flex-row justify-between border-b-[2px] pb-2 -mt-4">
+          <div className="flex flex-row">
+            <div className="rounded-full border-[2px]">
+              <img
+                src={data.avater ? data.avater : "img-5.jpg"}
+                alt="profile"
+                className="w-[7vw] rounded-full"
+              />
+            </div>
+            <div className="flex flex-col justify-center ml-2">
+              <h2 className="text-lg font-bold">
+                {data.first_name + " " + data.last_name}
+              </h2>
+              <div className="flex flex-row align-bottom">
+                <div>
+                  <MailFilled className="text-[#E7752B]" />
+                </div>
+                <div>
+                  <h3 className="text-md text-[#E7752B] p-1">Contact</h3>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="header-extra-th">
-            <div>
-              <h3>Class</h3>
-              <h4>
-                {data.class?.map((item, i) => item.level + item.section + ",")}
-              </h4>
+          <div className=" flex flex-col justify-center -ml-20">
+            <div className="flex flex-row">
+              <h3 className="font-bold pr-2 border-r-[1px]">Class</h3>
+              {data?.class ? (
+                <h4 className="pl-2">
+                  {data?.class?.map(
+                    (item, i) => item.level + item.section + ","
+                  )}
+                </h4>
+              ) : (
+                <h3>Teacher is not Assigned</h3>
+              )}
             </div>
             <div>
-              <h3>Subject</h3>
-              <h4>{data.course?.map((item, i) => item.course_name + ",")}</h4>
+              <h3 className="font-bold">Subject</h3>
             </div>
           </div>
         </div>
@@ -127,29 +187,42 @@ function TeacherView() {
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Edit Profile
               </Button>
-              <div className="teacher-static">
+              <div className="flex flex-row justify-between w-[70%]">
                 <div>
-                  <h1>7,8</h1>
+                  <h1 className="text-4xl font-bold py-2 text-center">7,8</h1>
                   <span>Assigned Grade</span>
                 </div>
                 <div>
-                  <h1>{data.class.length}</h1>
+                  <h1 className="text-4xl font-bold py-2 text-center">
+                    {data.class.length}
+                  </h1>
                   <span>Classes</span>
                 </div>
                 <div>
-                  <h1>{data.course.length}</h1>
+                  <h1 className="text-4xl font-bold py-2 text-center">
+                    {data.course.length}
+                  </h1>
                   <span>Course</span>
                 </div>
                 <div>
-                  <h1>{weekClass}</h1>
+                  <h1 className="text-4xl font-bold py-2 text-center">
+                    {weekClass ? weekClass : "0"}
+                  </h1>
                   <span>Classes/Week</span>
                 </div>
               </div>
-              <div className="teacher-profile">
-                <div className="personal-info">
-                  <h1>Personal Information</h1>
-                  <div className="info-content">
-                    <div className="col">
+              <div className="">
+                <div className="">
+                  <h1 className="text-lg py-5 font-bold">
+                    Personal Information
+                  </h1>
+                  <div className="">
+                    <Table
+                      columns={teacherColumn}
+                      dataSource={teacherData}
+                      pagination={false}
+                    />
+                    {/* <div className="col">
                       <div>
                         <h3>Age</h3>
                         <span>{age}</span>
@@ -166,10 +239,10 @@ function TeacherView() {
                         <h3>Email</h3>
                         <span>{data.email}</span>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
-                <div className="career-profile">
+                {/* <div className="career-profile">
                   <h1>Career Profile</h1>
                   <div>
                     <h3>Working Since</h3>
@@ -183,7 +256,7 @@ function TeacherView() {
                     <h3>Work Expirence</h3>
                     <span>{expriance} year</span>
                   </div>
-                </div>
+                </div> */}
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Course" key="2">

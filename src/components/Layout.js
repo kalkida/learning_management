@@ -4,22 +4,22 @@ import React, { useEffect } from "react";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
 
 //////////////Styles///////////////////////
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { styled, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import MuiDrawer from "@mui/material/Drawer";
+import MuiAppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import CssBaseline from "@mui/material/CssBaseline";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import MenuList from "@mui/material/MenuList";
@@ -77,69 +77,68 @@ const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
-  transition: theme.transitions.create('width', {
+  transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  overflowX: 'hidden',
+  overflowX: "hidden",
 });
 
 const closedMixin = (theme) => ({
-  transition: theme.transitions.create('width', {
+  transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowX: 'hidden',
+  overflowX: "hidden",
   width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
 });
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
+  transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    ...(open && {
-      ...openedMixin(theme),
-      '& .MuiDrawer-paper': openedMixin(theme),
-    }),
-    ...(!open && {
-      ...closedMixin(theme),
-      '& .MuiDrawer-paper': closedMixin(theme),
-    }),
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
   }),
-);
-
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
+}));
 
 const Layouts = () => {
   const navigate = useNavigate();
@@ -147,7 +146,7 @@ const Layouts = () => {
   const user = useSelector((state) => state.user.value);
   const role = useSelector((state) => state.user.profile.role);
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const current = JSON.parse(user);
   const dispatch = useDispatch();
 
@@ -204,135 +203,173 @@ const Layouts = () => {
     if (profile.role["isAdmin"] == true) {
       const currentURL = window.location.pathname;
       return (
-        <Drawer variant="permanent" open={open}>
+        <Drawer
+          className="sm:absolute md:relative"
+          variant="permanent"
+          open={open}
+        >
           <DrawerHeader />
-          <List sx={{ minHeight: "89.8vh" }}>
+          <List className="sm:invisible md:visible ">
             {[
               {
-                text: 'Home',
-                Icon: <FontAwesomeIcon
-                  icon={faHome}
-                  className="text-xl  text-[#2c5886]"
-                />,
-                link: "/admin"
+                text: "Home",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faHome}
+                    className="text-xl  text-[#2c5886]"
+                  />
+                ),
+                link: "/admin",
               },
               {
-                text: 'Message',
-                Icon: <FontAwesomeIcon
-                  icon={faMessage}
-                  className="text-xl text-[#2c5886]"
-                />,
-                link: "/message"
-              }
-              , {
-                text: 'Announcment',
-                Icon: <FontAwesomeIcon
-                  icon={faMicrophone}
-                  className="text-xl  text-[#2c5886]"
-                />,
-                link: "/announcment"
+                text: "Message",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faMessage}
+                    className="text-xl text-[#2c5886]"
+                  />
+                ),
+                link: "/message",
               },
               {
-                text: 'Course',
-                Icon: <FontAwesomeIcon
-                  icon={faBook}
-                  className="text-xl  text-[#2c5886]"
-                />,
-                link: "/list-course"
-              }, {
-                text: 'Classes',
-                Icon: <FontAwesomeIcon
-                  icon={faCity}
-                  className="text-xl text-[#2c5886]"
-                />,
-                link: "/list-classes"
-              }, {
-                text: 'Teacher',
-                Icon: <FontAwesomeIcon
-                  icon={faFeather}
-                  className="text-xl  text-[#2c5886]"
-                />,
-                link: "/list-teacher"
+                text: "Announcment",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faMicrophone}
+                    className="text-xl  text-[#2c5886]"
+                  />
+                ),
+                link: "/announcment",
               },
               {
-                text: 'Student',
-                Icon: <FontAwesomeIcon
-                  icon={faGraduationCap}
-                  className="text-xl  text-[#2c5886]"
-                />,
-                link: "/list-student"
+                text: "Course",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faBook}
+                    className="text-xl  text-[#2c5886]"
+                  />
+                ),
+                link: "/list-course",
               },
               {
-                text: 'Attendance',
-                Icon: <FontAwesomeIcon
-                  icon={faCalendar}
-                  className="text-xl text-[#2c5886]"
-                />,
-                link: "/attendance"
+                text: "Classes",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faCity}
+                    className="text-xl text-[#2c5886]"
+                  />
+                ),
+                link: "/list-classes",
               },
               {
-                text: 'Schedule',
-                Icon: <FontAwesomeIcon
-                  icon={faCalendar}
-                  className="text-xl  text-[#2c5886]"
-                />,
-                link: "/schedule"
-              }
+                text: "Teacher",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faFeather}
+                    className="text-xl  text-[#2c5886]"
+                  />
+                ),
+                link: "/list-teacher",
+              },
+              {
+                text: "Student",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faGraduationCap}
+                    className="text-xl  text-[#2c5886]"
+                  />
+                ),
+                link: "/list-student",
+              },
+              {
+                text: "Attendance",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faCalendar}
+                    className="text-xl text-[#2c5886]"
+                  />
+                ),
+                link: "/attendance",
+              },
+              {
+                text: "Schedule",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faCalendar}
+                    className="text-xl  text-[#2c5886]"
+                  />
+                ),
+                link: "/schedule",
+              },
             ].map((item, index) => (
-              <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
-                <Link to={item.link} >
+              <ListItem
+                key={item.text}
+                disablePadding
+                sx={{ display: "block" }}
+              >
+                <Link to={item.link}>
                   <ListItemButton
                     sx={{
                       ":hover": {
-                        backgroundColor: "#FCF0E8"
+                        backgroundColor: "#FCF0E8",
                       },
                       color: "#2c5886",
                       minHeight: 48,
-                      justifyContent: open ? 'initial' : 'center',
+                      justifyContent: open ? "initial" : "center",
                       px: 2.5,
                     }}
                   >
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
                       }}
                     >
                       {item.Icon}
                     </ListItemIcon>
 
-                    <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
+                    <ListItemText
+                      primary={item.text}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
                   </ListItemButton>
                 </Link>
               </ListItem>
             ))}
 
-            <ListItem style={{ position: "fixed", bottom: 0, width: open ? 234 : 65 }} disablePadding sx={{ display: 'block' }}>
+            <ListItem
+              style={{ position: "fixed", bottom: 0, width: open ? 234 : 65 }}
+              disablePadding
+              sx={{ display: "block" }}
+            >
               <Divider />
-              <a onClick={() => logout()} >
+              <a onClick={() => logout()}>
                 <ListItemButton
                   sx={{
                     ":hover": {
-                      backgroundColor: "#FCF0E8"
+                      backgroundColor: "#FCF0E8",
                     },
                     color: "#2c5886",
                     minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
+                    justifyContent: open ? "initial" : "center",
                     // px: 2.5,
                   }}
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
                     }}
                   >
                     <Avatar style={{ padding: "none" }} fontSize="small" />
                   </ListItemIcon>
                   {role["isAdmin"] == true ? (
-                    <ListItemText primary="Admin" sx={{ opacity: open ? 1 : 0 }} />
+                    <ListItemText
+                      primary="Admin"
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
                   ) : (
                     <h1></h1>
                   )}
@@ -340,8 +377,7 @@ const Layouts = () => {
               </a>
             </ListItem>
           </List>
-
-        </Drawer >
+        </Drawer>
       );
     }
     if (profile.role["isParent"] == true) {
@@ -441,17 +477,27 @@ const Layouts = () => {
 
   return (
     <Layout style={{ backgroundColor: "white" }}>
-      <Box sx={{ display: 'flex' }}>
-        <Navigation handleDrawerOpen={handleDrawerOpen} open={open} handleDrawerClose={handleDrawerClose} theme={theme} AppBar={AppBar} />
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <Navigation
+          handleDrawerOpen={handleDrawerOpen}
+          open={open}
+          handleDrawerClose={handleDrawerClose}
+          theme={theme}
+          AppBar={AppBar}
+        />
         <SiderGenerator />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 1 }}
+          className="bg-[#F9FAFB]"
+        >
           <DrawerHeader />
           <Content
-            className="site-layout-background"
             style={{
               margin: 0,
               minHeight: 280,
-              backgroundColor: "white",
+              backgroundColor: "#F9FAFB",
+              justifyContent: "center",
             }}
           >
             <Routes>

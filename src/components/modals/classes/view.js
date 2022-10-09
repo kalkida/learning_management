@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Select, Tabs, Table } from "antd";
+import { Button, Select, Tabs, Table, Tag } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import "./style.css";
@@ -37,24 +37,6 @@ function ViewClass() {
     },
 
     {
-      title: "Period",
-      dataIndex: "schedule",
-      key: "schedule",
-      render: (value) => {
-        moment.locale("en");
-        return (
-          <>
-            {value?.map((item, i) => (
-              <h1>
-                {/* {moment(item.time[0]).format('d MMM')} */}
-                {item.time + "    ,   "}
-              </h1>
-            ))}
-          </>
-        );
-      },
-    },
-    {
       title: "Day",
       dataIndex: "schedule",
       key: "schedule",
@@ -68,71 +50,25 @@ function ViewClass() {
         );
       },
     },
-
-    // {
-    //   title: "Tuesday",
-    //   dataIndex: "schedule",
-    //   key: "schedule",
-    //   render: (value) => {
-    //     return (
-    //       <>
-    //         {value?.map((item, i) => (
-    //            <h1>
-    //            {item.day}
-    //          </h1>
-    //         ))}
-    //       </>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Wednesday",
-    //   dataIndex: "schedule",
-    //   key: "schedule",
-    //   render: (value) => {
-    //     return (
-    //       <>
-    //         {value?.map((item, i) => (
-    //            <h1>
-    //            {item.day}
-    //          </h1>
-    //         ))}
-    //       </>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Thursday",
-    //   dataIndex: "schedule",
-    //   key: "schedule",
-    //   render: (value) => {
-    //     return (
-    //       <>
-    //         {value?.map((item, i) => (
-    //            <h1>
-    //            {item.day}
-    //          </h1>
-    //         ))}
-    //       </>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Friday",
-    //   dataIndex: "schedule",
-    //   key: "schedule",
-    //   render: (value) => {
-    //     return (
-    //       <>
-    //         {value?.map((item, i) => (
-    //            <h1>
-    //            {item.day}
-    //          </h1>
-    //         ))}
-    //       </>
-    //     );
-    //   },
-    // },
+    {
+      title: "Period",
+      dataIndex: "schedule",
+      key: "schedule",
+      render: (value) => {
+        moment.locale("en");
+        return (
+          <>
+            {value?.map((item, i) => (
+              <Tag color="green">
+                {moment(JSON.parse(item.time[0])).format("hh:mm") +
+                  " to " +
+                  moment(JSON.parse(item.time[1])).format("hh:mm")}
+              </Tag>
+            ))}
+          </>
+        );
+      },
+    },
   ];
   const columns = [
     {
@@ -193,16 +129,6 @@ function ViewClass() {
     } else {
     }
   };
-  // const getStudent = async () =>{
-  //   const docRef = doc(firestoreDb, "student", data.St);
-  //   var data = "";
-  //   await getDoc(docRef).then((response) => {
-  //     data = response.data();
-  //     data.key = response.id;
-  //   });
-  //   return data;
-  // }
-
   const getClassData = async (ID) => {
     const docRef = doc(firestoreDb, "class", ID);
 
@@ -270,10 +196,7 @@ function ViewClass() {
   const getStudents = async (ids) => {
     var temporary = [];
     if (ids.length > 0) {
-      const q = query(
-        collection(firestoreDb, "students")
-        // where("student_id", "in", ids)
-      );
+      const q = query(collection(firestoreDb, "students"));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         var data = doc.data();
@@ -295,27 +218,27 @@ function ViewClass() {
   }, []);
   return (
     <div>
-      <div className="flex flex-row justify-between align-bottom border-[2px] p-10 -mt-20 rounded-md">
+      <div className="flex flex-row justify-between align-bottom border-b-[2px] py-10 -mt-20 ">
         <div className="flex flex-row justify-center align-middle">
-          <img
-            className="w-20 border-[black] border-[2px]"
-            src="logo512.png"
-            alt="profile"
-          />
-          <div className="flex flex-row mt-8 ml-2">
-            <h2>{data?.level}</h2>
-            <h3>{data?.section}</h3>
+          <div className="border-[2px] border-[#EA8848] rounded-full">
+            <img
+              className="w-[8vw] border-[black] border-[2px]"
+              src="logo512.png"
+              alt="profile"
+            />
+          </div>
+          <div className="flex flex-col justify-center  ml-2">
+            <h2 className="font-bold text-xl">
+              {data?.level}
+              {data?.section}
+            </h2>
           </div>
         </div>
         <div className="header-extra">
-          <div>
+          <div className="flex flex-col justify-center">
             <h3>Assigned Students</h3>
             <h4>{data?.student.length}</h4>
           </div>
-          {/* <div>
-            <h3>Assigned Course</h3>
-            <h4>{data?.course.length}</h4>
-          </div> */}
         </div>
       </div>
       <div className="tab-content">
@@ -334,7 +257,11 @@ function ViewClass() {
             </div>
             <div className="asssign-teacher">
               <h4 className="text-[24px]">Weekly Schedule</h4>
-              <Table dataSource={datas} columns={scheduleColumn} />
+              <Table
+                dataSource={datas}
+                columns={scheduleColumn}
+                pagination={null}
+              />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane tab="Attendance" key="2">

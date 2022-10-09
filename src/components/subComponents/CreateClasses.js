@@ -142,7 +142,7 @@ const CreateClasses = () => {
     const checkIsExist = (await getDocs(q)).empty;
     if (checkIsExist) {
       setDoc(doc(firestoreDb, "class", uuid()), newClass)
-        .then((response) => {
+        .then((_) => {
           message.success("Class Created");
           navigate("/list-Classes");
         })

@@ -3,6 +3,8 @@ import Liner from "../graph/Liner";
 import BarGraph from "../graph/BarGraph";
 import { useSelector } from "react-redux";
 import { Card, Progress } from "antd";
+import Grid from "@mui/material/Grid";
+import { styled } from "@mui/material/styles";
 
 export default function AdminDash() {
   const schools = useSelector((state) => state.user.school);
@@ -12,108 +14,226 @@ export default function AdminDash() {
       style={{
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",
-        justifyContent: "space-between",
-        width: "100%",
-        height: "100vh",
+        justifyContent: "center",
       }}
     >
-      <div className="bg-[#F2F4F7] border-[#98A2B3] w-[84%] flex-row flex-1 absolute top-0 h-[8vh] border-[1px] rounded-lg">
-        <h1 className="text-lg p-5 text-[#344054] font-bold">{schools.name}</h1>
-      </div>
-      <div className="flex w-[100%] flex-row overflow-hidden justify-between">
-        <Card
-          bordered={true}
-          style={{
-            width: "35%",
-            height: 300,
-            marginTop: 50,
-            borderWidth: 2,
-            marginRight: 10,
-          }}
-        >
-          <h1 style={{ fontWeight: "bold", marginBottom: 10 }}>
-            Todays Attendance
-          </h1>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <div>
-              <Progress
-                type="circle"
-                strokeColor={"gray"}
-                percent={75}
-                width={70}
-              />
+      <h1 className="text-[24px] -mt-20 mb-4 p-7 text-[#344054] font-bold text-center">
+        {schools.name}
+      </h1>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid item sm={1} md={4}>
+          <Card
+            bordered={true}
+            className="w-[100%] h-[419px]"
+            title={
+              <h1 style={{ fontWeight: "bold", marginBottom: 10 }}>
+                Todays Attendance
+              </h1>
+            }
+          >
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <div className="relative flex flex-col justify-center">
+                <Progress
+                  type="circle"
+                  className="absolute"
+                  strokeColor={"#475467"}
+                  percent={75}
+                />
+                <Progress
+                  type="circle"
+                  className="flex justify-center p-6"
+                  strokeColor={"#98A2B3"}
+                  showInfo={false}
+                  percent={75}
+                  width={70}
+                />
+              </div>
+              <div className="flex flex-col justify-center ml-12">
+                <h1 className="text-md flex flex-row">
+                  {" "}
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>7
+                  Absent Students
+                </h1>
+                <h1 className="text-md flex flex-row">
+                  {" "}
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#98A2B3] rounded-lg"></a>2
+                  Absent Teachers
+                </h1>
+              </div>
             </div>
-            <div style={{ marginTop: 10, marginLeft: 19 }}>
-              <h1 style={{ fontSize: 14 }}>7 Absent Students</h1>
-              <h1 style={{ fontSize: 14 }}>2 Absent Teachers</h1>
-            </div>
-          </div>
-          <h1 style={{ fontWeight: "bold", marginBottom: 40, marginTop: 30 }}>
-            Average Attendance
-          </h1>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <div
+            <h1
               style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "100%",
+                fontWeight: "bold",
+                marginBottom: 40,
+                marginTop: 30,
+                fontSize: 18,
               }}
             >
-              <div>
-                <Progress type="circle" percent={30} width={40} />
-                <h1 className="text-center">Weekly</h1>
-              </div>
-              <div>
-                <Progress type="circle" percent={70} width={40} />
-                <h1 className="text-center">Monthly</h1>
-              </div>
-              <div>
-                <Progress type="circle" percent={90} width={40} />
-                <h1 className="text-center">Yearly</h1>
+              Average Attendance
+            </h1>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <div>
+                  <div className="relative flex flex-col justify-center">
+                    <Progress
+                      type="circle"
+                      className="absolute"
+                      strokeColor={"#475467"}
+                      percent={75}
+                      width={60}
+                    />
+                    <Progress
+                      type="circle"
+                      className="flex justify-center p-2"
+                      strokeColor={"#98A2B3"}
+                      showInfo={false}
+                      percent={75}
+                      width={45}
+                    />
+                  </div>
+                  <h1 className="text-center">Weekly</h1>
+                </div>
+                <div>
+                  <div className="relative flex flex-col justify-center">
+                    <Progress
+                      type="circle"
+                      className="absolute"
+                      strokeColor={"#475467"}
+                      percent={75}
+                      width={60}
+                    />
+                    <Progress
+                      type="circle"
+                      className="flex justify-center p-2"
+                      strokeColor={"#98A2B3"}
+                      showInfo={false}
+                      percent={75}
+                      width={45}
+                    />
+                  </div>
+                  <h1 className="text-center">Monthly</h1>
+                </div>
+                <div>
+                  <div className="relative flex flex-col justify-center">
+                    <Progress
+                      type="circle"
+                      className="absolute"
+                      strokeColor={"#475467"}
+                      percent={75}
+                      width={60}
+                    />
+                    <Progress
+                      type="circle"
+                      className="flex justify-center p-2"
+                      strokeColor={"#98A2B3"}
+                      showInfo={false}
+                      percent={75}
+                      width={45}
+                    />
+                  </div>
+                  <h1 className="text-center">Yearly</h1>
+                </div>
               </div>
             </div>
-          </div>
-        </Card>
-        <Card
-          bordered={true}
-          style={{
-            width: "35%",
-            height: 300,
-            marginRight: 10,
-
-            marginTop: 50,
-            borderWidth: 2,
-          }}
-        >
-          <Liner />
-        </Card>
-        <Card
-          bordered={true}
-          style={{
-            width: "35%",
-            height: 300,
-            marginTop: 50,
-            borderWidth: 2,
-          }}
-        >
-          <Liner />
-        </Card>
-      </div>
-      <Card
-        bordered={true}
-        style={{
-          width: "53%",
-          marginTop: "20%",
-          borderWidth: 2,
-          position: "absolute",
-          bottom: -70,
-          right: 50,
-        }}
-      >
-        <BarGraph />
-      </Card>
+          </Card>
+        </Grid>
+        <Grid item sm={1} md={4}>
+          <Card
+            bordered={true}
+            className="w-[100%] h-[419px]"
+            title={
+              <h1 style={{ fontWeight: "bold", marginBottom: 0, fontSize: 18 }}>
+                Student Number
+              </h1>
+            }
+          >
+            <div>
+              <div>
+                <h1 className="text-[18px] font-semibold">3200</h1>
+                <Progress
+                  strokeColor={"#EA8848"}
+                  percent={70}
+                  showInfo={false}
+                />
+                <h1 className="text-[14px] ">Total</h1>
+              </div>
+              <div>
+                <div className="flex flex-row justify-between">
+                  <h1 className="text-[18px] font-semibold">7899</h1>
+                  <h1 className="text-[18px] font-semibold">6899</h1>
+                </div>
+                <Progress
+                  strokeColor={"#EA8848"}
+                  percent={100}
+                  showInfo={false}
+                  success={{
+                    percent: 60,
+                  }}
+                />
+                <div className="flex flex-row justify-between">
+                  <h1 className="text-[14px] ">Femail</h1>
+                  <h1 className="text-[14px]">Male</h1>
+                </div>
+              </div>
+            </div>
+            <Liner />
+          </Card>
+        </Grid>
+        <Grid item sm={1} md={4}>
+          <Card
+            bordered={true}
+            className="w-[100%] h-[419px]"
+            title={
+              <h1 style={{ fontWeight: "bold", marginBottom: 0, fontSize: 18 }}>
+                Teacher Number
+              </h1>
+            }
+          >
+            <div>
+              <div>
+                <h1 className="text-[18px] font-semibold">3200</h1>
+                <Progress
+                  strokeColor={"#EA8848"}
+                  percent={70}
+                  showInfo={false}
+                />
+                <h1 className="text-[14px] ">Total</h1>
+              </div>
+              <div>
+                <div className="flex flex-row justify-between">
+                  <h1 className="text-[18px] font-semibold">7899</h1>
+                  <h1 className="text-[18px] font-semibold">6899</h1>
+                </div>
+                <Progress
+                  strokeColor={"#EA8848"}
+                  percent={100}
+                  showInfo={false}
+                  success={{
+                    percent: 60,
+                  }}
+                />
+                <div className="flex flex-row justify-between">
+                  <h1 className="text-[14px] ">Femail</h1>
+                  <h1 className="text-[14px]">Male</h1>
+                </div>
+              </div>
+            </div>
+            <Liner />
+          </Card>
+        </Grid>
+        <Grid item sm={1} md={12}>
+          <Card bordered={true} className="w-[100%] mt-10 mb-10">
+            <BarGraph />
+          </Card>
+        </Grid>
+      </Grid>
     </div>
   );
 }
