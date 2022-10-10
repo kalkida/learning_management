@@ -258,7 +258,7 @@ export default function ListClasses() {
   }, [updateComplete]);
 
   return (
-    <div className="bg-[#E8E8E8] h-[100vh]">
+    <div className="bg-[#E8E8E8] h-[100vh] px-8">
       <div className="list-header">
         <h1 style={{ fontSize: 28 }}>List Of Class</h1>
       </div>

@@ -56,17 +56,21 @@ function ViewClass() {
       key: "schedule",
       render: (value) => {
         moment.locale("en");
-        return (
-          <>
-            {value?.map((item, i) => (
-              <Tag color="green">
-                {moment(JSON.parse(item.time[0])).format("hh:mm") +
-                  " to " +
-                  moment(JSON.parse(item.time[1])).format("hh:mm")}
-              </Tag>
-            ))}
-          </>
-        );
+        if (value?.time == undefined) {
+          return (
+            <>
+              {value?.map((item, i) => (
+                <Tag color="green">
+                  {moment(JSON.parse(item?.time[0])).format("hh:mm") +
+                    " to " +
+                    moment(JSON.parse(item?.time[1])).format("hh:mm")}
+                </Tag>
+              ))}
+            </>
+          );
+        } else {
+          return <Tag color="red">No Data</Tag>;
+        }
       },
     },
   ];
@@ -217,8 +221,8 @@ function ViewClass() {
     getCourses();
   }, []);
   return (
-    <div>
-      <div className="flex flex-row justify-between align-bottom border-b-[2px] py-10 -mt-20 ">
+    <div className="bg-[#E8E8E8] p-10">
+      <div className="flex flex-row justify-between align-bottom border-b-[2px] py-0 -mt-20 ">
         <div className="flex flex-row justify-center align-middle">
           <div className="border-[2px] border-[#EA8848] rounded-full">
             <img
@@ -235,7 +239,7 @@ function ViewClass() {
           </div>
         </div>
         <div className="header-extra">
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center mt-10">
             <h3>Assigned Students</h3>
             <h4>{data?.student.length}</h4>
           </div>
@@ -243,7 +247,10 @@ function ViewClass() {
       </div>
       <div className="tab-content">
         <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="Profile" key="1">
+          <Tabs.TabPane
+            tab={<p className="text-xl font-bold text-center ml-0">Profile</p>}
+            key="1"
+          >
             <Button className="btn-confirm" onClick={handleUpdate}>
               Edit Class
             </Button>
@@ -264,7 +271,12 @@ function ViewClass() {
               />
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Attendance" key="2">
+          <Tabs.TabPane
+            tab={
+              <p className="text-xl font-bold text-center ml-5">Attendance</p>
+            }
+            key="2"
+          >
             <AttendanceList />
           </Tabs.TabPane>
         </Tabs>

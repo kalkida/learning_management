@@ -91,7 +91,10 @@ const CreateCrouse = () => {
 
   const createNewCourse = async () => {
     newCourse.course_name = selectedSubject + " " + selectedLevel;
-
+    if (newCourse.course_name == "") {
+      message.error("please enter a new course name");
+      return 0;
+    }
     const q = query(
       collection(firestoreDb, "courses"),
       where("school_id", "==", uid.school),
@@ -165,10 +168,10 @@ const CreateCrouse = () => {
   }, []);
 
   return (
-    <div className="bg-[#E8E8E8] h-[auto] pb-20">
-      <div className="flex flex-row justify-between -mt-10 mb-10">
-        <h1 className="text-2xl font-bold ml-12">Add Course</h1>
-        <div className="pr-10">
+    <div className="bg-[#E8E8E8] h-[auto] pb-20 mt-[41px] px-10">
+      <div className="flex flex-row justify-between -mt-10 mb-10 z-0">
+        <h1 className="text-2xl font-bold ">Add Course</h1>
+        <div className="pr-0 ">
           <Button
             className="bg-[#E7752B] text-[white] rounded-lg shadow-md"
             onClick={createNewCourse}
@@ -199,6 +202,12 @@ const CreateCrouse = () => {
                 placeholder="select Subjects"
                 onChange={handleSubject}
                 optionLabelProp="label"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Subject!",
+                  },
+                ]}
               >
                 {subject.map((item, index) => (
                   <Option
@@ -266,7 +275,7 @@ const CreateCrouse = () => {
           </div>
         </div>
       </div>
-      <div className="w-[60%] border-[1px] border-[#D0D5DD] bg-[#F9FAFB] mt-[56px] p-10 rounded-lg">
+      <div className="w-[100%] border-[1px] border-[#D0D5DD] bg-[#F9FAFB] mt-[56px] p-10 rounded-lg">
         <div className="pb-10">
           <h1 className="text-[24px]">Schedule</h1>
           <h2 className="text-[20px] pt-[24px] pb-[24px] text-[#EA8848]">
