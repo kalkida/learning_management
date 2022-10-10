@@ -200,7 +200,7 @@ export default function ListAnnouncment() {
     }, 100);
   };
   return (
-    <div className="flex flex-col bg-[#E8E8E8] h-[auto] lg:h-[auto] xl:h-[100vh] 2xl:h-[auto] -mt-20 p-10 ">
+    <div className="flex flex-col bg-[#E8E8E8] h-[auto] lg:h-[auto]  -mt-20 p-10 ">
       <div className="flex flex-row justify-end mb-2">
         <select
           title="Filter"

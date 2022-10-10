@@ -488,7 +488,7 @@ const Layouts = () => {
         <SiderGenerator />
         <Box
           component="main"
-          sx={{ flexGrow: 1, p: 1 }}
+          sx={{ flexGrow: 1, p: 3 }}
           className="bg-[#E8E8E8]"
         >
           <DrawerHeader />
