@@ -266,17 +266,32 @@ function UpdateClass() {
   };
 
   return (
-    <div>
+    <div className="bg-[#E8E8E8] p-10 h-[100vh]">
       {loading ? (
         <>
           {" "}
           <div>
-            <h1 className="text-4xl -mt-14">
+            <h1
+              className="text-4xl -mt-4"
+              style={{
+                fontFamily: "Plus Jakarta Sans",
+                fontWeight: "600",
+                lineHeight: "32px",
+                fontSize: 24,
+              }}
+            >
               Edit Class {data.level} - {data.section}
             </h1>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
-                <Tabs.TabPane tab="Profile" key="1">
+                <Tabs.TabPane
+                  tab={
+                    <p className="text-xl font-bold text-center ml-0">
+                      Profile
+                    </p>
+                  }
+                  key="1"
+                >
                   <Button className="btn-confirm" onClick={handleUpdate}>
                     Edit Class
                   </Button>
@@ -287,6 +302,7 @@ function UpdateClass() {
                           style={{
                             fontSize: 24,
                             fontWeight: "bold",
+                            paddingBottom: 20,
                           }}
                         >
                           Assigned Students
@@ -317,13 +333,15 @@ function UpdateClass() {
                       columns={columns}
                     />
                   </div>
-                  <div className="mb-8">
+                  <div className="-mb-10">
                     <div className="flex flex-row justify-between">
                       <h1
                         style={{
-                          fontSize: 24,
-                          fontWeight: "bold",
-                          paddingBottom: "10px",
+                          fontFamily: "Plus Jakarta Sans",
+                          fontWeight: "600",
+                          lineHeight: "30px",
+                          fontSize: 20,
+                          paddingBottom: 10,
                         }}
                       >
                         Assigned Courses
@@ -349,111 +367,15 @@ function UpdateClass() {
                     </div>
                     <Table dataSource={item} columns={courseColumns} />
                   </div>
-                  <div className="schedule">
-                    <h1
-                      style={{
-                        fontSize: 24,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Weekly Schedule
-                    </h1>
-                    <div className="up-card-schedule">
-                      <h2>
-                        Class{" "}
-                        {updateClass.class
-                          ? updateClass.class.level + updateClass.class.section
-                          : null}
-                      </h2>
-                      <div className="schedule-header">
-                        <div>
-                          <p> Period</p>
-                        </div>
-                        <div>
-                          <p> Start time</p>
-                          <p> End time</p>
-                        </div>
-                      </div>
-
-                      {data.schedule?.map((item, i) => (
-                        <>
-                          <Select
-                            style={{ width: "40%" }}
-                            placeholder="First Select Days"
-                            onChange={(e) => handleScheduler(e, i)}
-                            defaultValue={item.day}
-                            in
-                          >
-                            {days.map((item, index) => (
-                              <Option key={index} value={item} label={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                          <TimePicker.RangePicker
-                            style={{ width: "60%" }}
-                            format={"hh:mm"}
-                            use12Hours
-                            defaultValue={
-                              item.time.length
-                                ? [
-                                    moment(JSON.parse(item.time[0])),
-                                    moment(JSON.parse(item.time[1])),
-                                  ]
-                                : []
-                            }
-                            onChange={(e) => handleScheduler(e, i)}
-                          />
-                        </>
-                      ))}
-                      {input.map((item, i) => (
-                        <>
-                          <Select
-                            style={{ width: "40%" }}
-                            placeholder="First Select Days"
-                            onChange={(e) => handleNewScheduler(e, i)}
-                          >
-                            {days.map((item, index) => (
-                              <Option key={index} value={item} label={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                          <TimePicker.RangePicker
-                            style={{ width: "60%" }}
-                            format={"hh:mm"}
-                            use12Hours
-                            onChange={(e) => handleNewScheduler(e, i)}
-                          />
-                        </>
-                      ))}
-                      <Button
-                        style={{ float: "right" }}
-                        onClick={() => {
-                          setInput([...input, 0]);
-                          setUpdateClass({
-                            ...updateClass,
-                            schedule: [
-                              ...updateClass.schedule,
-                              { day: "", time: [] },
-                            ],
-                          });
-                        }}
-                      >
-                        Add New
-                      </Button>
-                    </div>
-                  </div>
-                  <Button
-                    className="btn-dlt"
-                    type="primary"
-                    danger
-                    onClick={handleDelete}
-                  >
-                    Delete
-                  </Button>
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Attendance" key="2">
+                <Tabs.TabPane
+                  tab={
+                    <p className="text-xl font-bold text-center ml-0">
+                      Attendance
+                    </p>
+                  }
+                  key="2"
+                >
                   <AttendanceList />
                 </Tabs.TabPane>
               </Tabs>

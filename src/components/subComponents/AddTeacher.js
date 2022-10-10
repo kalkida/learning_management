@@ -19,11 +19,8 @@ import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
 import "../modals/courses/style.css";
-import {
-  InfoCircleOutlined,
-  UserOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { removeSingleClassToTeacher } from "../modals/funcs";
+import { PlusOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 const { Option } = Select;
 const { Search } = Input;
@@ -154,13 +151,19 @@ export default function AddTeacher() {
     }
   };
 
-  const getClassData = async (ID) => {
+  const getClassData = async (ID, teach) => {
     const docRef = doc(firestoreDb, "class", ID);
+
     var data = "";
-    await getDoc(docRef).then((response) => {
+    const response = await getDoc(docRef);
+    if (response.exists()) {
       data = response.data();
       data.key = response.id;
-    });
+    } else {
+      console.log("none exist data", data);
+      removeSingleClassToTeacher(ID, teach);
+    }
+
     return data;
   };
 
@@ -171,13 +174,14 @@ export default function AddTeacher() {
       data = response.data();
       data.key = response.id;
     });
+
     return data;
   };
 
-  const getData = async (data) => {
+  const getData = async (data, teach) => {
     if (data.class) {
       data.class?.map(async (item, index) => {
-        data.class[index] = await getClassData(item);
+        data.class[index] = await getClassData(item, teach);
       });
 
       data.course?.map(async (item, index) => {
@@ -199,11 +203,13 @@ export default function AddTeacher() {
     snap.forEach((doc) => {
       var data = doc.data();
       data.key = doc.id;
-
-      getData(data).then((response) => temporary.push(response));
+      getData(data, doc.id).then((response) => {
+        temporary.push(response);
+      });
     });
     setTimeout(() => {
       setData(temporary);
+      console.log("temporary data", temporary);
       setTableTextLoading(false);
     }, 2000);
   };
@@ -218,10 +224,9 @@ export default function AddTeacher() {
   };
 
   const getClass = async () => {
-    var branches = await getSchool();
     const q = query(
       collection(firestoreDb, "class"),
-      where("school_id", "in", branches.branches)
+      where("school_id", "in", uid.school)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -380,9 +385,18 @@ export default function AddTeacher() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-[#E8E8E8] h-[100vh]">
       <div className="list-header">
-        <h1 style={{ fontSize: 28 }}>List Of Teachers</h1>
+        <h1
+          style={{
+            fontFamily: "Plus Jakarta Sans",
+            fontWeight: "600",
+            lineHeight: "28px",
+            fontSize: 24,
+          }}
+        >
+          List Of Teachers
+        </h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">

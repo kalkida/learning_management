@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Input, Button, Select, message, TimePicker, Table, Tag } from "antd";
-import { addSingleCourseToClass } from "../modals/funcs";
+import { Skeleton } from "antd";
 import {
   doc,
   setDoc,
@@ -24,8 +24,10 @@ const CreateClasses = () => {
   const uid = useSelector((state) => state.user.profile);
   const [input, setInput] = useState([]);
   const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
   const [coursesData, setCourseData] = useState([]);
+  const [classSelected, setClassSelected] = useState(true);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [newClass, setNewClass] = useState({
     level: "",
@@ -179,32 +181,42 @@ const CreateClasses = () => {
     return data;
   };
 
+  const constractCourse = async (querySnapshot) => {
+    var data = [];
+
+    return data;
+  };
   const getCourse = async () => {
-    const coursess = [];
+    console.log(newClass);
+    var variables = [];
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school),
-      where("class", "==", newClass.class)
+      where("school_id", "==", uid.school)
+      // where("class", "==", newClass.class)
     );
-    const querySnapshot = await getDocs(q);
+    var querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-
-      getData(datas).then((response) =>
-        coursess.push({ ...response, key: doc.id })
-      );
+      getData(datas).then((response) => {
+        var newDAtas = response;
+        newDAtas.key = doc.id;
+        console.log("dat", newDAtas);
+        variables.push(newDAtas);
+      });
     });
-
     setTimeout(() => {
-      setCourseData(coursess);
+      setCourseData(variables);
+      setLoading(false);
     }, 2000);
   };
 
   const handleClass = (e) => {
+    setClassSelected(false);
     if (e.target.name === "level") {
       getStudents(e.target.value);
     }
     setNewClass({ ...newClass, [e.target.name]: e.target.value });
+    setClassSelected(true);
   };
 
   const handleStudent = (value) => {
@@ -221,14 +233,14 @@ const CreateClasses = () => {
 
   return (
     <>
-      <div>
+      <div className="bg-[#E8E8E8] p-10 -mt-0 h-[100vh]">
         <div className="flex flex-row justify-between mb-2">
-          <h1 className="text-3xl">Create Class</h1>
+          <h1 className="text-3xl font-bold mb-6">Create Class</h1>
           <Button
-            className="text-[#E7752B] border-[1px] border-[#E7752B]  hover:bg-[#E7752B]"
+            className="text-[#E7752B] border-[1px] border-[#E7752B]  hover:bg-[#E7752B] z-0"
             onClick={() => createNewClass()}
           >
-            <h1 className="text-black">Submit</h1>
+            Submit
           </Button>
         </div>
         <div
@@ -242,7 +254,16 @@ const CreateClasses = () => {
           <div className="course-content">
             <div>
               <div className="py-2">
-                <span>Class</span>
+                <span
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "500",
+                    lineHeight: "20px",
+                    fontSize: 14,
+                  }}
+                >
+                  Class
+                </span>
                 <Input
                   name="level"
                   type={"number"}
@@ -250,7 +271,16 @@ const CreateClasses = () => {
                 />
               </div>
               <div>
-                <span>Student</span>
+                <span
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "500",
+                    lineHeight: "20px",
+                    fontSize: 14,
+                  }}
+                >
+                  Student
+                </span>
                 <Select
                   style={{
                     width: "100%",
@@ -280,13 +310,24 @@ const CreateClasses = () => {
               </div>
             </div>
             <div className="py-2 ml-10">
-              <span>Section</span>
+              <span
+                style={{
+                  fontFamily: "Plus Jakarta Sans",
+                  fontWeight: "500",
+                  lineHeight: "20px",
+                  fontSize: 14,
+                }}
+              >
+                Section
+              </span>
               <Input name="section" onChange={(e) => handleClass(e)} />
             </div>
           </div>
         </div>
         <div className="list-header">
-          <h1 style={{ fontSize: 28, marginTop: 20 }}>Add Courses</h1>
+          <h1 className="text-2xl font-semibold" style={{ marginTop: 20 }}>
+            Add Courses
+          </h1>
         </div>
         <div
           style={{
@@ -304,6 +345,7 @@ const CreateClasses = () => {
           >
             <div>
               <Table
+                loading={loading}
                 rowSelection={rowSelection}
                 dataSource={coursesData}
                 columns={columns}
@@ -311,66 +353,6 @@ const CreateClasses = () => {
             </div>
           </div>
         </div>
-        <div
-          style={{
-            marginTop: "20px",
-          }}
-        ></div>
-        <div className="schedule">
-          <div className="up-card-schedule">
-            <h1 style={{ fontSize: 24, fontWeight: "bold", padding: 10 }}>
-              {" "}
-              Schedule
-            </h1>
-            <div className="schedule-header">
-              <div>
-                <p> Period</p>
-              </div>
-              <div>
-                <p> Start time</p>
-                <p> End time</p>
-              </div>
-            </div>
-            {input.map((item, i) => (
-              <>
-                <Select
-                  style={{ width: "40%" }}
-                  placeholder="First Select Days"
-                  onChange={(e) => handleNewScheduler(e, i)}
-                >
-                  {days.map((item, index) => (
-                    <Option key={index} value={item} label={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-                <TimePicker.RangePicker
-                  style={{ width: "60%" }}
-                  format={"hh:mm"}
-                  use12Hours
-                  onChange={(e) => handleNewScheduler(e, i)}
-                />
-              </>
-            ))}
-            <Button
-              style={{ float: "right" }}
-              onClick={() => {
-                setInput([...input, 0]);
-              }}
-            >
-              Add New
-            </Button>
-          </div>
-        </div>
-
-        <Button
-          className="btn-dlt"
-          type="primary"
-          danger
-          onClick={handleDelete}
-        >
-          Delete
-        </Button>
       </div>
     </>
   );

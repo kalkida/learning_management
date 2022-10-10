@@ -263,7 +263,7 @@ function UpdateCourse() {
   return (
     <>
       {loading ? (
-        <div>
+        <div className="bg-[#E8E8E8] p-8">
           <div className="flex flex-row justify-between -mt-16">
             <div className="flex flex-row justify-between align-middle ">
               <div className="rounded-full border-[2px] border-[#E7752B] mr-10">
@@ -329,7 +329,16 @@ function UpdateCourse() {
                       </div>
                       <div>
                         <div>
-                          <span>Class</span>
+                          <span
+                            style={{
+                              fontFamily: "Plus Jakarta Sans",
+                              fontWeight: "500",
+                              lineHeight: "24px",
+                              fontSize: 14,
+                            }}
+                          >
+                            Class
+                          </span>
                           <Select
                             className="mt-2"
                             style={{
@@ -404,7 +413,7 @@ function UpdateCourse() {
                     />
                   ) : null}
                 </div>
-                <div className="schedule">
+                <div className="schedule w-[100%]">
                   <h4 className="text-xl pt-2">Weekly Schedule</h4>
                   <div className="up-card-schedule pb-10 border-[2px]">
                     <h2 className="text-lg py-2">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Select, Tabs, Table, Tag } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
+import { fetchSubject } from "../funcs";
 import { MailFilled } from "@ant-design/icons";
 import moment from "moment";
 import "./style.css";
@@ -97,8 +98,8 @@ function TeacherView() {
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
-        if (item?.name) {
-          return <div>{item.name}</div>;
+        if (item) {
+          return <div>{item?.name}</div>;
         } else {
           return <Tag>Teacher Not Assigned To class</Tag>;
         }
@@ -109,7 +110,7 @@ function TeacherView() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        if (item?.level) {
+        if (item) {
           return (
             <div>
               {item.level}
@@ -139,10 +140,10 @@ function TeacherView() {
 
   return (
     <>
-      <div>
+      <div className="w-[100%] p-10 -mt-20">
         <div className="flex flex-row justify-between border-b-[2px] pb-2 -mt-4">
           <div className="flex flex-row">
-            <div className="rounded-full border-[2px]">
+            <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
               <img
                 src={data.avater ? data.avater : "img-5.jpg"}
                 alt="profile"
@@ -163,7 +164,7 @@ function TeacherView() {
               </div>
             </div>
           </div>
-          <div className=" flex flex-col justify-center -ml-20">
+          <div className=" flex flex-col justify-center -ml-20 border-l-[2px]">
             <div className="flex flex-row">
               <h3 className="font-bold pr-2 border-r-[1px]">Class</h3>
               {data?.class ? (
@@ -173,11 +174,18 @@ function TeacherView() {
                   )}
                 </h4>
               ) : (
-                <h3>Teacher is not Assigned</h3>
+                <Tag>Teacher is not Assigned</Tag>
               )}
             </div>
             <div>
               <h3 className="font-bold">Subject</h3>
+              {data?.course ? (
+                <h4 className="pl-0">
+                  {data?.course?.map((item, i) => item.course_name + ",")}
+                </h4>
+              ) : (
+                <Tag>Teacher is not Assigned</Tag>
+              )}
             </div>
           </div>
         </div>
@@ -222,41 +230,8 @@ function TeacherView() {
                       dataSource={teacherData}
                       pagination={false}
                     />
-                    {/* <div className="col">
-                      <div>
-                        <h3>Age</h3>
-                        <span>{age}</span>
-                      </div>
-                      <div>
-                        <h3>Sex</h3>
-                        <span>{data.sex}</span>
-                      </div>
-                      <div>
-                        <h3>Phone number</h3>
-                        <span>{data.phone}</span>
-                      </div>
-                      <div>
-                        <h3>Email</h3>
-                        <span>{data.email}</span>
-                      </div>
-                    </div> */}
                   </div>
                 </div>
-                {/* <div className="career-profile">
-                  <h1>Career Profile</h1>
-                  <div>
-                    <h3>Working Since</h3>
-                    <span>{workTime}</span>
-                  </div>
-                  <div>
-                    <h3>Speciality</h3>
-                    <span>Teacher</span>
-                  </div>
-                  <div>
-                    <h3>Work Expirence</h3>
-                    <span>{expriance} year</span>
-                  </div>
-                </div> */}
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Course" key="2">

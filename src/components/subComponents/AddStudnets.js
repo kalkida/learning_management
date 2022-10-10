@@ -154,8 +154,8 @@ export default function AddStudnets() {
       render: (item) => {
         return (
           <h1>
+             {item?.level}
             {item?.section}
-            {item?.level}
           </h1>
         );
       },
@@ -192,7 +192,7 @@ export default function AddStudnets() {
   return (
     <div>
       <div className="list-header">
-        <h1 className="text-[24px] font-bold">List Of Students</h1>
+        <h1 className="text-[24px] font-bold"  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}>List Of Students</h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">

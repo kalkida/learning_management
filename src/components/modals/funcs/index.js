@@ -115,7 +115,7 @@ const addSingleClassToTeacher = async (classId, teacherId) => {
 const removeSingleClassToTeacher = async (classId, teacherId) => {
   const teacherRef = doc(firestoreDb, "teachers", teacherId);
   await updateDoc(teacherRef, {
-    course: arrayRemove(classId),
+    class: arrayRemove(classId),
   });
 };
 

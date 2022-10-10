@@ -331,3 +331,17 @@
     outline: 0;
     -webkit-box-shadow: 0 0 0 2px rgba(233, 170, 87, 0.2) !important;
 }
+
+.ant-table table { font-size: 14px; 
+    font-family: 'plus jakarta Sans';
+    font-weight: 500;
+    line-height: 20px;
+
+}
+
+.ant-table table thead { font-size: 16px; 
+    font-family: 'plus jakarta Sans';
+    font-weight: bold;
+    line-height: 24px;
+
+}

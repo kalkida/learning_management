@@ -212,95 +212,84 @@ const Layouts = () => {
           <List className="sm:invisible md:visible ">
             {[
               {
-                text: "Home",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faHome}
-                    className="text-xl  text-[#2c5886]"
-                  />
-                ),
-                link: "/admin",
+                text: 'Home',
+                Icon: <FontAwesomeIcon
+                  icon={faHome}
+                  className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/admin"
               },
               {
-                text: "Message",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faMessage}
-                    className="text-xl text-[#2c5886]"
-                  />
-                ),
-                link: "/message",
+                text: 'Message',
+                Icon: <FontAwesomeIcon
+                  icon={faMessage}
+                  className="text-xl text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/message"
+              }
+              , {
+                text: 'Announcment',
+                Icon: <FontAwesomeIcon
+                  icon={faMicrophone}
+                  className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/announcment"
               },
               {
-                text: "Announcment",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faMicrophone}
-                    className="text-xl  text-[#2c5886]"
-                  />
-                ),
-                link: "/announcment",
+                text: 'Course',
+                Icon: <FontAwesomeIcon
+                  icon={faBook}
+                  className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/list-course"
+              }, {
+                text: 'Classes',
+                Icon: <FontAwesomeIcon
+                  icon={faCity}
+                  className="text-xl text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/list-classes"
+              }, {
+                text: 'Teacher',
+                Icon: <FontAwesomeIcon
+                  icon={faFeather}
+                  className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/list-teacher"
               },
               {
-                text: "Course",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faBook}
-                    className="text-xl  text-[#2c5886]"
-                  />
-                ),
-                link: "/list-course",
+                text: 'Student',
+                Icon: <FontAwesomeIcon
+                  icon={faGraduationCap}
+                  className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/list-student"
               },
               {
-                text: "Classes",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faCity}
-                    className="text-xl text-[#2c5886]"
-                  />
-                ),
-                link: "/list-classes",
+                text: 'Attendance',
+                Icon: <FontAwesomeIcon
+                  icon={faCalendar}
+                  className="text-xl text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/attendance"
               },
               {
-                text: "Teacher",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faFeather}
-                    className="text-xl  text-[#2c5886]"
-                  />
-                ),
-                link: "/list-teacher",
-              },
-              {
-                text: "Student",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faGraduationCap}
-                    className="text-xl  text-[#2c5886]"
-                  />
-                ),
-                link: "/list-student",
-              },
-              {
-                text: "Attendance",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="text-xl text-[#2c5886]"
-                  />
-                ),
-                link: "/attendance",
-              },
-              {
-                text: "Schedule",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="text-xl  text-[#2c5886]"
-                  />
-                ),
-                link: "/schedule",
-              },
+                text: 'Schedule',
+                Icon: <FontAwesomeIcon
+                  icon={faCalendar}
+                  className="text-xl  text-[#2c5886]"
+                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
+                />,
+                link: "/schedule"
+              }
             ].map((item, index) => (
               <ListItem
                 key={item.text}
@@ -476,7 +465,7 @@ const Layouts = () => {
   }, []);
 
   return (
-    <Layout style={{ backgroundColor: "white" }}>
+    <Layout className="bg-[#E8E8E8] min-h-[100vh]">
       <Box sx={{ display: "flex", width: "100%" }}>
         <Navigation
           handleDrawerOpen={handleDrawerOpen}
@@ -488,18 +477,11 @@ const Layouts = () => {
         <SiderGenerator />
         <Box
           component="main"
-          sx={{ flexGrow: 1, p: 1 }}
-          className="bg-[#F9FAFB]"
+          sx={{ flexGrow: 1, p: 3 }}
+          className="bg-[#E8E8E8]"
         >
           <DrawerHeader />
-          <Content
-            style={{
-              margin: 0,
-              minHeight: 280,
-              backgroundColor: "#F9FAFB",
-              justifyContent: "center",
-            }}
-          >
+          <Content className="bg-[#E8E8E8] h-[auto]">
             <Routes>
               <Route path="/admin" element={<AdminDash />} />
               <Route path="/teacher" element={<TeacherDash />} />

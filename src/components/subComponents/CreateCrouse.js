@@ -91,7 +91,10 @@ const CreateCrouse = () => {
 
   const createNewCourse = async () => {
     newCourse.course_name = selectedSubject + " " + selectedLevel;
-
+    if (newCourse.course_name == "") {
+      message.error("please enter a new course name");
+      return 0;
+    }
     const q = query(
       collection(firestoreDb, "courses"),
       where("school_id", "==", uid.school),
@@ -165,10 +168,10 @@ const CreateCrouse = () => {
   }, []);
 
   return (
-    <div>
-      <div className="flex flex-row justify-between -mt-16 mb-10">
-        <h1 className="text-2xl font-bold">Add Course</h1>
-        <div>
+    <div className="bg-[#E8E8E8] h-[auto] pb-20 mt-[41px] px-10">
+      <div className="flex flex-row justify-between -mt-10 mb-10 z-0">
+        <h1 className="text-2xl font-bold ">Add Course</h1>
+        <div className="pr-0 ">
           <Button
             className="bg-[#E7752B] text-[white] rounded-lg shadow-md"
             onClick={createNewCourse}
@@ -179,8 +182,8 @@ const CreateCrouse = () => {
       </div>
       <div className="bg-[#F9FAFB] border-[1px] border-[#D0D5DD] p-[43px] rounded-lg">
         <div>
-          <h1 className="text-2xl font-bold mb-3">Coures Information</h1>
-          <h3 className="pb-2 font-semibold">Description</h3>
+          <h1 className="text-2xl font-bold mb-3"  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px'}}>Course Information</h1>
+          <h3 className="pb-2 font-semibold" style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px'}}>Description</h3>
           <Input.TextArea
             placeholder="Course "
             rows={4}
@@ -191,7 +194,7 @@ const CreateCrouse = () => {
         <div className="info-selection">
           <div className="col">
             <div className="pt-[24px] pb-[6px]">
-              <h3>Subject</h3>
+              <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px', fontSize:14}}>Subject</h3>
               <Select
                 style={{
                   width: "50%",
@@ -199,6 +202,12 @@ const CreateCrouse = () => {
                 placeholder="select Subjects"
                 onChange={handleSubject}
                 optionLabelProp="label"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Subject!",
+                  },
+                ]}
               >
                 {subject.map((item, index) => (
                   <Option
@@ -212,7 +221,7 @@ const CreateCrouse = () => {
               </Select>
             </div>
             <div className="pb-[6px] pt-[12px]">
-              <h3>Class</h3>
+              <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px', fontSize:14}}>Class</h3>
               <Select
                 style={{
                   width: "50%",
@@ -234,7 +243,7 @@ const CreateCrouse = () => {
           </div>
           <div className="col">
             <div className="pt-[24px] pb-[6px]">
-              <h3>Teachers</h3>
+              <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px', fontSize:14}}>Teachers</h3>
               <Select
                 style={{
                   width: "50%",
@@ -266,10 +275,10 @@ const CreateCrouse = () => {
           </div>
         </div>
       </div>
-      <div className="w-[60%] border-[1px] border-[#D0D5DD] bg-[#F9FAFB] mt-[56px] p-10 rounded-lg">
+      <div className="w-[100%] border-[1px] border-[#D0D5DD] bg-[#F9FAFB] mt-[56px] p-10 rounded-lg">
         <div className="pb-10">
-          <h1 className="text-[24px]">Schedule</h1>
-          <h2 className="text-[20px] pt-[24px] pb-[24px] text-[#EA8848]">
+          <h1 className="text-[24px]" style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px'}}>Schedule</h1>
+          <h2 className="text-[20px] pt-[24px] pb-[24px] text-[#EA8848]" style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'30px'}}>
             Class {selectedLevel ? selectedLevel : ""}
           </h2>
           <div className="flex flex-row justify-between">
@@ -310,6 +319,7 @@ const CreateCrouse = () => {
             </div>
           ))}
           <Button
+            className="border-[2px] border-[#E7752B] text-[#E7752B]"
             style={{
               float: "right",
             }}

@@ -258,9 +258,9 @@ export default function ListClasses() {
   }, [updateComplete]);
 
   return (
-    <div>
+    <div className="bg-[#E8E8E8] h-[100vh] px-8">
       <div className="list-header">
-        <h1 style={{ fontSize: 28 }}>List Of Class</h1>
+        <h1  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24}}>List Of Class</h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">
