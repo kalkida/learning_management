@@ -329,7 +329,16 @@ function UpdateCourse() {
                       </div>
                       <div>
                         <div>
-                          <span>Class</span>
+                          <span
+                            style={{
+                              fontFamily: "Plus Jakarta Sans",
+                              fontWeight: "500",
+                              lineHeight: "24px",
+                              fontSize: 14,
+                            }}
+                          >
+                            Class
+                          </span>
                           <Select
                             className="mt-2"
                             style={{

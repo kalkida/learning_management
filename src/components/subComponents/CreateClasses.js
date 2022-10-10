@@ -254,7 +254,16 @@ const CreateClasses = () => {
           <div className="course-content">
             <div>
               <div className="py-2">
-                <span>Class</span>
+                <span
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "500",
+                    lineHeight: "20px",
+                    fontSize: 14,
+                  }}
+                >
+                  Class
+                </span>
                 <Input
                   name="level"
                   type={"number"}
@@ -262,7 +271,16 @@ const CreateClasses = () => {
                 />
               </div>
               <div>
-                <span>Student</span>
+                <span
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "500",
+                    lineHeight: "20px",
+                    fontSize: 14,
+                  }}
+                >
+                  Student
+                </span>
                 <Select
                   style={{
                     width: "100%",
@@ -292,7 +310,16 @@ const CreateClasses = () => {
               </div>
             </div>
             <div className="py-2 ml-10">
-              <span>Section</span>
+              <span
+                style={{
+                  fontFamily: "Plus Jakarta Sans",
+                  fontWeight: "500",
+                  lineHeight: "20px",
+                  fontSize: 14,
+                }}
+              >
+                Section
+              </span>
               <Input name="section" onChange={(e) => handleClass(e)} />
             </div>
           </div>

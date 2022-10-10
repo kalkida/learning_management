@@ -20,7 +20,9 @@ const { Option } = Select;
 function ViewClass() {
   const [datas, setData] = useState([]);
   const [students, setStudents] = useState([]);
+  const [courseLoading, setCourseLoading] = useState(true);
   const [classData, setClassData] = useState([]);
+  const [studentLoading, setStudentLoading] = useState(true);
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   var { data } = state;
@@ -191,9 +193,9 @@ function ViewClass() {
         }
       });
     }
-    console.log(temporary);
     setTimeout(() => {
       setData(temporary);
+      setCourseLoading(false);
     }, 2000);
   };
 
@@ -209,6 +211,7 @@ function ViewClass() {
         }
       });
       setStudents(temporary);
+      setStudentLoading(false);
     }
   };
 
@@ -221,7 +224,7 @@ function ViewClass() {
     getCourses();
   }, []);
   return (
-    <div className="bg-[#E8E8E8] p-10">
+    <div className="bg-[#E8E8E8] p-10 h-[auto]">
       <div className="flex flex-row justify-between align-bottom border-b-[2px] py-0 -mt-20 ">
         <div className="flex flex-row justify-center align-middle">
           <div className="border-[2px] border-[#EA8848] rounded-full">
@@ -245,29 +248,51 @@ function ViewClass() {
           </div>
         </div>
       </div>
-      <div className="tab-content">
+      <div className="w-[100%]">
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
             tab={<p className="text-xl font-bold text-center ml-0">Profile</p>}
             key="1"
           >
-            <Button className="btn-confirm" onClick={handleUpdate}>
+            <Button
+              className="btn-confirm bg-[white] border-[1px] border-[#EA8848]"
+              onClick={handleUpdate}
+            >
               Edit Class
             </Button>
             <div className="asssign-teacher">
-              <h4 className="text-[24px] mb-10">Assigned Students</h4>
-              <Table dataSource={students} columns={columns} />
+              <h4
+                className="text-[24px] mb-10"
+                style={{ fontFamily: "Plus Jakarta Sans", fontWeight: "600" }}
+              >
+                Assigned Students
+              </h4>
+              <Table
+                loading={studentLoading}
+                dataSource={students}
+                columns={columns}
+              />
             </div>
-            <div className="asssign-teacher -mt-10">
-              <h4 className="text-[24px]">Assigned Courses</h4>
-              <Table dataSource={datas} columns={courseColumns} />
-            </div>
-            <div className="asssign-teacher">
-              <h4 className="text-[24px]">Weekly Schedule</h4>
+            <div className="-mt-10">
+              <h4
+                className="text-[24px] mb-10"
+                style={{ fontFamily: "Plus Jakarta Sans", fontWeight: "600" }}
+              >
+                Assigned Courses
+              </h4>
               <Table
                 dataSource={datas}
+                columns={courseColumns}
+                loading={courseLoading}
+              />
+            </div>
+            <div className="-mt-10">
+              <h4 className="text-xl mb-10 font-bold">Weekly Schedule</h4>
+              <Table
+                dataSource={datas}
+                loading={courseLoading}
                 columns={scheduleColumn}
-                pagination={null}
+                pagination={false}
               />
             </div>
           </Tabs.TabPane>

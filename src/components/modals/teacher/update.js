@@ -429,7 +429,14 @@ function TeacherUpdate() {
               alt="profile"
             />
             <div className="profile-info">
-              <h2>
+              <h2
+                style={{
+                  fontFamily: "Plus Jakarta Sans",
+                  fontWeight: "600",
+                  lineHeight: "28px",
+                  fontSize: 20,
+                }}
+              >
                 {updateTeacher.first_name + " " + updateTeacher.last_name}
               </h2>
               <h3>Contact</h3>
@@ -465,11 +472,30 @@ function TeacherUpdate() {
                 Confirm
               </Button>
               <div className="add-teacher">
-                <h1>Edit Profile</h1>
+                c{" "}
+                <h1
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "600",
+                    lineHeight: "28px",
+                    fontSize: 24,
+                  }}
+                >
+                  Edit Profile
+                </h1>
                 <div>
                   <div className="avater-img">
                     <div>
-                      <h2>Profile Picture</h2>
+                      <h2
+                        style={{
+                          fontFamily: "Plus Jakarta Sans",
+                          fontWeight: "600",
+                          lineHeight: "28px",
+                          fontSize: 16,
+                        }}
+                      >
+                        Profile Picture
+                      </h2>
                       <img
                         src={
                           file

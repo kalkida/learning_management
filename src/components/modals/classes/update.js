@@ -271,7 +271,15 @@ function UpdateClass() {
         <>
           {" "}
           <div>
-            <h1 className="text-4xl -mt-14">
+            <h1
+              className="text-4xl -mt-4"
+              style={{
+                fontFamily: "Plus Jakarta Sans",
+                fontWeight: "600",
+                lineHeight: "32px",
+                fontSize: 24,
+              }}
+            >
               Edit Class {data.level} - {data.section}
             </h1>
             <div className="tab-content">
@@ -329,9 +337,11 @@ function UpdateClass() {
                     <div className="flex flex-row justify-between">
                       <h1
                         style={{
-                          fontSize: 24,
-                          fontWeight: "bold",
-                          paddingBottom: "10px",
+                          fontFamily: "Plus Jakarta Sans",
+                          fontWeight: "600",
+                          lineHeight: "30px",
+                          fontSize: 20,
+                          paddingBottom: 10,
                         }}
                       >
                         Assigned Courses
