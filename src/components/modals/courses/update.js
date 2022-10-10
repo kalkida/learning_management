@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
-  Form,
   Input,
   Button,
   Select,
-  Modal,
   message,
   TimePicker,
   Tabs,
@@ -21,13 +19,17 @@ import {
   where,
   query,
   getDoc,
-  updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../../firebase";
 import AttendanceList from "../../subComponents/AttendanceList";
 import moment from "moment";
-import { removeSingleCourseFromClass } from "../funcs";
+import {
+  removeSingleCourseFromClass,
+  addSingleCourseToTeacher,
+  addSingleClassToTeacher,
+  removeSingleCourseToTeacher,
+} from "../funcs";
 
 const { Option } = Select;
 
@@ -76,9 +78,23 @@ function UpdateCourse() {
       }
     });
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
-      .then((response) => {
+      .then((_) => {
         setLoading(false);
-        console.log("courses updated", data);
+        //add Course To Teacher when updating
+        updateCourse.teachers.map((items) => {
+          if (!data.teachers.includes(items)) {
+            addSingleCourseToTeacher(data.key, items);
+            addSingleClassToTeacher(updateCourse.class, items);
+          }
+        });
+        // if teacher is in data but not in updateCourse then remove it from the teacher
+        data.teachers.map((items) => {
+          if (!updateCourse.teachers.includes(items)) {
+            console.log("removed", data.key, items.key);
+            removeSingleCourseToTeacher(data.key, items.key);
+          }
+        });
+
         removeSingleCourseFromClass(data.class.key, data.key);
         message.success("Data is updated successfuly");
         navigate("/list-course");
@@ -259,7 +275,7 @@ function UpdateCourse() {
                 </h3>
               </div>
             </div>
-            <div className="header-extra">
+            <div className="header-extra flex flex-col justify-center align-middle w-[20vw]">
               <div>
                 <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:18}}>Assigned Teachers</h3>
                 <h4>{data.teachers.length}</h4>
@@ -269,7 +285,7 @@ function UpdateCourse() {
                 <h4>{data.schedule.length}</h4>
               </div>
             </div>
-            <div className="flex justify-between flex-col mt-[10vh]">
+            <div className="flex justify-end flex-col  mt-[10vh]">
               <Button
                 className="btn-confirm bg-[#E7752B] text-white"
                 onClick={handleUpdate}
@@ -278,6 +294,7 @@ function UpdateCourse() {
               </Button>
             </div>
           </div>
+
           <div className="tab-content">
             <Tabs defaultActiveKey="1">
               <Tabs.TabPane tab="Profile" key="1">
@@ -288,7 +305,7 @@ function UpdateCourse() {
                       <div>
                         <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}>Subject</span>
                         <Select
-                          className="rounded-xl"
+                          className="rounded-xl mt-2"
                           style={{
                             width: "100%",
                           }}
@@ -312,6 +329,7 @@ function UpdateCourse() {
                         <div>
                           <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}>Class</span>
                           <Select
+                            className="mt-2"
                             style={{
                               width: "100%",
                             }}
@@ -478,14 +496,6 @@ function UpdateCourse() {
                     </Button>
                   </div>
                 </div>
-                <Button
-                  className="btn-dlt"
-                  type="primary"
-                  danger
-                  onClick={handleDelete}
-                >
-                  Delete
-                </Button>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Attendance" key="2">
                 <AttendanceList />

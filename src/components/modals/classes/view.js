@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Select, Tabs, Table } from "antd";
+import { Button, Select, Tabs, Table, Tag } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import "./style.css";
@@ -37,24 +37,6 @@ function ViewClass() {
     },
 
     {
-      title: "Period",
-      dataIndex: "schedule",
-      key: "schedule",
-      render: (value) => {
-        moment.locale("en");
-        return (
-          <>
-            {value?.map((item, i) => (
-              <h1>
-                {/* {moment(item.time[0]).format('d MMM')} */}
-                {item.time + "    ,   "}
-              </h1>
-            ))}
-          </>
-        );
-      },
-    },
-    {
       title: "Day",
       dataIndex: "schedule",
       key: "schedule",
@@ -68,71 +50,25 @@ function ViewClass() {
         );
       },
     },
-
-    // {
-    //   title: "Tuesday",
-    //   dataIndex: "schedule",
-    //   key: "schedule",
-    //   render: (value) => {
-    //     return (
-    //       <>
-    //         {value?.map((item, i) => (
-    //            <h1>
-    //            {item.day}
-    //          </h1>
-    //         ))}
-    //       </>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Wednesday",
-    //   dataIndex: "schedule",
-    //   key: "schedule",
-    //   render: (value) => {
-    //     return (
-    //       <>
-    //         {value?.map((item, i) => (
-    //            <h1>
-    //            {item.day}
-    //          </h1>
-    //         ))}
-    //       </>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Thursday",
-    //   dataIndex: "schedule",
-    //   key: "schedule",
-    //   render: (value) => {
-    //     return (
-    //       <>
-    //         {value?.map((item, i) => (
-    //            <h1>
-    //            {item.day}
-    //          </h1>
-    //         ))}
-    //       </>
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Friday",
-    //   dataIndex: "schedule",
-    //   key: "schedule",
-    //   render: (value) => {
-    //     return (
-    //       <>
-    //         {value?.map((item, i) => (
-    //            <h1>
-    //            {item.day}
-    //          </h1>
-    //         ))}
-    //       </>
-    //     );
-    //   },
-    // },
+    {
+      title: "Period",
+      dataIndex: "schedule",
+      key: "schedule",
+      render: (value) => {
+        moment.locale("en");
+        return (
+          <>
+            {value?.map((item, i) => (
+              <Tag color="green">
+                {moment(JSON.parse(item.time[0])).format("hh:mm") +
+                  " to " +
+                  moment(JSON.parse(item.time[1])).format("hh:mm")}
+              </Tag>
+            ))}
+          </>
+        );
+      },
+    },
   ];
   const columns = [
     {
@@ -193,16 +129,6 @@ function ViewClass() {
     } else {
     }
   };
-  // const getStudent = async () =>{
-  //   const docRef = doc(firestoreDb, "student", data.St);
-  //   var data = "";
-  //   await getDoc(docRef).then((response) => {
-  //     data = response.data();
-  //     data.key = response.id;
-  //   });
-  //   return data;
-  // }
-
   const getClassData = async (ID) => {
     const docRef = doc(firestoreDb, "class", ID);
 
@@ -270,10 +196,7 @@ function ViewClass() {
   const getStudents = async (ids) => {
     var temporary = [];
     if (ids.length > 0) {
-      const q = query(
-        collection(firestoreDb, "students")
-        // where("student_id", "in", ids)
-      );
+      const q = query(collection(firestoreDb, "students"));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         var data = doc.data();
@@ -312,10 +235,6 @@ function ViewClass() {
             <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>Assigned Students</h3>
             <h4>{data?.student.length}</h4>
           </div>
-          {/* <div>
-            <h3>Assigned Course</h3>
-            <h4>{data?.course.length}</h4>
-          </div> */}
         </div>
       </div>
       <div className="tab-content">

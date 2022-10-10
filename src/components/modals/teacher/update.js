@@ -168,18 +168,20 @@ function TeacherUpdate() {
   };
 
   const getID = () => {
-    var classArr = [];
-    var courseArr = [];
-    data.class?.map((item) => {
-      classArr.push(item.key);
-    });
-    data.course?.map((item) => {
-      courseArr.push(item.key);
-    });
-    setUpdateTeacher({ ...updateTeacher, class: classArr });
-    setUpdateTeacher({ ...updateTeacher, course: courseArr });
-    setSelectedClassKeys(classArr);
-    setSelectedRowKeysCourse(courseArr);
+    if (data?.class) {
+      var classArr = [];
+      var courseArr = [];
+      data?.class?.map((item) => {
+        classArr.push(item.key);
+      });
+      data?.course?.map((item) => {
+        courseArr.push(item.key);
+      });
+      setUpdateTeacher({ ...updateTeacher, class: classArr });
+      setUpdateTeacher({ ...updateTeacher, course: courseArr });
+      setSelectedClassKeys(classArr);
+      setSelectedRowKeysCourse(courseArr);
+    }
   };
 
   const getSubject = async () => {

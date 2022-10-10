@@ -175,21 +175,24 @@ export default function AddTeacher() {
   };
 
   const getData = async (data) => {
-    data.class?.map(async (item, index) => {
-      data.class[index] = await getClassData(item);
-    });
+    if (data.class) {
+      data.class?.map(async (item, index) => {
+        data.class[index] = await getClassData(item);
+      });
 
-    data.course?.map(async (item, index) => {
-      data.course[index] = await getCourseData(item);
-    });
-    return data;
+      data.course?.map(async (item, index) => {
+        data.course[index] = await getCourseData(item);
+      });
+      return data;
+    } else {
+      return data;
+    }
   };
 
   const getTeacher = async () => {
-    var branches = await getSchool();
     const q = query(
       collection(firestoreDb, "teachers"),
-      where("school_id", "in", branches.branches)
+      where("school_id", "==", uid.school)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -308,13 +311,17 @@ export default function AddTeacher() {
       key: "course",
       dataIndex: "course",
       render: (value) => {
-        return (
-          <>
-            {value.map((item) => (
-              <h1>{item.course_name}</h1>
-            ))}
-          </>
-        );
+        if (Array.isArray(value)) {
+          return (
+            <>
+              {value.map((item) => (
+                <h1>{item.course_name}</h1>
+              ))}
+            </>
+          );
+        } else {
+          return <Tag>Course Not Assigned</Tag>;
+        }
       },
     },
     {
@@ -329,13 +336,17 @@ export default function AddTeacher() {
       key: "class",
 
       render: (value) => {
-        return (
-          <>
-            {value?.map((item, i) => (
-              <h1>{item.level + item.section}</h1>
-            ))}
-          </>
-        );
+        if (value?.length) {
+          return (
+            <>
+              {value?.map((item, i) => (
+                <h1>{item.level + item.section}</h1>
+              ))}
+            </>
+          );
+        } else {
+          return <Tag color="red">Class Not Assigned</Tag>;
+        }
       },
     },
 
