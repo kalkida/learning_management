@@ -235,6 +235,7 @@ const CreateClasses = () => {
     <>
       <div className="bg-[#E8E8E8] p-10 -mt-0 h-[100vh]">
         <div className="flex flex-row justify-between mb-2">
+          <h1 className="text-3xl" style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24}}>Create Class</h1>
           <h1 className="text-3xl font-bold mb-6">Create Class</h1>
           <Button
             className="text-[#E7752B] border-[1px] border-[#E7752B]  hover:bg-[#E7752B] z-0"
@@ -254,6 +255,7 @@ const CreateClasses = () => {
           <div className="course-content">
             <div>
               <div className="py-2">
+                <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Class</span>
                 <span
                   style={{
                     fontFamily: "Plus Jakarta Sans",
@@ -271,6 +273,7 @@ const CreateClasses = () => {
                 />
               </div>
               <div>
+                <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Student</span>
                 <span
                   style={{
                     fontFamily: "Plus Jakarta Sans",
@@ -310,21 +313,13 @@ const CreateClasses = () => {
               </div>
             </div>
             <div className="py-2 ml-10">
-              <span
-                style={{
-                  fontFamily: "Plus Jakarta Sans",
-                  fontWeight: "500",
-                  lineHeight: "20px",
-                  fontSize: 14,
-                }}
-              >
-                Section
-              </span>
+              <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Section</span>
               <Input name="section" onChange={(e) => handleClass(e)} />
             </div>
           </div>
         </div>
         <div className="list-header">
+          <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24 ,marginTop:10}}>Add Courses</h1>
           <h1 className="text-2xl font-semibold" style={{ marginTop: 20 }}>
             Add Courses
           </h1>
@@ -353,6 +348,66 @@ const CreateClasses = () => {
             </div>
           </div>
         </div>
+        <div
+          style={{
+            marginTop: "20px",
+          }}
+        ></div>
+        <div className="schedule">
+          <div className="up-card-schedule">
+            <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24 , padding:10}}>
+              {" "}
+              Schedule
+            </h1>
+            <div className="schedule-header">
+              <div>
+                <p> Period</p>
+              </div>
+              <div>
+                <p> Start time</p>
+                <p> End time</p>
+              </div>
+            </div>
+            {input.map((item, i) => (
+              <>
+                <Select
+                  style={{ width: "40%" }}
+                  placeholder="First Select Days"
+                  onChange={(e) => handleNewScheduler(e, i)}
+                >
+                  {days.map((item, index) => (
+                    <Option key={index} value={item} label={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+                <TimePicker.RangePicker
+                  style={{ width: "60%" }}
+                  format={"hh:mm"}
+                  use12Hours
+                  onChange={(e) => handleNewScheduler(e, i)}
+                />
+              </>
+            ))}
+            <Button
+              style={{ float: "right" }}
+              onClick={() => {
+                setInput([...input, 0]);
+              }}
+            >
+              Add New
+            </Button>
+          </div>
+        </div>
+
+        <Button
+          className="btn-dlt"
+          type="primary"
+          danger
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
       </div>
     </>
   );

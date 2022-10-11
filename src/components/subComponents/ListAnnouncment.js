@@ -295,8 +295,8 @@ export default function ListAnnouncment() {
           </div>
         </div>
       ) : null}
-      <div className="bg-[#E8E8E8]">
-        <h1 className=" md:text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054]">
+      <div>
+        <h1 className="text-3xl font-bold font-sans leading-10">
           Latest Announcements
         </h1>
         <div>
@@ -308,11 +308,7 @@ export default function ListAnnouncment() {
 
               <div
                 className="preview"
-                style={{
-                  fontFamily: "Plus Jackarta Sans",
-                  fontSize: 16,
-                  fontWeight: "500",
-                }}
+                style={{ fontFamily:'Plus Jackarta Sans' , fontSize:16, fontWeight:'500'}}
                 dangerouslySetInnerHTML={createMarkup(item.body)}
               ></div>
               <div
@@ -355,14 +351,14 @@ export default function ListAnnouncment() {
         </div>
       </div>
       <div>
-        <h1 className="md:text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054] mt-10">
+        <h1 className="text-3xl font-bold font-sans leading-10">
           Archived Announcements
         </h1>
         <div>
           {archivedAnnoumnet.map((item, index) => (
             <div key={index} className="mt-10">
               <h1 className="text-lg mb-2 font-bold">{item.title}</h1>
-              <article class="prose lg:prose-xl">{item.body}</article>
+              <p style={{ fontFamily:'Plus Jackarta Sans' , fontSize:16, fontWeight:'500'}}>{item.body}</p>
             </div>
           ))}
         </div>

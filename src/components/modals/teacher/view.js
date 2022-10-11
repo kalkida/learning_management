@@ -197,41 +197,61 @@ function TeacherView() {
               </Button>
               <div className="flex flex-row justify-between w-[70%]">
                 <div>
-                  <h1 className="text-4xl font-bold py-2 text-center">7,8</h1>
-                  <span>Assigned Grade</span>
+                  <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}>7,8</h1>
+                  <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Assigned Grade</span>
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold py-2 text-center">
-                    {data.class.length}
-                  </h1>
-                  <span>Classes</span>
+                  <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}>{data.class.length}</h1>
+                  <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Classes</span>
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold py-2 text-center">
-                    {data.course.length}
-                  </h1>
-                  <span>Course</span>
+                  <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}>{data.course.length}</h1>
+                  <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Course</span>
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold py-2 text-center">
-                    {weekClass ? weekClass : "0"}
-                  </h1>
-                  <span>Classes/Week</span>
+                  <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}>{weekClass}</h1>
+                  <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Classes/Week</span>
                 </div>
               </div>
-              <div className="">
-                <div className="">
-                  <h1 className="text-lg py-5 font-bold">
-                    Personal Information
-                  </h1>
-                  <div className="">
-                    <Table
-                      columns={teacherColumn}
-                      dataSource={teacherData}
-                      pagination={false}
-                    />
+              <div className="teacher-profile">
+                <div className="personal-info">
+                  <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}>Personal Information</h1>
+                  <div className="info-content">
+                    <div className="col">
+                      <div>
+                        <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}>Age</h3>
+                        <span>{age}</span>
+                      </div>
+                      <div style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}>
+                        <h3>Sex</h3>
+                        <span>{data.sex}</span>
+                      </div>
+                      <div>
+                        <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}>Phone number</h3>
+                        <span>{data.phone}</span>
+                      </div>
+                      <div>
+                        <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}>Email</h3>
+                        <span>{data.email}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div className="career-profile">
+                  <h1  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}>Career Profile</h1>
+                  <div>
+                    <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}>Working Since</h3>
+                    <span>{workTime}</span>
+                  </div>
+                  <div>
+                    <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}>Speciality</h3>
+                    <span>Teacher</span>
+                  </div>
+                  <div>
+                    <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}>Work Expirence</h3>
+                    <span>{expriance} year</span>
+                  </div>
+                </div> 
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Course" key="2">
