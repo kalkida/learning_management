@@ -261,12 +261,8 @@ export default function ListClasses() {
     <div className="bg-[#F9FAFB] h-[100vh] px-8">
       <div className="list-header">
         <h1
-          style={{
-            fontFamily: "Plus Jakarta Sans",
-            fontWeight: "600",
-            lineHeight: "32px",
-            fontSize: 24,
-          }}
+          className="text-2xl mb-2 font-bold font-serif"
+          //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24}}
         >
           List Of Class
         </h1>

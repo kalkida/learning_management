@@ -41,24 +41,24 @@ function ViewCourse() {
             />
           </div>
           <div className="flex flex-col justify-center align-middle">
-            <h2 className="text-xl font-bold"> {data.course_name}</h2>
+            <h2 className="text-2xl font-bold font-serif"> {data.course_name}</h2>
           </div>
         </div>
         <div className="header-extra flex flex-col justify-center align-middle">
           <div>
-            <h3 className="font-semibold">Assigned Teachers</h3>
-            <h4 className="font-bold">{data.teachers.length}</h4>
+            <h3 className="text-lg font-semibold font-serif">Assigned Teachers</h3>
+            <h4 className="text-sm font-bold font-serif">{data.teachers.length}</h4>
           </div>
           <div>
-            <h3 className="font-semibold">Class/week</h3>
-            <h4 className="font-bold">{data.schedule.length}</h4>
+            <h3 className="text-lg font-semibold font-serif">Class/week</h3>
+            <h4 className="text-sm font-bold font-serif">{data.schedule.length}</h4>
           </div>
         </div>
       </div>
       <div className="tab-content">
         <Tabs className="bg-[#F9FAFB]" defaultActiveKey="1">
           <Tabs.TabPane
-            tab={<p className="text-xl font-bold text-center ml-5">Profile</p>}
+            tab={<p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>}
             key="1"
           >
             <Button
@@ -69,7 +69,7 @@ function ViewCourse() {
               Edit Course
             </Button>
             <div className="course-description rounded-2xl border-[2px]">
-              <h4 className="mb-2 font-bold text-lg">Coures Description</h4>
+              <h4 className="mb-2 font-bold text-lg font-serif">Coures Description</h4>
               <Input.TextArea
                 className="border-[1px] rounded-lg"
                 width="100%"
@@ -78,7 +78,7 @@ function ViewCourse() {
               />
             </div>
             <div className="text-xl mt-10">
-              <h4 className="py-2 font-semibold">Assigned Teachers</h4>
+              <h4 className="py-2 font-semibold font-serif">Assigned Teachers</h4>
               <Table
                 className="border-l-[1px] border-r-[1px] "
                 dataSource={data.teachers}
@@ -86,9 +86,9 @@ function ViewCourse() {
               />
             </div>
             <div className="schedule">
-              <h4 className="text-xl font-semibold pt-2 ">Weekly Schedule</h4>
+              <h4 className="text-xl font-semibold pt-2 font-serif ">Weekly Schedule</h4>
               <div className="card-schedule border-[2px]">
-                <h2 className="text-lg py-2">
+                <h2 className="text-lg py-2 font-serif">
                   Class{" "}
                   {data.class ? data.class.level + data.class.section : ""}
                 </h2>
@@ -132,7 +132,7 @@ function ViewCourse() {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <p className="text-xl font-bold text-center ml-5">Attendance</p>
+              <p className="text-xl font-bold text-center ml-5 font-serif">Attendance</p>
             }
             key="2"
           >
@@ -140,7 +140,7 @@ function ViewCourse() {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <p className="text-xl font-bold text-center ml-5">Assignment</p>
+              <p className="text-xl font-bold text-center ml-5 font-serif">Assignment</p>
             }
             key="3"
           >

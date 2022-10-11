@@ -428,7 +428,8 @@ function TeacherUpdate() {
               alt="profile"
             />
             <div className="profile-info">
-              <h2  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:20}}>
+              <h2
+              className="text-xl font-bold font-serif"  >
                 {updateTeacher.first_name + " " + updateTeacher.last_name}
               </h2>
               <h3>Contact</h3>
@@ -436,31 +437,44 @@ function TeacherUpdate() {
           </div>
           <div className="header-extra-th">
             <div>
-              <h3  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'28px',fontSize:14}}>Class</h3>
+              <h3  
+              className="text-sm font-bold font-serif" 
+              >Class</h3>
               <h4
-               style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'28px',fontSize:14}}
+               className="text-sm font-serif" 
               >
                 {data.class?.map((item, i) => item.level + item.section + ",")}
               </h4>
             </div>
             <div>
-              <h3  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'28px',fontSize:14}}>Subject</h3>
-              <h4  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'28px',fontSize:14}}>{data.course?.map((item, i) => item.course_name + ",")}</h4>
+              <h3 
+               className="text-sm font-bold font-serif" 
+               >Subject</h3>
+              <h4  
+               className="text-sm font-serif" 
+              >{data.course?.map((item, i) => item.course_name + ",")}</h4>
             </div>
           </div>
         </div>
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
-            <Tabs.TabPane tab="Profile" key="1">
+            <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
+            } key="1">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Confirm
               </Button>
               <div className="add-teacher">
-                <h1  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}>Edit Profile</h1>
+                <h1
+                className="text-xl font-bold font-serif"  
+                >Edit Profile</h1>
                 <div>
                   <div className="avater-img">
                     <div>
-                      <h2  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>Profile Picture</h2>
+                      <h2
+                      className="text-base font-bold font-serif"  
+                     // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}
+                      >Profile Picture</h2>
                       <img
                         src={
                           file
@@ -502,7 +516,9 @@ function TeacherUpdate() {
                   <div className="add-form">
                     <div className="col">
                       <div>
-                        <label>First Name</label>
+                        <label
+                         className="text-sm  font-serif" 
+                        >First Name</label>
                         <Input
                           defaultValue={updateTeacher.first_name}
                           name="first_name"
@@ -510,7 +526,9 @@ function TeacherUpdate() {
                         />
                       </div>
                       <div>
-                        <label>Last Name</label>
+                        <label
+                         className="text-sm font-serif" 
+                        >Last Name</label>
                         <Input
                           defaultValue={updateTeacher.last_name}
                           name="last_name"
@@ -520,7 +538,9 @@ function TeacherUpdate() {
                     </div>
                     <div className="col">
                       <div>
-                        <label>Phone</label>
+                        <label
+                         className="text-sm  font-serif" 
+                        >Phone</label>
                         <Input
                           defaultValue={updateTeacher.phone}
                           name="phone"
@@ -528,7 +548,9 @@ function TeacherUpdate() {
                         />
                       </div>
                       <div>
-                        <label>Email</label>
+                        <label
+                         className="text-sm font-serif" 
+                        >Email</label>
                         <Input
                           defaultValue={updateTeacher.email}
                           name="email"
@@ -538,7 +560,9 @@ function TeacherUpdate() {
                     </div>
                     <div className="col">
                       <div>
-                        <label>Date Of Birth</label>
+                        <label
+                         className="text-sm  font-serif" 
+                        >Date Of Birth</label>
                         <DatePicker
                           style={{ width: "100%" }}
                           onChange={handleDob}
@@ -550,7 +574,9 @@ function TeacherUpdate() {
                         />
                       </div>
                       <div>
-                        <label>Sex</label>
+                        <label
+                         className="text-sm font-serif" 
+                        >Sex</label>
                         <Select
                           defaultValue={updateTeacher.sex}
                           placeholder="Select Gender"
@@ -568,7 +594,9 @@ function TeacherUpdate() {
                         </Select>
                       </div>
                       <div>
-                        <label>Working Since</label>
+                        <label 
+                         className="text-sm font-serif" 
+                        >Working Since</label>
                         <DatePicker
                           style={{ width: "100%" }}
                           onChange={handleWork}
@@ -584,14 +612,16 @@ function TeacherUpdate() {
                 </div>
               </div>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Course" key="2">
+            <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">Course</p>
+            } key="2">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Confirm
               </Button>
 
               <div>
                 <div className="teacher-course-list">
-                  <h1>Add/Remove Courses</h1>
+                  <h1  className="text-xl font-bold font-serif mb-6" >Add/Remove Courses</h1>
                   <div className="tch-cr-list">
                     <div>
                       <Select
@@ -634,14 +664,16 @@ function TeacherUpdate() {
                 </div>
               </div>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Class" key="3">
+            <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">Class</p>
+            } key="3">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Confirm
               </Button>
 
               <div>
                 <div className="teacher-course-list">
-                  <h1>Add/Remove Class</h1>
+                  <h1  className="text-xl font-bold font-serif mb-10" >Add/Remove Class</h1>
 
                   <Table
                     rowSelection={rowSelectionClass}

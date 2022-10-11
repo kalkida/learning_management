@@ -204,7 +204,7 @@ export default function ListAnnouncment() {
       {showPost ? (
         <div className="bg-[white] mb-10">
           <div className="flex flex-row justify-between -mt-20 mb-5">
-            <h1 className="text-2xl font-[600] font-sans text-[#344054] ">
+            <h1 className="text-2xl font-[600] font-jakarta text-[#344054] ">
               Post Announcment
             </h1>
           </div>
@@ -228,11 +228,11 @@ export default function ListAnnouncment() {
               </Select>
             </div>
             <div className="flex flex-col">
-              <h1 className="text-lg font-bold">Header</h1>
+              <h1 className="text-lg font-bold font-jakarta">Header</h1>
               <input
                 onChange={onChange}
                 type="text"
-                className="mt-2 border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
+                className="mt-2 font-jakarta border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
               />
             </div>
             <Editor
@@ -247,7 +247,7 @@ export default function ListAnnouncment() {
             <div className="flex flex-row justify-end">
               <button
                 onClick={() => uploadData()}
-                className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 right-0"
+                className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 font-jakarta right-0"
               >
                 <Icon name="checkmark-outline" size="small" /> Post
               </button>
@@ -256,9 +256,9 @@ export default function ListAnnouncment() {
         </div>
       ) : null}
       {showEdit ? (
-        <div className="bg-[white] mb-10 -mt-10 ">
+        <div className="bg-[white] mb-10 -mt-10  ">
           <div className="flex flex-row justify-between -mt-14">
-            <h1 className="text-2xl font-bold text-[#344054] ">
+            <h1 className="text-2xl font-jakarta font-bold text-[#344054] ">
               Edit Announcment
             </h1>
           </div>
@@ -279,11 +279,11 @@ export default function ListAnnouncment() {
               </Select>
             </div>
             <div className="flex flex-col">
-              <h1 className="text-lg font-bold">Header</h1>
+              <h1 className="text-lg font-bold font-jakarta">Header</h1>
               <input
                 onChange={onEdit}
                 type="text"
-                className="mt-2 border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
+                className="mt-2 border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] font-jakarta active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
                 defaultValue={editData.title}
               />
             </div>
@@ -294,26 +294,20 @@ export default function ListAnnouncment() {
               style={{ padding: 10 }}
               toolbarClassName="toolbarClassName"
               wrapperClassName="wrapperClassName"
-              editorClassName="p-2 h-80"
+              editorClassName="p-2 h-[auto]"
               onEditorStateChange={onEditorStateChange}
               onChange={onEditorEdit}
             />
             <div className="flex flex-row justify-end">
-              {/* <button
-                onClick={() => shownewPost()}
-                className="p-1 border-[1px] md:border-[2px] text-xs md:text-sm md:px-3 md:w-25 rounded-sm py-1 hover:text-[white]  border-[#E7752B] text-[#E7752B] z-0"
-              >
-                Add Post
-              </button> */}
               <button
                 onClick={() => shownewPost()}
-                className="float-right px-3 w-30 mr-2  rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
+                className="float-right px-3 w-30 mr-2 font-jakarta  rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
               >
                 Add Post
               </button>
               <button
                 onClick={() => EditData()}
-                className="float-right px-3 w-20  rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
+                className="float-right px-3 w-20 font-jakarta rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
               >
                 Update
               </button>
@@ -322,13 +316,13 @@ export default function ListAnnouncment() {
         </div>
       ) : null}
       <div className="mb-10">
-        <h1 className="text-2xl text-[#344054] font-bold font-sans leading-10 mb-5">
+        <h1 className="text-2xl text-[#344054] font-bold font-jakarta leading-10 mb-5">
           Latest Announcements
         </h1>
         <div className="p-6 bg-[#FFFFFF] border-[1px] rounded-md">
           {announcment.map((item, index) => (
             <div key={index} className="mt-0 flex flex-col mb-10">
-              <h1 className="text-lg mb-2 font-bold font-sans capitalize text-[#344054]  ">
+              <h1 className="text-lg mb-2 font-bold font-jakarta capitalize text-[#344054]  ">
                 {item.title}
               </h1>
 
@@ -383,13 +377,13 @@ export default function ListAnnouncment() {
         </div>
       </div>
       <div className="mb-10">
-        <h1 className="text-2xl font-bold font-sans leading-10 mb-5 text-[#344054]">
+        <h1 className="text-2xl font-bold  font-jakarta leading-10 mb-5 text-[#344054]">
           Archived Announcements
         </h1>
         <div className="bg-[#FFFFFF] p-6 border-[1px] rounded-md">
           {archivedAnnoumnet.map((item, index) => (
             <div key={index} className="mt-0">
-              <h1 className="text-lg mb-2 font-bold text-[#344054]">
+              <h1 className="text-lg mb-2 font-bold  font-jakarta text-[#344054]">
                 {item.title}
               </h1>
               <p

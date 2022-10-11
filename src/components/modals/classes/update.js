@@ -271,14 +271,15 @@ function UpdateClass() {
         <>
           {" "}
           <div>
-            <h1 className="text-4xl -mt-4" style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24}}>
+            <h1 className="text-2xl font-bold -mt-4 font-serif"  
+            >
               Edit Class {data.level} - {data.section}
             </h1>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
                 <Tabs.TabPane
                   tab={
-                    <p className="text-xl font-bold text-center ml-0">
+                    <p className="text-xl font-serif font-bold text-center ml-0">
                       Profile
                     </p>
                   }
@@ -291,7 +292,8 @@ function UpdateClass() {
                     <div className="flex flex-row justify-between">
                       <div>
                         <h1
-                          style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:20}}
+                       className="text-lg font-bold font-serif" 
+                         // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:20}}
                         >
                           Assigned Students
                         </h1>
@@ -324,7 +326,8 @@ function UpdateClass() {
                   <div className="-mb-10">
                     <div className="flex flex-row justify-between">
                       <h1
-                       style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'30px',fontSize:20 , paddingBottom:10 }}
+                    className="text-lg font-bold font-serif mb-10" 
+                    //   style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'30px',fontSize:20 , paddingBottom:10 }}
                       >
                         Assigned Courses
                       </h1>
@@ -452,7 +455,7 @@ function UpdateClass() {
                 </Tabs.TabPane>
                 <Tabs.TabPane
                   tab={
-                    <p className="text-xl font-bold text-center ml-0">
+                    <p className="text-xl font-bold text-center ml-0 font-serif">
                       Attendance
                     </p>
                   }

@@ -263,45 +263,29 @@ function UpdateCourse() {
   return (
     <>
       {loading ? (
-        <div className="bg-[#F9FAFB] p-8">
-          <div className="flex flex-row justify-between -mt-16">
-            <div className="flex flex-row justify-between align-middle ">
-              <div className="rounded-full border-[2px] border-[#E7752B] mr-10">
-                <img
-                  className="w-[7vw] rounded-full h-[7vw] "
-                  src="logo512.png"
-                  alt="profile"
-                />
-              </div>
-              <div className="flex flex-col justify-center align-middle">
-                <h2 className="text-xl font-bold"> {data.course_name}</h2>
+        <div>
+          <div className="profile-header -mt-4">
+            <div className="course-avater -ml-6">
+              <img src="logo512.png" alt="profile" />
+              <div className="profile-info">
+                <h2 className="text-2xl font-bold font-serif">
+                  {data.course_name}
+                </h2>
+                <h3>
+                  Grade{" "}
+                  {data.class ? data.class.level + data.class.section : ""}
+                </h3>
               </div>
             </div>
             <div className="header-extra flex flex-col justify-center align-middle w-[20vw]">
               <div>
-                <h3
-                  style={{
-                    fontFamily: "Plus Jakarta Sans",
-                    fontWeight: "600",
-                    lineHeight: "28px",
-                    fontSize: 18,
-                  }}
-                >
+                <h3 className="text-lg font-semibold font-serif">
                   Assigned Teachers
                 </h3>
                 <h4>{data.teachers.length}</h4>
               </div>
               <div>
-                <h3
-                  style={{
-                    fontFamily: "Plus Jakarta Sans",
-                    fontWeight: "600",
-                    lineHeight: "28px",
-                    fontSize: 18,
-                  }}
-                >
-                  Class/week
-                </h3>
+                <h3 className="text-lg font-semibold font-serif">Class/week</h3>
                 <h4>{data.schedule.length}</h4>
               </div>
             </div>
@@ -317,29 +301,24 @@ function UpdateCourse() {
 
           <div className="tab-content">
             <Tabs defaultActiveKey="1">
-              <Tabs.TabPane tab="Profile" key="1">
+              <Tabs.TabPane
+                tab={
+                  <p className="text-xl font-bold text-center ml-5 font-serif">
+                    Profile
+                  </p>
+                }
+                key="1"
+              >
                 <div className="course-description rounded-lg border-[2px] ">
-                  <h1
-                    className="text-lg"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontWeight: "600",
-                      lineHeight: "20px",
-                      fontSize: 14,
-                    }}
-                  >
+                  <h1 className="text-lg font-serif font-bold">
                     Course Information
                   </h1>
                   <div className="course-content flex flex-row justify-between">
                     <div className="py-2 flex flex-col justify-around">
                       <div>
                         <span
-                          style={{
-                            fontFamily: "Plus Jakarta Sans",
-                            fontWeight: "500",
-                            lineHeight: "24px",
-                            fontSize: 14,
-                          }}
+                          className="text-sm font-serif font-semibold"
+                          //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
                         >
                           Subject
                         </span>
@@ -366,14 +345,7 @@ function UpdateCourse() {
                       </div>
                       <div>
                         <div>
-                          <span
-                            style={{
-                              fontFamily: "Plus Jakarta Sans",
-                              fontWeight: "500",
-                              lineHeight: "24px",
-                              fontSize: 14,
-                            }}
-                          >
+                          <span className="text-sm font-serif font-semibold">
                             Class
                           </span>
                           <Select
@@ -400,14 +372,7 @@ function UpdateCourse() {
                       </div>
                     </div>
                     <div className="up-course-description">
-                      <h4
-                        style={{
-                          fontFamily: "Plus Jakarta Sans",
-                          fontWeight: "600",
-                          lineHeight: "20px",
-                          fontSize: 16,
-                        }}
-                      >
+                      <h4 className="text-base font-serif font-semibold mt-2">
                         Coures Description
                       </h4>
                       <Input.TextArea
@@ -423,15 +388,7 @@ function UpdateCourse() {
                 </div>
                 <div className="asssign-teacher">
                   <div className="assign-header">
-                    <h4
-                      className="text-xl"
-                      style={{
-                        fontFamily: "Plus Jakarta Sans",
-                        fontWeight: "600",
-                        lineHeight: "24px",
-                        fontSize: 16,
-                      }}
-                    >
+                    <h4 className="text-base font-serif font-bold">
                       Assigned Teachers
                     </h4>
                     <Select
@@ -471,13 +428,8 @@ function UpdateCourse() {
                 </div>
                 <div className="schedule">
                   <h4
-                    className="text-xl pt-2"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontWeight: "600",
-                      lineHeight: "24px",
-                      fontSize: 16,
-                    }}
+                    // className="text-xl pt-2"
+                    className="textbase pt-2 font-serif font-bold"
                   >
                     Weekly Schedule
                   </h4>
@@ -574,10 +526,24 @@ function UpdateCourse() {
                   </div>
                 </div>
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Attendance" key="2">
+              <Tabs.TabPane
+                tab={
+                  <p className="text-xl font-bold text-center ml-5 font-serif">
+                    Attendance
+                  </p>
+                }
+                key="2"
+              >
                 <AttendanceList />
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Assignment" key="3">
+              <Tabs.TabPane
+                tab={
+                  <p className="text-xl font-bold text-center ml-5 font-serif">
+                    Assignment
+                  </p>
+                }
+                key="3"
+              >
                 Content of Tab Pane 3
               </Tabs.TabPane>
             </Tabs>
