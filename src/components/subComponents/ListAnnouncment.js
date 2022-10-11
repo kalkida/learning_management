@@ -16,12 +16,14 @@ import {
 } from "firebase/firestore";
 import { firestoreDb } from "../../firebase";
 import { useSelector } from "react-redux";
-import { message } from "antd";
+import { message, Select } from "antd";
+import Icon from "react-eva-icons";
 
+const { Option } = Select;
 export default function ListAnnouncment() {
   const [announcment, setAnnouncment] = useState([]);
   const [archivedAnnoumnet, setArchivedAnnouncement] = useState([]);
-  const [showPost, setShowPost] = useState(false);
+  const [showPost, setShowPost] = useState(true);
   const data = useSelector((state) => state.user.profile.school);
   const [editorState, setEditorState] = useState("");
   const [editData, setEditData] = useState({});
@@ -48,10 +50,7 @@ export default function ListAnnouncment() {
     await addDoc(collection(firestoreDb, "announcment"), anounceData)
       .then((response) => {
         getBlog();
-        message.success(
-          `Announce Poseted for
-          ${announcment.target.toParents ? "parents" : "teachers"}`
-        );
+        message.success("Announcement successfully added");
         setShowPost(false);
       })
       .catch((error) => message.error("Something is wrong, Try Again"));
@@ -112,7 +111,8 @@ export default function ListAnnouncment() {
   };
 
   const onSelect = (e) => {
-    const value = e.target.value;
+    console.log(e);
+    const value = e;
     switch (value) {
       case "all":
         setAnmounceData({
@@ -124,7 +124,7 @@ export default function ListAnnouncment() {
           },
         });
         break;
-      case "1":
+      case 1:
         setAnmounceData({
           ...anounceData,
           target: {
@@ -134,7 +134,7 @@ export default function ListAnnouncment() {
           },
         });
         break;
-      case "2":
+      case 2:
         setAnmounceData({
           ...anounceData,
           target: {
@@ -200,47 +200,41 @@ export default function ListAnnouncment() {
     }, 100);
   };
   return (
-    <div className="flex flex-col bg-[#F9FAFB] h-[auto] lg:h-[auto]  -mt-20 p-10 ">
-      <div className="flex flex-row justify-end mb-2">
-        <select
-          title="Filter"
-          className="h-9 border-[#E7752B] outline-none border-[1px] md:border-[2px] rounded-sm mr-4 bg-transparent text-[#E7752B] md:w-[5rem] z-0"
-          onChange={(e) => onSelect(e)}
-          placeholder="Filter"
-        >
-          <option selected hidden>
-            Filter
-          </option>
-          <option key={1} value="all">
-            For All
-          </option>
-          <option key={2} value="1">
-            Parents
-          </option>
-          <option key={3} value="2">
-            Teacher
-          </option>
-        </select>
-        <button
-          onClick={() => shownewPost()}
-          className="p-1 border-[1px] md:border-[2px] text-xs md:text-sm md:px-3 md:w-25 rounded-sm py-1 hover:text-[white]  border-[#E7752B] text-[#E7752B] z-0"
-        >
-          Add Post
-        </button>
-      </div>
-
+    <div className="flex flex-col bg-[#F9FAFB] h-[auto] lg:h-[auto]  mt-0 p-6 ">
       {showPost ? (
-        <div>
-          <div className="flex flex-row justify-between -mt-14">
-            <h1 className="text-3xl font-bold font-sans ">Post Announcment</h1>
+        <div className="bg-[white] mb-10">
+          <div className="flex flex-row justify-between -mt-20 mb-5">
+            <h1 className="text-2xl font-[600] font-sans text-[#344054] ">
+              Post Announcment
+            </h1>
           </div>
-          <div className="flex flex-col">
-            <input
-              onChange={onChange}
-              type="text"
-              className="mt-10 border-[2px] border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
-              placeholder="Header"
-            />
+          <div className="flex flex-col p-6 border-[1px] bg-[#FFFFFF] rounded-md">
+            <div className="flex flex-row justify-between w-[15vw] mt-5 mb-5">
+              <h1 className="text-lg font-bold">To:</h1>
+              <Select
+                defaultValue="Select Audiance"
+                onChange={(e) => onSelect(e)}
+                className="w-[20vh] border-[#EAECF0] hover:border-[#EAECF0]"
+              >
+                <Option key={1} value={"all"}>
+                  All
+                </Option>
+                <Option key={1} value={1}>
+                  Parents
+                </Option>
+                <Option key={2} value={2}>
+                  Teachers
+                </Option>
+              </Select>
+            </div>
+            <div className="flex flex-col">
+              <h1 className="text-lg font-bold">Header</h1>
+              <input
+                onChange={onChange}
+                type="text"
+                className="mt-2 border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
+              />
+            </div>
             <Editor
               editorState={editorState}
               style={{ padding: 10 }}
@@ -253,27 +247,47 @@ export default function ListAnnouncment() {
             <div className="flex flex-row justify-end">
               <button
                 onClick={() => uploadData()}
-                className="float-right px-3 w-20  rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
+                className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 right-0"
               >
-                Submit
+                <Icon name="checkmark-outline" size="small" /> Post
               </button>
             </div>
           </div>
         </div>
       ) : null}
       {showEdit ? (
-        <div>
-          <div className="flex flex-col">
-            <div className="flex flex-row justify-between -mt-14">
-              <h1 className="text-4xl ">Edit Announcment</h1>
+        <div className="bg-[white] mb-10 -mt-10 ">
+          <div className="flex flex-row justify-between -mt-14">
+            <h1 className="text-2xl font-bold text-[#344054] ">
+              Edit Announcment
+            </h1>
+          </div>
+          <div className="flex flex-col p-6 border-[1px] bg-[white] mt-4 rounded-md">
+            <div className="flex flex-row justify-between w-[15vw] mt-5 mb-5">
+              <h1 className="text-lg font-bold">To:</h1>
+              <Select
+                defaultValue="Select Audiance"
+                onChange={(e) => onSelect(e)}
+                className="w-[20vh] border-[#EAECF0] hover:border-[#EAECF0]"
+              >
+                <Option key={1} value={1}>
+                  Parents
+                </Option>
+                <Option key={2} value={2}>
+                  Teachers
+                </Option>
+              </Select>
             </div>
-            <input
-              onChange={onEdit}
-              type="text"
-              className="mt-10 border-[2px] border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
-              placeholder="Title Of Post"
-              defaultValue={editData.title}
-            />
+            <div className="flex flex-col">
+              <h1 className="text-lg font-bold">Header</h1>
+              <input
+                onChange={onEdit}
+                type="text"
+                className="mt-2 border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
+                defaultValue={editData.title}
+              />
+            </div>
+
             <Editor
               editorState={editorState}
               defaultContentState={"hkshdkdghdhgkj"}
@@ -285,6 +299,18 @@ export default function ListAnnouncment() {
               onChange={onEditorEdit}
             />
             <div className="flex flex-row justify-end">
+              {/* <button
+                onClick={() => shownewPost()}
+                className="p-1 border-[1px] md:border-[2px] text-xs md:text-sm md:px-3 md:w-25 rounded-sm py-1 hover:text-[white]  border-[#E7752B] text-[#E7752B] z-0"
+              >
+                Add Post
+              </button> */}
+              <button
+                onClick={() => shownewPost()}
+                className="float-right px-3 w-30 mr-2  rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
+              >
+                Add Post
+              </button>
               <button
                 onClick={() => EditData()}
                 className="float-right px-3 w-20  rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
@@ -295,14 +321,14 @@ export default function ListAnnouncment() {
           </div>
         </div>
       ) : null}
-      <div className="bg-[#F9FAFB]">
-        <h1 className=" md:text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054]">
+      <div className="mb-10">
+        <h1 className="text-2xl text-[#344054] font-bold font-sans leading-10 mb-5">
           Latest Announcements
         </h1>
-        <div>
+        <div className="p-6 bg-[#FFFFFF] border-[1px] rounded-md">
           {announcment.map((item, index) => (
-            <div key={index} className="mt-10">
-              <h1 className="text-lg mb-2 font-bold font-sans capitalize underline underline-offset-8 decoration-[#E7752B] ">
+            <div key={index} className="mt-0 flex flex-col mb-10">
+              <h1 className="text-lg mb-2 font-bold font-sans capitalize text-[#344054]  ">
                 {item.title}
               </h1>
 
@@ -312,6 +338,7 @@ export default function ListAnnouncment() {
                   fontFamily: "Plus Jackarta Sans",
                   fontSize: 16,
                   fontWeight: "500",
+                  color: "#667085",
                 }}
                 dangerouslySetInnerHTML={createMarkup(item.body)}
               ></div>
@@ -320,6 +347,7 @@ export default function ListAnnouncment() {
                   float: "right",
                   width: 100,
                   display: "flex",
+                  marginTop: 10,
                   justifyContent: "space-between",
                 }}
               >
@@ -354,15 +382,26 @@ export default function ListAnnouncment() {
           ))}
         </div>
       </div>
-      <div>
-        <h1 className="md:text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054] mt-10">
+      <div className="mb-10">
+        <h1 className="text-2xl font-bold font-sans leading-10 mb-5 text-[#344054]">
           Archived Announcements
         </h1>
-        <div>
+        <div className="bg-[#FFFFFF] p-6 border-[1px] rounded-md">
           {archivedAnnoumnet.map((item, index) => (
-            <div key={index} className="mt-10">
-              <h1 className="text-lg mb-2 font-bold">{item.title}</h1>
-              <article class="prose lg:prose-xl">{item.body}</article>
+            <div key={index} className="mt-0">
+              <h1 className="text-lg mb-2 font-bold text-[#344054]">
+                {item.title}
+              </h1>
+              <p
+                style={{
+                  fontFamily: "Plus Jackarta Sans",
+                  fontSize: 16,
+                  fontWeight: "500",
+                  color: "#667085",
+                }}
+              >
+                {item.body}
+              </p>
             </div>
           ))}
         </div>

@@ -438,6 +438,7 @@ export default function AddTeacher() {
               }}
             />
           </div>
+          {/* add padding  */}
           <div>
             <Link to={"/add-teacher"}>
               <PlusOutlined />

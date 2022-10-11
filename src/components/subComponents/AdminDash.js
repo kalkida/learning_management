@@ -72,7 +72,7 @@ export default function AdminDash() {
             bordered={true}
             className="w-[100%] min-h-[419px]"
             title={
-              <h1 style={{ fontWeight: "bold", marginBottom: 10 }}>
+              <h1 className="text-[#475467] font-[600] mb-[10px]">
                 Todays Attendance
               </h1>
             }
@@ -155,7 +155,7 @@ export default function AdminDash() {
             bordered={true}
             className="w-[100%] min-h-[419px]"
             title={
-              <h1 style={{ fontWeight: "bold", marginBottom: 0, fontSize: 18 }}>
+              <h1 className="text-[#475467] font-[600] mb-[10px]">
                 Student Number
               </h1>
             }
@@ -197,7 +197,7 @@ export default function AdminDash() {
             bordered={true}
             className="w-[100%] min-h-[419px]"
             title={
-              <h1 style={{ fontWeight: "bold", marginBottom: 0, fontSize: 18 }}>
+              <h1 className="text-[#475467] font-[600] mb-[10px]">
                 Teacher Number
               </h1>
             }

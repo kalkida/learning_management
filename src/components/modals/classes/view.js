@@ -224,26 +224,22 @@ function ViewClass() {
     getCourses();
   }, []);
   return (
-    <div className="bg-[#E8E8E8] p-10 h-[auto]">
-      <div className="flex flex-row justify-between align-bottom border-b-[2px] py-0 -mt-20 ">
-        <div className="flex flex-row justify-center align-middle">
-          <div className="border-[2px] border-[#EA8848] rounded-full">
-            <img
-              className="w-[8vw] border-[black] border-[2px]"
-              src="logo512.png"
-              alt="profile"
-            />
-          </div>
-          <div className="flex flex-col justify-center  ml-2">
-            <h2 className="font-bold text-xl">
-              {data?.level}
-              {data?.section}
-            </h2>
+    <div>
+      <div className="flex flex-row   justify-between align-bottom border-[2px] p-10  rounded-md">
+        <div className="flex flex-row justify-center align-middle ">
+          <img
+            className="w-20 border-[black] border-[2px]"
+            src="logo512.png"
+            alt="profile"
+          />
+          <div className="flex flex-row mt-8 ml-2">
+            <h2 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>{data?.level}</h2>
+            <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>{data?.section}</h3>
           </div>
         </div>
         <div className="header-extra">
-          <div className="flex flex-col justify-center mt-10">
-            <h3>Assigned Students</h3>
+          <div>
+            <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>Assigned Students</h3>
             <h4>{data?.student.length}</h4>
           </div>
         </div>
@@ -261,39 +257,16 @@ function ViewClass() {
               Edit Class
             </Button>
             <div className="asssign-teacher">
-              <h4
-                className="text-[24px] mb-10"
-                style={{ fontFamily: "Plus Jakarta Sans", fontWeight: "600" }}
-              >
-                Assigned Students
-              </h4>
-              <Table
-                loading={studentLoading}
-                dataSource={students}
-                columns={columns}
-              />
+              <h4 className="text-[24px] mb-10" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Assigned Students</h4>
+              <Table dataSource={students} columns={columns} />
             </div>
-            <div className="-mt-10">
-              <h4
-                className="text-[24px] mb-10"
-                style={{ fontFamily: "Plus Jakarta Sans", fontWeight: "600" }}
-              >
-                Assigned Courses
-              </h4>
-              <Table
-                dataSource={datas}
-                columns={courseColumns}
-                loading={courseLoading}
-              />
+            <div className="asssign-teacher -mt-10">
+              <h4 className="text-[24px]" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Assigned Courses</h4>
+              <Table dataSource={datas} columns={courseColumns} />
             </div>
-            <div className="-mt-10">
-              <h4 className="text-xl mb-10 font-bold">Weekly Schedule</h4>
-              <Table
-                dataSource={datas}
-                loading={courseLoading}
-                columns={scheduleColumn}
-                pagination={false}
-              />
+            <div className="asssign-teacher">
+              <h4 className="text-[24px]" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Weekly Schedule</h4>
+              <Table dataSource={datas} columns={scheduleColumn} />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane

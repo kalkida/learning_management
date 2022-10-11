@@ -25,7 +25,7 @@ export default function Dashboard({
     >
       <Toolbar className="mt-2">
         {open ? (
-          <div className="flex flex-row justify-start">
+          <div className="flex flex-row justify-start ml-1">
             <IconButton
               onClick={handleDrawerClose}
               sx={{
@@ -90,9 +90,9 @@ export default function Dashboard({
           </div>
         )}
       </Toolbar>
-      <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle mt-4">
+      {/* <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle mt-4">
         Hello Admin
-      </p>
+      </p> */}
     </AppBar>
   );
 }

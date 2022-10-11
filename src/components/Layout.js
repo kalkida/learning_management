@@ -196,7 +196,7 @@ const Layouts = () => {
             {[
               {
                 text: (
-                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-[500] text-[16px] text-left pt-1">
                     Home
                   </p>
                 ),
@@ -216,7 +216,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-[500] text-[16px] text-left pt-1">
                     Message
                   </p>
                 ),
@@ -236,7 +236,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                  <p className="text-[#344054]  font-[500] text-[16px] text-left pt-1">
                     Announcment
                   </p>
                 ),
@@ -256,7 +256,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                  <p className="text-[#344054]  font-[500] text-[16px] text-left pt-1">
                     Course
                   </p>
                 ),
@@ -276,7 +276,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                  <p className="text-[#344054]  font-[500] text-[16px] text-left pt-1">
                     Classes
                   </p>
                 ),
@@ -296,7 +296,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                  <p className="text-[#344054]  font-[500] text-[16px] text-left pt-1">
                     Teacher
                   </p>
                 ),
@@ -316,7 +316,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                  <p className="text-[#344054]  font-[500] text-[16px] text-left pt-1">
                     Students
                   </p>
                 ),
@@ -336,7 +336,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-[500] text-[16px] text-left pt-1">
                     Attendance
                   </p>
                 ),
@@ -363,7 +363,7 @@ const Layouts = () => {
               //       style={{
               //         fontFamily: "Plus Jakarta Sans",
               //         fontSize: 16,
-              //         fontWeight: "600",
+              //         fontWeight: "500",
               //       }}
               //     />
               //   ),

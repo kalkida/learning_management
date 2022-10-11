@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Space, Table, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Icon from "react-eva-icons";
+
 import {
   collection,
   getDocs,
@@ -259,10 +261,8 @@ export default function ListCourses() {
       title: "Course",
       dataIndex: "course_name",
       key: "course_name",
-      ...getColumnSearchProps("course_name"),
       render: (text, data) => {
-        console.log(data);
-        return <div>{text}</div>;
+        return <p className="text-[14px]">{text}</p>;
       },
     },
     {
@@ -364,15 +364,12 @@ export default function ListCourses() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] p-8 -mt-10">
+    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-6">
       <div className="list-header -mt-15">
         <h1
-          className="text-3xl font-bold"
+          className="text-2xl font-[600]"
           style={{
             fontFamily: "Plus Jakarta Sans",
-            fontWeight: "600",
-            lineHeight: "28px",
-            fontSize: 24,
           }}
         >
           List Of Course
@@ -380,11 +377,12 @@ export default function ListCourses() {
         <CreateSubject />
       </div>
       <div className="list-sub">
-        <div className="list-filter">
+        <div className="flex flex-row justify-between w-[30%]">
           <Select
-            className="hover:border-[#E7752B] border-[#E7752B]"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
             defaultValue="Subject"
-            style={{ width: 120 }}
+            bordered={false}
+            style={{ width: 141 }}
             onChange={handleFilterSubject}
           >
             {subject?.map((item, i) => (
@@ -394,8 +392,10 @@ export default function ListCourses() {
             ))}
           </Select>
           <Select
-            style={{ width: 120 }}
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
+            style={{ width: 141 }}
             defaultValue="Class"
+            bordered={false}
             onChange={handleFilterClass}
           >
             {classes?.map((item, i) => (
@@ -413,17 +413,21 @@ export default function ListCourses() {
           <div>
             <Search
               placeholder="input search text"
-              allowClear
+              bordered={true}
+              enterButton={false}
+              // prefix={<SearchOutlined />}
+              suffix={null}
               onSearch={onSearch}
-              style={{
-                width: 200,
-              }}
             />
           </div>
           <div>
-            <Link to={"/add-course"}>
-              <PlusOutlined />
-              Add Courses
+            <Link to={"/add-course"} className="flex flex-row h-[16px]">
+              <Icon
+                fill="#E7752B"
+                name="plus-outline"
+                size="medium" // small, medium, large, xlarge
+              />
+              <p className="text-sm pl-2">Add Course</p>
             </Link>
           </div>
         </div>

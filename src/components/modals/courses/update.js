@@ -279,12 +279,30 @@ function UpdateCourse() {
             </div>
             <div className="header-extra flex flex-col justify-center align-middle w-[20vw]">
               <div>
-                <h3 className="font-semibold">Assigned Teachers</h3>
-                <h4 className="font-bold">{data.teachers.length}</h4>
+                <h3
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "600",
+                    lineHeight: "28px",
+                    fontSize: 18,
+                  }}
+                >
+                  Assigned Teachers
+                </h3>
+                <h4>{data.teachers.length}</h4>
               </div>
               <div>
-                <h3 className="font-semibold">Class/week</h3>
-                <h4 className="font-bold">{data.schedule.length}</h4>
+                <h3
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "600",
+                    lineHeight: "28px",
+                    fontSize: 18,
+                  }}
+                >
+                  Class/week
+                </h3>
+                <h4>{data.schedule.length}</h4>
               </div>
             </div>
             <div className="flex justify-end flex-col  mt-[10vh]">
@@ -301,11 +319,30 @@ function UpdateCourse() {
             <Tabs defaultActiveKey="1">
               <Tabs.TabPane tab="Profile" key="1">
                 <div className="course-description rounded-lg border-[2px] ">
-                  <h1 className="text-xl font-bold">Course Information</h1>
+                  <h1
+                    className="text-lg"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontWeight: "600",
+                      lineHeight: "20px",
+                      fontSize: 14,
+                    }}
+                  >
+                    Course Information
+                  </h1>
                   <div className="course-content flex flex-row justify-between">
                     <div className="py-2 flex flex-col justify-around">
                       <div>
-                        <h1>Subject</h1>
+                        <span
+                          style={{
+                            fontFamily: "Plus Jakarta Sans",
+                            fontWeight: "500",
+                            lineHeight: "24px",
+                            fontSize: 14,
+                          }}
+                        >
+                          Subject
+                        </span>
                         <Select
                           className="rounded-xl mt-2"
                           style={{
@@ -363,7 +400,16 @@ function UpdateCourse() {
                       </div>
                     </div>
                     <div className="up-course-description">
-                      <h4 className="mb-2">Coures Description</h4>
+                      <h4
+                        style={{
+                          fontFamily: "Plus Jakarta Sans",
+                          fontWeight: "600",
+                          lineHeight: "20px",
+                          fontSize: 16,
+                        }}
+                      >
+                        Coures Description
+                      </h4>
                       <Input.TextArea
                         name="description"
                         className="border-[1px] rounded-lg"
@@ -377,7 +423,17 @@ function UpdateCourse() {
                 </div>
                 <div className="asssign-teacher">
                   <div className="assign-header">
-                    <h4 className="text-xl font-bold">Assigned Teachers</h4>
+                    <h4
+                      className="text-xl"
+                      style={{
+                        fontFamily: "Plus Jakarta Sans",
+                        fontWeight: "600",
+                        lineHeight: "24px",
+                        fontSize: 16,
+                      }}
+                    >
+                      Assigned Teachers
+                    </h4>
                     <Select
                       style={{ width: "30%" }}
                       showArrow={true}
@@ -413,8 +469,18 @@ function UpdateCourse() {
                     />
                   ) : null}
                 </div>
-                <div className="schedule w-[100%]">
-                  <h4 className="text-xl pt-2">Weekly Schedule</h4>
+                <div className="schedule">
+                  <h4
+                    className="text-xl pt-2"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontWeight: "600",
+                      lineHeight: "24px",
+                      fontSize: 16,
+                    }}
+                  >
+                    Weekly Schedule
+                  </h4>
                   <div className="up-card-schedule pb-10 border-[2px]">
                     <h2 className="text-lg py-2">
                       Class{" "}
