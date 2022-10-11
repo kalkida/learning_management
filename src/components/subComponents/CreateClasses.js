@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Input, Button, Select, message, TimePicker, Table, Tag } from "antd";
-import { addSingleCourseToClass } from "../modals/funcs";
+import { Skeleton } from "antd";
 import {
   doc,
   setDoc,
@@ -24,8 +24,10 @@ const CreateClasses = () => {
   const uid = useSelector((state) => state.user.profile);
   const [input, setInput] = useState([]);
   const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
   const [coursesData, setCourseData] = useState([]);
+  const [classSelected, setClassSelected] = useState(true);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [newClass, setNewClass] = useState({
     level: "",
@@ -179,32 +181,42 @@ const CreateClasses = () => {
     return data;
   };
 
+  const constractCourse = async (querySnapshot) => {
+    var data = [];
+
+    return data;
+  };
   const getCourse = async () => {
-    const coursess = [];
+    console.log(newClass);
+    var variables = [];
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school),
-      where("class", "==", newClass.class)
+      where("school_id", "==", uid.school)
+      // where("class", "==", newClass.class)
     );
-    const querySnapshot = await getDocs(q);
+    var querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-
-      getData(datas).then((response) =>
-        coursess.push({ ...response, key: doc.id })
-      );
+      getData(datas).then((response) => {
+        var newDAtas = response;
+        newDAtas.key = doc.id;
+        console.log("dat", newDAtas);
+        variables.push(newDAtas);
+      });
     });
-
     setTimeout(() => {
-      setCourseData(coursess);
+      setCourseData(variables);
+      setLoading(false);
     }, 2000);
   };
 
   const handleClass = (e) => {
+    setClassSelected(false);
     if (e.target.name === "level") {
       getStudents(e.target.value);
     }
     setNewClass({ ...newClass, [e.target.name]: e.target.value });
+    setClassSelected(true);
   };
 
   const handleStudent = (value) => {
@@ -221,14 +233,15 @@ const CreateClasses = () => {
 
   return (
     <>
-      <div>
+      <div className="bg-[#E8E8E8] p-10 -mt-0 h-[100vh]">
         <div className="flex flex-row justify-between mb-2">
           <h1 className="text-3xl" style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24}}>Create Class</h1>
+          <h1 className="text-3xl font-bold mb-6">Create Class</h1>
           <Button
-            className="text-[#E7752B] border-[1px] border-[#E7752B]  hover:bg-[#E7752B]"
+            className="text-[#E7752B] border-[1px] border-[#E7752B]  hover:bg-[#E7752B] z-0"
             onClick={() => createNewClass()}
           >
-            <h1 className="text-black">Submit</h1>
+            Submit
           </Button>
         </div>
         <div
@@ -243,6 +256,16 @@ const CreateClasses = () => {
             <div>
               <div className="py-2">
                 <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Class</span>
+                <span
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "500",
+                    lineHeight: "20px",
+                    fontSize: 14,
+                  }}
+                >
+                  Class
+                </span>
                 <Input
                   name="level"
                   type={"number"}
@@ -251,6 +274,16 @@ const CreateClasses = () => {
               </div>
               <div>
                 <span style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}>Student</span>
+                <span
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "500",
+                    lineHeight: "20px",
+                    fontSize: 14,
+                  }}
+                >
+                  Student
+                </span>
                 <Select
                   style={{
                     width: "100%",
@@ -287,6 +320,9 @@ const CreateClasses = () => {
         </div>
         <div className="list-header">
           <h1 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24 ,marginTop:10}}>Add Courses</h1>
+          <h1 className="text-2xl font-semibold" style={{ marginTop: 20 }}>
+            Add Courses
+          </h1>
         </div>
         <div
           style={{
@@ -304,6 +340,7 @@ const CreateClasses = () => {
           >
             <div>
               <Table
+                loading={loading}
                 rowSelection={rowSelection}
                 dataSource={coursesData}
                 columns={columns}

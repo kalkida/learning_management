@@ -200,11 +200,11 @@ export default function ListAnnouncment() {
     }, 100);
   };
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-[#E8E8E8] h-[auto] lg:h-[auto]  -mt-20 p-10 ">
       <div className="flex flex-row justify-end mb-2">
         <select
           title="Filter"
-          className="h-9 border-[#E7752B] outline-none border-[2px] rounded-sm mr-4 bg-transparent text-[#E7752B] w-[5rem] z-0"
+          className="h-9 border-[#E7752B] outline-none border-[1px] md:border-[2px] rounded-sm mr-4 bg-transparent text-[#E7752B] md:w-[5rem] z-0"
           onChange={(e) => onSelect(e)}
           placeholder="Filter"
         >
@@ -223,7 +223,7 @@ export default function ListAnnouncment() {
         </select>
         <button
           onClick={() => shownewPost()}
-          className="px-3 w-25 rounded-sm py-1 hover:text-[white] border-[2px] border-[#E7752B] text-[#E7752B] z-0"
+          className="p-1 border-[1px] md:border-[2px] text-xs md:text-sm md:px-3 md:w-25 rounded-sm py-1 hover:text-[white]  border-[#E7752B] text-[#E7752B] z-0"
         >
           Add Post
         </button>

@@ -465,7 +465,7 @@ const Layouts = () => {
   }, []);
 
   return (
-    <Layout style={{ backgroundColor: "white" }}>
+    <Layout className="bg-[#E8E8E8] min-h-[100vh]">
       <Box sx={{ display: "flex", width: "100%" }}>
         <Navigation
           handleDrawerOpen={handleDrawerOpen}
@@ -477,18 +477,11 @@ const Layouts = () => {
         <SiderGenerator />
         <Box
           component="main"
-          sx={{ flexGrow: 1, p: 1 }}
-          className="bg-[#F9FAFB]"
+          sx={{ flexGrow: 1, p: 3 }}
+          className="bg-[#E8E8E8]"
         >
           <DrawerHeader />
-          <Content
-            style={{
-              margin: 0,
-              minHeight: 280,
-              backgroundColor: "#F9FAFB",
-              justifyContent: "center",
-            }}
-          >
+          <Content className="bg-[#E8E8E8] h-[auto]">
             <Routes>
               <Route path="/admin" element={<AdminDash />} />
               <Route path="/teacher" element={<TeacherDash />} />

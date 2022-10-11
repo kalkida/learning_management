@@ -1,13 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Liner from "../graph/Liner";
 import BarGraph from "../graph/BarGraph";
 import { useSelector } from "react-redux";
 import { Card, Progress } from "antd";
 import Grid from "@mui/material/Grid";
-import { styled } from "@mui/material/styles";
+import { firestoreDb } from "../../firebase";
+import { getDocs, query, collection, where } from "firebase/firestore";
 
 export default function AdminDash() {
-  const schools = useSelector((state) => state.user.school);
+  const [students, setStudents] = useState([]);
+  const [male, setMale] = useState([]);
+  const [female, setfemale] = useState([]);
+  const [teachermale, setmaleteacher] = useState([]);
+  const [teacherfemale, setfemailteacher] = useState([]);
+  const [teacherData, setTeacherData] = useState([]);
+  const schools = useSelector((state) => state.user.profile);
+  const getStudents = async () => {
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", schools.school)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+
+      temporary.push(data);
+    });
+    var male = temporary.filter((doc) => doc.sex === "Male");
+    var femail = temporary.filter((doc) => doc.sex === "Female");
+    setMale(male);
+    setfemale(femail);
+    setStudents(temporary);
+  };
+  useEffect(() => {
+    getStudents();
+    getTeacher();
+  }, []);
+
+  const getTeacher = async () => {
+    const q = query(
+      collection(firestoreDb, "teachers"),
+      where("school_id", "==", schools.school)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      temporary.push(data);
+    });
+    var male = temporary.filter((doc) => doc.sex === "Male");
+    var femail = temporary.filter((doc) => doc.sex === "Female");
+    setfemailteacher(femail);
+    setmaleteacher(male);
+    setTeacherData(temporary);
+  };
 
   return (
     <div
@@ -15,6 +63,7 @@ export default function AdminDash() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        backgroundColor: "#E8E8E8",
       }}
     >
       <h1 className="text-[24px] -mt-20 mb-4 p-7 text-[#344054] font-bold text-center">
@@ -156,25 +205,25 @@ export default function AdminDash() {
           >
             <div>
               <div>
-                <h1 className="text-[18px] font-semibold">3200</h1>
+                <h1 className="text-[18px] font-semibold">{students.length}</h1>
                 <Progress
                   strokeColor={"#EA8848"}
-                  percent={70}
+                  percent={(100 * students.length) / 20}
                   showInfo={false}
                 />
                 <h1 className="text-[14px] ">Total</h1>
               </div>
               <div>
                 <div className="flex flex-row justify-between">
-                  <h1 className="text-[18px] font-semibold">7899</h1>
-                  <h1 className="text-[18px] font-semibold">6899</h1>
+                  <h1 className="text-[18px] font-semibold">{male.length}</h1>
+                  <h1 className="text-[18px] font-semibold">{female.length}</h1>
                 </div>
                 <Progress
                   strokeColor={"#EA8848"}
-                  percent={100}
+                  percent={(100 * female.length) / students.length}
                   showInfo={false}
                   success={{
-                    percent: 60,
+                    percent: (100 * male.length) / students.length,
                   }}
                 />
                 <div className="flex flex-row justify-between">
@@ -198,18 +247,24 @@ export default function AdminDash() {
           >
             <div>
               <div>
-                <h1 className="text-[18px] font-semibold">3200</h1>
+                <h1 className="text-[18px] font-semibold">
+                  {teacherData.length}
+                </h1>
                 <Progress
                   strokeColor={"#EA8848"}
-                  percent={70}
+                  percent={(100 * teacherData.length) / 20}
                   showInfo={false}
                 />
                 <h1 className="text-[14px] ">Total</h1>
               </div>
               <div>
                 <div className="flex flex-row justify-between">
-                  <h1 className="text-[18px] font-semibold">7899</h1>
-                  <h1 className="text-[18px] font-semibold">6899</h1>
+                  <h1 className="text-[18px] font-semibold">
+                    {teacherfemale.length}
+                  </h1>
+                  <h1 className="text-[18px] font-semibold">
+                    {teachermale.length}
+                  </h1>
                 </div>
                 <Progress
                   strokeColor={"#EA8848"}

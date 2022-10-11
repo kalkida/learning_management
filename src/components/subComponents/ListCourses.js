@@ -364,7 +364,7 @@ export default function ListCourses() {
   }, []);
 
   return (
-    <div>
+    <div className="bg-[#E8E8E8] h-[100vh] p-8 -mt-10">
       <div className="list-header -mt-15">
         <h1 className="text-3xl font-bold"  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}>List Of Course</h1>
         <CreateSubject />

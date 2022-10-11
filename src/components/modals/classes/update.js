@@ -266,7 +266,7 @@ function UpdateClass() {
   };
 
   return (
-    <div>
+    <div className="bg-[#E8E8E8] p-10 h-[100vh]">
       {loading ? (
         <>
           {" "}
@@ -276,7 +276,14 @@ function UpdateClass() {
             </h1>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
-                <Tabs.TabPane tab="Profile" key="1">
+                <Tabs.TabPane
+                  tab={
+                    <p className="text-xl font-bold text-center ml-0">
+                      Profile
+                    </p>
+                  }
+                  key="1"
+                >
                   <Button className="btn-confirm" onClick={handleUpdate}>
                     Edit Class
                   </Button>
@@ -314,7 +321,7 @@ function UpdateClass() {
                       columns={columns}
                     />
                   </div>
-                  <div className="mb-8">
+                  <div className="-mb-10">
                     <div className="flex flex-row justify-between">
                       <h1
                        style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'30px',fontSize:20 , paddingBottom:10 }}
@@ -443,7 +450,14 @@ function UpdateClass() {
                     Delete
                   </Button>
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Attendance" key="2">
+                <Tabs.TabPane
+                  tab={
+                    <p className="text-xl font-bold text-center ml-0">
+                      Attendance
+                    </p>
+                  }
+                  key="2"
+                >
                   <AttendanceList />
                 </Tabs.TabPane>
               </Tabs>

@@ -20,7 +20,9 @@ const { Option } = Select;
 function ViewClass() {
   const [datas, setData] = useState([]);
   const [students, setStudents] = useState([]);
+  const [courseLoading, setCourseLoading] = useState(true);
   const [classData, setClassData] = useState([]);
+  const [studentLoading, setStudentLoading] = useState(true);
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   var { data } = state;
@@ -56,17 +58,21 @@ function ViewClass() {
       key: "schedule",
       render: (value) => {
         moment.locale("en");
-        return (
-          <>
-            {value?.map((item, i) => (
-              <Tag color="green">
-                {moment(JSON.parse(item.time[0])).format("hh:mm") +
-                  " to " +
-                  moment(JSON.parse(item.time[1])).format("hh:mm")}
-              </Tag>
-            ))}
-          </>
-        );
+        if (value?.time == undefined) {
+          return (
+            <>
+              {value?.map((item, i) => (
+                <Tag color="green">
+                  {moment(JSON.parse(item?.time[0])).format("hh:mm") +
+                    " to " +
+                    moment(JSON.parse(item?.time[1])).format("hh:mm")}
+                </Tag>
+              ))}
+            </>
+          );
+        } else {
+          return <Tag color="red">No Data</Tag>;
+        }
       },
     },
   ];
@@ -187,9 +193,9 @@ function ViewClass() {
         }
       });
     }
-    console.log(temporary);
     setTimeout(() => {
       setData(temporary);
+      setCourseLoading(false);
     }, 2000);
   };
 
@@ -205,6 +211,7 @@ function ViewClass() {
         }
       });
       setStudents(temporary);
+      setStudentLoading(false);
     }
   };
 
@@ -237,10 +244,16 @@ function ViewClass() {
           </div>
         </div>
       </div>
-      <div className="tab-content">
+      <div className="w-[100%]">
         <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="Profile" key="1">
-            <Button className="btn-confirm" onClick={handleUpdate}>
+          <Tabs.TabPane
+            tab={<p className="text-xl font-bold text-center ml-0">Profile</p>}
+            key="1"
+          >
+            <Button
+              className="btn-confirm bg-[white] border-[1px] border-[#EA8848]"
+              onClick={handleUpdate}
+            >
               Edit Class
             </Button>
             <div className="asssign-teacher">
@@ -256,7 +269,12 @@ function ViewClass() {
               <Table dataSource={datas} columns={scheduleColumn} />
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Attendance" key="2">
+          <Tabs.TabPane
+            tab={
+              <p className="text-xl font-bold text-center ml-5">Attendance</p>
+            }
+            key="2"
+          >
             <AttendanceList />
           </Tabs.TabPane>
         </Tabs>

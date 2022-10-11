@@ -4,6 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import zIndex from "@mui/material/styles/zIndex";
 
 export default function Dashboard({
   handleDrawerOpen,
@@ -24,7 +25,7 @@ export default function Dashboard({
           <>
             <img
               src={require("../assets/logo1.png")}
-              className="w-[104px] h-[42px]"
+              className="w-[104px] h-[42px] z-1"
             />
             <IconButton
               onClick={handleDrawerClose}

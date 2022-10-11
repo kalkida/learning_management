@@ -127,6 +127,9 @@ export default function Login() {
     };
     dispatch(userLogin(data))
       .then((res) => {
+        if (res.error) {
+          message.error("Failed to login");
+        }
         setLoading(false);
       })
       .catch((e) => {
@@ -144,55 +147,22 @@ export default function Login() {
   });
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
+    <div className="flex flex-row justify-center align-center width-[100%]">
       <img
         src={require("../assets/Vector1.png")}
-        style={{
-          width: 400,
-          height: 300,
-          position: "absolute",
-          top: 0,
-          left: 0,
-        }}
+        className="w-[25vw] absolute top-0 left-0"
       />
       <img
         src={require("../assets/data.png")}
-        style={{
-          width: 400,
-          height: 300,
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-          zIndex: 1,
-        }}
+        className="w-[25vw] absolute bottom-0 right-0 z-10"
       />
       <img
         src={require("../assets/Vector.png")}
-        style={{
-          width: 400,
-          height: 300,
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-        }}
+        className="w-[25vw]  absolute bottom-0 right-0"
       />
       <img
         src={require("../assets/logo1.png")}
-        style={{
-          width: 120,
-          height: 60,
-          position: "absolute",
-          left: "45%",
-          top: "15%",
-        }}
+        className="lg:w-[8vw] absolute top-[20vh] left-[50vw] -ml-20"
       />
 
       <div className="flex flex-col top-[30%] absolute">
