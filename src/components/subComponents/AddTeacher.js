@@ -19,7 +19,7 @@ import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
 import "../modals/courses/style.css";
-import { removeSingleClassToTeacher } from "../modals/funcs";
+import { removeSingleClassToTeacher, fetchSubject } from "../modals/funcs";
 import { PlusOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 const { Option } = Select;
@@ -385,7 +385,7 @@ export default function AddTeacher() {
   }, []);
 
   return (
-    <div className="bg-[#E8E8E8] h-[100vh]">
+    <div className="bg-[#F9FAFB] h-[100vh]">
       <div className="list-header">
         <h1
           style={{
@@ -440,7 +440,7 @@ export default function AddTeacher() {
           </div>
           <div>
             <Link to={"/add-teacher"}>
-              <PlusOutlined className="site-form-item-icon" />
+              <PlusOutlined />
               Add teacher
             </Link>
           </div>

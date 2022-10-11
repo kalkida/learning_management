@@ -200,7 +200,7 @@ export default function ListAnnouncment() {
     }, 100);
   };
   return (
-    <div className="flex flex-col bg-[#E8E8E8] h-[auto] lg:h-[auto]  -mt-20 p-10 ">
+    <div className="flex flex-col bg-[#F9FAFB] h-[auto] lg:h-[auto]  -mt-20 p-10 ">
       <div className="flex flex-row justify-end mb-2">
         <select
           title="Filter"
@@ -295,7 +295,7 @@ export default function ListAnnouncment() {
           </div>
         </div>
       ) : null}
-      <div className="bg-[#E8E8E8]">
+      <div className="bg-[#F9FAFB]">
         <h1 className=" md:text-4xl bg-[#f0e5da] p-2 rounded-sm shadow-lg text-[#344054]">
           Latest Announcements
         </h1>

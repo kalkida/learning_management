@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Input, Button, Select, message, TimePicker, Table, Tag } from "antd";
 import { Skeleton } from "antd";
 import {
@@ -22,11 +22,13 @@ const { Option } = Select;
 const CreateClasses = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
+  const classes = useRef();
   const [input, setInput] = useState([]);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
   const [coursesData, setCourseData] = useState([]);
+
   const [classSelected, setClassSelected] = useState(true);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [newClass, setNewClass] = useState({
@@ -86,9 +88,6 @@ const CreateClasses = () => {
     });
     setStudents(children);
   };
-
-  const handleNewScheduler = (value, i) => {};
-  const handleDelete = () => {};
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -181,18 +180,13 @@ const CreateClasses = () => {
     return data;
   };
 
-  const constractCourse = async (querySnapshot) => {
-    var data = [];
-
-    return data;
-  };
   const getCourse = async () => {
-    console.log(newClass);
+    console.log(classes.current);
     var variables = [];
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school)
-      // where("class", "==", newClass.class)
+      where("school_id", "==", uid.school),
+      where("class", "==", newClass.class)
     );
     var querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -229,11 +223,11 @@ const CreateClasses = () => {
 
   useEffect(() => {
     getCourse();
-  }, []);
+  }, [classSelected]);
 
   return (
     <>
-      <div className="bg-[#E8E8E8] p-10 -mt-0 h-[100vh]">
+      <div className="bg-[#F9FAFB] p-10 -mt-16 h-[100vh]">
         <div className="flex flex-row justify-between mb-2">
           <h1 className="text-3xl font-bold mb-6">Create Class</h1>
           <Button

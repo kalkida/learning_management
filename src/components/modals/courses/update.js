@@ -263,7 +263,7 @@ function UpdateCourse() {
   return (
     <>
       {loading ? (
-        <div className="bg-[#E8E8E8] p-8">
+        <div className="bg-[#F9FAFB] p-8">
           <div className="flex flex-row justify-between -mt-16">
             <div className="flex flex-row justify-between align-middle ">
               <div className="rounded-full border-[2px] border-[#E7752B] mr-10">

@@ -30,6 +30,8 @@ import BookOnline from "@mui/icons-material/BookOnline";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import ContentPaste from "@mui/icons-material/ContentPaste";
 import Cloud from "@mui/icons-material/Cloud";
+import Icon from "react-eva-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
@@ -204,7 +206,7 @@ const Layouts = () => {
       const currentURL = window.location.pathname;
       return (
         <Drawer
-          className="sm:absolute md:relative"
+          className="sm:absolute  md:relative "
           variant="permanent"
           open={open}
         >
@@ -212,140 +214,180 @@ const Layouts = () => {
           <List className="sm:invisible md:visible ">
             {[
               {
-                text: "Home",
+                text: (
+                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                    Home
+                  </p>
+                ),
                 Icon: (
-                  <FontAwesomeIcon
-                    icon={faHome}
-                    className="text-xl  text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
+                  <Icon
+                    name="home-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 ),
                 link: "/admin",
               },
               {
-                text: "Message",
+                text: (
+                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                    Message
+                  </p>
+                ),
                 Icon: (
-                  <FontAwesomeIcon
-                    icon={faMessage}
-                    className="text-xl text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
+                  <Icon
+                    name="message-square-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 ),
                 link: "/message",
               },
               {
-                text: "Announcment",
+                text: (
+                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                    Announcment
+                  </p>
+                ),
                 Icon: (
-                  <FontAwesomeIcon
-                    icon={faMicrophone}
-                    className="text-xl  text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
+                  <Icon
+                    name="volume-up-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 ),
                 link: "/announcment",
               },
               {
-                text: "Course",
+                text: (
+                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                    Course
+                  </p>
+                ),
                 Icon: (
-                  <FontAwesomeIcon
-                    icon={faBook}
-                    className="text-xl  text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
+                  <Icon
+                    name="book-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 ),
                 link: "/list-course",
               },
               {
-                text: "Classes",
+                text: (
+                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                    Classes
+                  </p>
+                ),
                 Icon: (
-                  <FontAwesomeIcon
-                    icon={faCity}
-                    className="text-xl text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
+                  <Icon
+                    name="pie-chart-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 ),
                 link: "/list-classes",
               },
               {
-                text: "Teacher",
+                text: (
+                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                    Teacher
+                  </p>
+                ),
                 Icon: (
-                  <FontAwesomeIcon
-                    icon={faFeather}
-                    className="text-xl  text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
+                  <Icon
+                    name="person-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 ),
                 link: "/list-teacher",
               },
               {
-                text: "Student",
+                text: (
+                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                    Students
+                  </p>
+                ),
                 Icon: (
-                  <FontAwesomeIcon
-                    icon={faGraduationCap}
-                    className="text-xl  text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
+                  <Icon
+                    name="people-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 ),
                 link: "/list-student",
               },
               {
-                text: "Attendance",
+                text: (
+                  <p className="text-[#344054] text-[16px] text-left pt-1">
+                    Attendance
+                  </p>
+                ),
                 Icon: (
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="text-xl text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
+                  <Icon
+                    name="smiling-face-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 ),
                 link: "/attendance",
               },
-              {
-                text: "Schedule",
-                Icon: (
-                  <FontAwesomeIcon
-                    icon={faCalendar}
-                    className="text-xl  text-[#2c5886]"
-                    style={{
-                      fontFamily: "Plus Jakarta Sans",
-                      fontSize: 16,
-                      fontWeight: "600",
-                    }}
-                  />
-                ),
-                link: "/schedule",
-              },
+              // {
+              //   text: "Schedule",
+              //   Icon: (
+              //     <FontAwesomeIcon
+              //       icon={faCalendar}
+              //       className="text-xl  text-[#2c5886]"
+              //       style={{
+              //         fontFamily: "Plus Jakarta Sans",
+              //         fontSize: 16,
+              //         fontWeight: "600",
+              //       }}
+              //     />
+              //   ),
+              //   link: "/schedule",
+              // },
             ].map((item, index) => (
               <ListItem
                 key={item.text}

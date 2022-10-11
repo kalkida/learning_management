@@ -35,15 +35,15 @@ export const options = {
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const labels = ["2017", "2018", "2019", "2020", "2021", "2022", "2023"];
 
 export const data = {
   labels,
   datasets: [
     {
       data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      borderColor: "#E7752B",
+      backgroundColor: "#E7752B",
     },
     // {
     //   label: "Dataset 2",

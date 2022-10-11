@@ -30,7 +30,7 @@ function ViewCourse() {
     navigate("/update-course", { state: { data } });
   };
   return (
-    <div className="bg-[#E8E8E8] h-[100vh] p-4">
+    <div className="bg-[#F9FAFB] h-[100vh] p-4">
       <div className="flex flex-row justify-between -mt-16 ">
         <div className="flex flex-row justify-between align-middle ">
           <div className="rounded-full border-[2px] border-[#E7752B] mr-10">
@@ -56,7 +56,7 @@ function ViewCourse() {
         </div>
       </div>
       <div className="tab-content">
-        <Tabs className="bg-[#E8E8E8]" defaultActiveKey="1">
+        <Tabs className="bg-[#F9FAFB]" defaultActiveKey="1">
           <Tabs.TabPane
             tab={<p className="text-xl font-bold text-center ml-5">Profile</p>}
             key="1"
