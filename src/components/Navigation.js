@@ -23,9 +23,9 @@ export default function Dashboard({
         flexDirection: "row",
       }}
     >
-      <Toolbar className="-ml-[15px] mt-2">
+      <Toolbar className=" mt-2 ml-1">
         {open ? (
-          <>
+          <div className="flex flex-row">
             <IconButton
               onClick={handleDrawerClose}
               sx={{
@@ -62,7 +62,7 @@ export default function Dashboard({
               src={require("../assets/logo1.png")}
               className="w-[98px] h-[37px] z-1"
             />
-          </>
+          </div>
         ) : (
           <IconButton
             color="default"

@@ -8,18 +8,11 @@ import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import MenuList from "@mui/material/MenuList";
@@ -31,19 +24,6 @@ import ContentCopy from "@mui/icons-material/ContentCopy";
 import ContentPaste from "@mui/icons-material/ContentPaste";
 import Cloud from "@mui/icons-material/Cloud";
 import Icon from "react-eva-icons";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-  faMessage,
-  faMicrophone,
-  faBook,
-  faCalendar,
-  faFile,
-  faFeather,
-  faGraduationCap,
-  faCity,
-} from "@fortawesome/free-solid-svg-icons";
 import { Avatar, Breadcrumb, Layout, Menu } from "antd";
 
 //////////// Route Components /////////////////
@@ -150,6 +130,7 @@ const Layouts = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const current = JSON.parse(user);
+  console.log(current);
   const dispatch = useDispatch();
 
   const logout = () => {
@@ -392,7 +373,12 @@ const Layouts = () => {
               <ListItem
                 key={item.text}
                 disablePadding
-                sx={{ display: "block" }}
+                sx={{
+                  display: "block",
+                  paddingLeft: 2,
+                  borderRadius: 5,
+                  paddingRight: 2,
+                }}
               >
                 <Link to={item.link}>
                   <ListItemButton
@@ -402,6 +388,7 @@ const Layouts = () => {
                       },
                       color: "#2c5886",
                       minHeight: 48,
+                      borderRadius: 2,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
                     }}
@@ -428,15 +415,21 @@ const Layouts = () => {
             <ListItem
               style={{ position: "fixed", bottom: 0, width: open ? 234 : 65 }}
               disablePadding
-              sx={{ display: "block" }}
+              sx={{
+                display: "block",
+                paddingLeft: 2,
+                borderRadius: 5,
+                paddingRight: 2,
+              }}
             >
-              <Divider />
               <a onClick={() => logout()}>
                 <ListItemButton
                   sx={{
                     ":hover": {
                       backgroundColor: "#FCF0E8",
                     },
+                    borderRadius: 2,
+
                     color: "#2c5886",
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
@@ -454,7 +447,11 @@ const Layouts = () => {
                   </ListItemIcon>
                   {role["isAdmin"] == true ? (
                     <ListItemText
-                      primary="Admin"
+                      primary={
+                        <p className="text-[#344054] text-[16px] text-left pt-1">
+                          Admin
+                        </p>
+                      }
                       sx={{ opacity: open ? 1 : 0 }}
                     />
                   ) : (
