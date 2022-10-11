@@ -213,15 +213,12 @@ function ViewStudent() {
             alt="profile"
           />
           <div className="flex flex-col justify-start align-baseline mt-2 w-[13vw] ">
-            <h2 className="text-2xl font-bold capitalize text-[#344054]" 
-            style={{fontFamily:'Plus Jakarta Sans',
-          fontWeight:'600',lineHeight:'30px',fontSize:'20px'
-          }}>
+            <h2 className="text-xl font-bold capitalize text-[#344054] font-serif" 
+           >
               {data.first_name + " " + data.last_name}
             </h2>
-            <p className="text-[14px] text-[gray] p-1" 
+            <p className="text-[14px] text-[gray] p-1 font-serif" 
              style={{fontFamily:'Plus Jakarta Sans',
-             fontWeight:'500',lineHeight:'20px',fontSize:'14px'
              }}
             >ID: {data.studentId}</p>
             <a className="border-[0px] border-[#E7752B]  rounded-lg flex flex-row  text-[#E7752B] hover:text-[#E7752B] ">
@@ -237,54 +234,49 @@ function ViewStudent() {
       </div>
       <div className="tab-content">
         <Tabs defaultActiveKey="0">
-          <Tabs.TabPane tab="Overview" key="0">
+          <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">OverView</p>
+            } key="0">
             <div className="flex flex-row flex-wrap justify-between align-middle text-[#344054]">
               <div className="border-[#D0D5DD] border-[1px] w-[30%] h-[40vh] mb-2 rounded-sm bg-[#FCFCFD]">
                 <div className="mt-10 flex flex-row justify-around">
-                  <h1 className="text-lg" 
-                  style={{fontFamily:'Plus Jakarta Sans',
-             fontWeight:'600',lineHeight:'28px',fontSize:'18px',color:'#667085'
-             }}>Class {data.class?.level}</h1>
-                  <h1 className="text-lg"
-                      style={{fontFamily:'Plus Jakarta Sans',
-                      fontWeight:'600',lineHeight:'28px',fontSize:'18px',color:'#667085'
-                      }}
+                  <h1 className="text-lg font-serif " 
+              >Class {data.class?.level}</h1>
+                  <h1 className="text-lg font-serif "
                   >Section {data.class?.section}</h1>
                 </div>
                 <div className="mt-10 flex flex-row justify-around">
-                  <h1 className="text-lg"
-                      style={{fontFamily:'Plus Jakarta Sans',
-                      fontWeight:'600',lineHeight:'28px',fontSize:'18px',color:'#667085'
-                      }}
+                  <h1 className="text-lg font-serif "
+                      // style={{fontFamily:'Plus Jakarta Sans',
+                      // fontWeight:'600',lineHeight:'28px',fontSize:'18px',color:'#667085'
+                      // }}
                   >Class {data.class?.level}</h1>
-                  <h1 className="text-lg"
-                      style={{fontFamily:'Plus Jakarta Sans',
-                      fontWeight:'600',lineHeight:'28px',fontSize:'18px',color:'#667085'
-                      }}
+                  <h1 className="text-lg font-serif "
+                     
                   >Section {data.class?.section}</h1>
                 </div>
               </div>
               <div className="border-[#D0D5DD] border-[1px] w-[30%] h-[40vh] mb-2 rounded-sm bg-[#FCFCFD]">
-                <div className="p-10 text-lg font-bold">
-                  <h1  style={{fontFamily:'Plus Jakarta Sans',
-                      fontWeight:'700',lineHeight:'20px',fontSize:'16px'
-                      }}>Conduct Board</h1>
+                <div className="p-10 text-lg font-bold font-serif">
+                  <h1  
+                  // style={{fontFamily:'Plus Jakarta Sans',
+                  //     fontWeight:'700',lineHeight:'20px',fontSize:'16px'
+                  //     }}
+                      >Conduct Board</h1>
                 </div>
               </div>
               <div className="border-[#D0D5DD] border-[1px] w-[30%] h-[40vh] mb-2 rounded-sm bg-[#FCFCFD]">
-                <div className="p-10 text-lg font-bold">
-                  <h1 style={{fontFamily:'Plus Jakarta Sans',
-                      fontWeight:'700',lineHeight:'20px',fontSize:'16px'
-                      }}>Grade Board</h1>
+                <div className="p-10 text-lg font-bold font-serif">
+                  <h1 >Grade Board</h1>
                 </div>
               </div>
               <div className="border-[#D0D5DD] border-[1px] w-[30%]  mb-2 mt-10 bg-[#FCFCFD]">
                 <div className="p-10 ">
-                  <h1 className="mb-4 text-lg font-bold">Daily Report</h1>
+                  <h1 className="mb-4 text-lg font-bold font-serif">Daily Report</h1>
                   <div className="flex flex-col justify-between overflow-scroll">
                     {[0, 1, , 2, 3].map((item, index) => (
                       <div className="w-[100%]  border-[2px] rounded-md mb-2 p-2">
-                        <h1 className="text-lg font-bold">Biology Teacher </h1>
+                        <h1 className="text-lg font-bold font-serif">Biology Teacher </h1>
                         <p>
                           Class aptent taciti sociosqu ad litora torquent per
                           conubia nostra, per inceptos himenaeos.
@@ -300,60 +292,44 @@ function ViewStudent() {
             </div>
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Profile" key="1">
+          <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
+            } key="1">
             <Button className="btn-confirm" onClick={handleUpdate}>
               Edit Profile
             </Button>
             <div className="flex flex-row justify-around border-[0px] border-[#e5e5e5] p-4 text-[#344054]">
               <div className="flex flex-col justify-center align-middle text-[#344054]">
-                <h1 className="text-[48px] text-center text-[#344054] font-bold" style={{fontFamily:'Plus Jakarta Sans',
-                      fontWeight:'700'
-                      }}>
+                <h1 className="text-[48px] text-center text-[#344054] font-bold font-serif" 
+                      >
                   {data.class?.level}
                 </h1>
-                <span className="text-lg text-center text-[#344054]"
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'500'
-                 }}
+                <span className="text-lg text-center text-[#344054] font-serif"
                 >
                   Grade
                 </span>
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054] ">
-                <h1 className="text-[48px] text-center font-bold " 
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'700'
-                 }}
+                <h1 className="text-[48px] text-center font-bold font-serif " 
                 >2</h1>
-                <span className="text-lg"
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'500'
-                 }}
+                <span className="text-lg font-serif"
                 >Sibilings</span>
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054]">
-                <h1 className="text-[48px] text-center font-bold"
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'700'
-                 }}
+                <h1 className="text-[48px] text-center font-bold font-serif"
                 >4</h1>
-                <span className="text-lg"  style={{fontFamily:'Plus Jakarta Sans',
-                      fontWeight:'500'
-                      }}>Rank</span>
+                <span className="text-lg font-serif"  
+               >Rank</span>
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054]">
-                <h1 className="text-[48px] text-center font-bold"
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'700'
-                 }}
+                <h1 className="text-[48px] text-center font-bold font-serif"
                 >A</h1>
-                <span className="text-lg"  style={{fontFamily:'Plus Jakarta Sans',
-                      fontWeight:'500'
-                      }}>Conduct</span>
+                <span className="text-lg font-serif"  
+               >Conduct</span>
               </div>
             </div>
             <h1
-              className="text-[#344054]"
+              className="text-[#344054] font-serif"
               style={{
                 fontSize: 24,
                 fontWeight: "600",
@@ -366,130 +342,99 @@ function ViewStudent() {
             </h1>
             <div className="flex flex-row justify-between border-b-[2px] border-[#e2e2e2] py-2 px-2">
               <div>
-                <span className="text-[16px] text-left text-[#344054]"
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'500', fontSize:16,color:'#667085'
-                 }}
+                <span className="text-[16px] text-left text-[#344054] font-serif"
                 >
                   Age
                 </span>
-                <h2 className="text-left text-[16px] font-bold" 
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'600', fontSize:18
-                 }}
+                <h2 className="text-left text-[16px] font-bold font-serif" 
                 >{age}</h2>
               </div>
               <div>
-                <span className="text-[16px] text-left text-[#344054]"
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'500', fontSize:16,color:'#667085'
-                 }}
+                <span className="text-[16px] text-left text-[#344054] font-serif"
                 >
                   Sex
                 </span>
-                <h2 className="text-left text-[14px] font-bold text-[#344054]"
-                style={{fontFamily:'Plus Jakarta Sans',
-                fontWeight:'600', fontSize:18
-                }}
+                <h2 className="text-left text-[14px] font-bold text-[#344054] font-serif"
                 >
                   {data.sex}
                 </h2>
               </div>
               <div>
-                <span className="text-[16px] text-left text-[#344054]"
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'500', fontSize:16,color:'#667085'
-                 }}
+                <span className="text-[16px] text-left text-[#344054] font-serif"
                 >
                   Phone Number
                 </span>
                 {data.phone.map((item, index) => (
-                  <h2 className="text-left text-[14px] font-bold text-[#344054]"
-                  style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'600', fontSize:18
-                 }}
+                  <h2 className="text-left text-[14px] font-bold text-[#344054] font-serif"
                   >
                     {item}
                   </h2>
                 ))}
               </div>
               <div>
-                <span className="text-[16px] text-left text-[#344054]"
-                 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'500', fontSize:16,color:'#667085'
-                 }}
+                <span className="text-[16px] text-left text-[#344054] font-serif"
                 >
                   Email
                 </span>
-                <h2 className="text-left text-[14px] font-bold"
-                style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'600', fontSize:18
-                 }}
+                <h2 className="text-left text-[14px] font-bold font-serif"
                 >
                   {data.email}
                 </h2>
               </div>
               <div>
-                <span className="text-[16px] text-[#344054]" 
-                style={{fontFamily:'Plus Jakarta Sans',
-                fontWeight:'500', fontSize:16,color:'#667085'
-                }}
+                <span className="text-[16px] text-[#344054] font-serif" 
+                // style={{fontFamily:'Plus Jakarta Sans',
+                // fontWeight:'500', fontSize:16,color:'#667085'
+                // }}
                 >Location</span>
-                <h2 style={{fontFamily:'Plus Jakarta Sans',
-                 fontWeight:'600', fontSize:18
-                 }}>Lideta</h2>
+                <h2 
+                 className="text-left text-[14px] font-bold font-serif"
+                // style={{fontFamily:'Plus Jakarta Sans',
+                //  fontWeight:'600', fontSize:18
+                //  }}
+                 >Lideta</h2>
               </div>
             </div>
             <div className="mt-10 mb-10">
-              <h1 className="text-xl font-bold mb-10"
-                 style={{
-                  fontSize: 24,
-                  fontWeight: "600",
-                fontFamily:'Plus Jakarta Sans',
-                  marginTop: "3%",
-                  marginBottom: "2%",
-                }}
-              >Guardian Information</h1>
+              <h1 className="text-xl font-bold mb-10 font-serif">
+                Guardian Information</h1>
               {guardian.map((item, index) => (
                 <div className="border-b-[2px] mt-2 flex flex-row justify-between w-[50vw] py-2">
                   <div>
-                    <h1 className="text-lg"    style={{
-                fontWeight: "600",
-              fontFamily:'Plus Jakarta Sans',
-                 fontSize:18,
-                marginTop: "3%",
-                marginBottom: "2%",
-              }}>Guardian {index + 1}</h1>
+                    <h1 className="text-lg font-serif mt-3 mb-10"    
+              >Guardian {index + 1}</h1>
                   </div>
                   <div>
-                    <span className="font-light text-xs">Phone Number</span>
+                    <span className="font-light text-xs font-serif">Phone Number</span>
                     <h1>{item.phoneNumber}</h1>
                   </div>
                   <div>
-                    <span className="font-light text-xs">Email</span>
+                    <span className="font-light text-xs font-serif">Email</span>
                     <h1>{item.email}</h1>
                   </div>
                   <div>
-                    <span className="font-light text-xs text-left">
+                    <span className="font-light text-xs text-left font-serif">
                       Full Name
                     </span>
                     <h1>{item.fullName}</h1>
                   </div>
                   <div>
-                    <span className="font-light text-xs">Type</span>
+                    <span className="font-light text-xs font-serif">Type</span>
                     <h1>{item.type}</h1>
                   </div>
                 </div>
               ))}
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Course" key="2">
+          <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">Course</p>
+            } key="2">
             <Button className="btn-confirm" onClick={handleUpdate}>
               Edit Profile
             </Button>
             <div className="teacher-course-list">
               <div className="tch-cr-list">
-                <h1>Assigned Courses</h1>
+                <h1 className="text-xl font-bold text-center ml-5 font-serif">Assigned Courses</h1>
               </div>
               <Table
                 loading={loadingCourse}
@@ -498,12 +443,14 @@ function ViewStudent() {
               />
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Attendance" key="3">
+          <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">Attendance</p>
+            } key="3">
             <Button className="btn-confirm" onClick={handleUpdate}>
               Edit Profile
             </Button>
             <div className="st-at">
-              <h1> Attendance</h1>
+              <h1 className="text-xl font-bold mb-10 font-serif"> Attendance</h1>
               <div>
                 <Tabs defaultActiveKey="1">
                   <Tabs.TabPane tab="Monthly" key="1">

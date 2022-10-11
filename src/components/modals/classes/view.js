@@ -233,13 +233,19 @@ function ViewClass() {
             alt="profile"
           />
           <div className="flex flex-row mt-8 ml-2">
-            <h2 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>{data?.level}</h2>
-            <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>{data?.section}</h3>
+            <h2 
+            className="text-lg font-bold font-serif"
+            >{data?.level}</h2>
+            <h3 
+             className="text-lg font-bold font-serif"
+            >{data?.section}</h3>
           </div>
         </div>
         <div className="header-extra">
           <div>
-            <h3 style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}>Assigned Students</h3>
+            <h3 
+            className="text-lg font-semibold font-serif"
+            >Assigned Students</h3>
             <h4>{data?.student.length}</h4>
           </div>
         </div>
@@ -247,7 +253,7 @@ function ViewClass() {
       <div className="w-[100%]">
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
-            tab={<p className="text-xl font-bold text-center ml-0">Profile</p>}
+            tab={<p className="text-xl font-bold text-center ml-0 font-serif">Profile</p>}
             key="1"
           >
             <Button
@@ -257,21 +263,27 @@ function ViewClass() {
               Edit Class
             </Button>
             <div className="asssign-teacher">
-              <h4 className="text-[24px] mb-10" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Assigned Students</h4>
+              <h4 className="text-[24px] mb-10 font-serif font-bold" 
+              //style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}
+              >Assigned Students</h4>
               <Table dataSource={students} columns={columns} />
             </div>
             <div className="asssign-teacher -mt-10">
-              <h4 className="text-[24px]" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Assigned Courses</h4>
+              <h4 className="text-[24px] mb-10 font-serif font-bold" 
+              //style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}
+              >Assigned Courses</h4>
               <Table dataSource={datas} columns={courseColumns} />
             </div>
             <div className="asssign-teacher">
-              <h4 className="text-[24px]" style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}>Weekly Schedule</h4>
+              <h4 
+               className="text-[24px] mb-10 font-serif font-bold" 
+               >Weekly Schedule</h4>
               <Table dataSource={datas} columns={scheduleColumn} />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <p className="text-xl font-bold text-center ml-5">Attendance</p>
+              <p className="text-xl font-bold text-center ml-5 font-serif">Attendance</p>
             }
             key="2"
           >
