@@ -63,7 +63,7 @@ function CreateSubject() {
       <Button
         onClick={showModal}
         style={{
-          padding: 10,
+          padding: 8,
           borderColor: "#E7752B",
           borderWidth: 2,
           // marginTop: 20,
@@ -73,6 +73,7 @@ function CreateSubject() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "white",
         }}
       >
         <PlusOutlined />

@@ -240,7 +240,7 @@ export default function ListAnnouncment() {
               style={{ padding: 10 }}
               toolbarClassName="toolbarClassName"
               wrapperClassName="wrapperClassName"
-              editorClassName="p-2 h-80"
+              editorClassName="p-2 h-[auto]"
               onEditorStateChange={onEditorStateChange}
               onChange={onEditorChange}
             />

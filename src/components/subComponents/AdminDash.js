@@ -66,6 +66,9 @@ export default function AdminDash() {
         backgroundColor: "#F9FAFB",
       }}
     >
+      <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8">
+        Hello Admin
+      </p>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item sm={1} md={4}>
           <Card

@@ -21,6 +21,7 @@ export default function Dashboard({
         boxShadow: "none",
         display: "flex",
         flexDirection: "row",
+        width: "0%",
       }}
     >
       <Toolbar className="mt-2">

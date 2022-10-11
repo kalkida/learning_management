@@ -5,6 +5,8 @@ import { Routes, Route, useNavigate, Link } from "react-router-dom";
 
 //////////////Styles///////////////////////
 import { styled, useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -191,7 +193,74 @@ const Layouts = () => {
           variant="permanent"
           open={open}
         >
-          <DrawerHeader />
+          {/* <DrawerHeader /> */}
+          <div className="mt-6 ml-6 mb-2">
+            {open ? (
+              <div className="flex flex-row justify-start ml-1">
+                <IconButton
+                  onClick={handleDrawerClose}
+                  sx={{
+                    marginRight: 0,
+                    marginLeft: 0,
+                  }}
+                >
+                  {theme.direction === "rtl" ? (
+                    <Icon
+                      name="menu-outline"
+                      fill="#667085"
+                      size="large" // small, medium, large, xlarge
+                      animation={{
+                        type: "pulse", // zoom, pulse, shake, flip
+                        hover: true,
+                        infinite: false,
+                      }}
+                    />
+                  ) : (
+                    <Icon
+                      name="menu-outline"
+                      fill="#667085"
+                      size="large" // small, medium, large, xlarge
+                      animation={{
+                        type: "pulse", // zoom, pulse, shake, flip
+                        hover: true,
+                        infinite: false,
+                      }}
+                    />
+                  )}
+                </IconButton>
+
+                <img
+                  src={require("../assets/logo1.png")}
+                  className="w-[98px] h-[37px] z-1"
+                />
+              </div>
+            ) : (
+              <div className="flex flex-row justify-start -ml-2">
+                <IconButton
+                  color="default"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{
+                    marginRight: 0,
+                    marginLeft: 0,
+                    ...(open && { display: "none" }),
+                  }}
+                >
+                  <Icon
+                    name="menu-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                </IconButton>
+              </div>
+            )}
+          </div>
           <List className="sm:invisible md:visible ">
             {[
               {
