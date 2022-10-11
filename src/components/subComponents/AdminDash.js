@@ -63,7 +63,7 @@ export default function AdminDash() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        backgroundColor: "#E8E8E8",
+        backgroundColor: "#F9FAFB",
       }}
     >
       <h1 className="text-[24px] -mt-20 mb-4 p-7 text-[#344054] font-bold text-center">

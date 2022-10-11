@@ -212,84 +212,140 @@ const Layouts = () => {
           <List className="sm:invisible md:visible ">
             {[
               {
-                text: 'Home',
-                Icon: <FontAwesomeIcon
-                  icon={faHome}
-                  className="text-xl  text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/admin"
+                text: "Home",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faHome}
+                    className="text-xl  text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/admin",
               },
               {
-                text: 'Message',
-                Icon: <FontAwesomeIcon
-                  icon={faMessage}
-                  className="text-xl text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/message"
-              }
-              , {
-                text: 'Announcment',
-                Icon: <FontAwesomeIcon
-                  icon={faMicrophone}
-                  className="text-xl  text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/announcment"
+                text: "Message",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faMessage}
+                    className="text-xl text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/message",
               },
               {
-                text: 'Course',
-                Icon: <FontAwesomeIcon
-                  icon={faBook}
-                  className="text-xl  text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/list-course"
-              }, {
-                text: 'Classes',
-                Icon: <FontAwesomeIcon
-                  icon={faCity}
-                  className="text-xl text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/list-classes"
-              }, {
-                text: 'Teacher',
-                Icon: <FontAwesomeIcon
-                  icon={faFeather}
-                  className="text-xl  text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/list-teacher"
+                text: "Announcment",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faMicrophone}
+                    className="text-xl  text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/announcment",
               },
               {
-                text: 'Student',
-                Icon: <FontAwesomeIcon
-                  icon={faGraduationCap}
-                  className="text-xl  text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/list-student"
+                text: "Course",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faBook}
+                    className="text-xl  text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/list-course",
               },
               {
-                text: 'Attendance',
-                Icon: <FontAwesomeIcon
-                  icon={faCalendar}
-                  className="text-xl text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/attendance"
+                text: "Classes",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faCity}
+                    className="text-xl text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/list-classes",
               },
               {
-                text: 'Schedule',
-                Icon: <FontAwesomeIcon
-                  icon={faCalendar}
-                  className="text-xl  text-[#2c5886]"
-                  style={{ fontFamily:'Plus Jakarta Sans', fontSize:16, fontWeight:'600' }} 
-                />,
-                link: "/schedule"
-              }
+                text: "Teacher",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faFeather}
+                    className="text-xl  text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/list-teacher",
+              },
+              {
+                text: "Student",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faGraduationCap}
+                    className="text-xl  text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/list-student",
+              },
+              {
+                text: "Attendance",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faCalendar}
+                    className="text-xl text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/attendance",
+              },
+              {
+                text: "Schedule",
+                Icon: (
+                  <FontAwesomeIcon
+                    icon={faCalendar}
+                    className="text-xl  text-[#2c5886]"
+                    style={{
+                      fontFamily: "Plus Jakarta Sans",
+                      fontSize: 16,
+                      fontWeight: "600",
+                    }}
+                  />
+                ),
+                link: "/schedule",
+              },
             ].map((item, index) => (
               <ListItem
                 key={item.text}
@@ -465,7 +521,7 @@ const Layouts = () => {
   }, []);
 
   return (
-    <Layout className="bg-[#E8E8E8] min-h-[100vh]">
+    <Layout className="bg-[#F9FAFB] min-h-[100vh]">
       <Box sx={{ display: "flex", width: "100%" }}>
         <Navigation
           handleDrawerOpen={handleDrawerOpen}
@@ -478,10 +534,10 @@ const Layouts = () => {
         <Box
           component="main"
           sx={{ flexGrow: 1, p: 3 }}
-          className="bg-[#E8E8E8]"
+          className="bg-[#F9FAFB]"
         >
           <DrawerHeader />
-          <Content className="bg-[#E8E8E8] h-[auto]">
+          <Content className="bg-[#F9FAFB] h-[auto]">
             <Routes>
               <Route path="/admin" element={<AdminDash />} />
               <Route path="/teacher" element={<TeacherDash />} />
