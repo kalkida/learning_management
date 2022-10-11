@@ -386,6 +386,9 @@ const Layouts = () => {
                       ":hover": {
                         backgroundColor: "#FCF0E8",
                       },
+                      ":active": {
+                        backgroundColor: "#FCF0E8",
+                      },
                       color: "#2c5886",
                       minHeight: 48,
                       borderRadius: 2,
@@ -396,7 +399,7 @@ const Layouts = () => {
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
-                        mr: open ? 3 : "auto",
+                        mr: open ? 3 : 0,
                         justifyContent: "center",
                       }}
                     >

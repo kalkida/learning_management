@@ -23,9 +23,9 @@ export default function Dashboard({
         flexDirection: "row",
       }}
     >
-      <Toolbar className=" mt-2 ml-1">
+      <Toolbar className="mt-2">
         {open ? (
-          <div className="flex flex-row">
+          <div className="flex flex-row justify-start">
             <IconButton
               onClick={handleDrawerClose}
               sx={{
@@ -64,28 +64,30 @@ export default function Dashboard({
             />
           </div>
         ) : (
-          <IconButton
-            color="default"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 0,
-              marginLeft: 0,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <Icon
-              name="menu-outline"
-              fill="#667085"
-              size="large" // small, medium, large, xlarge
-              animation={{
-                type: "pulse", // zoom, pulse, shake, flip
-                hover: true,
-                infinite: false,
+          <div className="flex flex-row justify-start -ml-2">
+            <IconButton
+              color="default"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 0,
+                marginLeft: 0,
+                ...(open && { display: "none" }),
               }}
-            />
-          </IconButton>
+            >
+              <Icon
+                name="menu-outline"
+                fill="#667085"
+                size="large" // small, medium, large, xlarge
+                animation={{
+                  type: "pulse", // zoom, pulse, shake, flip
+                  hover: true,
+                  infinite: false,
+                }}
+              />
+            </IconButton>
+          </div>
         )}
       </Toolbar>
       <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle mt-4">
