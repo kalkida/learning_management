@@ -263,38 +263,40 @@ function UpdateStudents() {
               alt="profile"
             />
             <div className="flex flex-col justify-center ml-4">
-              <h2 className="text-xl">
+              <h2  className="text-xl font-bold font-serif" >
                 {data.first_name + " " + data.last_name}
               </h2>
             </div>
           </div>
           <div className="header-extra">
             <div>
-              <h3>Class</h3>
-              <h4>{data.class?.level + data.class?.section}</h4>
+              <h3  className="text-sm font-bold font-serif" >Class</h3>
+              <h4  className="text-sm" >{data.class?.level + data.class?.section}</h4>
             </div>
             <div>
-              <h3>Assigned Course</h3>
-              <h4>{data.course?.length}</h4>
+              <h3 className="text-sm font-bold font-serif" >Assigned Course</h3>
+              <h4  className="text-sm font-serif" >{data.course?.length}</h4>
             </div>
           </div>
         </div>
 
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
-            <Tabs.TabPane tab="Profile" key="1">
+            <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
+            } key="1">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Confirm Profile
               </Button>
               <div className="add-header">
-                <h1>Student Profile</h1>
+                <h1 className="text-xl font-bold font-serif">Student Profile</h1>
               </div>
               <div className="add-teacher">
                 <div className="add-form">
                   <div className="col">
                     <div style={{ marginTop: "30%" }}>
                       <div className="avatar-img">
-                        <h2>Student Picture</h2>
+                        <h2 className="text-xl font-bold mb-10 font-serif">Student Picture</h2>
                         <img
                           src={file ? URL.createObjectURL(file) : "img-5.jpg"}
                         />
@@ -332,7 +334,9 @@ function UpdateStudents() {
                   </div>
                   <div className="col">
                     <div>
-                      <label>First Name</label>
+                      <label 
+                       className="text-sm  font-serif" 
+                      >First Name</label>
                       <Input
                         defaultValue={updateStudent.first_name}
                         name="first_name"
@@ -341,7 +345,9 @@ function UpdateStudents() {
                     </div>
 
                     <div>
-                      <label>Date of Birth</label>
+                      <label
+                       className="text-sm  font-serif" 
+                      >Date of Birth</label>
                       <DatePicker
                         style={{ width: "100%" }}
                         onChange={handleDob}
@@ -353,7 +359,9 @@ function UpdateStudents() {
                       />
                     </div>
                     <div>
-                      <label>Last Name</label>
+                      <label
+                       className="text-sm  font-serif" 
+                      >Last Name</label>
                       <Input
                         defaultValue={updateStudent.last_name}
                         name="last_name"
@@ -361,7 +369,9 @@ function UpdateStudents() {
                       />
                     </div>
                     <div>
-                      <label>Sex </label>
+                      <label
+                       className="text-sm  font-serif" 
+                      >Sex </label>
                       <Select
                         placeholder="Select Gender"
                         onChange={handleGender}
@@ -387,7 +397,9 @@ function UpdateStudents() {
                         display: "flex",
                       }}
                     >
-                      <label>Class</label>
+                      <label
+                       className="text-sm  font-serif" 
+                      >Class</label>
                       <Select
                         placeholder="Select Section"
                         defaultValue={data.class}
@@ -409,7 +421,9 @@ function UpdateStudents() {
                       </Select>
                     </div>
                     <div>
-                      <label>Guardian Contact</label>
+                      <label
+                       className="text-sm  font-serif" 
+                      >Guardian Contact</label>
                       {data.phone.map((item, index) => {
                         return (
                           <Input
@@ -432,7 +446,9 @@ function UpdateStudents() {
                       ) : null}
                     </div>
                     <div>
-                      <label>Email</label>
+                      <label
+                       className="text-sm  font-serif" 
+                      >Email</label>
                       <Input
                         defaultValue={updateStudent.email}
                         name="email"
@@ -440,7 +456,9 @@ function UpdateStudents() {
                       />
                     </div>
                     <div>
-                      <label>Student Id</label>
+                      <label
+                       className="text-sm  font-serif" 
+                      >Student Id</label>
                       <Input
                         defaultValue={updateStudent.studentId}
                         name="studentId"
@@ -466,35 +484,37 @@ function UpdateStudents() {
                 {parents.map((item, index) => (
                   <div className="border-b-[1px] mt-2 flex flex-row justify-between w-[40vw] p-2">
                     <div>
-                      <h1 className="font-bold">Guardian {index + 1}</h1>
+                      <h1 className="font-bold font-serif">Guardian {index + 1}</h1>
                     </div>
                     <div>
-                      <span className="font-light text-xs">Full Name</span>
+                      <span className="font-light text-xs font-serif">Full Name</span>
                       <h1>{item.fullName}</h1>
                     </div>
                     <div>
-                      <span className="font-light text-xs">Phone Number</span>
+                      <span className="font-light text-xs font-serif">Phone Number</span>
                       <h1>{item.phoneNumber}</h1>
                     </div>
                     <div>
-                      <span className="font-light text-xs">Email</span>
+                      <span className="font-light text-xs font-serif">Email</span>
                       <h1>{item.email}</h1>
                     </div>
                     <div>
-                      <span className="font-light text-xs">Type</span>
+                      <span className="font-light text-xs font-serif">Type</span>
                       <h1>{item.type}</h1>
                     </div>
                   </div>
                 ))}
               </div>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Course" key="2">
+            <Tabs.TabPane tab={
+                 <p className="text-xl font-bold text-center ml-5 font-serif">Course</p>
+            } key="2">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Edit Profile
               </Button>
               <div className="teacher-course-list">
                 <div className="tch-cr-list">
-                  <h1>Assigned Courses</h1>
+                  <h1 className="text-xl font-bold  font-serif">Assigned Courses</h1>
                 </div>
                 <Table
                   rowSelection={rowSelection}

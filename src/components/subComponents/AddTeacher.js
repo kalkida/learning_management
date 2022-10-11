@@ -387,7 +387,10 @@ export default function AddTeacher() {
   return (
     <div className="bg-[#E8E8E8] h-[100vh]">
       <div className="list-header">
-        <h1  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}>List Of Teachers</h1>
+        <h1  
+        className="text-2xl mb-2 font-bold font-serif"
+        //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
+        >List Of Teachers</h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">
