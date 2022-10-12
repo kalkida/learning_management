@@ -428,20 +428,22 @@ function TeacherUpdate() {
   return (
     <>
       <div>
-        <div className="profile-header">
-        <div className=" flex flex-row  pb-2 -mt-4">
-          <div className=" flex flex-row justify-start self-start">
+      <div className="w-[100%] p-2 -mt-20">
+        <div className=" flex flex-row  pb-2 -mt-4 justify-between  py-10 px-2">
+          <div className=" flex flex-row  w-[40%] justify-between ">
             <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
               <img
                 src={data.avater ? data.avater : "img-5.jpg"}
                 alt="profile"
-                className="w-[7vw] rounded-full"
+                className="w-[8vw] rounded-full"
               />
             </div>
-            <div className="flex flex-col ml-2">
-              <h2 className="text-lg font-bold font-jakarta">
+            <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%]">
+              <div className="flex flex-row">
+              <h3 className="text-lg font-bold font-jakarta ">
                 {data.first_name + " " + data.last_name}
-              </h2>
+              </h3>
+              </div>
               <div className="flex flex-row align-bottom">
                 <div>
                   <MailFilled className="text-[#E7752B]" />
@@ -452,8 +454,8 @@ function TeacherUpdate() {
               </div>
             </div>
           </div>
-          <div className=" flex-col justify-end self-end  justify-self-end ">
-          <div className="flex flex-row justify-self-end ml-[40%]">
+          <div className="flex flex-col align-middle">
+          <div className="flex flex-row ">
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Class
             </h3>
@@ -470,14 +472,15 @@ function TeacherUpdate() {
                 <Tag>Teacher is not Assigned</Tag>
               )}
             </div>
-            <div className="flex flex-row ml-[40%] ">
-            <h3 className="text-lg font-semibold font-jakarta">
+        
+            <div className="flex flex-row ">
+            <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Subject
             </h3>
               {data?.course ? (
                 <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
                 text-[#667085] p-[1px] ml-2">
-                  {data?.course?.map((item, i) => item.course_name + ",")}
+                  {data?.course?.slice(0,2).map((item, i) => item.course_name + ",")}
                 </h4>
               ) : (
                 <Tag>Teacher is not Assigned</Tag>
@@ -533,7 +536,7 @@ function TeacherUpdate() {
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-jakarta">Profile</p>
+                 <p className="text-base font-bold text-center font-jakarta">Edit Profile</p>
             } key="1">
               <Button   className="btn-confirm " onClick={handleUpdate}>
                 Finalize review
@@ -690,7 +693,7 @@ function TeacherUpdate() {
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-jakarta">Course</p>
+                 <p className="text-base font-bold text-center ml-5 font-jakarta">Edit Course</p>
             } key="2">
               <Button 
                icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
@@ -700,7 +703,7 @@ function TeacherUpdate() {
 
               <div>
                 <div className="teacher-course-list">
-                  <h1  className="text-xl font-bold font-jakarta mb-6" >Add/Remove Courses</h1>
+                  <h1  className="text-xl font-bold font-jakarta mb-6" >Edit Courses</h1>
                   <div className="tch-cr-list">
                     <div>
                       <Select
@@ -750,7 +753,7 @@ function TeacherUpdate() {
                 </div>
               </div>
             </Tabs.TabPane>
-            <Tabs.TabPane tab={
+            {/* <Tabs.TabPane tab={
                  <p className="text-xl font-bold text-center ml-5 font-jakarta">Class</p>
             } key="3">
               <Button 
@@ -770,7 +773,7 @@ function TeacherUpdate() {
                   />
                 </div>
               </div>
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
           </Tabs>
         </div>
       </div>
