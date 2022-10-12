@@ -153,9 +153,14 @@ function TeacherView() {
               />
             </div>
             <div className="flex flex-col ml-2">
+              <div className="flex flex-row">
               <h2 className="text-lg font-bold font-jakarta">
-                {data.first_name + " " + data.last_name}
+                {data.first_name+"   "}
               </h2>
+              <h2 className="text-lg font-bold font-jakarta">
+                {data.last_name}
+              </h2>
+              </div>
               <div className="flex flex-row align-bottom">
                 <div>
                   <MailFilled className="text-[#E7752B]" />
@@ -166,8 +171,9 @@ function TeacherView() {
               </div>
             </div>
           </div>
-          <div className=" flex-col justify-end self-end  justify-self-end ">
-          <div className="flex flex-row justify-self-end ml-[40%]">
+          <div className="flex flex-col justify-between" 
+          >
+          <div className="flex flex-row justify-self-end self-end">
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Class
             </h3>
@@ -184,8 +190,10 @@ function TeacherView() {
                 <Tag>Teacher is not Assigned</Tag>
               )}
             </div>
-            <div className="flex flex-row ml-[40%] ">
-            <h3 className="text-lg font-semibold font-jakarta">
+        
+        <div className=" flex justify-self-end ml-[70%]">
+            <div className="flex flex-row">
+            <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Subject
             </h3>
               {data?.course ? (
@@ -196,6 +204,7 @@ function TeacherView() {
               ) : (
                 <Tag>Teacher is not Assigned</Tag>
               )}
+            </div>
             </div>
           </div>
         </div>
@@ -212,30 +221,30 @@ function TeacherView() {
               <div className="flex flex-row justify-between w-[50%]">
                 <div>
                   <h1 
-                   className="text-4xl font-bold  leading-none mb-4"
+                   className="text-4xl font-bold  font-jakarta mb-4"
                   >7,8</h1>
                   <span 
-                   className="text-sm font-medium mb-8 "
+                   className="text-sm font-medium font-jakarta mb-8 "
                //   style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                   >Assigned Grade</span>
                 </div>
                 <div>
                   <h1 
-                   className="text-4xl font-bold mb-4"
+                   className="text-4xl font-bold font-jakarta mb-4"
                 //  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
                   >{data.course.length}</h1>
                   <span
-                   className="text-sm font-medium mb-3 -ml-2 "
+                   className="text-sm font-medium mb-3 font-jakarta -ml-2 "
                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                    >Courses</span>
                 </div>
                 <div>
                   <h1 
-                   className="text-4xl font-bold  mb-4"
+                   className="text-4xl font-bold font-jakarta  mb-4"
                   //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
                   >{weekClass}</h1>
                   <span
-                   className="text-sm font-medium mb-4" 
+                   className="text-sm font-medium font-jakarta mb-4" 
                   //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                   >Classes/Week</span>
                 </div>
