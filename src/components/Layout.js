@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { userAction } from "../redux/user";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
 
 //////////////Styles///////////////////////
@@ -27,6 +27,7 @@ import ContentPaste from "@mui/icons-material/ContentPaste";
 import Cloud from "@mui/icons-material/Cloud";
 import Icon from "react-eva-icons";
 import { Avatar, Breadcrumb, Layout, Menu } from "antd";
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 //////////// Route Components /////////////////
 import ListAnnouncment from "./subComponents/ListAnnouncment";
@@ -55,85 +56,28 @@ import ViewStudent from "./modals/student/View";
 import UpdateStudent from "./modals/student/Update";
 import AttendanceList from "./subComponents/AttendanceList";
 import AttendanceView from "./modals/attendance/view";
+import zIndex from "@mui/material/styles/zIndex";
 
 const { Header, Content, Sider } = Layout;
 const drawerWidth = 240;
 
-const openedMixin = (theme) => ({
-  width: drawerWidth,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
 
-const closedMixin = (theme) => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
-}));
 
 const Layouts = () => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user.profile);
   const user = useSelector((state) => state.user.value);
   const role = useSelector((state) => state.user.profile.role);
+  const [windowSize, setWindowSize] = useState(getWindowSize());
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(windowSize.innerWidth <= 425 ? false : true);
   const current = JSON.parse(user);
-  console.log(current);
   const dispatch = useDispatch();
+
+  function getWindowSize() {
+    const { innerWidth, innerHeight } = window;
+    return { innerWidth, innerHeight };
+  }
 
   const logout = () => {
     dispatch(userAction.logout());
@@ -146,6 +90,86 @@ const Layouts = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    function handleWindowResize() {
+      setWindowSize(getWindowSize());
+    }
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
+
+
+  const openedMixin = (theme) => ({
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: "hidden",
+    position: windowSize.innerWidth <= 425 ? "fixed" : "relative",
+    zIndex: 1000
+  });
+
+  const closedMixin = (theme) => ({
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: "hidden",
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up("sm")]: {
+      width: `calc(${theme.spacing(8)} + 1px)`,
+    },
+  });
+
+  const DrawerHeader = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  }));
+
+  const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== "open",
+  })(({ theme, open }) => ({
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  }));
+
+  const Drawer = styled(MuiDrawer, {
+    shouldForwardProp: (prop) => prop !== "open",
+  })(({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: "nowrap",
+    boxSizing: "border-box",
+    ...(open && {
+      ...openedMixin(theme),
+      "& .MuiDrawer-paper": openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      "& .MuiDrawer-paper": closedMixin(theme),
+    }),
+  }));
 
   const SiderGenerator = () => {
     if (profile == undefined || profile == "undefined") {
@@ -189,7 +213,6 @@ const Layouts = () => {
       const currentURL = window.location.pathname;
       return (
         <Drawer
-          className="sm:absolute  md:relative "
           variant="permanent"
           open={open}
         >
@@ -204,31 +227,8 @@ const Layouts = () => {
                     marginLeft: 0,
                   }}
                 >
-                  {theme.direction === "rtl" ? (
-                    <Icon
-                      name="menu-outline"
-                      fill="#667085"
-                      size="large" // small, medium, large, xlarge
-                      animation={{
-                        type: "pulse", // zoom, pulse, shake, flip
-                        hover: true,
-                        infinite: false,
-                      }}
-                    />
-                  ) : (
-                    <Icon
-                      name="menu-outline"
-                      fill="#667085"
-                      size="large" // small, medium, large, xlarge
-                      animation={{
-                        type: "pulse", // zoom, pulse, shake, flip
-                        hover: true,
-                        infinite: false,
-                      }}
-                    />
-                  )}
+                  <ChevronLeftIcon />
                 </IconButton>
-
                 <img
                   src={require("../assets/logo1.png")}
                   className="w-[98px] h-[37px] z-1"
@@ -644,11 +644,11 @@ const Layouts = () => {
         <SiderGenerator />
         <Box
           component="main"
-          sx={{ flexGrow: 1, p: 3 }}
-          className="bg-[#F9FAFB]"
+          sx={{ flexGrow: 1, p: 3, }}
+          className="bg-[#F9FAFB] xs:"
         >
           <DrawerHeader />
-          <Content className="bg-[#F9FAFB] h-[auto]">
+          <Content className="bg-[#F9FAFB] h-[auto]" >
             <Routes>
               <Route path="/admin" element={<AdminDash />} />
               <Route path="/teacher" element={<TeacherDash />} />

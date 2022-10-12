@@ -200,7 +200,7 @@ export default function ListAnnouncment() {
     }, 100);
   };
   return (
-    <div className="flex flex-col bg-[#F9FAFB] h-[auto] lg:h-[auto]  mt-0 p-6 ">
+    <div className="flex flex-col bg-[#F9FAFB] h-[auto] lg:h-[auto]  mt-0 py-6 ">
       {showPost ? (
         <div className="bg-[white] mb-10">
           <div className="flex flex-row justify-between -mt-20 mb-5">
@@ -208,7 +208,7 @@ export default function ListAnnouncment() {
               Post Announcment
             </h1>
           </div>
-          <div className="flex flex-col p-6 border-[1px] bg-[#FFFFFF] rounded-md">
+          <div className="flex flex-col p-6  border-[1px] bg-[#FFFFFF] rounded-md">
             <div className="flex flex-row justify-between w-[15vw] mt-5 mb-5">
               <h1 className="text-lg font-bold">To:</h1>
               <Select
@@ -249,7 +249,7 @@ export default function ListAnnouncment() {
                 onClick={() => uploadData()}
                 className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 font-jakarta right-0"
               >
-                <Icon name="checkmark-outline" size="small" /> Post
+                Post{"  "}<Icon name="checkmark-outline" size="small" />
               </button>
             </div>
           </div>
@@ -321,7 +321,7 @@ export default function ListAnnouncment() {
         </h1>
         <div className="p-6 bg-[#FFFFFF] border-[1px] rounded-md">
           {announcment.map((item, index) => (
-            <div key={index} className="mt-0 flex flex-col mb-10">
+            <div key={index} className="mt-0 flex flex-col mb-4">
               <h1 className="text-lg mb-2 font-bold font-jakarta capitalize text-[#344054]  ">
                 {item.title}
               </h1>

@@ -310,14 +310,15 @@ function UpdateCourse() {
                   {subjectData?.name}
                 </h4>
               </div>
-              <div className="flex justify-end flex-col  mt-[5vh]">
+              <div className="flex flex-row mt-4 justify-center ">
                 <Button
-                  className="btn-confirm bg-[#E7752B] text-white"
+                  className=" bg-[#E7752B] text-white items-center rounded-lg "
                   onClick={handleUpdate}
                 >
                   Finalize Review
-                  <CheckOutlined style={{ marginTop: -1 }} />
+                  <CheckOutlined className="mb-2" />
                 </Button>
+
               </div>
             </div>
           </div>
@@ -344,7 +345,7 @@ function UpdateCourse() {
                 <div className="flex flex-col mt-[24px]">
                   <span
                     className="text-sm font-jakarta font-[500"
-                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
+                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
                   >
                     Subject
                   </span>
@@ -480,14 +481,14 @@ function UpdateCourse() {
                     <TimePicker.RangePicker
                       style={{ width: "67%" }}
                       className="rounded-lg border-[0px]"
-                      format={"hh:mm"}
-                      use12Hours
+                      format={"hh:mm a"}
+                      showTime={{ use12Hours: true }}
                       defaultValue={
                         item.time.length
                           ? [
-                              moment(JSON.parse(item.time[0])),
-                              moment(JSON.parse(item.time[1])),
-                            ]
+                            moment(JSON.parse(item.time[0])),
+                            moment(JSON.parse(item.time[1])),
+                          ]
                           : []
                       }
                       onChange={(e) => handleSchedulerTime(e, i)}

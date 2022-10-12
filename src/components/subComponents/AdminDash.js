@@ -64,13 +64,14 @@ export default function AdminDash() {
         flexDirection: "column",
         justifyContent: "center",
         backgroundColor: "#F9FAFB",
+
       }}
     >
       <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8">
         Hello Admin
       </p>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item sm={1} md={4}>
+        <Grid item xs={12} sm={12} md={4}>
           <Card
             bordered={true}
             className="w-[100%] min-h-[419px]"
@@ -153,7 +154,7 @@ export default function AdminDash() {
             </div>
           </Card>
         </Grid>
-        <Grid item sm={1} md={4}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card
             bordered={true}
             className="w-[100%] min-h-[419px]"
@@ -195,7 +196,7 @@ export default function AdminDash() {
             <Liner />
           </Card>
         </Grid>
-        <Grid item sm={1} md={4}>
+        <Grid item xs={12} sm={6} md={4} >
           <Card
             bordered={true}
             className="w-[100%] min-h-[419px]"
@@ -243,8 +244,8 @@ export default function AdminDash() {
             <Liner />
           </Card>
         </Grid>
-        <Grid item sm={1} md={12}>
-          <Card bordered={true} className="w-[100%] mt-10 mb-10">
+        <Grid item xs={12} sm={12} md={12}>
+          <Card bordered={true} className="w-[100%]  mb-10">
             <BarGraph />
           </Card>
         </Grid>

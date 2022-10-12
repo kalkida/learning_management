@@ -374,7 +374,7 @@ export default function ListCourses() {
         {/* <CreateSubject /> */}
       </div>
       <div className="list-sub">
-        <div className="flex flex-row justify-between w-[30%]">
+        <div className="flex flex-row justify-between w-[23%]">
           <Select
             className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
             defaultValue="Subject"
