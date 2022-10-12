@@ -27,7 +27,7 @@ import ContentPaste from "@mui/icons-material/ContentPaste";
 import Cloud from "@mui/icons-material/Cloud";
 import Icon from "react-eva-icons";
 import { Avatar, Breadcrumb, Layout, Menu } from "antd";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 //////////// Route Components /////////////////
 import ListAnnouncment from "./subComponents/ListAnnouncment";
@@ -61,8 +61,6 @@ import zIndex from "@mui/material/styles/zIndex";
 const { Header, Content, Sider } = Layout;
 const drawerWidth = 240;
 
-
-
 const Layouts = () => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user.profile);
@@ -70,7 +68,9 @@ const Layouts = () => {
   const role = useSelector((state) => state.user.profile.role);
   const [windowSize, setWindowSize] = useState(getWindowSize());
   const theme = useTheme();
-  const [open, setOpen] = React.useState(windowSize.innerWidth <= 425 ? false : true);
+  const [open, setOpen] = React.useState(
+    windowSize.innerWidth <= 425 ? false : true
+  );
   const current = JSON.parse(user);
   const dispatch = useDispatch();
 
@@ -96,13 +96,12 @@ const Layouts = () => {
       setWindowSize(getWindowSize());
     }
 
-    window.addEventListener('resize', handleWindowResize);
+    window.addEventListener("resize", handleWindowResize);
 
     return () => {
-      window.removeEventListener('resize', handleWindowResize);
+      window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
-
 
   const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -111,8 +110,8 @@ const Layouts = () => {
       duration: theme.transitions.duration.enteringScreen,
     }),
     overflowX: "hidden",
-    position: windowSize.innerWidth <= 425 ? "fixed" : "relative",
-    zIndex: 1000
+    position: windowSize.innerWidth <= 425 ? "fixed" : "",
+    zIndex: 1000,
   });
 
   const closedMixin = (theme) => ({
@@ -212,10 +211,7 @@ const Layouts = () => {
     if (profile.role["isAdmin"] == true) {
       const currentURL = window.location.pathname;
       return (
-        <Drawer
-          variant="permanent"
-          open={open}
-        >
+        <Drawer variant="permanent" open={open}>
           {/* <DrawerHeader /> */}
           <div className="mt-6 ml-6 mb-2">
             {open ? (
@@ -634,21 +630,14 @@ const Layouts = () => {
   return (
     <Layout className="bg-[#F9FAFB] min-h-[100vh]">
       <Box sx={{ display: "flex", width: "100%" }}>
-        <Navigation
-          handleDrawerOpen={handleDrawerOpen}
-          open={open}
-          handleDrawerClose={handleDrawerClose}
-          theme={theme}
-          AppBar={AppBar}
-        />
         <SiderGenerator />
         <Box
           component="main"
-          sx={{ flexGrow: 1, p: 3, }}
-          className="bg-[#F9FAFB] xs:"
+          sx={{ flexGrow: 1, p: 3 }}
+          className="bg-[#F9FAFB] w-[100%] overflow-hidden"
         >
           <DrawerHeader />
-          <Content className="bg-[#F9FAFB] h-[auto]" >
+          <Content className="bg-[#F9FAFB] h-[auto] w-[100%]">
             <Routes>
               <Route path="/admin" element={<AdminDash />} />
               <Route path="/teacher" element={<TeacherDash />} />
