@@ -149,17 +149,14 @@ function TeacherView() {
               <img
                 src={data.avater ? data.avater : "img-5.jpg"}
                 alt="profile"
-                className="w-[7vw] rounded-full"
+                className="w-[8vw] border-[2px] rounded-full"
               />
             </div>
-            <div className="flex flex-col ml-2">
+            <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%]">
               <div className="flex flex-row">
-              <h2 className="text-lg font-bold font-jakarta">
-                {data.first_name+"   "}
-              </h2>
-              <h2 className="text-lg font-bold font-jakarta">
-                {data.last_name}
-              </h2>
+              <h3 className="text-lg font-bold font-jakarta ">
+                {data.first_name + " " + data.last_name}
+              </h3>
               </div>
               <div className="flex flex-row align-bottom">
                 <div>
