@@ -60,7 +60,7 @@ function TeacherView() {
       dataIndex: "DOB",
       key: "DOB",
       render: (item) => {
-        return <span>{moment(JSON.parse(item)).format("DD-MMMM-YYYY")}</span>;
+        return <span>{age}</span>;
       },
     },
     {
@@ -84,7 +84,7 @@ function TeacherView() {
       dataIndex: "working_since",
       key: "working_since",
       render: (item) => {
-        return <span>{moment(JSON.parse(item)).format("DD-MMMM-YYYY")}</span>;
+        return <span>{workTime}</span>;
       },
     },
   ];
@@ -127,6 +127,63 @@ function TeacherView() {
     },
   ];
 
+  const columnss = [
+    {
+      title: "Age",
+      dataIndex: "Age",
+      render: (text, record) => (
+        <div className="font-[500] text-sm font-jakarta">
+          {age}
+        </div>
+      ),
+    },
+    {
+      title: "Sex",
+      dataIndex: "Age",
+      render: (text, record) => (
+        <div className="font-[500] text-sm font-jakarta">
+          {data.sex}
+        </div>
+      ),
+    },
+    {
+      title: "PhoneNumber",
+      dataIndex: "Age",
+      render: (text, record) => (
+        <div className="font-[500] text-sm font-jakarta">
+          <h1>{data.phone}</h1>
+        </div>
+      ),
+    },
+    {
+      title: "Email",
+      dataIndex: "Age",
+      render: (text, record) => (
+        <div className="font-[500] text-sm font-jakarta">
+          <h1>{data.email}</h1>
+        </div>
+      ),
+    },
+    {
+      title: "Address",
+      dataIndex: "Age",
+      render: (text, record) => (
+        <div className="font-[500] text-sm font-jakarta">
+          <h1>Lideta</h1>
+        </div>
+      ),
+    },
+    {
+      title: "Working Since",
+      dataIndex: "Age",
+      render: (text, record) => (
+        <div className="font-[500] text-sm font-jakarta">
+          <h1>{workTime}</h1>
+        </div>
+      ),
+    },
+  ];
+
   const classColumns = [
     {
       title: "Grade",
@@ -142,9 +199,9 @@ function TeacherView() {
 
   return (
     <>
-      <div className="w-[100%] p-10 -mt-20">
-        <div className=" flex flex-row  pb-2 -mt-4">
-          <div className=" flex flex-row justify-start self-start">
+      <div className="w-[100%] p-2 -mt-20">
+        <div className=" flex flex-row  pb-2 -mt-4 justify-between  py-10 px-2">
+          <div className=" flex flex-row  w-[40%] justify-between ">
             <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
               <img
                 src={data.avater ? data.avater : "img-5.jpg"}
@@ -168,17 +225,15 @@ function TeacherView() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-between" 
-          >
-          <div className="flex flex-row justify-self-end self-end">
+          <div className="flex flex-col align-middle">
+          <div className="flex flex-row ">
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Class
             </h3>
             {/* <div className="flex flex-row">
               <h3 className="font-bold pr-2 border-r-[1px] font-serif">Class</h3> */}
               {data?.class ? (
-                <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
-                p-[1px] ml-2">
+                <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta  text-[#667085] p-[1px] ml-2 ">
                   {data?.class?.map(
                     (item, i) => item.level + item.section + ","
                   )}
@@ -187,33 +242,30 @@ function TeacherView() {
                 <Tag>Teacher is not Assigned</Tag>
               )}
             </div>
-        
-        <div className=" flex justify-self-end ml-[70%]">
-            <div className="flex flex-row">
+      
+            <div className="flex flex-row ">
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Subject
             </h3>
               {data?.course ? (
-                <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
-                text-[#667085] p-[1px] ml-2">
-                  {data?.course?.map((item, i) => item.course_name + ",")}
+                <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta  text-[#667085] p-[1px] ml-2">
+                  {data?.course?.slice(0,2).map((item, i) => item.course_name + ",")}
                 </h4>
               ) : (
                 <Tag>Teacher is not Assigned</Tag>
               )}
-            </div>
             </div>
           </div>
         </div>
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={
-              <p className="text-xl font-bold text-center ml-5 ">Profile</p>
+              <p className="text-base font-bold text-center ">Profile</p>
             } key="1">
               <Button className="btn-confirm"
                icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
               onClick={handleUpdate}>
-                Edit Profile
+                Edit 
               </Button>
               <div className="flex flex-row justify-between w-[50%]">
                 <div>
@@ -257,71 +309,18 @@ function TeacherView() {
                 </div> */}
               </div>
               <div className="teacher-profile mt-10">
-                <div className="personal-info">
-                  <h1
-                   className="text-xl font-bold font-jakarta text-[#344054] " 
-                 // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
-                  >Personal Information</h1>
-                  <div className="info-content">
-                    <div className="col">
-                      <div>
-                        <h3
-                        className=" font-semibold text-sm font-jakarta text-[#344054]"  
-                      //  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}
-                        >Age</h3>
-                        <span className="font-jakarta font-bold">{age}</span>
-                      </div>
-                      <div 
-                       className=" font-semibold text-sm font-jakarta text-[#344054] "  >
-                        <h3>Sex</h3>
-                        <span className="font-jakarta font-bold">{data.sex}</span>
-                      </div>
-                      <div>
-                        <h3 
-                         className=" font-semibold text-sm font-jakarta text-[#344054] "  
-                        >Phone number</h3>
-                        <span className="font-jakarta font-bold">{data.phone}</span>
-                      </div>
-                      <div>
-                        <h3 
-                         className=" font-semibold text-sm font-jakarta text-[#344054] "  
-                        >Email</h3>
-                        <span className="font-jakarta font-bold">{data.email}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="career-profile">
-                  <h1 
-                   className="text-xl font-bold font-jakarta text-[#344054] "  
-                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
-                  >Career Profile</h1>
-                  <div>
-                    <h3
-                     className=" font-semibold text-sm font-jakarta text-[#344054] "  
-                    >Working Since</h3>
-                    <span className="font-jakarta font-bold">{workTime}</span>
-                  </div>
-                  <div> 
-                    <h3 
-                    className=" font-semibold text-sm font-jakarta text-[#344054]"  
-                    >Speciality</h3>
-                    <span className="font-jakarta font-bold">Teacher</span>
-                  </div>
-                  <div>
-                    <h3 
-                    className=" font-semibold text-sm font-jakarta text-[#344054]"  
-                    >Work Expirence</h3>
-                    <span className="font-bold font-jakarta ">{expriance} year</span>
-                  </div>
-                </div> 
-              </div>
+               
+                </div>  
+              {/* </div> */}
+              <Table dataSource={teacherData} columns={teacherColumn} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-jakarta">Course</p>
+                 <p className="text-base font-bold text-center ml-5 font-jakarta">Course</p>
             } key="2">
-              <Button className="btn-confirm" onClick={handleUpdate}>
-                Edit Profile
+              <Button
+               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
+               className="btn-confirm" onClick={handleUpdate}>
+                Edit 
               </Button>
               <div className="teacher-course-list">
                 <div className="tch-cr-list">
@@ -330,8 +329,8 @@ function TeacherView() {
                 <Table dataSource={data.course} columns={columns} />
               </div>
             </Tabs.TabPane>
-            <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-jakarta ">Class</p>
+            {/* <Tabs.TabPane tab={
+                 <p className="text-base font-bold text-center ml-5 font-jakarta ">Class</p>
             } key="3">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Edit Profile
@@ -342,7 +341,7 @@ function TeacherView() {
                 </div>
                 <Table dataSource={data.class} columns={classColumns} />
               </div>
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
           </Tabs>
         </div>
       </div>
