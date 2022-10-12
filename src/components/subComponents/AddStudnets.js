@@ -11,15 +11,13 @@ import {
 } from "firebase/firestore";
 import { firestoreDb } from "../../firebase";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { Input } from "antd";
-import { useRef } from "react";
 import { Select } from "antd";
 import "../modals/courses/style.css";
 import { PlusOutlined } from "@ant-design/icons";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { addSingleClassToCourse } from "../modals/funcs";
+
 
 const { Option } = Select;
 const { Search } = Input;

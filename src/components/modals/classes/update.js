@@ -461,6 +461,7 @@ function UpdateClass() {
                   }
                   key="2"
                 >
+                  <div  className="mt-14"/>
                   <AttendanceList />
                 </Tabs.TabPane>
               </Tabs>
@@ -470,7 +471,7 @@ function UpdateClass() {
       ) : (
         <div className="flex flex-row justify-center">
           <Spin
-            tip={<p className="text-lg">Loading course...</p>}
+            tip={<p className="text-lg">Loading class...</p>}
             className="text-[#E7752B] "
             wrapperClassName="text-[#E7752B]"
           />

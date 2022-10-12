@@ -74,7 +74,7 @@ function ViewCourse() {
               alt="profile"
             />
           </div>
-          <div className="flex flex-col justify-center align-middle">
+          <div className="flex flex-col justify-center align-middle ">
             <h2 className="text-xl font-[600] font-jakarta text-[#1D2939]">
               {data.course_name}
             </h2>
@@ -85,7 +85,9 @@ function ViewCourse() {
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Assigned Teachers
             </h3>
-            <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] p-[1px] ml-2">
+            <h4 
+            className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
+            p-[1px] ml-2">
               {data.teachers.length}
             </h4>
           </div>
@@ -93,7 +95,8 @@ function ViewCourse() {
             <h3 className="text-lg font-semibold font-jakarta">
               Class per week
             </h3>
-            <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta  text-[#667085] p-[1px] ml-2">
+            <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
+              text-[#667085] p-[1px] ml-2">
               {data.schedule.length}
             </h4>
           </div>
@@ -158,6 +161,7 @@ function ViewCourse() {
             }
             key="2"
           >
+            <div className="mt-14"></div>
             <AttendanceList />
           </Tabs.TabPane>
         </Tabs>

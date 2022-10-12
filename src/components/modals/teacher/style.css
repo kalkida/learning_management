@@ -120,6 +120,9 @@
     border-radius: 5px;
     margin-right: 10px;
 }
+.h1 {
+    font-family: 'plus jakarta Sans';
+}
 
 .info-content {
     display: flex;

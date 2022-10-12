@@ -5,6 +5,8 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 import {
   collection,
   getDocs,
@@ -245,18 +247,19 @@ function ViewClass() {
       <div className="w-[100%] mt-10">
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
-            tab={
-              <p className="text-sm font-[600] text-center ml-0 font-jakarta">
-                Profile
-              </p>
-            }
+           tab={
+            <p className="text-lg font-semibold text-center ml-5 font-jakarta">
+              Profile
+            </p>
+          }
             key="1"
           >
             <Button
-              className="btn-confirm bg-[white] border-[1px] border-[#EA8848]"
+              icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
+              className="btn-confirm"
               onClick={handleUpdate}
             >
-              Edit Class
+              Edit 
             </Button>
             <div className="asssign-teacher">
               <h4
@@ -284,13 +287,14 @@ function ViewClass() {
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane
-            tab={
-              <p className="text-sm font-[600] text-center ml-0 font-jakarta">
-                Attendance
-              </p>
-            }
+           tab={
+            <p className="text-lg font-semibold text-center ml-5 font-jakarta">
+              Attendance
+            </p>
+          }
             key="2"
           >
+              <div className="mt-14"></div>
             <AttendanceList />
           </Tabs.TabPane>
         </Tabs>

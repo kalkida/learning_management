@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Form, Input, Button, Select, DatePicker, Space, Table } from "antd";
 import { addSingleTeacherToCourse } from "../modals/funcs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import {
   doc,
   setDoc,
@@ -19,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "../modals/courses/style.css";
 import "../modals/teacher/style.css";
-
+import { SearchOutlined } from "@ant-design/icons";
 const { Option } = Select;
 const { Search } = Input;
 
@@ -415,17 +417,20 @@ const CreateNewTeacher = () => {
   }
   return (
     <>
-      <div>
-        <div className="add-header">
-          <h1>Add Teacher</h1>
-          <button onClick={async () => await createNewTeacher()}>
+      <div className="bg-[#F9FAFB] h-[auto] pb-20  px-6 -mt-14">
+        <div className="add-header mb-10">
+          <h1 className="text-2xl font-bold font-jakarta text-[#344054] ">Add Teacher</h1>
+          <button 
+             className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
+          onClick={async () => await createNewTeacher()}>
             Confirm
+            <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
           </button>
         </div>
-        <div className="add-teacher">
+        <div className="add-teacher bg-[#FFF]">
           <div className="avater-img">
             <div>
-              <h2>Profile Picture</h2>
+              <h2 className="text-[#344054] pb-[6px] font-jakarta">Teacher Picture</h2>
               <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
             </div>
             <div className="file-content">
@@ -458,39 +463,41 @@ const CreateNewTeacher = () => {
 
           <div className="add-form">
             <div className="col">
-              <div>
-                <label>First Name</label>
+              <div  className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">First Name</h1>
                 <Input
                   name="first_name"
+                  className="rounded-lg"
                   onChange={(e) => handleChangeTeacher(e)}
                 />
               </div>
-              <div>
-                <label>Last Name</label>
+              <div className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">Last Name</h1>
                 <Input
                   name="last_name"
+                  className="rounded-lg"
                   onChange={(e) => handleChangeTeacher(e)}
                 />
               </div>
             </div>
             <div className="col">
-              <div>
-                <label>Phone</label>
-                <Input name="phone" onChange={(e) => handleChangeTeacher(e)} />
+              <div  className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">Phone</h1>
+                <Input name="phone"  className="rounded-lg" onChange={(e) => handleChangeTeacher(e)} />
               </div>
 
-              <div>
-                <label>Email</label>
-                <Input name="email" onChange={(e) => handleChangeTeacher(e)} />
+              <div  className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">Email</h1>
+                <Input name="email"  className="rounded-lg" onChange={(e) => handleChangeTeacher(e)} />
               </div>
             </div>
             <div className="col">
-              <div>
-                <label>Date of Birth</label>
+              <div  className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">Date of Birth</h1>
                 <DatePicker style={{ width: "100%" }} onChange={handleDob} />
               </div>
-              <div>
-                <label>Sex </label>
+              <div  className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">Sex </h1>
                 <Select
                   placeholder="Select Gender"
                   onChange={handleGender}
@@ -506,17 +513,16 @@ const CreateNewTeacher = () => {
                   ))}
                 </Select>
               </div>
-              <div>
-                <label>Working since</label>
+              <div  className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">Working since</h1>
                 <DatePicker style={{ width: "100%" }} onChange={handleWork} />
               </div>
             </div>
           </div>
         </div>
-        <div style={{ marginTop: 20 }}>
-          <div style={{ padding: 20 }}>
+          <div style={{ padding: 20  }}>
             <div className="list-header">
-              <h1 style={{ fontSize: 28 }}>Add Course </h1>
+              <h1 className=" pt-2 font-jakarta font-semibold text-xl  text-[#344054] my-5">Courses </h1>
             </div>
             <div className="list-sub">
               <div className="list-filter">
@@ -549,14 +555,20 @@ const CreateNewTeacher = () => {
               </div>
               <div className="course-search">
                 <div>
-                  <Search
+                <Input
+            style={{ width: 200 }}
+            className="mr-3 rounded-lg"
+            placeholder="Search"
+            prefix={<SearchOutlined className="site-form-item-icon" />}
+          />
+                  {/* <Search
                     placeholder="input search text"
                     allowClear
                     // onSearch={onSearch}
                     style={{
                       width: 200,
                     }}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -570,9 +582,9 @@ const CreateNewTeacher = () => {
           </div>
         </div>
         <div>
-          <div style={{ padding: 20 }}>
+          <div style={{ padding: 20 , marginTop:-20}}>
             <div className="list-header">
-              <h1 style={{ fontSize: 28 }}>Add Class </h1>
+              <h1 className=" pt-2 font-jakarta font-semibold text-xl  text-[#344054] my-5">Add Class </h1>
             </div>
             <br />
             <Table
@@ -583,7 +595,6 @@ const CreateNewTeacher = () => {
             />
           </div>
         </div>
-      </div>
     </>
   );
 };
