@@ -7,6 +7,8 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 import {
   collection,
   getDocs,
@@ -104,7 +106,7 @@ function ViewClass() {
       key: "first_name",
       render: (_, value) => {
         return (
-          <h1 className="text-[14px] font-[600] text-[#344054]">
+          <h1 className=" text-[#344054]">
             {value.first_name}
             {"  "}
             {value.last_name}
@@ -119,9 +121,7 @@ function ViewClass() {
       key: "studentId",
       render: (value) => {
         if (value) {
-          return (
-            <h1 className="text-[14px] font-[600] text-[#344054]">{value}</h1>
-          );
+          return <h1 className=" text-[#344054]">{value}</h1>;
         } else {
           return (
             <h1 className="text-[14px] font-light text-[#515f76]">No Data</h1>
@@ -138,7 +138,7 @@ function ViewClass() {
           const todays = Date.now();
 
           return (
-            <h1 className="text-[14px] font-[600] text-[#344054]">
+            <h1 className=" text-[#344054]">
               {/* {moment(JSON.parse(value)).format("mm-yy-dd")} */}
               {moment(todays).year() - moment(JSON.parse(value)).year()}
             </h1>
@@ -156,9 +156,7 @@ function ViewClass() {
       key: "sex",
       render: (value) => {
         if (value) {
-          return (
-            <h1 className="text-[14px] font-[600] text-[#344054]">{value}</h1>
-          );
+          return <h1 className=" text-[#344054]">{value}</h1>;
         } else {
           return (
             <h1 className="text-[14px] font-light text-[#515f76]">No Data</h1>
@@ -197,10 +195,17 @@ function ViewClass() {
       title: "Teacher",
       dataIndex: "teachers",
       key: "teachers",
+      width: "30%",
       render: (item, other) => {
+        console.log("teachers", other);
         return (
-          <div className="text-[14px] font-[600] text-[#344054]">
-            {item.section}
+          <div className=" text-[#344054]">
+            {other.teachers.map((teacher) => (
+              <h1>
+                {teacher.first_name}
+                {"   "} {teacher.last_name}
+              </h1>
+            ))}
           </div>
         );
       },
@@ -309,13 +314,15 @@ function ViewClass() {
       <div className="flex flex-row justify-between w-[100%] -mt-20 ">
         <div className="flex flex-row justify-center align-middle ">
           <div className="flex flex-row">
-            <h1 className="text-lg font-bold font-jakarta mr-2">Class</h1>
+            <h1 className="text-lg font-bold font-jakarta mr-2 text-[#1D2939]">
+              Class
+            </h1>
             <h2 className="text-lg font-bold font-jakarta">{data?.level}</h2>
             <h3 className="text-lg font-bold font-jakarta">{data?.section}</h3>
           </div>
         </div>
         <div className="flex flex-row">
-          <h3 className="text-lg font-semibold font-jakarta border-r-[2px] pr-2 text-[#344054]">
+          <h3 className="text-lg font-[600]  font-jakarta border-r-[2px] pr-2 text-[#344054]">
             Assigned Students
           </h3>
           <h4 className="text-lg font-semibold font-jakarta pl-2">
@@ -327,7 +334,7 @@ function ViewClass() {
         <Tabs defaultActiveKey="1" className="pb-30">
           <Tabs.TabPane
             tab={
-              <p className="text-sm font-[600] text-center ml-0 font-jakarta text-[#344054]">
+              <p className="text-sm font-[600] text-center ml-0 font-jakarta ">
                 Profile
               </p>
             }
@@ -355,7 +362,11 @@ function ViewClass() {
               <h4 className="text-lg mb-[16px] mt-[32px] font-jakarta font-[600] text-[#344054]">
                 Assigned Students
               </h4>
-              <Table dataSource={students} columns={columns} />
+              <Table
+                dataSource={students}
+                columns={columns}
+                pagination={false}
+              />
             </div>
             <div className="">
               <h4 className="text-lg mb-[16px] mt-[32px] font-jakarta font-[600] text-[#344054">
@@ -365,6 +376,7 @@ function ViewClass() {
                 loading={courseLoading}
                 dataSource={datas}
                 columns={courseColumns}
+                pagination={false}
               />
             </div>
             <div className="pb-0">
@@ -380,12 +392,13 @@ function ViewClass() {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <p className="text-sm font-[600] text-center ml-0 font-jakarta text-[#344054]">
+              <p className="text-sm font-[600] text-center ml-0 font-jakarta">
                 Attendance
               </p>
             }
             key="2"
           >
+            <div className="mt-14"></div>
             <AttendanceList />
           </Tabs.TabPane>
         </Tabs>

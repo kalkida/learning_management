@@ -14,8 +14,10 @@ import { firebaseAuth, firestoreDb } from "../../firebase";
 
 import "../modals/attendance/style.css";
 import { async } from "@firebase/util";
+import { SearchOutlined } from "@ant-design/icons";
 
-const { Search } = Input;
+
+//const { Search } = Input;
 const { Option } = Select;
 
 function AttendanceList() {
@@ -61,7 +63,7 @@ function AttendanceList() {
       dataIndex: "attendance",
       key: "sex",
       render: (_, record) => (
-        <a onClick={() => onView(record)}>{record.attendace.length}</a>
+        <a onClick={() => onView(record)}>{record.attendace?.length}</a>
       ),
     },
     {
@@ -278,8 +280,13 @@ function AttendanceList() {
 
   return (
     <>
+    <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14" >
+    <div  className="list-header mb-10">
+    <h1 className="text-2xl font-[600] font-jakarta">Attendance</h1>
+    </div>
       <div className="at-filters">
-        <div>
+        <div  >
+        
           <Select placeholder={"Select class"} onChange={handleFilterClass}>
             {classes?.map((item, i) => (
               <Option
@@ -304,14 +311,13 @@ function AttendanceList() {
           />
         </div>
         <div>
-          <Search
-            placeholder="Search "
-            allowClear
-            // onSearch={onSearch}
-            style={{
-              width: 200,
-            }}
+          <Input
+            style={{ width: 200 }}
+            className="mr-3 rounded-lg"
+            placeholder="Search"
+            prefix={<SearchOutlined className="site-form-item-icon" />}
           />
+        
         </div>
       </div>
       <div>
@@ -320,6 +326,7 @@ function AttendanceList() {
           dataSource={courseData}
           columns={columns}
         />
+      </div>
       </div>
     </>
   );

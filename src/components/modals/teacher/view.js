@@ -5,6 +5,8 @@ import { fetchSubject } from "../funcs";
 import { MailFilled } from "@ant-design/icons";
 import moment from "moment";
 import "./style.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 const { Option } = Select;
 
@@ -141,8 +143,8 @@ function TeacherView() {
   return (
     <>
       <div className="w-[100%] p-10 -mt-20">
-        <div className="flex flex-row justify-between border-b-[2px] pb-2 -mt-4">
-          <div className="flex flex-row">
+        <div className=" flex flex-row  pb-2 -mt-4">
+          <div className=" flex flex-row justify-start self-start">
             <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
               <img
                 src={data.avater ? data.avater : "img-5.jpg"}
@@ -150,7 +152,7 @@ function TeacherView() {
                 className="w-[7vw] rounded-full"
               />
             </div>
-            <div className="flex flex-col justify-center ml-2">
+            <div className="flex flex-col ml-2">
               <h2 className="text-lg font-bold font-serif">
                 {data.first_name + " " + data.last_name}
               </h2>
@@ -164,11 +166,16 @@ function TeacherView() {
               </div>
             </div>
           </div>
-          <div className=" flex flex-col justify-center -ml-20 border-l-[2px]">
-            <div className="flex flex-row">
-              <h3 className="font-bold pr-2 border-r-[1px] font-serif">Class</h3>
+          <div className=" flex-col justify-end self-end  justify-self-end ">
+          <div className="flex flex-row justify-self-end ml-[40%]">
+            <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
+              Class
+            </h3>
+            {/* <div className="flex flex-row">
+              <h3 className="font-bold pr-2 border-r-[1px] font-serif">Class</h3> */}
               {data?.class ? (
-                <h4 className="pl-2">
+                <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
+                p-[1px] ml-2">
                   {data?.class?.map(
                     (item, i) => item.level + item.section + ","
                   )}
@@ -177,10 +184,13 @@ function TeacherView() {
                 <Tag>Teacher is not Assigned</Tag>
               )}
             </div>
-            <div>
-              <h3 className="font-bold font-serif">Subject</h3>
+            <div className="flex flex-row ml-[40%] ">
+            <h3 className="text-lg font-semibold font-jakarta">
+              Subject
+            </h3>
               {data?.course ? (
-                <h4 className="pl-0">
+                <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
+                text-[#667085] p-[1px] ml-2">
                   {data?.course?.map((item, i) => item.course_name + ",")}
                 </h4>
               ) : (
@@ -194,7 +204,9 @@ function TeacherView() {
             <Tabs.TabPane tab={
               <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
             } key="1">
-              <Button className="btn-confirm" onClick={handleUpdate}>
+              <Button className="btn-confirm"
+               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
+              onClick={handleUpdate}>
                 Edit Profile
               </Button>
               <div className="flex flex-row justify-between w-[70%]">
@@ -212,21 +224,11 @@ function TeacherView() {
                   <h1 
                    className="text-5xl font-bold font-serif leading-none mb-4"
                 //  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
-                  >{data.class.length}</h1>
+                  >{data.course.length}</h1>
                   <span
                    className="text-sm font-medium font-serif"
                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
-                   >Classes</span>
-                </div>
-                <div>
-                  <h1 
-                   className="text-5xl font-bold font-serif leading-none mb-4"
-                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
-                  >{data.course.length}</h1>
-                  <span
-                   className="text-sm font-medium font-serif" 
-                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
-                  >Course</span>
+                   >Courses</span>
                 </div>
                 <div>
                   <h1 
@@ -238,6 +240,16 @@ function TeacherView() {
                   //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                   >Classes/Week</span>
                 </div>
+                {/* <div>
+                  <h1 
+                   className="text-5xl font-bold font-serif leading-none mb-4"
+                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
+                  >{weekClass}</h1>
+                  <span
+                   className="text-sm font-medium font-serif" 
+                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
+                  >Classes/Week</span>
+                </div> */}
               </div>
               <div className="teacher-profile">
                 <div className="personal-info">

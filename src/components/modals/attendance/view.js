@@ -4,8 +4,7 @@ import { useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { async } from "@firebase/util";
-
-const { Search } = Input;
+import { SearchOutlined } from "@ant-design/icons";
 
 function AttendanceView() {
   const { state } = useLocation();
@@ -54,8 +53,17 @@ function AttendanceView() {
       dataIndex: "studentId",
       key: "studentId",
       render: (item, record) => {
-        return <Tag color="#E7752B">{item}</Tag>;
+        return <p>{item}</p>;
       },
+    },
+    
+    {
+      title: "Sex",
+      dataIndex: "class",
+      key: "name",
+      render: (_, record) => (
+        <a>{record.sex}</a>
+      ),
     },
 
     {
@@ -118,26 +126,28 @@ function AttendanceView() {
 
   return (
     <>
+      <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14" >
+   
       <h1 className="view-header">
-        {data.class.level + data.class.section} Attendance
+      Attendance {data.class.level + data.class.section} 
       </h1>
+      <div  className="list-header mb-5" />
       <div className="at-filters">
         <div>
           <DatePicker onChange={onFilter} placeholder={"Selecet Date"} />
         </div>
         <div>
-          <Search
-            placeholder="Search "
-            allowClear
-            // onSearch={onSearch}
-            style={{
-              width: 200,
-            }}
+        <Input
+            style={{ width: 200 }}
+            className="mr-3 rounded-lg"
+            placeholder="Search"
+            prefix={<SearchOutlined className="site-form-item-icon" />}
           />
         </div>
       </div>
       <div>
         <Table loading={loading} dataSource={Students} columns={columns} />
+      </div>
       </div>
     </>
   );

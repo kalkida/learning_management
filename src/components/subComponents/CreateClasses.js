@@ -373,7 +373,7 @@ const CreateClasses = () => {
             className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
             onClick={() => createNewClass()}
           >
-            Submit
+            Confirm
             <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
           </Button>
         </div>
