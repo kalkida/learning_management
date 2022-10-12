@@ -70,7 +70,7 @@ function AttendanceList() {
       key: "sex",
       render: (_, record) => (
         <a onClick={() => onView(record)}>
-          {record.class.student.length - record.attendace.length}
+          {record.class.student?.length - record.attendace?.length}
         </a>
       ),
     },

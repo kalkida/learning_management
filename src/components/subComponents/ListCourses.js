@@ -281,7 +281,11 @@ export default function ListCourses() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <div className="text-[#344054]">{item.level}</div>;
+        if (item.level) {
+          return <div className="text-[#344054]">{item.level}</div>;
+        } else {
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
+        }
       },
     },
     {
@@ -289,7 +293,11 @@ export default function ListCourses() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <div className="text-[#344054]">{item.section}</div>;
+        if (item.level) {
+          return <div className="text-[#344054]">{item.section}</div>;
+        } else {
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
+        }
       },
     },
 

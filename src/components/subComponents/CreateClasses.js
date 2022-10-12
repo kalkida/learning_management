@@ -18,6 +18,10 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "../modals/courses/style.css";
+import {
+  addSingleClassToCourse,
+  addSingleClassToCourses,
+} from "../modals/funcs";
 
 const { Option } = Select;
 
@@ -36,6 +40,7 @@ const CreateClasses = () => {
   const [teachers, setTeachers] = useState([]);
   const [classSelected, setClassSelected] = useState(true);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeysCourses, setSelectedRowKeysCourse] = useState([]);
   const [newClass, setNewClass] = useState({
     level: "",
     student: [],
@@ -43,6 +48,20 @@ const CreateClasses = () => {
     section: "",
     school_id: uid.school,
   });
+  const [updateCourse, setUpdateCourse] = useState({});
+
+  const courseColumn = [
+    {
+      title: <p className="font-jakarta text-[#344054] font-[600]">Course</p>,
+      dataIndex: "course_name",
+      key: "course_name",
+      render: (text, data) => {
+        return (
+          <p className="text-[14px] font-jakarta text-[#344054]">{text}</p>
+        );
+      },
+    },
+  ];
 
   const columns = [
     {
@@ -111,6 +130,49 @@ const CreateClasses = () => {
       setLoading(false);
     }, 2000);
   };
+  const onSelectChanges = (newSelectedRowKeys) => {
+    setSelectedRowKeysCourse(newSelectedRowKeys);
+    setNewClass({ ...newClass, course: selectedRowKeysCourses });
+  };
+  const rowSelections = {
+    selectedRowKeysCourses,
+    onChange: onSelectChanges,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+        key: "odd",
+        text: "Select Odd Row",
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return false;
+            }
+
+            return true;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+      {
+        key: "even",
+        text: "Select Even Row",
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return true;
+            }
+
+            return false;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+    ],
+  };
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -165,9 +227,17 @@ const CreateClasses = () => {
     );
     const checkIsExist = (await getDocs(q)).empty;
     if (checkIsExist) {
-      setDoc(doc(firestoreDb, "class", uuid()), newClass)
+      var uids = uuid();
+      setDoc(doc(firestoreDb, "class", uids), {
+        ...newClass,
+        course: selectedRowKeysCourses,
+      })
         .then((_) => {
           message.success("Class Created");
+          selectedRowKeysCourses.map((item) => {
+            addSingleClassToCourses(item, uids);
+          });
+
           navigate("/list-Classes");
         })
         .catch((error) => console.log(error));
@@ -187,7 +257,9 @@ const CreateClasses = () => {
   };
 
   const getData = async (data) => {
-    data.class = await getClassData(data.class);
+    if (data.class !== "") {
+      data.class = await getClassData(data.class);
+    }
     data.subject = await getSubjectData(data.subject);
     return data;
   };
@@ -236,10 +308,10 @@ const CreateClasses = () => {
     var querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-      console.log("this is me", datas);
-      if (datas.course_name.includes(value)) {
+      if (datas.course_name.includes(value) || datas.class == "") {
         getData(datas).then((response) => {
           var newDAtas = response;
+          console.log(newDAtas);
           newDAtas.key = doc.id;
           variables.push(newDAtas);
         });
@@ -259,17 +331,8 @@ const CreateClasses = () => {
     setNewClass({ ...newClass, [e.target.name]: e.target.value });
     setClassSelected(true);
   };
-  const handleCourseSchedule = (e) => {
-    var coursees = coursesData.filter((c) => c.course_id === e);
-    setSelectedCourseForSchedule(coursees[0]);
-  };
 
   const handleStudent = (value) => {
-    console.log(value);
-    // value.map((item, i) => {
-    //   var newItem = JSON.parse(item);
-    //   value[i] = newItem.key;
-    // });
     setNewClass({ ...newClass, homeRoomTeacher: value });
   };
 
@@ -368,105 +431,20 @@ const CreateClasses = () => {
           </div>
         </div>
         <h4 className=" pt-2 font-jakarta font-semibold text-xl  text-[#344054] my-5">
-          Schedule
+          Courses
         </h4>
         <div className="">
-          <div className="pb-20 border-[2px] rounded-lg bg-[white] p-4">
-            <Select
-              defaultValue="Course"
-              className="border-[1px] w-[200px] mb-[24px] rounded-lg outline-none "
-              onChange={(e) => handleCourseSchedule(e)}
-            >
-              {coursesData.map((item, i) => (
-                <Option key={i} value={item.course_id} lable={item.course_name}>
-                  {item.course_name}
-                </Option>
-              ))}
-            </Select>
-            <div className="flex flex-row justify-between ">
-              <div className="border-[2px] w-[100%] p-2 text-left rounded-l-lg border-r-[0px] border-[#F2F4F7]">
-                <p> Period</p>
-              </div>
-              <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-left border-r-[0px] rounded-none border-[#F2F4F7]">
-                <p> Start time</p>
-              </div>
-
-              <div className="border-[2px] w-[100%] p-2 text-left rounded-l-none border-l-[0px] rounded-lg border-[#F2F4F7]">
-                <p> End time</p>
-              </div>
-            </div>
-            {selectedCourseForSchedule?.schedule?.map((item, i) => (
-              <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
-                <Select
-                  style={{ width: "33%" }}
-                  className="rounded-lg border-[0px]"
-                  placeholder="First Select Days"
-                  // onChange={(e) => handleScheduler(e, i)}
-                  defaultValue={item.day}
-                >
-                  {days.map((item, index) => (
-                    <Option key={index} value={item} label={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-                <TimePicker.RangePicker
-                  style={{ width: "67%" }}
-                  className="rounded-lg border-[0px]"
-                  format={"hh:mm"}
-                  use12Hours
-                  defaultValue={
-                    item.time.length
-                      ? [
-                          moment(JSON.parse(item.time[0])),
-                          moment(JSON.parse(item.time[1])),
-                        ]
-                      : []
-                  }
-                  // onChange={(e) => handleSchedulerTime(e, i)}
-                />
-              </div>
-            ))}
-
-            {input.map((item, i) => (
-              <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
-                <Select
-                  style={{ width: "33%" }}
-                  placeholder="First Select Days"
-                  // onChange={(e) => handleNewScheduler(e, i)}
-                >
-                  {days.map((item, index) => (
-                    <Option key={index} value={item} label={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-                <TimePicker.RangePicker
-                  status="warning"
-                  style={{ width: "67%" }}
-                  className="rounded-lg border-[0px] active:border-[0px] outline-none selection:border-[#E7752B]"
-                  format={"hh:mm"}
-                  use12Hours
-                  // onChange={(e) => handleNewScheduler(e, i)}
-                />
-              </div>
-            ))}
-            <Button
-              style={{ float: "right", marginBottom: 20, marginTop: 20 }}
-              onClick={() => {
-                setInput([...input, 0]);
-                // setUpdateCourse({
-                //   ...updateCourse,
-                //   schedule: [...updateCourse.schedule, { day: "", time: [] }],
-                // });
-              }}
-            >
-              Add New
-            </Button>
+          <div className="pb-6 border-[2px] rounded-lg bg-[white] p-4">
+            <Table
+              loading={loading}
+              rowSelection={rowSelections}
+              dataSource={coursesData}
+              columns={courseColumn}
+            />
           </div>
         </div>
         <div className="list-header">
-          <h1 className="text-2xl font-semibold" style={{ marginTop: 20 }}>
+          <h1 className="text-xl font-semibold" style={{ marginTop: 20 }}>
             Add Student
           </h1>
         </div>

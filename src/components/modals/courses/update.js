@@ -318,7 +318,6 @@ function UpdateCourse() {
                   Finalize Review
                   <CheckOutlined className="mb-2" />
                 </Button>
-
               </div>
             </div>
           </div>
@@ -345,7 +344,7 @@ function UpdateCourse() {
                 <div className="flex flex-col mt-[24px]">
                   <span
                     className="text-sm font-jakarta font-[500"
-                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
+                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
                   >
                     Subject
                   </span>
@@ -485,9 +484,9 @@ function UpdateCourse() {
                       defaultValue={
                         item.time.length
                           ? [
-                            moment(JSON.parse(item.time[0])),
-                            moment(JSON.parse(item.time[1])),
-                          ]
+                              moment(JSON.parse(item.time[0])),
+                              moment(JSON.parse(item.time[1])),
+                            ]
                           : []
                       }
                       onChange={(e) => handleSchedulerTime(e, i)}

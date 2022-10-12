@@ -73,19 +73,33 @@ const removeSingleCourseFromClass = async (classId, courseId) => {
 
 // Class Is Created
 const addSingleClassToCourse = async (courseId, classId) => {
-  const classRef = doc(firestoreDb, "course", courseId);
+  const classRef = doc(firestoreDb, "courses", courseId);
   await updateDoc(classRef, {
     course: arrayUnion(classId),
   });
 };
+const addSingleClassToCourses = async (courseId, classId) => {
+  const classRef = doc(firestoreDb, "courses", courseId);
+  await updateDoc(classRef, {
+    class: classId,
+    // course_name:
+  });
+};
 const removeSingleClassFromCourse = async (courseId, classId) => {
-  const classRef = doc(firestoreDb, "course", courseId);
+  const classRef = doc(firestoreDb, "courses", courseId);
   await updateDoc(classRef, {
     course: arrayRemove(classId),
   });
 };
 
 // Course Is
+const addClassIDToCourse = async (classId, courseId) => {
+  const teacherRef = doc(firestoreDb, "courses", courseId);
+
+  await updateDoc(teacherRef, {
+    class: classId,
+  });
+};
 
 // Add Couse To Teachers
 const addSingleCourseToTeacher = async (courseId, teacherId) => {
@@ -190,6 +204,7 @@ export {
   addSingleTeacherToCourse,
   removeTeacherClassfromCourse,
   addSingleCourseToClass,
+  addClassIDToCourse,
   removeSingleCourseFromClass,
   addSingleClassToCourse,
   removeSingleClassFromCourse,
@@ -198,6 +213,7 @@ export {
   addSingleClassToTeacher,
   removeSingleClassToTeacher,
   createParentwhithStudent,
+  addSingleClassToCourses,
   fetchParents,
   fetchSubject,
   fetchClass,
