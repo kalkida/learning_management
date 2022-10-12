@@ -439,7 +439,7 @@ function TeacherUpdate() {
               />
             </div>
             <div className="flex flex-col ml-2">
-              <h2 className="text-lg font-bold font-serif">
+              <h2 className="text-lg font-bold font-jakarta">
                 {data.first_name + " " + data.last_name}
               </h2>
               <div className="flex flex-row align-bottom">
@@ -447,7 +447,7 @@ function TeacherUpdate() {
                   <MailFilled className="text-[#E7752B]" />
                 </div>
                 <div>
-                  <h3 className="text-md text-[#E7752B] p-1 font-serif">Contact</h3>
+                  <h3 className="text-md text-[#E7752B] p-1 font-jakarta">Contact</h3>
                 </div>
               </div>
             </div>
@@ -533,7 +533,7 @@ function TeacherUpdate() {
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
+                 <p className="text-xl font-bold text-center ml-5 font-jakarta">Profile</p>
             } key="1">
               <Button   className="btn-confirm " onClick={handleUpdate}>
                 Finalize review
@@ -541,7 +541,7 @@ function TeacherUpdate() {
               </Button>
 
               <h1
-                className="text-xl font-bold font-serif mt-10 "  
+                className="text-xl font-bold font-jakarta mt-10 mb-5 "  
                 >Edit Profile</h1>
               <div className="add-teacher bg-[#FFF] ">
                
@@ -549,7 +549,7 @@ function TeacherUpdate() {
                   <div className="avater-img">
                     <div>
                       <h2
-                      className="text-base font-bold font-serif"  
+                      className="text-base font-bold font-jakarta"  
                      // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}
                       >Teacher Picture</h2>
                       <img
@@ -560,10 +560,10 @@ function TeacherUpdate() {
                             ? data.avater
                             : "img-5.jpg"
                         }
-                      />
+                      /> 
                     </div>
                     <div className="file-content">
-                      <span>
+                      <span className="font-jakarta text-sm">
                         This will be displayed to you when you view this profile
                       </span>
 
@@ -690,7 +690,7 @@ function TeacherUpdate() {
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-serif">Course</p>
+                 <p className="text-xl font-bold text-center ml-5 font-jakarta">Course</p>
             } key="2">
               <Button 
                icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
@@ -700,7 +700,7 @@ function TeacherUpdate() {
 
               <div>
                 <div className="teacher-course-list">
-                  <h1  className="text-xl font-bold font-serif mb-6" >Add/Remove Courses</h1>
+                  <h1  className="text-xl font-bold font-jakarta mb-6" >Add/Remove Courses</h1>
                   <div className="tch-cr-list">
                     <div>
                       <Select
@@ -751,7 +751,7 @@ function TeacherUpdate() {
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-serif">Class</p>
+                 <p className="text-xl font-bold text-center ml-5 font-jakarta">Class</p>
             } key="3">
               <Button 
                 icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
@@ -761,7 +761,7 @@ function TeacherUpdate() {
 
               <div>
                 <div className="teacher-course-list">
-                  <h1  className="text-xl font-bold font-serif mb-10" >Add/Remove Class</h1>
+                  <h1  className="text-xl font-bold font-jakarta mb-10" >Add/Remove Class</h1>
 
                   <Table
                     rowSelection={rowSelectionClass}
