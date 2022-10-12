@@ -298,21 +298,34 @@ export default function AddTeacher() {
     }
   };
 
+  const edit = () => {
+    navigate("/add-teacher");
+  };
+
+
   const columns = [
     {
-      title: "First Name",
+      title: <p className="font-jakarta text-[#344054] font-[600]">First Name </p>,
       dataIndex: "first_name",
       key: "first_name",
-      render: (text) => <a>{text}</a>,
+      render: (text, data) => {
+        return (
+          <p className="text-[14px] font-jakarta text-[#344054]">{text}</p>
+        );
+      },
     },
     {
-      title: "Last Name",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Last Name </p>,
       dataIndex: "last_name",
       key: "last_name",
-      render: (text) => <a>{text}</a>,
+      render: (text, data) => {
+        return (
+          <p className="text-[14px] font-jakarta text-[#344054]">{text}</p>
+        );
+      },
     },
     {
-      title: "Course",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Course </p>,
       key: "course",
       dataIndex: "course",
       render: (value) => {
@@ -320,7 +333,7 @@ export default function AddTeacher() {
           return (
             <>
               {value.map((item) => (
-                <h1>{item.course_name}</h1>
+                 <div className="text-[#344054]">{item.course_name}</div>
               ))}
             </>
           );
@@ -330,13 +343,13 @@ export default function AddTeacher() {
       },
     },
     {
-      title: "Phone Number",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Phone Number </p>,
       key: "phone",
       dataIndex: "phone",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Class",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Class </p>,
       dataIndex: "class",
       key: "class",
 
@@ -345,7 +358,8 @@ export default function AddTeacher() {
           return (
             <>
               {value?.map((item, i) => (
-                <h1>{item.level + item.section}</h1>
+                <div className="text-[#344054]">{item.level + item.section}</div>
+
               ))}
             </>
           );
@@ -373,7 +387,7 @@ export default function AddTeacher() {
           >
             Update
           </a>
-        </Space>
+          </Space>
       ),
     },
   ];
@@ -385,19 +399,16 @@ export default function AddTeacher() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh]">
-      <div className="list-header">
-        <h1
-          className="text-2xl mb-2 font-bold font-serif"
-          //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
-        >
-          List Of Teachers
-        </h1>
+    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-[10vh]">
+      <div className="list-header mb-10">
+      <h1 className="text-2xl font-[600] font-jakarta">List Of Teachers</h1>
       </div>
       <div className="list-sub">
-        <div className="list-filter">
+        <div className="flex flex-row justify-between w-[23%]">
           <Select
+           className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
             placeholder="Course"
+            bordered={false}
             style={{ width: 120 }}
             onChange={handleFilterSubject}
           >
@@ -408,8 +419,10 @@ export default function AddTeacher() {
             ))}
           </Select>
           <Select
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
             style={{ width: 120 }}
             placeholder="Class"
+            bordered={false}
             onChange={handleFilterClass}
           >
             {classes?.map((item, i) => (
@@ -425,31 +438,45 @@ export default function AddTeacher() {
         </div>
         <div className="course-search">
           <div>
-            <Search
-              placeholder="input search text"
-              allowClear
-              // onSearch={onSearch}
-              style={{
-                width: 200,
-              }}
-            />
+          <Input
+            style={{ width: 200 }}
+            className="mr-3 rounded-lg"
+            placeholder="Search"
+            //onSearch={onSearch}
+            prefix={<SearchOutlined className="site-form-item-icon" />}
+          />
+           
           </div>
           {/* add padding  */}
-          <div>
-            <Link to={"/add-teacher"}>
+          <Button
+            onClick={() => edit()}
+            className="hover:border-[#E7752B] hover:border-[2px]"
+            style={{
+              padding: 10,
+              borderColor: "#E7752B",
+              borderWidth: 2,
+              color: "#E7752B",
+              borderRadius: 5,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "white",
+            }}
+          >
+            <PlusOutlined />
+            Add Teacher
+          </Button>
+            {/* <Link to={"/add-teacher"}>
               <PlusOutlined />
               Add teacher
-            </Link>
-          </div>
+            </Link> */}
+      
         </div>
       </div>
 
-      <Table
-        style={{ marginTop: 20 }}
-        loading={tableLoading}
-        columns={columns}
-        dataSource={datas}
-      />
+      <br />
+
+      <Table  loading={tableLoading}columns={columns} dataSource={datas} />
     </div>
   );
 }

@@ -194,8 +194,7 @@ export default function AddStudnets() {
       <div className="list-header">
         <h1
         className="text-2xl mb-2 font-bold font-serif"    
-        // className="text-[24px] font-bold"  
-        //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
+     
         >List Of Students</h1>
       </div>
       <div className="list-sub">

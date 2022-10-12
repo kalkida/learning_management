@@ -9,11 +9,17 @@ import {
   DatePicker,
   Row,
   Col,
+  Tag,
   message,
   Tabs,
   Table,
 } from "antd";
 import moment from "moment";
+import { MailFilled } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 import {
   doc,
   setDoc,
@@ -27,6 +33,7 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
 import "./style.css";
+import { CheckOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -422,7 +429,63 @@ function TeacherUpdate() {
     <>
       <div>
         <div className="profile-header">
-          <div className="teacher-avater">
+        <div className=" flex flex-row  pb-2 -mt-4">
+          <div className=" flex flex-row justify-start self-start">
+            <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
+              <img
+                src={data.avater ? data.avater : "img-5.jpg"}
+                alt="profile"
+                className="w-[7vw] rounded-full"
+              />
+            </div>
+            <div className="flex flex-col ml-2">
+              <h2 className="text-lg font-bold font-serif">
+                {data.first_name + " " + data.last_name}
+              </h2>
+              <div className="flex flex-row align-bottom">
+                <div>
+                  <MailFilled className="text-[#E7752B]" />
+                </div>
+                <div>
+                  <h3 className="text-md text-[#E7752B] p-1 font-serif">Contact</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className=" flex-col justify-end self-end  justify-self-end ">
+          <div className="flex flex-row justify-self-end ml-[40%]">
+            <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
+              Class
+            </h3>
+            {/* <div className="flex flex-row">
+              <h3 className="font-bold pr-2 border-r-[1px] font-serif">Class</h3> */}
+              {data?.class ? (
+                <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
+                p-[1px] ml-2">
+                  {data?.class?.map(
+                    (item, i) => item.level + item.section + ","
+                  )}
+                </h4>
+              ) : (
+                <Tag>Teacher is not Assigned</Tag>
+              )}
+            </div>
+            <div className="flex flex-row ml-[40%] ">
+            <h3 className="text-lg font-semibold font-jakarta">
+              Subject
+            </h3>
+              {data?.course ? (
+                <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
+                text-[#667085] p-[1px] ml-2">
+                  {data?.course?.map((item, i) => item.course_name + ",")}
+                </h4>
+              ) : (
+                <Tag>Teacher is not Assigned</Tag>
+              )}
+            </div>
+          </div>
+        </div>
+          {/* <div className="teacher-avater">
             <img
               src={updateTeacher.avater ? updateTeacher.avater : "img-5.jpg"}
               alt="profile"
@@ -453,28 +516,42 @@ function TeacherUpdate() {
               <h4  
                className="text-sm font-serif" 
               >{data.course?.map((item, i) => item.course_name + ",")}</h4>
-            </div>
-          </div>
+            </div> */}
+            {/* <div className="flex flex-row mt-4 justify-center ">
+                <Button
+                  className=" bg-[#E7752B] text-white items-center rounded-lg "
+                  onClick={handleUpdate}
+                >
+                  Finalize Review
+                  <CheckOutlined className="mb-2" />
+                </Button>
+
+              </div> */}
+
+          {/* </div> */}
         </div>
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={
                  <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
             } key="1">
-              <Button className="btn-confirm" onClick={handleUpdate}>
-                Confirm
+              <Button   className="btn-confirm " onClick={handleUpdate}>
+                Finalize review
+                <CheckOutlined className="mb-10" />
               </Button>
-              <div className="add-teacher">
-                <h1
-                className="text-xl font-bold font-serif"  
+
+              <h1
+                className="text-xl font-bold font-serif mt-10 "  
                 >Edit Profile</h1>
+              <div className="add-teacher bg-[#FFF] ">
+               
                 <div>
                   <div className="avater-img">
                     <div>
                       <h2
                       className="text-base font-bold font-serif"  
                      // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}
-                      >Profile Picture</h2>
+                      >Teacher Picture</h2>
                       <img
                         src={
                           file
@@ -515,9 +592,9 @@ function TeacherUpdate() {
                   </div>
                   <div className="add-form">
                     <div className="col">
-                      <div>
+                      <div className="py-2">
                         <label
-                         className="text-sm  font-serif" 
+                      className="text-[#344054] pb-[6px] font-jakarta"
                         >First Name</label>
                         <Input
                           defaultValue={updateTeacher.first_name}
@@ -525,9 +602,9 @@ function TeacherUpdate() {
                           onChange={(e) => handleChangeTeacher(e)}
                         />
                       </div>
-                      <div>
+                      <div className="py-2">
                         <label
-                         className="text-sm font-serif" 
+                          className="text-[#344054] pb-[6px] font-jakarta"
                         >Last Name</label>
                         <Input
                           defaultValue={updateTeacher.last_name}
@@ -537,9 +614,9 @@ function TeacherUpdate() {
                       </div>
                     </div>
                     <div className="col">
-                      <div>
+                      <div className="py-2">
                         <label
-                         className="text-sm  font-serif" 
+                          className="text-[#344054] pb-[6px] font-jakarta"
                         >Phone</label>
                         <Input
                           defaultValue={updateTeacher.phone}
@@ -547,9 +624,9 @@ function TeacherUpdate() {
                           onChange={(e) => handleChangeTeacher(e)}
                         />
                       </div>
-                      <div>
+                      <div className="py-2">
                         <label
-                         className="text-sm font-serif" 
+                          className="text-[#344054] pb-[6px] font-jakarta" 
                         >Email</label>
                         <Input
                           defaultValue={updateTeacher.email}
@@ -559,9 +636,9 @@ function TeacherUpdate() {
                       </div>
                     </div>
                     <div className="col">
-                      <div>
+                      <div className="py-2">
                         <label
-                         className="text-sm  font-serif" 
+                          className="text-[#344054] pb-[6px] font-jakarta" 
                         >Date Of Birth</label>
                         <DatePicker
                           style={{ width: "100%" }}
@@ -573,9 +650,9 @@ function TeacherUpdate() {
                           }
                         />
                       </div>
-                      <div>
+                      <div className="py-2">
                         <label
-                         className="text-sm font-serif" 
+                          className="text-[#344054] pb-[6px] font-jakarta" 
                         >Sex</label>
                         <Select
                           defaultValue={updateTeacher.sex}
@@ -593,9 +670,9 @@ function TeacherUpdate() {
                           ))}
                         </Select>
                       </div>
-                      <div>
+                      <div className="py-2">
                         <label 
-                         className="text-sm font-serif" 
+                          className="text-[#344054] pb-[6px] font-jakarta" 
                         >Working Since</label>
                         <DatePicker
                           style={{ width: "100%" }}
@@ -615,8 +692,10 @@ function TeacherUpdate() {
             <Tabs.TabPane tab={
                  <p className="text-xl font-bold text-center ml-5 font-serif">Course</p>
             } key="2">
-              <Button className="btn-confirm" onClick={handleUpdate}>
-                Confirm
+              <Button 
+               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
+              className="btn-confirm" onClick={handleUpdate}>
+                Edit
               </Button>
 
               <div>
@@ -646,14 +725,21 @@ function TeacherUpdate() {
                       </Select>
                     </div>
                     <div>
-                      <Search
+                    <Input
+            style={{ width: 200 }}
+            className="mr-3 rounded-lg"
+            placeholder="Search"
+            //onSearch={onSearch}
+            prefix={<SearchOutlined className="site-form-item-icon" />}
+          />
+                      {/* <Search
                         placeholder="input search text"
                         allowClear
                         // onSearch={onSearch}
                         style={{
                           width: 200,
                         }}
-                      />
+                      /> */}
                     </div>
                   </div>
                   <Table
@@ -667,8 +753,10 @@ function TeacherUpdate() {
             <Tabs.TabPane tab={
                  <p className="text-xl font-bold text-center ml-5 font-serif">Class</p>
             } key="3">
-              <Button className="btn-confirm" onClick={handleUpdate}>
-                Confirm
+              <Button 
+                icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
+              className="btn-confirm" onClick={handleUpdate}>
+                Edit
               </Button>
 
               <div>

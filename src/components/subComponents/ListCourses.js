@@ -24,6 +24,7 @@ import { Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import "../modals/courses/style.css";
 
+
 const { Option } = Select;
 
 export default function ListCourses() {
@@ -408,13 +409,20 @@ export default function ListCourses() {
         </div>
         <div className="course-search">
           <div>
-            <Search
+          <Input
+            style={{ width: 200 }}
+            className="mr-3 rounded-lg"
+            placeholder="Search"
+            onSearch={onSearch}
+            prefix={<SearchOutlined className="site-form-item-icon" />}
+          />
+            {/* <Search
               placeholder="input search text"
               bordered={true}
               enterButton={false}
               suffix={null}
               onSearch={onSearch}
-            />
+            /> */}
           </div>
           <Button
             onClick={() => edit()}
