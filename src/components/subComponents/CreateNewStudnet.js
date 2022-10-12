@@ -13,6 +13,8 @@ import {
   arrayUnion,
   updateDoc,
 } from "firebase/firestore";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +25,7 @@ import PhoneInput from "react-phone-number-input";
 import "../../css/teacher.css";
 import "../modals/courses/style.css";
 import "../modals/teacher/style.css";
+import Icon from "react-eva-icons";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -214,13 +217,17 @@ const CreateNewStudnet = () => {
     getClass();
   }, []);
   return (
-    <div className="">
+    <div className="bg-[#F9FAFB] h-[100vh] p-4 -mt-14">
+      <div className="add-header mb-10 items-center">
+        < h1 className="text-[1.5rem] font-jakarta" > Add Student</h1 >
+        <button onClick={async () => await createNewStudent()}>
+          <FontAwesomeIcon className="mr-2" icon={faCheck} />Confirm
+        </button>
+      </div >
       <div className="add-teacher">
-        <h1 className="text-[1.5rem] font-bold ">Add Students</h1>
-
         <div className="avater-img">
           <div>
-            <h2>Profile Picture</h2>
+            <h2>Student Picture</h2>
             <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
           </div>
           <div className="file-content">
@@ -255,7 +262,7 @@ const CreateNewStudnet = () => {
           <div className="flex flex-col w-[40%] mr-10">
             <div className="py-4">
               <label>First Name</label>
-              <Input name="first_name" onChange={(e) => handleStudent(e)} />
+              <Input name="first_name" placeholder="Eneter First Name" onChange={(e) => handleStudent(e)} />
             </div>
 
             <div>
@@ -279,16 +286,12 @@ const CreateNewStudnet = () => {
               <label>Date of Birth</label>
               <DatePicker style={{ width: "100%" }} onChange={handleDob} />
             </div>
-            <div className="add-header">
-              <button onClick={async () => await createNewStudent()}>
-                Submit
-              </button>
-            </div>
+
           </div>
           <div className="flex flex-col w-[40%]  mr-10">
             <div className="py-4">
               <label>Last Name</label>
-              <Input name="last_name" onChange={(e) => handleStudent(e)} />
+              <Input name="last_name" placeholder="Enter Last Name" onChange={(e) => handleStudent(e)} />
             </div>
             <div>
               <label>Sex </label>
@@ -309,7 +312,7 @@ const CreateNewStudnet = () => {
             </div>
             <div className="py-4">
               <label>Email</label>
-              <Input name="email" onChange={(e) => handleStudent(e)} />
+              <Input name="email" placeholder="Enter Email Address" onChange={(e) => handleStudent(e)} />
             </div>
           </div>
           <div className="flex flex-col w-[40%] mr-10">
@@ -338,9 +341,9 @@ const CreateNewStudnet = () => {
             </div>
             <div>
               <label>Student Id</label>
-              <Input name="studentId" onChange={(e) => handleStudent(e)} />
+              <Input name="studentId" placeholder="Enter Student Id" onChange={(e) => handleStudent(e)} />
             </div>
-            <div>
+            {/* <div>
               <Button
                 className="float-right -bottom-[5.5vh] border-[2px] border-[#E7752B] text-[#E7752B] rounded-lg flex flex-row  "
                 onClick={handleCancle}
@@ -348,14 +351,14 @@ const CreateNewStudnet = () => {
                 <CloseCircleFilled className="mt-[1px]" />
                 Cancel
               </Button>
-            </div>
+            </div> */}
           </div>
           <div></div>
         </div>
       </div>
 
       <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}></div>
-    </div>
+    </div >
   );
 };
 

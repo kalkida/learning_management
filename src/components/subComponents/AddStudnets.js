@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Tag } from "antd";
+import { Space, Table, Button } from "antd";
 import { useSelector } from "react-redux";
 import {
   collection,
@@ -19,6 +19,7 @@ import "../modals/courses/style.css";
 import { PlusOutlined } from "@ant-design/icons";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { addSingleClassToCourse } from "../modals/funcs";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -118,13 +119,13 @@ export default function AddStudnets() {
 
   const columns = [
     {
-      title: "FirstName",
+      title: <p className="font-jakarta text-[#344054] font-[600]">FirstName</p>,
       dataIndex: "first_name",
       key: "first_name",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Guardian Phone Number",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Guardian Phone Number</p>,
       key: "phone",
       dataIndex: "phone",
       render: (value) => {
@@ -143,18 +144,18 @@ export default function AddStudnets() {
       },
     },
     {
-      title: "Email",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Email</p>,
       dataIndex: "email",
       key: "email",
     },
     {
-      title: "Class",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Class</p>,
       dataIndex: "class",
       key: "class",
       render: (item) => {
         return (
           <h1>
-             {item?.level}
+            {item?.level}
             {item?.section}
           </h1>
         );
@@ -162,7 +163,7 @@ export default function AddStudnets() {
     },
 
     {
-      title: "Action",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Action</p>,
       key: "action",
       width: "10%",
       render: (_, record) => (
@@ -184,19 +185,21 @@ export default function AddStudnets() {
     },
   ];
 
+  const add = () => {
+    navigate("/add-student");
+  };
+
   useEffect(() => {
     getStudents();
     getClass();
   }, [updateComplete]);
 
   return (
-    <div>
-      <div className="list-header">
+    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-14">
+      <div className="list-header mb-10">
         <h1
-        className="text-2xl mb-2 font-bold font-serif"    
-        // className="text-[24px] font-bold"  
-        //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
-        >List Of Students</h1>
+          className="text-2xl  font-[600] font-jakarta">
+          List Of Students</h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">
@@ -227,22 +230,29 @@ export default function AddStudnets() {
           <div>
             <Search
               placeholder="input search text"
-              allowClear
-              // onSearch={onSearch}
-              style={{
-                width: 200,
-              }}
+              bordered={true}
+            // onSearch={onSearch}
+
             />
           </div>
-          <Link
-            className="flex flex-col justify-center align-middle  h-8 w-[10vw] hover:text-[#E77528] border-[#E7752B] border-[2px] rounded-sm"
-            to={"/add-student"}
+          <Button
+            onClick={() => add()}
+            className="hover:border-[#E7752B] hover:border-[2px]"
+            style={{
+              padding: 10,
+              borderColor: "#E7752B",
+              borderWidth: 2,
+              color: "#E7752B",
+              borderRadius: 5,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "white",
+            }}
           >
-            <div className="flex flex-row justify-around">
-              <PlusOutlined className="text-sm" />
-              <h1 className="text-[15px]">Add Students</h1>
-            </div>
-          </Link>
+            <PlusOutlined />
+            Add Student
+          </Button>
         </div>
       </div>
 
