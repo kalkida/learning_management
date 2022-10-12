@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Icon from "react-eva-icons";
+
 import {
   Input,
   Button,
@@ -11,6 +13,7 @@ import {
 } from "antd";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { CheckOutlined } from "@ant-design/icons";
 import {
   doc,
   setDoc,
@@ -29,6 +32,7 @@ import {
   addSingleCourseToTeacher,
   addSingleClassToTeacher,
   removeSingleCourseToTeacher,
+  fetchSubject,
 } from "../funcs";
 
 const { Option } = Select;
@@ -41,7 +45,9 @@ function UpdateCourse() {
   const [courses, setCourses] = useState({});
   const [input, setInput] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [subjectData, setSubjectData] = useState();
   const [teachers, setTeachers] = useState([]);
+  const [singleClass, setSingleClass] = useState("");
   const [subject, setSubject] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(data.subject?.name);
   const [selectedLevel, setSelectedLevel] = useState(
@@ -169,7 +175,16 @@ function UpdateCourse() {
     });
     return data;
   };
+  const setClassesData = async (ID) => {
+    const classData = await getClasstID(ID);
+    const subject = await fetchSubject(updateCourse.subject);
+    setSubjectData(subject);
+    setSingleClass(classData);
+  };
 
+  useEffect(() => {
+    setClassesData(updateCourse.class);
+  }, []);
   const handleCourse = (e) => {
     setUpdateCourse({ ...updateCourse, [e.target.name]: e.target.value });
   };
@@ -263,271 +278,262 @@ function UpdateCourse() {
   return (
     <>
       {loading ? (
-        <div>
-          <div className="profile-header -mt-4">
-            <div className="course-avater -ml-6">
-              <img src="logo512.png" alt="profile" />
-              <div className="profile-info">
-                <h2 
-                className="text-2xl font-bold font-serif"
-                >
-                  {data.course_name}</h2>
-                <h3 >
-                  Grade{" "}
-                  {data.class ? data.class.level + data.class.section : ""}
+        <div className="bg-[#F9FAFB] h-[100vh] p-4">
+          <div className="flex flex-row justify-between w-[100%] -mt-16 border-b-[1px] p-3">
+            <div className="flex flex-row justify-between align-middle h-[78px]">
+              <div className="rounded-full  border-[2px] border-[#E7752B] mr-10">
+                <img
+                  className="w-[74px] rounded-full  bg-[white] "
+                  src="logo512.png"
+                  alt="profile"
+                />
+              </div>
+              <div className="flex flex-col justify-center align-middle">
+                <h2 className="text-xl font-[600] font-jakarta text-[#1D2939]">
+                  {data.course_name}
+                </h2>
+              </div>
+            </div>
+            <div className="flex flex-col justify-center align-end">
+              <div className="flex flex-row justify-end">
+                <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
+                  Class
                 </h3>
+                <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] p-[1px] ml-2">
+                  {singleClass?.level}
+                  {singleClass?.section}
+                </h4>
               </div>
-            </div>
-            <div className="header-extra flex flex-col justify-center align-middle w-[20vw]">
-              <div>
-                <h3 
-                className="text-lg font-semibold font-serif"
-                >Assigned Teachers</h3>
-                <h4>{data.teachers.length}</h4>
+              <div className="flex flex-row">
+                <h3 className="text-lg font-semibold font-jakarta">Subject</h3>
+                <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta  text-[#667085] p-[1px] ml-2">
+                  {subjectData?.name}
+                </h4>
               </div>
-              <div>
-                <h3 
-              className="text-lg font-semibold font-serif"
-                >Class/week</h3>
-                <h4>{data.schedule.length}</h4>
+              <div className="flex justify-end flex-col  mt-[5vh]">
+                <Button
+                  className="btn-confirm bg-[#E7752B] text-white"
+                  onClick={handleUpdate}
+                >
+                  Finalize Review
+                  <CheckOutlined style={{ marginTop: -1 }} />
+                </Button>
               </div>
-            </div>
-            <div className="flex justify-end flex-col  mt-[10vh]">
-              <Button
-                className="btn-confirm bg-[#E7752B] text-white"
-                onClick={handleUpdate}
-              >
-                Confirm
-              </Button>
             </div>
           </div>
 
-          <div className="tab-content">
-            <Tabs defaultActiveKey="1">
-              <Tabs.TabPane tab={
-                <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
-              } key="1">
-                <div className="course-description rounded-lg border-[2px] ">
-                  <h1 className="text-lg font-serif font-bold" >Course Information</h1>
-                  <div className="course-content flex flex-row justify-between">
-                    <div className="py-2 flex flex-col justify-around">
-                      <div>
-                        <span 
-                         className="text-sm font-serif font-semibold"
-                        //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
-                        >Subject</span>
-                        <Select
-                          className="rounded-xl mt-2"
-                          style={{
-                            width: "100%",
-                          }}
-                          placeholder="select Subjects"
-                          onChange={handleSubject}
-                          optionLabelProp="label"
-                          defaultValue={updateCourse.subject}
-                        >
-                          {subject.map((item, index) => (
-                            <Option
-                              key={index}
-                              value={item.key}
-                              label={item.name}
-                            >
-                              {item.name}
-                            </Option>
-                          ))}
-                        </Select>
-                      </div>
-                      <div>
-                        <div>
-                          <span
-                           className="text-sm font-serif font-semibold"
-                           >Class</span>
-                          <Select
-                            className="mt-2"
-                            style={{
-                              width: "100%",
-                            }}
-                            placeholder="select Classes"
-                            onChange={handleClass}
-                            optionLabelProp="label"
-                            defaultValue={updateCourse.class}
-                          >
-                            {classes.map((item, index) => (
-                              <Option
-                                key={item.key}
-                                value={item.key}
-                                label={item.level + " " + item.section}
-                              >
-                                {item.level + " " + item.section}
-                              </Option>
-                            ))}
-                          </Select>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="up-course-description">
-                      <h4 
-                      className="text-base font-serif font-semibold mt-2"
-                      >Coures Description</h4>
-                      <Input.TextArea
-                        name="description"
-                        className="border-[1px] rounded-lg"
-                        width="100%"
-                        rows={6}
-                        defaultValue={updateCourse.description}
-                        onChange={(e) => handleCourse(e)}
-                      />
-                    </div>
-                  </div>
+          <div className="mt-[32px]">
+            <p className="text-xl font-semibold text-[#344054] text-left font-jakarta mb-[12px]">
+              Edit Course
+            </p>
+
+            <div className="bg-[#FFFFFF] rounded-sm border-[2px] p-[24px]">
+              <div className="py-2 flex flex-col justify-around">
+                <div className="w-[100%]">
+                  <h4 className="text-base font-jakarta text-[#344054] mb-[6px] font-semibold mt-2">
+                    Description
+                  </h4>
+                  <Input.TextArea
+                    name="description"
+                    className="border-[1px] rounded-sm"
+                    rows={6}
+                    defaultValue={updateCourse.description}
+                    onChange={(e) => handleCourse(e)}
+                  />
                 </div>
-                <div className="asssign-teacher">
-                  <div className="assign-header">
-                    <h4 className="text-base font-serif font-bold" 
-                    >Assigned Teachers</h4>
+                <div className="flex flex-col mt-[24px]">
+                  <span
+                    className="text-sm font-jakarta font-[500"
+                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
+                  >
+                    Subject
+                  </span>
+                  <Select
+                    className="rounded-xl mt-2"
+                    style={{
+                      width: "40%",
+                    }}
+                    placeholder="select Subjects"
+                    onChange={handleSubject}
+                    optionLabelProp="label"
+                    defaultValue={updateCourse.subject}
+                  >
+                    {subject.map((item, index) => (
+                      <Option key={index} value={item.key} label={item.name}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="w-[40%] mt-[12px]">
+                  <div>
+                    <span className="text-sm font-jakarta font-[500]">
+                      Class
+                    </span>
                     <Select
-                      style={{ width: "30%" }}
-                      showArrow={true}
-                      placeholder="select Teachers"
-                      onChange={handleTeacher}
+                      className="mt-2"
+                      style={{
+                        width: "100%",
+                      }}
+                      placeholder="select Classes"
+                      onChange={handleClass}
                       optionLabelProp="label"
-                      mode="multiple"
-                      defaultValue={data.teachers}
-                      maxTagCount={2}
+                      defaultValue={updateCourse.class}
                     >
-                      {teachers.map((item, index) => (
+                      {classes.map((item, index) => (
                         <Option
                           key={item.key}
                           value={item.key}
-                          label={
-                            item.first_name +
-                            " " +
-                            (item.last_name ? item.last_name : "")
-                          }
+                          label={item.level + " " + item.section}
                         >
-                          {item.first_name +
-                            " " +
-                            (item.last_name ? item.last_name : "")}
+                          {item.level + " " + item.section}
                         </Option>
                       ))}
                     </Select>
                   </div>
-                  {teacherView ? (
-                    <Table
-                      className="p-2 bg-[#F9FAFB] rounded-lg border-[1px] border-[#D0D5DD]"
-                      dataSource={teachers}
-                      columns={columns}
-                    />
-                  ) : null}
                 </div>
-                <div className="schedule">
-                  <h4 
-                 // className="text-xl pt-2" 
-                   className="textbase pt-2 font-serif font-bold" 
-                  >Weekly Schedule</h4>
-                  <div className="up-card-schedule pb-10 border-[2px]">
-                    <h2 className="text-lg py-2">
-                      Class{" "}
-                      {updateCourse.class
-                        ? updateCourse.class.level + updateCourse.class.section
-                        : null}
-                    </h2>
-                    <div className="flex flex-row justify-between">
-                      <div className="border-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
-                        <p> Period</p>
-                      </div>
-                      <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
-                        <p> Start time</p>
-                      </div>
-
-                      <div className="border-[2px] w-[100%] p-2 text-center rounded-lg border-[#E7752B]">
-                        <p> End time</p>
-                      </div>
-                    </div>
-
-                    {data.schedule?.map((item, i) => (
-                      <div className="border-[#E7752B] border-[2px] my-2 rounded-lg">
-                        <Select
-                          style={{ width: "33%" }}
-                          className="rounded-lg border-[0px]"
-                          placeholder="First Select Days"
-                          onChange={(e) => handleScheduler(e, i)}
-                          defaultValue={item.day}
-                        >
-                          {days.map((item, index) => (
-                            <Option key={index} value={item} label={item}>
-                              {item}
-                            </Option>
-                          ))}
-                        </Select>
-                        <TimePicker.RangePicker
-                          style={{ width: "67%" }}
-                          className="rounded-lg border-[0px]"
-                          format={"hh:mm"}
-                          use12Hours
-                          defaultValue={
-                            item.time.length
-                              ? [
-                                  moment(JSON.parse(item.time[0])),
-                                  moment(JSON.parse(item.time[1])),
-                                ]
-                              : []
-                          }
-                          onChange={(e) => handleSchedulerTime(e, i)}
-                        />
-                      </div>
-                    ))}
-                    {input.map((item, i) => (
-                      <div className="border-[#E7752B] border-[2px] my-2 rounded-lg">
-                        <Select
-                          style={{ width: "33%" }}
-                          placeholder="First Select Days"
-                          onChange={(e) => handleNewScheduler(e, i)}
-                        >
-                          {days.map((item, index) => (
-                            <Option key={index} value={item} label={item}>
-                              {item}
-                            </Option>
-                          ))}
-                        </Select>
-                        <TimePicker.RangePicker
-                          status="warning"
-                          style={{ width: "67%" }}
-                          className="rounded-lg border-[0px] active:border-[0px] outline-none selection:border-[#E7752B]"
-                          format={"hh:mm"}
-                          use12Hours
-                          onChange={(e) => handleNewScheduler(e, i)}
-                        />
-                      </div>
-                    ))}
-                    <Button
-                      style={{ float: "right" }}
-                      onClick={() => {
-                        setInput([...input, 0]);
-                        setUpdateCourse({
-                          ...updateCourse,
-                          schedule: [
-                            ...updateCourse.schedule,
-                            { day: "", time: [] },
-                          ],
-                        });
-                      }}
+              </div>
+            </div>
+            <div className="asssign-teacher">
+              <div className="assign-header">
+                <h4 className="font-[600] font-jakarta text-[#344054] text-lg">
+                  Edit Teachers
+                </h4>
+                <Select
+                  style={{ width: "30%" }}
+                  showArrow={true}
+                  placeholder="select Teachers"
+                  className="font-jakarta text-[#344054]"
+                  onChange={handleTeacher}
+                  optionLabelProp="label"
+                  mode="multiple"
+                  defaultValue={data.teachers}
+                  maxTagCount={2}
+                >
+                  {teachers.map((item, index) => (
+                    <Option
+                      key={item.key}
+                      value={item.key}
+                      label={
+                        item.first_name +
+                        " " +
+                        (item.last_name ? item.last_name : "")
+                      }
                     >
-                      Add New
-                    </Button>
+                      {item.first_name +
+                        " " +
+                        (item.last_name ? item.last_name : "")}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+              {teacherView ? (
+                <Table
+                  className="p-2 bg-[white] font-jakarta text-[#344054] rounded-lg border-[1px] border-[#D0D5DD]"
+                  dataSource={teachers}
+                  columns={columns}
+                />
+              ) : null}
+            </div>
+            <div className="mb-20">
+              <h4
+                // className="text-xl pt-2"
+                className="textbase pt-2 font-jakarta font-semibold text-lg text-[#344054] mb-[24px]"
+              >
+                Edit Schedule
+              </h4>
+              <div className="up-card-schedule pb-10 border-[2px] rounded-sm bg-[white]">
+                <h2 className="text-lg py-2">
+                  Class{" "}
+                  {updateCourse.class
+                    ? updateCourse.class.level + updateCourse.class.section
+                    : null}
+                </h2>
+                <div className="flex flex-row justify-between">
+                  <div className="border-[2px] w-[100%] p-2 text-left rounded-l-lg border-r-[0px] border-[#F2F4F7]">
+                    <p> Period</p>
+                  </div>
+                  <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-left border-r-[0px] rounded-none border-[#F2F4F7]">
+                    <p> Start time</p>
+                  </div>
+
+                  <div className="border-[2px] w-[100%] p-2 text-left rounded-l-none border-l-[0px] rounded-lg border-[#F2F4F7]">
+                    <p> End time</p>
                   </div>
                 </div>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab={
-                <p className="text-xl font-bold text-center ml-5 font-serif">Attendance</p>
-              } key="2">
-                <AttendanceList />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab={
-                <p className="text-xl font-bold text-center ml-5 font-serif">Assignment</p>
-              } key="3">
-                Content of Tab Pane 3
-              </Tabs.TabPane>
-            </Tabs>
+
+                {data.schedule?.map((item, i) => (
+                  <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
+                    <Select
+                      style={{ width: "33%" }}
+                      className="rounded-lg border-[0px]"
+                      placeholder="First Select Days"
+                      onChange={(e) => handleScheduler(e, i)}
+                      defaultValue={item.day}
+                    >
+                      {days.map((item, index) => (
+                        <Option key={index} value={item} label={item}>
+                          {item}
+                        </Option>
+                      ))}
+                    </Select>
+                    <TimePicker.RangePicker
+                      style={{ width: "67%" }}
+                      className="rounded-lg border-[0px]"
+                      format={"hh:mm"}
+                      use12Hours
+                      defaultValue={
+                        item.time.length
+                          ? [
+                              moment(JSON.parse(item.time[0])),
+                              moment(JSON.parse(item.time[1])),
+                            ]
+                          : []
+                      }
+                      onChange={(e) => handleSchedulerTime(e, i)}
+                    />
+                  </div>
+                ))}
+                {input.map((item, i) => (
+                  <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
+                    <Select
+                      style={{ width: "33%" }}
+                      placeholder="First Select Days"
+                      onChange={(e) => handleNewScheduler(e, i)}
+                    >
+                      {days.map((item, index) => (
+                        <Option key={index} value={item} label={item}>
+                          {item}
+                        </Option>
+                      ))}
+                    </Select>
+                    <TimePicker.RangePicker
+                      status="warning"
+                      style={{ width: "67%" }}
+                      className="rounded-lg border-[0px] active:border-[0px] outline-none selection:border-[#E7752B]"
+                      format={"hh:mm"}
+                      use12Hours
+                      onChange={(e) => handleNewScheduler(e, i)}
+                    />
+                  </div>
+                ))}
+                <Button
+                  style={{ float: "right", marginBottom: 40 }}
+                  onClick={() => {
+                    setInput([...input, 0]);
+                    setUpdateCourse({
+                      ...updateCourse,
+                      schedule: [
+                        ...updateCourse.schedule,
+                        { day: "", time: [] },
+                      ],
+                    });
+                  }}
+                >
+                  Add New
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       ) : (

@@ -5,21 +5,16 @@ import { Routes, Route, useNavigate, Link } from "react-router-dom";
 
 //////////////Styles///////////////////////
 import { styled, useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import MenuList from "@mui/material/MenuList";
@@ -30,18 +25,7 @@ import BookOnline from "@mui/icons-material/BookOnline";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import ContentPaste from "@mui/icons-material/ContentPaste";
 import Cloud from "@mui/icons-material/Cloud";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-  faMessage,
-  faMicrophone,
-  faBook,
-  faCalendar,
-  faFile,
-  faFeather,
-  faGraduationCap,
-  faCity,
-} from "@fortawesome/free-solid-svg-icons";
+import Icon from "react-eva-icons";
 import { Avatar, Breadcrumb, Layout, Menu } from "antd";
 
 //////////// Route Components /////////////////
@@ -148,6 +132,7 @@ const Layouts = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const current = JSON.parse(user);
+  console.log(current);
   const dispatch = useDispatch();
 
   const logout = () => {
@@ -204,88 +189,265 @@ const Layouts = () => {
       const currentURL = window.location.pathname;
       return (
         <Drawer
-          className="sm:absolute md:relative"
+          className="sm:absolute  md:relative "
           variant="permanent"
           open={open}
         >
-          <DrawerHeader />
+          {/* <DrawerHeader /> */}
+          <div className="mt-6 ml-6 mb-2">
+            {open ? (
+              <div className="flex flex-row justify-start ml-1">
+                <IconButton
+                  onClick={handleDrawerClose}
+                  sx={{
+                    marginRight: 0,
+                    marginLeft: 0,
+                  }}
+                >
+                  {theme.direction === "rtl" ? (
+                    <Icon
+                      name="menu-outline"
+                      fill="#667085"
+                      size="large" // small, medium, large, xlarge
+                      animation={{
+                        type: "pulse", // zoom, pulse, shake, flip
+                        hover: true,
+                        infinite: false,
+                      }}
+                    />
+                  ) : (
+                    <Icon
+                      name="menu-outline"
+                      fill="#667085"
+                      size="large" // small, medium, large, xlarge
+                      animation={{
+                        type: "pulse", // zoom, pulse, shake, flip
+                        hover: true,
+                        infinite: false,
+                      }}
+                    />
+                  )}
+                </IconButton>
+
+                <img
+                  src={require("../assets/logo1.png")}
+                  className="w-[98px] h-[37px] z-1"
+                />
+              </div>
+            ) : (
+              <div className="flex flex-row justify-start -ml-2">
+                <IconButton
+                  color="default"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{
+                    marginRight: 0,
+                    marginLeft: 0,
+                    ...(open && { display: "none" }),
+                  }}
+                >
+                  <Icon
+                    name="menu-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                </IconButton>
+              </div>
+            )}
+          </div>
           <List className="sm:invisible md:visible ">
             {[
               {
-                text: 'Home',
-                Icon: <FontAwesomeIcon
-                  icon={faHome}
-                  className="text-xl  text-[#2c5886] font-serif"
-                />,
-                link: "/admin"
+                text: (
+                  <p className="text-[#344054] font-[500] font-jakarta text-[16px] text-left pt-1">
+                    Home
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="home-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/admin",
               },
               {
-                text: 'Message',
-                Icon: <FontAwesomeIcon
-                  icon={faMessage}
-                  className="text-xl text-[#2c5886] font-serif"
-                />,
-                link: "/message"
-              }
-              , {
-                text: 'Announcment',
-                Icon: <FontAwesomeIcon  
-                  icon={faMicrophone}
-                  className="text-xl  text-[#2c5886] font-serif"
-                />,
-                link: "/announcment"
+                text: (
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                    Message
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="message-square-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/message",
               },
               {
-                text: 'Course',
-                Icon: <FontAwesomeIcon
-                  icon={faBook}
-                  className="text-xl  text-[#2c5886] font-serif"
-                />,
-                link: "/list-course"
-              }, {
-                text: 'Classes',
-                Icon: <FontAwesomeIcon
-                  icon={faCity}
-                  className="text-xl text-[#2c5886] font-serif"
-                />,
-                link: "/list-classes"
-              }, {
-                text: 'Teacher',
-                Icon: <FontAwesomeIcon
-                  icon={faFeather}
-                  className="text-xl  text-[#2c5886] font-serif"
-                />,
-                link: "/list-teacher"
+                text: (
+                  <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left pt-1">
+                    Announcment
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="volume-up-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/announcment",
               },
               {
-                text: 'Student',
-                Icon: <FontAwesomeIcon
-                  icon={faGraduationCap}
-                  className="text-xl  text-[#2c5886] font-serif" 
-                />,
-                link: "/list-student"
+                text: (
+                  <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left pt-1">
+                    Course
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="book-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/list-course",
               },
               {
-                text: 'Attendance',
-                Icon: <FontAwesomeIcon
-                  icon={faCalendar}
-                  className="text-xl text-[#2c5886] font-serif"
-                />,
-                link: "/attendance"
+                text: (
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                    Classes
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="pie-chart-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/list-classes",
               },
               {
-                text: 'Schedule',
-                Icon: <FontAwesomeIcon
-                  icon={faCalendar}
-                  className="text-xl  text-[#2c5886] font-s erif"
-                />,
-                link: "/schedule"
-              }
+                text: (
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                    Teacher
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="person-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/list-teacher",
+              },
+              {
+                text: (
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                    Students
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="people-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/list-student",
+              },
+              {
+                text: (
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                    Attendance
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="smiling-face-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/attendance",
+              },
+              // {
+              //   text: "Schedule",
+              //   Icon: (
+              //     <FontAwesomeIcon
+              //       icon={faCalendar}
+              //       className="text-xl  text-[#2c5886]"
+              //       style={{
+              //         fontFamily: "Plus Jakarta Sans",
+              //         fontSize: 16,
+              //         fontWeight: "500",
+              //       }}
+              //     />
+              //   ),
+              //   link: "/schedule",
+              // },
             ].map((item, index) => (
               <ListItem
                 key={item.text}
                 disablePadding
-                sx={{ display: "block" }}
+                sx={{
+                  display: "block",
+                  paddingLeft: 2,
+                  borderRadius: 5,
+                  paddingRight: 2,
+                }}
               >
                 <Link to={item.link}>
                   <ListItemButton
@@ -293,8 +455,12 @@ const Layouts = () => {
                       ":hover": {
                         backgroundColor: "#FCF0E8",
                       },
+                      ":active": {
+                        backgroundColor: "#FCF0E8",
+                      },
                       color: "#2c5886",
                       minHeight: 48,
+                      borderRadius: 2,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
                     }}
@@ -302,7 +468,7 @@ const Layouts = () => {
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
-                        mr: open ? 3 : "auto",
+                        mr: open ? 3 : 0,
                         justifyContent: "center",
                       }}
                     >
@@ -321,15 +487,21 @@ const Layouts = () => {
             <ListItem
               style={{ position: "fixed", bottom: 0, width: open ? 234 : 65 }}
               disablePadding
-              sx={{ display: "block" }}
+              sx={{
+                display: "block",
+                paddingLeft: 2,
+                borderRadius: 5,
+                paddingRight: 2,
+              }}
             >
-              <Divider />
               <a onClick={() => logout()}>
                 <ListItemButton
                   sx={{
                     ":hover": {
                       backgroundColor: "#FCF0E8",
                     },
+                    borderRadius: 2,
+
                     color: "#2c5886",
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
@@ -347,7 +519,11 @@ const Layouts = () => {
                   </ListItemIcon>
                   {role["isAdmin"] == true ? (
                     <ListItemText
-                      primary="Admin"
+                      primary={
+                        <p className="text-[#344054] font-jakarta text-[16px] text-left pt-1">
+                          Admin
+                        </p>
+                      }
                       sx={{ opacity: open ? 1 : 0 }}
                     />
                   ) : (
@@ -456,7 +632,7 @@ const Layouts = () => {
   }, []);
 
   return (
-    <Layout className="bg-[#E8E8E8] min-h-[100vh]">
+    <Layout className="bg-[#F9FAFB] min-h-[100vh]">
       <Box sx={{ display: "flex", width: "100%" }}>
         <Navigation
           handleDrawerOpen={handleDrawerOpen}
@@ -469,10 +645,10 @@ const Layouts = () => {
         <Box
           component="main"
           sx={{ flexGrow: 1, p: 3 }}
-          className="bg-[#E8E8E8]"
+          className="bg-[#F9FAFB]"
         >
           <DrawerHeader />
-          <Content className="bg-[#E8E8E8] h-[auto]">
+          <Content className="bg-[#F9FAFB] h-[auto]">
             <Routes>
               <Route path="/admin" element={<AdminDash />} />
               <Route path="/teacher" element={<TeacherDash />} />

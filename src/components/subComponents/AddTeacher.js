@@ -19,7 +19,7 @@ import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
 import "../modals/courses/style.css";
-import { removeSingleClassToTeacher } from "../modals/funcs";
+import { removeSingleClassToTeacher, fetchSubject } from "../modals/funcs";
 import { PlusOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 const { Option } = Select;
@@ -385,12 +385,14 @@ export default function AddTeacher() {
   }, []);
 
   return (
-    <div className="bg-[#E8E8E8] h-[100vh]">
+    <div className="bg-[#F9FAFB] h-[100vh]">
       <div className="list-header">
-        <h1  
-        className="text-2xl mb-2 font-bold font-serif"
-        //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
-        >List Of Teachers</h1>
+        <h1
+          className="text-2xl mb-2 font-bold font-serif"
+          //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
+        >
+          List Of Teachers
+        </h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">
@@ -432,9 +434,10 @@ export default function AddTeacher() {
               }}
             />
           </div>
+          {/* add padding  */}
           <div>
             <Link to={"/add-teacher"}>
-              <PlusOutlined className="site-form-item-icon" />
+              <PlusOutlined />
               Add teacher
             </Link>
           </div>

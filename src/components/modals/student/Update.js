@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
-import { fetchParents } from "../funcs";
+import { fetchParents, fetchClass } from "../funcs";
 import "./style.css";
 
 const { Option } = Select;
@@ -46,6 +46,7 @@ function UpdateStudents() {
     sex: data.sex,
     class: data.class,
     course: selectedRowKeys,
+    className: data.className,
     phone: data.phone,
     studentId: data.studentId,
     school_id: data.school_id,
@@ -87,12 +88,17 @@ function UpdateStudents() {
     } else {
       users = await getClassID(updateStudent.class);
     }
+    console.log(users);
 
     setLoading(true);
     if (!file) {
       setDoc(
         doc(firestoreDb, "students", data.key),
-        { ...updateStudent, course: users.course },
+        {
+          ...updateStudent,
+          course: users.course,
+          className: users.level + users.section,
+        },
         {
           merge: true,
         }

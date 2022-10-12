@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Space, Table, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Icon from "react-eva-icons";
+
 import {
   collection,
   getDocs,
@@ -42,6 +44,9 @@ export default function ListCourses() {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
+  };
+  const edit = () => {
+    navigate("/add-course");
   };
 
   const handleReset = (clearFilters) => {
@@ -256,28 +261,27 @@ export default function ListCourses() {
 
   const columns = [
     {
-      title: "Course",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Course</p>,
       dataIndex: "course_name",
       key: "course_name",
-      ...getColumnSearchProps("course_name"),
       render: (text, data) => {
-        console.log(data);
-        return <div>{text}</div>;
+        return (
+          <p className="text-[14px] font-jakarta text-[#344054]">{text}</p>
+        );
       },
     },
     {
       title: "Subject",
       dataIndex: "subject",
       key: "subject",
-      ...getColumnSearchProps("subject"),
-      render: (text) => <a>{text.name}</a>,
+      render: (text) => <a className="text-[#344054]"> {text.name}</a>,
     },
     {
       title: "Grade",
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <div>{item.level}</div>;
+        return <div className="text-[#344054]">{item.level}</div>;
       },
     },
     {
@@ -285,7 +289,7 @@ export default function ListCourses() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <div>{item.section}</div>;
+        return <div className="text-[#344054]">{item.section}</div>;
       },
     },
 
@@ -296,13 +300,13 @@ export default function ListCourses() {
       render: (_, record) => (
         <div className="flex flex-row justify-around">
           <a
-            className="p-2 mr-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
           >
             View{" "}
           </a>
           <a
-            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="py-1 px-2 text-[12px] text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleUpdate(record)}
           >
             Update
@@ -364,20 +368,18 @@ export default function ListCourses() {
   }, []);
 
   return (
-    <div className="bg-[#E8E8E8] h-[100vh] p-8 -mt-10">
-      <div className="list-header -mt-15">
-        <h1 className="text-2xl mb-2 font-bold font-serif"
-        //className="text-3xl font-bold"  
-       // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
-        >  List Of Course</h1>
-        <CreateSubject />
+    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-[10vh]">
+      <div className="list-header mb-10">
+        <h1 className="text-2xl font-[600] font-jakarta">List Of Course</h1>
+        {/* <CreateSubject /> */}
       </div>
       <div className="list-sub">
-        <div className="list-filter">
+        <div className="flex flex-row justify-between w-[30%]">
           <Select
-            className="hover:border-[#E7752B] border-[#E7752B]"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
             defaultValue="Subject"
-            style={{ width: 120 }}
+            bordered={false}
+            style={{ width: 141 }}
             onChange={handleFilterSubject}
           >
             {subject?.map((item, i) => (
@@ -387,8 +389,10 @@ export default function ListCourses() {
             ))}
           </Select>
           <Select
-            style={{ width: 120 }}
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
+            style={{ width: 141 }}
             defaultValue="Class"
+            bordered={false}
             onChange={handleFilterClass}
           >
             {classes?.map((item, i) => (
@@ -406,30 +410,36 @@ export default function ListCourses() {
           <div>
             <Search
               placeholder="input search text"
-              allowClear
+              bordered={true}
+              enterButton={false}
+              suffix={null}
               onSearch={onSearch}
-              style={{
-                width: 200,
-              }}
             />
           </div>
-          <div>
-            <Link to={"/add-course"}>
-              <PlusOutlined />
-              Add Courses
-            </Link>
-          </div>
+          <Button
+            onClick={() => edit()}
+            className="hover:border-[#E7752B] hover:border-[2px]"
+            style={{
+              padding: 10,
+              borderColor: "#E7752B",
+              borderWidth: 2,
+              color: "#E7752B",
+              borderRadius: 5,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "white",
+            }}
+          >
+            <PlusOutlined />
+            Add Course
+          </Button>
         </div>
       </div>
 
       <br />
 
-      <Table
-        loading={tableLoading}
-        style={{ marginTop: 20 }}
-        columns={columns}
-        dataSource={datas}
-      />
+      <Table loading={tableLoading} columns={columns} dataSource={datas} />
     </div>
   );
 }

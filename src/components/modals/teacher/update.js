@@ -27,7 +27,6 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
 import "./style.css";
-import { getIdToken } from "firebase/auth";
 
 const { Option } = Select;
 const { Search } = Input;

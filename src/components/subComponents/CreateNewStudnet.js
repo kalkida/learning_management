@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { createParentwhithStudent } from "../modals/funcs";
+import { createParentwhithStudent, fetchClass } from "../modals/funcs";
 import { Input, Button, Select, DatePicker, message, Space } from "antd";
 import {
   doc,
@@ -51,6 +51,7 @@ const CreateNewStudnet = () => {
     first_name: "",
     last_name: "",
     class: "",
+    className: "",
     phone: [],
     school_id: uid.school,
   });
@@ -60,9 +61,14 @@ const CreateNewStudnet = () => {
   async function handleUpload() {
     var newUID = uuid();
     var data = await getCourses(newUser.class);
-
+    var classN = await fetchClass(newUser.class);
+    console.log(classN);
     if (!file) {
-      setDoc(doc(firestoreDb, "students", newUID), { ...newUser, course: data })
+      setDoc(doc(firestoreDb, "students", newUID), {
+        ...newUser,
+        course: data,
+        className: classN.level + classN.section,
+      })
         .then(
           (_) => modifyClassWithStudent(newUID, newUser.class),
           newUser.phone.map((item) => {

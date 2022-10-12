@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import zIndex from "@mui/material/styles/zIndex";
+import Icon from "react-eva-icons";
 
 export default function Dashboard({
   handleDrawerOpen,
@@ -13,50 +13,87 @@ export default function Dashboard({
   theme,
   AppBar,
 }) {
-  const user = useSelector((state) => state.user.value);
-
   return (
     <AppBar
       position="fixed"
-      style={{ backgroundColor: "#3b82f600", boxShadow: "none" }}
+      style={{
+        backgroundColor: "#3b82f600",
+        boxShadow: "none",
+        display: "flex",
+        flexDirection: "row",
+        width: "0%",
+      }}
     >
-      <Toolbar>
+      <Toolbar className="mt-2">
         {open ? (
-          <>
-            <img
-              src={require("../assets/logo1.png")}
-              className="w-[104px] h-[42px] z-1"
-            />
+          <div className="flex flex-row justify-start ml-1">
             <IconButton
               onClick={handleDrawerClose}
               sx={{
-                marginRight: 5,
-                marginLeft: 5,
+                marginRight: 0,
+                marginLeft: 0,
               }}
             >
               {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
+                <Icon
+                  name="menu-outline"
+                  fill="#667085"
+                  size="large" // small, medium, large, xlarge
+                  animation={{
+                    type: "pulse", // zoom, pulse, shake, flip
+                    hover: true,
+                    infinite: false,
+                  }}
+                />
               ) : (
-                <ChevronLeftIcon />
+                <Icon
+                  name="menu-outline"
+                  fill="#667085"
+                  size="large" // small, medium, large, xlarge
+                  animation={{
+                    type: "pulse", // zoom, pulse, shake, flip
+                    hover: true,
+                    infinite: false,
+                  }}
+                />
               )}
             </IconButton>
-          </>
+
+            <img
+              src={require("../assets/logo1.png")}
+              className="w-[98px] h-[37px] z-1"
+            />
+          </div>
         ) : (
-          <IconButton
-            color="default"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              marginLeft: -1,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <div className="flex flex-row justify-start -ml-2">
+            <IconButton
+              color="default"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 0,
+                marginLeft: 0,
+                ...(open && { display: "none" }),
+              }}
+            >
+              <Icon
+                name="menu-outline"
+                fill="#667085"
+                size="large" // small, medium, large, xlarge
+                animation={{
+                  type: "pulse", // zoom, pulse, shake, flip
+                  hover: true,
+                  infinite: false,
+                }}
+              />
+            </IconButton>
+          </div>
         )}
       </Toolbar>
+      {/* <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle mt-4">
+        Hello Admin
+      </p> */}
     </AppBar>
   );
 }

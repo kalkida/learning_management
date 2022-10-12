@@ -63,39 +63,26 @@ export default function AdminDash() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        backgroundColor: "#E8E8E8",
+        backgroundColor: "#F9FAFB",
       }}
     >
-      <h1 className="text-[24px] -mt-20 mb-4 p-7 text-[#344054] font-bold text-center">
-        {schools.name}
-      </h1>
+      <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8">
+        Hello Admin
+      </p>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item sm={1} md={4}>
           <Card
             bordered={true}
-            className="w-[100%] h-[419px]"
+            className="w-[100%] min-h-[419px]"
             title={
-              <h1 style={{ fontWeight: "bold", marginBottom: 10 }}>
+              <h1 className="text-[#475467] font-[600] mb-[10px]">
                 Todays Attendance
               </h1>
             }
           >
             <div style={{ display: "flex", flexDirection: "row" }}>
-              <div className="relative flex flex-col justify-center">
-                <Progress
-                  type="circle"
-                  className="absolute"
-                  strokeColor={"#475467"}
-                  percent={75}
-                />
-                <Progress
-                  type="circle"
-                  className="flex justify-center p-6"
-                  strokeColor={"#98A2B3"}
-                  showInfo={false}
-                  percent={75}
-                  width={70}
-                />
+              <div className=" flex flex-col justify-center">
+                <Progress type="circle" strokeColor={"#EA8848"} percent={75} />
               </div>
               <div className="flex flex-col justify-center ml-12">
                 <h1 className="text-md flex flex-row">
@@ -117,9 +104,7 @@ export default function AdminDash() {
                 marginTop: 30,
                 fontSize: 18,
               }}
-            >
-              Average Attendance
-            </h1>
+            ></h1>
             <div style={{ display: "flex", flexDirection: "row" }}>
               <div
                 style={{
@@ -127,24 +112,17 @@ export default function AdminDash() {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   width: "100%",
+                  paddingLeft: "2%",
+                  paddingRight: "2%",
                 }}
               >
                 <div>
                   <div className="relative flex flex-col justify-center">
                     <Progress
                       type="circle"
-                      className="absolute"
-                      strokeColor={"#475467"}
+                      strokeColor={"#EA8848"}
                       percent={75}
-                      width={60}
-                    />
-                    <Progress
-                      type="circle"
-                      className="flex justify-center p-2"
-                      strokeColor={"#98A2B3"}
-                      showInfo={false}
-                      percent={75}
-                      width={45}
+                      width={80}
                     />
                   </div>
                   <h1 className="text-center">Weekly</h1>
@@ -153,18 +131,9 @@ export default function AdminDash() {
                   <div className="relative flex flex-col justify-center">
                     <Progress
                       type="circle"
-                      className="absolute"
-                      strokeColor={"#475467"}
+                      strokeColor={"#EA8848"}
                       percent={75}
-                      width={60}
-                    />
-                    <Progress
-                      type="circle"
-                      className="flex justify-center p-2"
-                      strokeColor={"#98A2B3"}
-                      showInfo={false}
-                      percent={75}
-                      width={45}
+                      width={80}
                     />
                   </div>
                   <h1 className="text-center">Monthly</h1>
@@ -173,18 +142,9 @@ export default function AdminDash() {
                   <div className="relative flex flex-col justify-center">
                     <Progress
                       type="circle"
-                      className="absolute"
-                      strokeColor={"#475467"}
+                      strokeColor={"#EA8848"}
                       percent={75}
-                      width={60}
-                    />
-                    <Progress
-                      type="circle"
-                      className="flex justify-center p-2"
-                      strokeColor={"#98A2B3"}
-                      showInfo={false}
-                      percent={75}
-                      width={45}
+                      width={80}
                     />
                   </div>
                   <h1 className="text-center">Yearly</h1>
@@ -196,9 +156,9 @@ export default function AdminDash() {
         <Grid item sm={1} md={4}>
           <Card
             bordered={true}
-            className="w-[100%] h-[419px]"
+            className="w-[100%] min-h-[419px]"
             title={
-              <h1 style={{ fontWeight: "bold", marginBottom: 0, fontSize: 18 }}>
+              <h1 className="text-[#475467] font-[600] mb-[10px]">
                 Student Number
               </h1>
             }
@@ -238,9 +198,9 @@ export default function AdminDash() {
         <Grid item sm={1} md={4}>
           <Card
             bordered={true}
-            className="w-[100%] h-[419px]"
+            className="w-[100%] min-h-[419px]"
             title={
-              <h1 style={{ fontWeight: "bold", marginBottom: 0, fontSize: 18 }}>
+              <h1 className="text-[#475467] font-[600] mb-[10px]">
                 Teacher Number
               </h1>
             }
