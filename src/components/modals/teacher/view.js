@@ -215,7 +215,7 @@ function TeacherView() {
                    className="text-4xl font-bold  leading-none mb-4"
                   >7,8</h1>
                   <span 
-                   className="text-sm font-medium mb-4   "
+                   className="text-sm font-medium mb-8 "
                //   style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                   >Assigned Grade</span>
                 </div>
@@ -225,7 +225,7 @@ function TeacherView() {
                 //  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
                   >{data.course.length}</h1>
                   <span
-                   className="text-sm font-medium mb-4 "
+                   className="text-sm font-medium mb-3 -ml-2 "
                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                    >Courses</span>
                 </div>
@@ -263,24 +263,24 @@ function TeacherView() {
                         className=" font-semibold text-sm font-jakarta text-[#344054]"  
                       //  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}
                         >Age</h3>
-                        <span className="font-jakarta ">{age}</span>
+                        <span className="font-jakarta font-bold">{age}</span>
                       </div>
                       <div 
                        className=" font-semibold text-sm font-jakarta text-[#344054] "  >
                         <h3>Sex</h3>
-                        <span className="font-jakarta">{data.sex}</span>
+                        <span className="font-jakarta font-bold">{data.sex}</span>
                       </div>
                       <div>
                         <h3 
                          className=" font-semibold text-sm font-jakarta text-[#344054] "  
                         >Phone number</h3>
-                        <span className="font-jakarta ">{data.phone}</span>
+                        <span className="font-jakarta font-bold">{data.phone}</span>
                       </div>
                       <div>
                         <h3 
                          className=" font-semibold text-sm font-jakarta text-[#344054] "  
                         >Email</h3>
-                        <span className="font-jakarta ">{data.email}</span>
+                        <span className="font-jakarta font-bold">{data.email}</span>
                       </div>
                     </div>
                   </div>
@@ -294,19 +294,19 @@ function TeacherView() {
                     <h3
                      className=" font-semibold text-sm font-jakarta text-[#344054] "  
                     >Working Since</h3>
-                    <span className="font-jakarta ">{workTime}</span>
+                    <span className="font-jakarta font-bold">{workTime}</span>
                   </div>
                   <div> 
                     <h3 
                     className=" font-semibold text-sm font-jakarta text-[#344054]"  
                     >Speciality</h3>
-                    <span className="font-jakarta ">Teacher</span>
+                    <span className="font-jakarta font-bold">Teacher</span>
                   </div>
                   <div>
                     <h3 
                     className=" font-semibold text-sm font-jakarta text-[#344054]"  
                     >Work Expirence</h3>
-                    <span className="">{expriance} year</span>
+                    <span className="font-bold font-jakarta ">{expriance} year</span>
                   </div>
                 </div> 
               </div>
