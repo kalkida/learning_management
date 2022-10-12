@@ -449,7 +449,7 @@ function UpdateCourse() {
                     ? updateCourse.class.level + updateCourse.class.section
                     : null}
                 </h2>
-                <div className="flex flex-row justify-between">
+                <div className="flex flex-row justify-between ">
                   <div className="border-[2px] w-[100%] p-2 text-left rounded-l-lg border-r-[0px] border-[#F2F4F7]">
                     <p> Period</p>
                   </div>
