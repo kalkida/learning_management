@@ -369,15 +369,15 @@ export default function ListCourses() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-[10vh]">
+    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-14">
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Course</h1>
         {/* <CreateSubject /> */}
       </div>
       <div className="list-sub">
-        <div className="flex flex-row justify-between w-[23%]">
+        <div className="flex flex-row  w-[30%]">
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] mr-5"
             defaultValue="Subject"
             bordered={false}
             style={{ width: 141 }}
@@ -419,7 +419,7 @@ export default function ListCourses() {
             {/* <Search
               placeholder="input search text"
               bordered={true}
-              enterButton={false}
+              // enterButton={true}
               suffix={null}
               onSearch={onSearch}
             /> */}

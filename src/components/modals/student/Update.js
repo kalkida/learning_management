@@ -14,7 +14,10 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
 import { fetchParents, fetchClass } from "../funcs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
+
 
 const { Option } = Select;
 const { Search } = Input;
@@ -260,154 +263,71 @@ function UpdateStudents() {
 
   return (
     <>
-      <div>
-        <div className="st-profile-header border-t-[0px] border-l-[0px] border-r-[0px] -mt-10 border-b-[0px]">
-          <div className="flex flex-row align-middle -ml-5">
-            <img
-              className="w-[8vw] h-[15vh] rounded-full"
-              src={data.avater ? data.avater : "img-5.jpg"}
-              alt="profile"
-            />
-            <div className="flex flex-col justify-center ml-4">
-              <h2  className="text-xl font-bold font-serif" >
-                {data.first_name + " " + data.last_name}
-              </h2>
-            </div>
-          </div>
-          <div className="header-extra">
-            <div>
-              <h3  className="text-sm font-bold font-serif" >Class</h3>
-              <h4  className="text-sm" >{data.class?.level + data.class?.section}</h4>
-            </div>
-            <div>
-              <h3 className="text-sm font-bold font-serif" >Assigned Course</h3>
-              <h4  className="text-sm font-serif" >{data.course?.length}</h4>
-            </div>
-          </div>
-        </div>
+
+      <div className="bg-[#F9FAFB] h-[100vh] p-2 -mt-14">
+        <div className="add-header mb-6 items-center">
+          < h1 className="text-[1.5rem] font-jakarta" > Edit Student</h1 >
+          <button onClick={async () => await updateStudent()}>
+            <FontAwesomeIcon className="mr-2" icon={faCheck} />Confirm
+          </button>
+        </div >
 
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
+              <p className="text-xl font-bold text-center ml-5 font-jakarta">Profile</p>
             } key="1">
-              <Button className="btn-confirm" onClick={handleUpdate}>
-                Confirm Profile
-              </Button>
-              <div className="add-header">
-                <h1 className="text-xl font-bold font-serif">Student Profile</h1>
-              </div>
+
               <div className="add-teacher">
-                <div className="add-form">
-                  <div className="col">
-                    <div style={{ marginTop: "30%" }}>
-                      <div className="avatar-img">
-                        <h2 className="text-xl font-bold mb-10 font-serif">Student Picture</h2>
-                        <img
-                          src={file ? URL.createObjectURL(file) : "img-5.jpg"}
+                <div className="avater-img">
+                  <div>
+                    <h2>Student Picture</h2>
+                    <img src={file ? URL.createObjectURL(file) : data.avater ? data.avater : "img-5.jpg"} />
+                  </div>
+                  <div className="file-content">
+                    <span>
+                      This will be displayed to you when you view this profile
+                    </span>
+
+                    <div className="img-btn">
+                      <button>
+                        <input
+                          type="file"
+                          id="browse"
+                          name="files"
+                          style={{ display: "none" }}
+                          onChange={handleFile}
+                          accept="/image/*"
                         />
-                      </div>
-                      <div>
-                        <div className="file-content">
-                          {/* <span>This will be displayed to you when you view this profile</span> */}
-                          <div className="img-btn">
-                            <button>
-                              <input
-                                type="file"
-                                id="browse"
-                                name="files"
-                                style={{ display: "none" }}
-                                onChange={handleFile}
-                                accept="/image/*"
-                              />
-                              <input
-                                type="hidden"
-                                id="filename"
-                                readonly="true"
-                              />
-                              <input
-                                type="button"
-                                value="Add Photo"
-                                id="fakeBrowse"
-                                onClick={HandleBrowseClick}
-                              />
-                            </button>
-                            <button onClick={onRemove}>Remove</button>
-                          </div>
-                        </div>
-                      </div>
+                        <input type="hidden" id="filename" />
+                        <input
+                          type="button"
+                          value="Change Photo"
+                          id="fakeBrowse"
+                          onClick={HandleBrowseClick}
+                        />
+                      </button>
+                      <button onClick={onRemove}>Remove</button>
                     </div>
                   </div>
-                  <div className="col">
-                    <div>
-                      <label 
-                       className="text-sm  font-serif" 
-                      >First Name</label>
+                </div>
+
+                <div className="flex flex-row justify-between">
+                  <div className="flex flex-col w-[40%] mr-10">
+                    <div className="py-4">
+                      <label>First Name</label>
                       <Input
-                        defaultValue={updateStudent.first_name}
                         name="first_name"
+                        placeholder="Eneter First Name"
+                        defaultValue={updateStudent.first_name}
                         onChange={(e) => onChange(e)}
                       />
                     </div>
 
                     <div>
-                      <label
-                       className="text-sm  font-serif" 
-                      >Date of Birth</label>
-                      <DatePicker
-                        style={{ width: "100%" }}
-                        onChange={handleDob}
-                        defaultValue={
-                          updateStudent.DOB
-                            ? moment(JSON.parse(updateStudent.DOB))
-                            : ""
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label
-                       className="text-sm  font-serif" 
-                      >Last Name</label>
-                      <Input
-                        defaultValue={updateStudent.last_name}
-                        name="last_name"
-                        onChange={(e) => onChange(e)}
-                      />
-                    </div>
-                    <div>
-                      <label
-                       className="text-sm  font-serif" 
-                      >Sex </label>
+                      <label>Class</label>
                       <Select
-                        placeholder="Select Gender"
-                        onChange={handleGender}
-                        defaultValue={updateStudent.sex}
-                        optionLabelProp="label"
-                        style={{
-                          width: "100%",
-                        }}
-                      >
-                        {gender.map((item, index) => (
-                          <Option key={item.index} value={item} label={item}>
-                            {item}
-                          </Option>
-                        ))}
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="col">
-                    <div
-                      style={{
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        display: "flex",
-                      }}
-                    >
-                      <label
-                       className="text-sm  font-serif" 
-                      >Class</label>
-                      <Select
-                        placeholder="Select Section"
+                        placeholder="Select Class"
                         defaultValue={data.class}
                         onChange={handlesection}
                         optionLabelProp="label"
@@ -426,10 +346,60 @@ function UpdateStudents() {
                         ))}
                       </Select>
                     </div>
+                    <div className="py-4">
+                      <label>Date of Birth</label>
+                      <DatePicker style={{ width: "100%" }}
+                        onChange={handleDob}
+                        defaultValue={
+                          updateStudent.DOB
+                            ? moment(JSON.parse(updateStudent.DOB))
+                            : ""
+                        }
+                      />
+                    </div>
+
+                  </div>
+                  <div className="flex flex-col w-[40%]  mr-10">
+                    <div className="py-4">
+                      <label>Last Name</label>
+                      <Input
+                        name="last_name"
+                        placeholder="Enter Last Name"
+                        defaultValue={updateStudent.last_name}
+                        onChange={(e) => onChange(e)}
+                      />
+                    </div>
                     <div>
-                      <label
-                       className="text-sm  font-serif" 
-                      >Guardian Contact</label>
+                      <label>Sex </label>
+                      <Select
+                        placeholder="Select Gender"
+                        onChange={handleGender}
+                        defaultValue={updateStudent.sex}
+                        optionLabelProp="label"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        {gender.map((item, index) => (
+                          <Option key={item.index} value={item} label={item}>
+                            {item}
+                          </Option>
+                        ))}
+                      </Select>
+                    </div>
+                    <div className="py-4">
+                      <label>Email</label>
+                      <Input
+                        name="email"
+                        placeholder="Enter Email Address"
+                        defaultValue={updateStudent.email}
+                        onChange={(e) => onChange(e)}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col w-[40%] mr-10">
+                    <div className="py-4">
+                      <label>Guardian Contact</label>
                       {data.phone.map((item, index) => {
                         return (
                           <Input
@@ -452,75 +422,39 @@ function UpdateStudents() {
                       ) : null}
                     </div>
                     <div>
-                      <label
-                       className="text-sm  font-serif" 
-                      >Email</label>
+                      <label>Student Id</label>
                       <Input
-                        defaultValue={updateStudent.email}
-                        name="email"
-                        onChange={(e) => onChange(e)}
-                      />
-                    </div>
-                    <div>
-                      <label
-                       className="text-sm  font-serif" 
-                      >Student Id</label>
-                      <Input
-                        defaultValue={updateStudent.studentId}
                         name="studentId"
+                        placeholder="Enter Student Id"
+                        defaultValue={updateStudent.studentId}
                         onChange={(e) => onChange(e)}
                       />
                     </div>
+                    {/* <div>
+              <Button
+                className="float-right -bottom-[5.5vh] border-[2px] border-[#E7752B] text-[#E7752B] rounded-lg flex flex-row  "
+                onClick={handleCancle}
+              >
+                <CloseCircleFilled className="mt-[1px]" />
+                Cancel
+              </Button>
+            </div> */}
                   </div>
                   <div></div>
                 </div>
               </div>
-              <h1
-                id="gardian"
-                style={{
-                  fontSize: 22,
-                  fontWeight: "bold",
-                  marginTop: "2%",
-                  marginBottom: "0%",
-                }}
-              >
-                Guardian
-              </h1>
-              <div className="mt-8 border-[1px] bg-[#F9FAFB] rounded-lg">
-                {parents.map((item, index) => (
-                  <div className="border-b-[1px] mt-2 flex flex-row justify-between w-[40vw] p-2">
-                    <div>
-                      <h1 className="font-bold font-serif">Guardian {index + 1}</h1>
-                    </div>
-                    <div>
-                      <span className="font-light text-xs font-serif">Full Name</span>
-                      <h1>{item.fullName}</h1>
-                    </div>
-                    <div>
-                      <span className="font-light text-xs font-serif">Phone Number</span>
-                      <h1>{item.phoneNumber}</h1>
-                    </div>
-                    <div>
-                      <span className="font-light text-xs font-serif">Email</span>
-                      <h1>{item.email}</h1>
-                    </div>
-                    <div>
-                      <span className="font-light text-xs font-serif">Type</span>
-                      <h1>{item.type}</h1>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}></div>
+
             </Tabs.TabPane>
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-serif">Course</p>
+              <p className="text-xl font-bold text-center ml-5 font-jakarta">Course</p>
             } key="2">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Edit Profile
               </Button>
               <div className="teacher-course-list">
                 <div className="tch-cr-list">
-                  <h1 className="text-xl font-bold  font-serif">Assigned Courses</h1>
+                  <h1 className="text-xl font-bold  font-jakarta">Assigned Courses</h1>
                 </div>
                 <Table
                   rowSelection={rowSelection}
