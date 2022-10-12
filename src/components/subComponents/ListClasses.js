@@ -181,6 +181,9 @@ export default function ListClasses() {
     // setViewData(data);
     // setOpenUpdate(true);
   };
+  const handleAdd = (data) => {
+    navigate("/add-class");
+  };
 
   const getClasses = async () => {
     var branches = await getSchool();
@@ -203,11 +206,11 @@ export default function ListClasses() {
 
   const columns = [
     {
-      title: "Class",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Class</p>,
       dataIndex: "class",
       key: "class",
       render: (text, data) => (
-        <a>
+        <a className="text-[14px] font-jakarta text-[#344054]">
           {data.level}
           {""}
           {data.section}
@@ -218,14 +221,14 @@ export default function ListClasses() {
       title: "Level",
       dataIndex: "level",
       key: "level",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className="text-[#344054]">{text}</a>,
     },
 
     {
       title: "Section",
       key: "section",
       dataIndex: "section",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a className="text-[#344054]">{text}</a>,
     },
     {
       title: "Action",
@@ -234,13 +237,13 @@ export default function ListClasses() {
       render: (_, record) => (
         <Space size="middle">
           <a
-            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
           >
             View{" "}
           </a>
           <a
-            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleUpdate(record)}
           >
             Update
@@ -258,20 +261,16 @@ export default function ListClasses() {
   }, [updateComplete]);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] px-8">
-      <div className="list-header">
-        <h1
-          className="text-2xl mb-2 font-bold font-serif"
-          //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'32px',fontSize:24}}
-        >
-          List Of Class
-        </h1>
-      </div>
+    <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14">
+      <h1 className="text-2xl mb-7 font-[600] font-jakarta text-[#344054] ">
+        List Of Class
+      </h1>
       <div className="list-sub">
-        <div className="list-filter">
+        <div className="flex flex-row justify-between w-[25%]">
           <Select
             defaultValue="Subject"
-            style={{ width: 120 }}
+            className="rounded-lg"
+            style={{ width: "40%" }}
             onChange={handleChange}
           >
             <Option value="Subject">Subject</Option>
@@ -283,8 +282,9 @@ export default function ListClasses() {
             <Option value="Yiminghe">yiminghe</Option>
           </Select>
           <Select
-            style={{ width: 120 }}
+            style={{ width: "40%" }}
             defaultValue="Class"
+            className="rounded-lg"
             onChange={handleChange}
           >
             <Option value="Grade">Grade</Option>
@@ -297,24 +297,19 @@ export default function ListClasses() {
           </Select>
         </div>
         <div className="course-search">
-          <div>
-            <Input
-              style={{ width: 200 }}
-              placeholder="Search"
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              suffix={
-                <Tooltip title="Extra information">
-                  <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
-                </Tooltip>
-              }
-            />
-          </div>
-          <div>
-            <Link to={"/add-class"}>
-              <PlusOutlined className="site-form-item-icon" />
-              Add Classes
-            </Link>
-          </div>
+          <Input
+            style={{ width: 200 }}
+            className="mr-3 rounded-lg"
+            placeholder="Search"
+            prefix={<SearchOutlined className="site-form-item-icon" />}
+          />
+          <Button
+            onClick={() => handleAdd()}
+            className="border-[2px] border-[#E7752B] flex flex-row justify-center text-[#E7752B] bg-white rounded-md  "
+          >
+            <PlusOutlined className="p-[1px] text-[#E7752B]" />
+            Add Classes
+          </Button>
         </div>
       </div>
       {/* <CreateSection /> */}
