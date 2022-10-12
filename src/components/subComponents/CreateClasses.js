@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Input, Button, Select, message, TimePicker, Table, Tag } from "antd";
-import { Skeleton } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import {
   doc,
   setDoc,
@@ -12,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { firestoreDb } from "../../firebase";
 import uuid from "react-uuid";
+import moment from "moment";
 
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -28,7 +30,9 @@ const CreateClasses = () => {
   const [loading, setLoading] = useState(true);
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
   const [coursesData, setCourseData] = useState([]);
-
+  const [selectedCourseForSchedule, setSelectedCourseForSchedule] = useState(
+    {}
+  );
   const [classSelected, setClassSelected] = useState(true);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [newClass, setNewClass] = useState({
@@ -41,16 +45,21 @@ const CreateClasses = () => {
 
   const columns = [
     {
-      title: "Courses _name",
+      title: <p className="font-jakarta text-[#344054] font-[600]">Courses</p>,
       dataIndex: "course_name",
       key: "course_name",
+      render: (text, data) => {
+        return (
+          <p className="text-[14px] font-jakarta text-[#344054]">{text}</p>
+        );
+      },
     },
     {
       title: "Subject",
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
-        return <div>{item.name}</div>;
+        return <div className="text-[#344054]">{item.name}</div>;
       },
     },
     {
@@ -58,7 +67,7 @@ const CreateClasses = () => {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <div>{item.level}</div>;
+        return <div className="text-[#344054]">{item.level}</div>;
       },
     },
     {
@@ -66,7 +75,7 @@ const CreateClasses = () => {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <div>{item.section}</div>;
+        return <div className="text-[#344054]">{item.section}</div>;
       },
     },
   ];
@@ -185,8 +194,8 @@ const CreateClasses = () => {
     var variables = [];
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school),
-      where("class", "==", newClass.class)
+      where("school_id", "==", uid.school)
+      // where("class", "==", newClass.class)
     );
     var querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -212,6 +221,10 @@ const CreateClasses = () => {
     setNewClass({ ...newClass, [e.target.name]: e.target.value });
     setClassSelected(true);
   };
+  const handleCourseSchedule = (e) => {
+    var coursees = coursesData.filter((c) => c.course_id === e);
+    setSelectedCourseForSchedule(coursees[0]);
+  };
 
   const handleStudent = (value) => {
     value.map((item, i) => {
@@ -227,85 +240,37 @@ const CreateClasses = () => {
 
   return (
     <>
-      <div className="bg-[#F9FAFB] p-10 -mt-16 h-[100vh]">
-        <div className="flex flex-row justify-between mb-2">
-          <h1
-            className="text-3xl"
-            style={{
-              fontFamily: "Plus Jakarta Sans",
-              fontWeight: "600",
-              lineHeight: "32px",
-              fontSize: 24,
-            }}
-          >
-            Create Class
+      <div className="bg-[#F9FAFB] h-[auto] pb-20  px-6 -mt-14">
+        <div className="flex flex-row justify-between -mt-10 mb-8 z-0">
+          <h1 className="text-2xl font-bold font-jakarta text-[#344054] ">
+            Add Class
           </h1>
-          <h1 className="text-3xl font-bold mb-6">Create Class</h1>
           <Button
-            className="text-[#E7752B] border-[1px] border-[#E7752B]  hover:bg-[#E7752B] z-0"
+            className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
             onClick={() => createNewClass()}
           >
             Submit
+            <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
           </Button>
         </div>
-        <div
-          style={{
-            padding: 15,
-            backgroundColor: "#FFFFFF",
-            borderRadius: 5,
-            borderWidth: 2,
-          }}
-        >
+        <div className="bg-[white] p-4 border-[1px] rounded-lg">
           <div className="course-content">
             <div>
               <div className="py-2">
-                <span
-                  style={{
-                    fontFamily: "Plus Jakarta Sans",
-                    fontWeight: "500",
-                    lineHeight: "20px",
-                    fontSize: 14,
-                  }}
-                >
-                  Class
-                </span>
-                <span
-                  style={{
-                    fontFamily: "Plus Jakarta Sans",
-                    fontWeight: "500",
-                    lineHeight: "20px",
-                    fontSize: 14,
-                  }}
-                >
-                  Class
-                </span>
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">Grade</h1>
+
                 <Input
                   name="level"
                   type={"number"}
+                  className="rounded-lg"
                   onChange={(e) => handleClass(e)}
                 />
               </div>
               <div>
-                <span
-                  style={{
-                    fontFamily: "Plus Jakarta Sans",
-                    fontWeight: "500",
-                    lineHeight: "20px",
-                    fontSize: 14,
-                  }}
-                >
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">
                   Student
-                </span>
-                <span
-                  style={{
-                    fontFamily: "Plus Jakarta Sans",
-                    fontWeight: "500",
-                    lineHeight: "20px",
-                    fontSize: 14,
-                  }}
-                >
-                  Student
-                </span>
+                </h1>
+
                 <Select
                   style={{
                     width: "100%",
@@ -335,39 +300,23 @@ const CreateClasses = () => {
               </div>
             </div>
             <div className="py-2 ml-10">
-              <span
-                style={{
-                  fontFamily: "Plus Jakarta Sans",
-                  fontWeight: "500",
-                  lineHeight: "20px",
-                  fontSize: 14,
-                }}
-              >
-                Section
-              </span>
-              <Input name="section" onChange={(e) => handleClass(e)} />
+              <h1 className="text-[#344054] pb-[6px] font-jakarta">Section</h1>
+              <Input
+                className="rounded-lg"
+                name="section"
+                onChange={(e) => handleClass(e)}
+              />
             </div>
           </div>
         </div>
         <div className="list-header">
-          <h1
-            style={{
-              fontFamily: "Plus Jakarta Sans",
-              fontWeight: "600",
-              lineHeight: "32px",
-              fontSize: 24,
-              marginTop: 10,
-            }}
-          >
-            Add Courses
-          </h1>
           <h1 className="text-2xl font-semibold" style={{ marginTop: 20 }}>
             Add Courses
           </h1>
         </div>
         <div
           style={{
-            backgroundColor: "#F9FAFB",
+            backgroundColor: "white",
             borderRadius: 8,
             borderWidth: 1,
             top: 95,
@@ -389,11 +338,171 @@ const CreateClasses = () => {
             </div>
           </div>
         </div>
-        <div
-          style={{
-            marginTop: "20px",
-          }}
-        ></div>
+        <div className="mb-20 mt-20 w-[50%]">
+          <div className="up-card-schedule pb-10 border-[2px] rounded-lg bg-[white]">
+            <h4 className="textbase pt-2 font-jakarta font-semibold text-xl  text-[#344054] mb-[24px]">
+              Schedule
+            </h4>
+            <Select
+              defaultValue="Course"
+              className="border-[1px] h-[49px] w-[200px] mb-[24px] rounded-lg outline-none "
+              onChange={(e) => handleCourseSchedule(e)}
+            >
+              {coursesData.map((item, i) => (
+                <Option key={i} value={item.course_id} lable={item.course_name}>
+                  {item.course_name}
+                </Option>
+              ))}
+            </Select>
+            <div className="flex flex-row justify-between ">
+              <div className="border-[2px] w-[100%] p-2 text-left rounded-l-lg border-r-[0px] border-[#F2F4F7]">
+                <p> Period</p>
+              </div>
+              <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-left border-r-[0px] rounded-none border-[#F2F4F7]">
+                <p> Start time</p>
+              </div>
+
+              <div className="border-[2px] w-[100%] p-2 text-left rounded-l-none border-l-[0px] rounded-lg border-[#F2F4F7]">
+                <p> End time</p>
+              </div>
+            </div>
+            {selectedCourseForSchedule?.schedule?.map((item, i) => (
+              <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
+                <Select
+                  style={{ width: "33%" }}
+                  className="rounded-lg border-[0px]"
+                  placeholder="First Select Days"
+                  // onChange={(e) => handleScheduler(e, i)}
+                  defaultValue={item.day}
+                >
+                  {days.map((item, index) => (
+                    <Option key={index} value={item} label={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+                <TimePicker.RangePicker
+                  style={{ width: "67%" }}
+                  className="rounded-lg border-[0px]"
+                  format={"hh:mm"}
+                  use12Hours
+                  defaultValue={
+                    item.time.length
+                      ? [
+                          moment(JSON.parse(item.time[0])),
+                          moment(JSON.parse(item.time[1])),
+                        ]
+                      : []
+                  }
+                  // onChange={(e) => handleSchedulerTime(e, i)}
+                />
+              </div>
+            ))}
+
+            {input.map((item, i) => (
+              <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
+                <Select
+                  style={{ width: "33%" }}
+                  placeholder="First Select Days"
+                  // onChange={(e) => handleNewScheduler(e, i)}
+                >
+                  {days.map((item, index) => (
+                    <Option key={index} value={item} label={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+                <TimePicker.RangePicker
+                  status="warning"
+                  style={{ width: "67%" }}
+                  className="rounded-lg border-[0px] active:border-[0px] outline-none selection:border-[#E7752B]"
+                  format={"hh:mm"}
+                  use12Hours
+                  // onChange={(e) => handleNewScheduler(e, i)}
+                />
+              </div>
+            ))}
+            <Button
+              style={{ float: "right", marginBottom: 40 }}
+              onClick={() => {
+                setInput([...input, 0]);
+                // setUpdateCourse({
+                //   ...updateCourse,
+                //   schedule: [...updateCourse.schedule, { day: "", time: [] }],
+                // });
+              }}
+            >
+              Add New
+            </Button>
+            {/* {data.schedule?.map((item, i) => (
+              <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
+                <Select
+                  style={{ width: "33%" }}
+                  className="rounded-lg border-[0px]"
+                  placeholder="First Select Days"
+                  onChange={(e) => handleScheduler(e, i)}
+                  defaultValue={item.day}
+                >
+                  {days.map((item, index) => (
+                    <Option key={index} value={item} label={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+                <TimePicker.RangePicker
+                  style={{ width: "67%" }}
+                  className="rounded-lg border-[0px]"
+                  format={"hh:mm"}
+                  use12Hours
+                  defaultValue={
+                    item.time.length
+                      ? [
+                          moment(JSON.parse(item.time[0])),
+                          moment(JSON.parse(item.time[1])),
+                        ]
+                      : []
+                  }
+                  onChange={(e) => handleSchedulerTime(e, i)}
+                />
+              </div>
+            ))}
+            {input.map((item, i) => (
+              <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
+                <Select
+                  style={{ width: "33%" }}
+                  placeholder="First Select Days"
+                  onChange={(e) => handleNewScheduler(e, i)}
+                >
+                  {days.map((item, index) => (
+                    <Option key={index} value={item} label={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+                <TimePicker.RangePicker
+                  status="warning"
+                  style={{ width: "67%" }}
+                  className="rounded-lg border-[0px] active:border-[0px] outline-none selection:border-[#E7752B]"
+                  format={"hh:mm"}
+                  use12Hours
+                  onChange={(e) => handleNewScheduler(e, i)}
+                />
+              </div>
+            ))}
+            <Button
+              style={{ float: "right", marginBottom: 40 }}
+              onClick={() => {
+                setInput([...input, 0]);
+                setUpdateCourse({
+                  ...updateCourse,
+                  schedule: [...updateCourse.schedule, { day: "", time: [] }],
+                });
+              }}
+            >
+              Add New
+            </Button> */}
+          </div>
+        </div>
       </div>
     </>
   );
