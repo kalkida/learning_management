@@ -189,6 +189,15 @@ const fetchSubject = async (sectionId) => {
     return "";
   }
 };
+const fetchTeacher = async (sectionId) => {
+  const teacherRef = doc(firestoreDb, "teachers", sectionId);
+  const docSnap = await getDoc(teacherRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return "";
+  }
+};
 
 const fetchClass = async (sectionId) => {
   const teacherRef = doc(firestoreDb, "class", sectionId);
@@ -217,4 +226,5 @@ export {
   fetchParents,
   fetchSubject,
   fetchClass,
+  fetchTeacher,
 };

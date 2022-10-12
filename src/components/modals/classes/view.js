@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Select, Tabs, Table, Tag } from "antd";
+import { fetchTeacher } from "../funcs";
 import Icon from "react-eva-icons";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -98,9 +99,7 @@ function ViewClass() {
   ];
   const columns = [
     {
-      title: (
-        <h1 className="text-[16px] font-[600] text-[#344054]">First Name</h1>
-      ),
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Name</h1>,
       dataIndex: "first_name",
       key: "first_name",
       render: (_, value) => {
@@ -119,15 +118,42 @@ function ViewClass() {
       dataIndex: "studentId",
       key: "studentId",
       render: (value) => {
-        return (
-          <h1 className="text-[14px] font-[600] text-[#344054]">{value}</h1>
-        );
+        if (value) {
+          return (
+            <h1 className="text-[14px] font-[600] text-[#344054]">{value}</h1>
+          );
+        } else {
+          return (
+            <h1 className="text-[14px] font-light text-[#515f76]">No Data</h1>
+          );
+        }
       },
     },
     {
-      title: "Class",
-      dataIndex: "className",
-      key: "className",
+      title: "Age",
+      dataIndex: "DOB",
+      key: "DOB",
+      render: (value) => {
+        if (value) {
+          const todays = Date.now();
+
+          return (
+            <h1 className="text-[14px] font-[600] text-[#344054]">
+              {/* {moment(JSON.parse(value)).format("mm-yy-dd")} */}
+              {moment(todays).year() - moment(JSON.parse(value)).year()}
+            </h1>
+          );
+        } else {
+          return (
+            <h1 className="text-[14px] font-light text-[#515f76]">No Data</h1>
+          );
+        }
+      },
+    },
+    {
+      title: "Sex",
+      dataIndex: "sex",
+      key: "sex",
       render: (value) => {
         if (value) {
           return (
@@ -152,28 +178,26 @@ function ViewClass() {
       },
     },
     {
-      title: "Level",
+      title: "Class / Week",
       dataIndex: "class",
       key: "class",
       render: (value) => {
-        if (value) {
+        if (value.schedule?.length) {
           return (
             <h1 className="text-[14px] font-[600] text-[#344054]">
-              {value.level}
+              {value.schedule.length}
             </h1>
           );
         } else {
-          return (
-            <h1 className="text-[14px] font-light text-[#515f76]">No Data</h1>
-          );
+          return <h1 className="text-[14px] font-light text-[#515f76]">0</h1>;
         }
       },
     },
     {
-      title: "Section",
-      dataIndex: "class",
-      key: "class",
-      render: (item) => {
+      title: "Teacher",
+      dataIndex: "teachers",
+      key: "teachers",
+      render: (item, other) => {
         return (
           <div className="text-[14px] font-[600] text-[#344054]">
             {item.section}
@@ -291,7 +315,7 @@ function ViewClass() {
           </div>
         </div>
         <div className="flex flex-row">
-          <h3 className="text-lg font-semibold font-jakarta border-r-[2px] pr-2">
+          <h3 className="text-lg font-semibold font-jakarta border-r-[2px] pr-2 text-[#344054]">
             Assigned Students
           </h3>
           <h4 className="text-lg font-semibold font-jakarta pl-2">
@@ -303,7 +327,7 @@ function ViewClass() {
         <Tabs defaultActiveKey="1" className="pb-30">
           <Tabs.TabPane
             tab={
-              <p className="text-sm font-[600] text-center ml-0 font-jakarta">
+              <p className="text-sm font-[600] text-center ml-0 font-jakarta text-[#344054]">
                 Profile
               </p>
             }
@@ -331,11 +355,7 @@ function ViewClass() {
               <h4 className="text-lg mb-[16px] mt-[32px] font-jakarta font-[600] text-[#344054]">
                 Assigned Students
               </h4>
-              <Table
-                className="bg-white"
-                dataSource={students}
-                columns={columns}
-              />
+              <Table dataSource={students} columns={columns} />
             </div>
             <div className="">
               <h4 className="text-lg mb-[16px] mt-[32px] font-jakarta font-[600] text-[#344054">
@@ -360,7 +380,7 @@ function ViewClass() {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <p className="text-sm font-[600] text-center ml-0 font-jakarta">
+              <p className="text-sm font-[600] text-center ml-0 font-jakarta text-[#344054]">
                 Attendance
               </p>
             }

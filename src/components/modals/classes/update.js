@@ -31,6 +31,8 @@ function UpdateClass() {
   const [students, setStudents] = useState([]);
   const [selected, setSelected] = useState([]);
   const [sectionMainData, setSectionMainData] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
   const [studentLoading, setStudentLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
@@ -134,6 +136,51 @@ function UpdateClass() {
     } else {
       return "";
     }
+  };
+
+  const onSelectChange = (newSelectedRowKeys) => {
+    console.log("selectedRowKeys changed: ", selectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+        key: "odd",
+        text: "Select Odd Row",
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return false;
+            }
+
+            return true;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+      {
+        key: "even",
+        text: "Select Even Row",
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return true;
+            }
+
+            return false;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+    ],
   };
 
   const getCourse = async (course) => {
@@ -266,20 +313,36 @@ function UpdateClass() {
   };
 
   return (
-    <div className="bg-[#E8E8E8] p-10 h-[100vh]">
+    <div className="bg-[#F9FAFB] p-10 h-[100vh]">
       {loading ? (
         <>
-          {" "}
+          <div className="flex flex-row justify-between w-[100%] -mt-20 ">
+            <div className="flex flex-row justify-center align-middle ">
+              <div className="flex flex-row">
+                <h1 className="text-lg font-bold font-jakarta mr-2">Class</h1>
+                <h2 className="text-lg font-bold font-jakarta">
+                  {data?.level}
+                </h2>
+                <h3 className="text-lg font-bold font-jakarta">
+                  {data?.section}
+                </h3>
+              </div>
+            </div>
+            <div className="flex flex-row">
+              <h3 className="text-lg font-semibold font-jakarta border-r-[2px] pr-2">
+                Assigned Students
+              </h3>
+              <h4 className="text-lg font-semibold font-jakarta pl-2">
+                {data?.student.length}
+              </h4>
+            </div>
+          </div>{" "}
           <div>
-            <h1 className="text-2xl font-bold -mt-4 font-serif"  
-            >
-              Edit Class {data.level} - {data.section}
-            </h1>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
                 <Tabs.TabPane
                   tab={
-                    <p className="text-xl font-serif font-bold text-center ml-0">
+                    <p className="text-sm font-[600] text-center ml-0 font-jakarta">
                       Profile
                     </p>
                   }
@@ -290,172 +353,29 @@ function UpdateClass() {
                   </Button>
                   <div className="">
                     <div className="flex flex-row justify-between">
-                      <div>
-                        <h1
-                       className="text-lg font-bold font-serif" 
-                         // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:20}}
-                        >
-                          Assigned Students
-                        </h1>
-                      </div>
-                      <Select
-                        style={{ width: "20%" }}
-                        placeholder="select Students"
-                        onChange={handleStudent}
-                        defaultValue={data.student}
-                        optionLabelProp="label"
-                        mode="multiple"
-                        maxTagCount={2}
-                      >
-                        {students.map((item, index) => (
-                          <Option value={item.key} label={item.first_name}>
-                            {item.first_name +
-                              " " +
-                              (item.last_name ? item.last_name : "")}
-                          </Option>
-                        ))}
-                      </Select>
+                      <h1 className="text-lg font-[600] font-jakarta mb-[16px] mt-[32px]">
+                        Assigned Students
+                      </h1>
                     </div>
-                    {/* {data.student.length <= 0 ? ( */}
                     <Table
                       loading={studentLoading}
                       dataSource={selected}
+                      rowSelection={rowSelection}
                       columns={columns}
                     />
                   </div>
                   <div className="-mb-10">
                     <div className="flex flex-row justify-between">
-                      <h1
-                    className="text-lg font-bold font-serif mb-10" 
-                    //   style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'30px',fontSize:20 , paddingBottom:10 }}
-                      >
+                      <h1 className="text-lg font-[600] font-jakarta mb-[16px] mt-[32px]">
                         Assigned Courses
                       </h1>
-                      <Select
-                        style={{ width: "20%" }}
-                        placeholder="Asign Courses"
-                        onChange={handleCourse}
-                        defaultValue={data.course}
-                        optionLabelProp="label"
-                        mode="multiple"
-                        maxTagCount={4}
-                      >
-                        {courses.map((item, index) => (
-                          <Option
-                            value={item.course_id}
-                            label={item.course_name}
-                          >
-                            {item.course_name}
-                          </Option>
-                        ))}
-                      </Select>
                     </div>
                     <Table dataSource={item} columns={courseColumns} />
                   </div>
-                  <div className="schedule">
-                    <h1
-                     style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'30px',fontSize:20}}
-                    >
-                      Weekly Schedule
-                    </h1>
-                    <div className="up-card-schedule">
-                      <h2>
-                        Class{" "}
-                        {updateClass.class
-                          ? updateClass.class.level + updateClass.class.section
-                          : null}
-                      </h2>
-                      <div className="schedule-header">
-                        <div>
-                          <p> Period</p>
-                        </div>
-                        <div>
-                          <p> Start time</p>
-                          <p> End time</p>
-                        </div>
-                      </div>
-
-                      {data.schedule?.map((item, i) => (
-                        <>
-                          <Select
-                            style={{ width: "40%" }}
-                            placeholder="First Select Days"
-                            onChange={(e) => handleScheduler(e, i)}
-                            defaultValue={item.day}
-                            in
-                          >
-                            {days.map((item, index) => (
-                              <Option key={index} value={item} label={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                          <TimePicker.RangePicker
-                            style={{ width: "60%" }}
-                            format={"hh:mm"}
-                            use12Hours
-                            defaultValue={
-                              item.time.length
-                                ? [
-                                    moment(JSON.parse(item.time[0])),
-                                    moment(JSON.parse(item.time[1])),
-                                  ]
-                                : []
-                            }
-                            onChange={(e) => handleScheduler(e, i)}
-                          />
-                        </>
-                      ))}
-                      {input.map((item, i) => (
-                        <>
-                          <Select
-                            style={{ width: "40%" }}
-                            placeholder="First Select Days"
-                            onChange={(e) => handleNewScheduler(e, i)}
-                          >
-                            {days.map((item, index) => (
-                              <Option key={index} value={item} label={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                          <TimePicker.RangePicker
-                            style={{ width: "60%" }}
-                            format={"hh:mm"}
-                            use12Hours
-                            onChange={(e) => handleNewScheduler(e, i)}
-                          />
-                        </>
-                      ))}
-                      <Button
-                        style={{ float: "right" }}
-                        onClick={() => {
-                          setInput([...input, 0]);
-                          setUpdateClass({
-                            ...updateClass,
-                            schedule: [
-                              ...updateClass.schedule,
-                              { day: "", time: [] },
-                            ],
-                          });
-                        }}
-                      >
-                        Add New
-                      </Button>
-                    </div>
-                  </div>
-                  <Button
-                    className="btn-dlt"
-                    type="primary"
-                    danger
-                    onClick={handleDelete}
-                  >
-                    Delete
-                  </Button>
                 </Tabs.TabPane>
                 <Tabs.TabPane
                   tab={
-                    <p className="text-xl font-bold text-center ml-0 font-serif">
+                    <p className="text-sm font-[600] text-center ml-0 font-jakarta">
                       Attendance
                     </p>
                   }
