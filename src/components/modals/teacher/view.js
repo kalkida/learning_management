@@ -153,7 +153,7 @@ function TeacherView() {
               />
             </div>
             <div className="flex flex-col ml-2">
-              <h2 className="text-lg font-bold font-serif">
+              <h2 className="text-lg font-bold font-jakarta">
                 {data.first_name + " " + data.last_name}
               </h2>
               <div className="flex flex-row align-bottom">
@@ -161,7 +161,7 @@ function TeacherView() {
                   <MailFilled className="text-[#E7752B]" />
                 </div>
                 <div>
-                  <h3 className="text-md text-[#E7752B] p-1 font-serif">Contact</h3>
+                  <h3 className="text-md text-[#E7752B] p-1 font-jakarta">Contact</h3>
                 </div>
               </div>
             </div>
@@ -202,41 +202,40 @@ function TeacherView() {
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={
-              <p className="text-xl font-bold text-center ml-5 font-serif">Profile</p>
+              <p className="text-xl font-bold text-center ml-5 ">Profile</p>
             } key="1">
               <Button className="btn-confirm"
                icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
               onClick={handleUpdate}>
                 Edit Profile
               </Button>
-              <div className="flex flex-row justify-between w-[70%]">
+              <div className="flex flex-row justify-between w-[50%]">
                 <div>
                   <h1 
-                   className="text-5xl font-bold font-serif leading-none mb-4"
-                 style={{ fontFamily:'Plus Jakarta Sans'}}
+                   className="text-4xl font-bold  leading-none mb-4"
                   >7,8</h1>
                   <span 
-                   className="text-sm font-medium font-serif"
+                   className="text-sm font-medium mb-8 "
                //   style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                   >Assigned Grade</span>
                 </div>
                 <div>
                   <h1 
-                   className="text-5xl font-bold font-serif leading-none mb-4"
+                   className="text-4xl font-bold mb-4"
                 //  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
                   >{data.course.length}</h1>
                   <span
-                   className="text-sm font-medium font-serif"
+                   className="text-sm font-medium mb-3 -ml-2 "
                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                    >Courses</span>
                 </div>
                 <div>
                   <h1 
-                   className="text-5xl font-bold font-serif leading-none mb-4"
+                   className="text-4xl font-bold  mb-4"
                   //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
                   >{weekClass}</h1>
                   <span
-                   className="text-sm font-medium font-serif" 
+                   className="text-sm font-medium mb-4" 
                   //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
                   >Classes/Week</span>
                 </div>
@@ -251,89 +250,89 @@ function TeacherView() {
                   >Classes/Week</span>
                 </div> */}
               </div>
-              <div className="teacher-profile">
+              <div className="teacher-profile mt-10">
                 <div className="personal-info">
                   <h1
-                   className="text-xl font-bold font-serif" 
+                   className="text-xl font-bold font-jakarta text-[#344054] " 
                  // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
                   >Personal Information</h1>
                   <div className="info-content">
                     <div className="col">
                       <div>
                         <h3
-                        className="text-sm  font-serif"  
+                        className=" font-semibold text-sm font-jakarta text-[#344054]"  
                       //  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'200',lineHeight:'20px',fontSize:14}}
                         >Age</h3>
-                        <span className="font-serif">{age}</span>
+                        <span className="font-jakarta font-bold">{age}</span>
                       </div>
                       <div 
-                       className="text-sm  font-serif"  >
+                       className=" font-semibold text-sm font-jakarta text-[#344054] "  >
                         <h3>Sex</h3>
-                        <span className="font-serif">{data.sex}</span>
+                        <span className="font-jakarta font-bold">{data.sex}</span>
                       </div>
                       <div>
                         <h3 
-                         className="text-sm  font-serif"  
+                         className=" font-semibold text-sm font-jakarta text-[#344054] "  
                         >Phone number</h3>
-                        <span className="font-serif">{data.phone}</span>
+                        <span className="font-jakarta font-bold">{data.phone}</span>
                       </div>
                       <div>
                         <h3 
-                         className="text-sm  font-serif"  
+                         className=" font-semibold text-sm font-jakarta text-[#344054] "  
                         >Email</h3>
-                        <span className="font-serif">{data.email}</span>
+                        <span className="font-jakarta font-bold">{data.email}</span>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="career-profile">
                   <h1 
-                   className="text-xl font-bold font-serif"  
+                   className="text-xl font-bold font-jakarta text-[#344054] "  
                   //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:24}}
                   >Career Profile</h1>
                   <div>
                     <h3
-                     className="text-sm  font-serif"  
+                     className=" font-semibold text-sm font-jakarta text-[#344054] "  
                     >Working Since</h3>
-                    <span className="font-serif">{workTime}</span>
+                    <span className="font-jakarta font-bold">{workTime}</span>
                   </div>
                   <div> 
                     <h3 
-                    className="text-sm  font-serif"  
+                    className=" font-semibold text-sm font-jakarta text-[#344054]"  
                     >Speciality</h3>
-                    <span className="font-serif">Teacher</span>
+                    <span className="font-jakarta font-bold">Teacher</span>
                   </div>
                   <div>
                     <h3 
-                    className="text-sm  font-serif"  
+                    className=" font-semibold text-sm font-jakarta text-[#344054]"  
                     >Work Expirence</h3>
-                    <span className="font-serif">{expriance} year</span>
+                    <span className="font-bold font-jakarta ">{expriance} year</span>
                   </div>
                 </div> 
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-serif">Course</p>
+                 <p className="text-xl font-bold text-center ml-5 font-jakarta">Course</p>
             } key="2">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Edit Profile
               </Button>
               <div className="teacher-course-list">
                 <div className="tch-cr-list">
-                  <h1 className="text-xl font-bold font-serif">Assigned Courses</h1>
+                  <h1 className="text-xl font-bold font-jakarta">Assigned Courses</h1>
                 </div>
                 <Table dataSource={data.course} columns={columns} />
               </div>
             </Tabs.TabPane>
             <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-serif">Class</p>
+                 <p className="text-xl font-bold text-center ml-5 font-jakarta ">Class</p>
             } key="3">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Edit Profile
               </Button>
               <div className="teacher-course-list">
                 <div className="tch-cr-list">
-                  <h1 className="text-xl font-bold font-serif">Assigned Classes</h1>
+                  <h1 className="text-xl font-bold font-jakarta">Assigned Classes</h1>
                 </div>
                 <Table dataSource={data.class} columns={classColumns} />
               </div>
