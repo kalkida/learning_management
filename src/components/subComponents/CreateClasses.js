@@ -310,8 +310,8 @@ const CreateClasses = () => {
             className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
             onClick={() => createNewClass()}
           >
-            Submit
-            <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
+            Confirm
+          <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
           </Button>
         </div>
         <div className="bg-[white] p-4 border-[1px] rounded-lg">
@@ -368,7 +368,7 @@ const CreateClasses = () => {
           </div>
         </div>
         <h4 className=" pt-2 font-jakarta font-semibold text-xl  text-[#344054] my-5">
-          Schedule
+          Add Schedule
         </h4>
         <div className="">
           <div className="pb-20 border-[2px] rounded-lg bg-[white] p-4">
@@ -466,7 +466,7 @@ const CreateClasses = () => {
           </div>
         </div>
         <div className="list-header">
-          <h1 className="text-2xl font-semibold" style={{ marginTop: 20 }}>
+          <h1 className="pt-2 font-jakarta font-semibold text-xl  text-[#344054] my-5 " style={{ marginTop: 20 }}>
             Add Student
           </h1>
         </div>
