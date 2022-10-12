@@ -279,7 +279,7 @@ function UpdateCourse() {
     <>
       {loading ? (
         <div className="bg-[#F9FAFB] h-[100vh] p-4">
-          <div className="flex flex-row justify-between w-[100%] -mt-16 border-b-[1px] p-3">
+          <div className="flex flex-row justify-between w-[100%] -mt-20 border-b-[1px] p-3">
             <div className="flex flex-row justify-between align-middle h-[78px]">
               <div className="rounded-full  border-[2px] border-[#E7752B] mr-10">
                 <img
@@ -436,7 +436,7 @@ function UpdateCourse() {
                 />
               ) : null}
             </div>
-            <div className="mb-20">
+            <div className="mb-20 rounded-lg">
               <h4
                 // className="text-xl pt-2"
                 className="textbase pt-2 font-jakarta font-semibold text-lg text-[#344054] mb-[24px]"
@@ -445,12 +445,11 @@ function UpdateCourse() {
               </h4>
               <div className="up-card-schedule pb-10 border-[2px] rounded-sm bg-[white]">
                 <h2 className="text-lg py-2">
-                  Class{" "}
-                  {updateCourse.class
-                    ? updateCourse.class.level + updateCourse.class.section
-                    : null}
+                  Class{"  "}
+                  {singleClass?.level}
+                  {singleClass?.section}
                 </h2>
-                <div className="flex flex-row justify-between ">
+                <div className="flex flex-row justify-between">
                   <div className="border-[2px] w-[100%] p-2 text-left rounded-l-lg border-r-[0px] border-[#F2F4F7]">
                     <p> Period</p>
                   </div>
@@ -519,7 +518,7 @@ function UpdateCourse() {
                   </div>
                 ))}
                 <Button
-                  style={{ float: "right", marginBottom: 40 }}
+                  style={{ float: "right", marginBottom: 10 }}
                   onClick={() => {
                     setInput([...input, 0]);
                     setUpdateCourse({
