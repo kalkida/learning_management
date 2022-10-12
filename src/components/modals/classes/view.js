@@ -27,9 +27,12 @@ function ViewClass() {
   const [courseLoading, setCourseLoading] = useState(true);
   const [classData, setClassData] = useState([]);
   const [studentLoading, setStudentLoading] = useState(true);
+
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   var { data } = state;
+  const [selectedRowKeys, setSelectedRowKeys] = useState(data.course);
+
   const navigate = useNavigate();
 
   const scheduleColumn = [
@@ -300,6 +303,14 @@ function ViewClass() {
       setStudentLoading(false);
     }
   };
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
 
   const handleUpdate = () => {
     navigate("/update-class", { state: { data } });
@@ -398,8 +409,9 @@ function ViewClass() {
             }
             key="2"
           >
-            <div className="mt-14"></div>
-            <AttendanceList />
+            <div className="mt-14 -ml-8">
+              <AttendanceList />
+            </div>
           </Tabs.TabPane>
         </Tabs>
       </div>

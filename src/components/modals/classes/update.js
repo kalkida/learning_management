@@ -11,11 +11,21 @@ import {
   getDoc,
   deleteDoc,
 } from "firebase/firestore";
+
 import moment from "moment";
 import { firestoreDb, storage } from "../../../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Select, TimePicker, Tabs, Table, message, Spin } from "antd";
+import {
+  Button,
+  Select,
+  TimePicker,
+  Tabs,
+  Table,
+  message,
+  Spin,
+  Input,
+} from "antd";
 import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
 import { async } from "@firebase/util";
@@ -31,11 +41,13 @@ function UpdateClass() {
   const [students, setStudents] = useState([]);
   const [selected, setSelected] = useState([]);
   const [sectionMainData, setSectionMainData] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [teachers, setTeachers] = useState([]);
 
   const [studentLoading, setStudentLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
+  const [selectedRowKeys, setSelectedRowKeys] = useState(data.student);
+  console.log("students", data);
 
   const [updateClass, setUpdateClass] = useState({
     level: data.level,
@@ -81,14 +93,32 @@ function UpdateClass() {
       key: "last_name",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: "Sex",
+      dataIndex: "sex",
+      key: "sex",
+      render: (item) => {
+        if (item) {
+          return <div>{item}</div>;
+        } else {
+          return (
+            <div className="text-[14px] font-light text-[#515f76]">No Data</div>
+          );
+        }
+      },
     },
     {
       title: "class",
-      dataIndex: "level",
-      key: "level",
+      dataIndex: "className",
+      key: "className",
+      render: (item) => {
+        if (item) {
+          return <div>{item}</div>;
+        } else {
+          return (
+            <div className="text-[14px] font-light text-[#515f76]">No Data</div>
+          );
+        }
+      },
     },
   ];
 
@@ -106,7 +136,7 @@ function UpdateClass() {
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
-        // return <div>{item.level}</div>;
+        return <div>{item}</div>;
       },
     },
   ];
@@ -276,7 +306,60 @@ function UpdateClass() {
       });
     });
     console.log("temporary", temp);
-    await setSelected(temp);
+    setSelected(temp);
+  };
+  const getCourseData = async (ID) => {
+    const docRef = doc(firestoreDb, "courses", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+
+    return data;
+  };
+
+  const getClassData = async (ID) => {
+    const docRef = doc(firestoreDb, "class", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+    return data;
+  };
+  const getDatas = async (data, teach) => {
+    if (data.class) {
+      data.class?.map(async (item, index) => {
+        data.class[index] = await getClassData(item, teach);
+      });
+
+      data.course?.map(async (item, index) => {
+        data.course[index] = await getCourseData(item);
+      });
+      return data;
+    } else {
+      return data;
+    }
+  };
+  const getTeacher = async () => {
+    var value = [];
+    const q = query(
+      collection(firestoreDb, "teachers"),
+      where("school_id", "==", uid.school)
+    );
+
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      getDatas(data, doc.id).then((response) => {
+        value.push(response);
+      });
+    });
+    setTimeout(() => {
+      setTeachers(value);
+    }, 2000);
   };
 
   const getStudentID = async (ID) => {
@@ -289,17 +372,17 @@ function UpdateClass() {
       data = response.data();
     }
 
-    setStudentLoading(false);
-
     return data;
   };
   useEffect(() => {
     getStudenters();
     getClass();
     getStudents();
+    getTeacher();
     getCourse(data.course);
     setTimeout(() => {
       setLoading(true);
+      setStudentLoading(false);
 
       getStudent();
     }, 2000);
@@ -311,7 +394,9 @@ function UpdateClass() {
   const handleCourse = (value) => {
     setUpdateClass({ ...updateClass, course: value });
   };
-
+  const handleClass = (e) => {
+    setUpdateClass({ ...updateClass, [e.target.name]: e.target.value });
+  };
   return (
     <div className="bg-[#F9FAFB] p-10 h-[100vh]">
       {loading ? (
@@ -336,7 +421,7 @@ function UpdateClass() {
                 {data?.student.length}
               </h4>
             </div>
-          </div>{" "}
+          </div>
           <div>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
@@ -351,6 +436,66 @@ function UpdateClass() {
                   <Button className="btn-confirm" onClick={handleUpdate}>
                     Edit Class
                   </Button>
+                  <div className="flex flex-row bg-white w-[100%]  border-[1px] rounded-lg p-4">
+                    <div className="flex flex-row justify-between w-[100%]">
+                      <div>
+                        <div className="py-2">
+                          <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                            Grade
+                          </h1>
+
+                          <Input
+                            name="level"
+                            type={"number"}
+                            className="rounded-lg"
+                            defaultValue={data.level}
+                            // onChange={(e) => handleClass(e)}
+                          />
+                        </div>
+                      </div>
+                      <div className="py-2 ml-10">
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Section
+                        </h1>
+                        <Input
+                          className="rounded-lg"
+                          name="section"
+                          value={data.section}
+                          onChange={(e) => handleClass(e)}
+                        />
+                      </div>
+                      <div className="py-2 ml-10 w-[20vw]">
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Home room Teacher
+                        </h1>
+                        <Select
+                          style={{
+                            width: "100%",
+                          }}
+                          value={data.homeRoomTeacher}
+                          placeholder="Select Home room Teacher"
+                          onChange={handleStudent}
+                          optionLabelProp="label"
+                        >
+                          {teachers.map((item, index) => (
+                            <Option
+                              key={item.key}
+                              value={item.key}
+                              label={
+                                item.first_name +
+                                " " +
+                                (item.last_name ? item.last_name : "")
+                              }
+                            >
+                              {item.first_name +
+                                " " +
+                                (item.last_name ? item.last_name : "")}
+                            </Option>
+                          ))}
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
                   <div className="">
                     <div className="flex flex-row justify-between">
                       <h1 className="text-lg font-[600] font-jakarta mb-[16px] mt-[32px]">
@@ -359,7 +504,7 @@ function UpdateClass() {
                     </div>
                     <Table
                       loading={studentLoading}
-                      dataSource={selected}
+                      dataSource={students}
                       rowSelection={rowSelection}
                       columns={columns}
                     />
@@ -381,7 +526,7 @@ function UpdateClass() {
                   }
                   key="2"
                 >
-                  <div  className="mt-14"/>
+                  <div className="mt-14" />
                   <AttendanceList />
                 </Tabs.TabPane>
               </Tabs>
