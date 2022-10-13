@@ -28,6 +28,7 @@ function ViewStudent() {
   const [loadingCourse, setLoadingCourse] = useState(true);
   const { data } = state;
   const [age, setAge] = useState();
+  const [teacherData, setTeacherData] = useState([data]);
 
   const getClassData = async (id) => {
     const q = query(
@@ -91,6 +92,44 @@ function ViewStudent() {
   const handleUpdate = () => {
     navigate("/update-student", { state: { data } });
   };
+
+  const teacherColumn = [
+    {
+      title: "Age",
+      dataIndex: "DOB",
+      key: "DOB",
+      render: (item) => {
+        return <span>{age}</span>;
+      },
+    },
+    {
+      title: "Sex",
+      dataIndex: "sex",
+      key: "sex",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phone",
+      key: "phone",
+      render: (item) => {
+        return <span>{item}</span>;
+      },
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+
+    {
+      title: "Location",
+      dataIndex: "working_since",
+      key: "working_since",
+      render: (item) => {
+        return <span>Lideta</span>;
+      },
+    },
+  ];
 
   const columns = [
     {
@@ -380,47 +419,53 @@ function ViewStudent() {
             >
               Edit
             </Button>
-            <div className="flex flex-row justify-around border-[0px] border-[#e5e5e5] p-4 text-[#344054]">
+            <div className="flex flex-row justify-around border-[0px] border-[#e5e5e5] text-[#344054]">
               <div className="flex flex-col justify-center align-middle text-[#344054]">
+              <span className="text-lg text-center text-[#344054] font-jakarta">
+                  Grade
+                </span>
                 <h1 className="text-[48px] text-center text-[#344054] font-bold font-jakarta">
                   {data.class?.level}
                 </h1>
-                <span className="text-lg text-center text-[#344054] font-jakarta">
-                  Grade
-                </span>
+              
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054] ">
+              <span className="text-lg font-jakarta">Sibilings</span>
                 <h1 className="text-[48px] text-center font-bold font-jakarta ">
                   2
                 </h1>
-                <span className="text-lg font-jakarta">Sibilings</span>
+ 
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054]">
+              <span className="text-lg font-jakarta">Rank</span>
                 <h1 className="text-[48px] text-center font-bold font-jakarta">
                   4
                 </h1>
-                <span className="text-lg font-jakarta">Rank</span>
+          
               </div>
               <div className="flex flex-col justify-center align-middle text-[#344054]">
+              <span className="text-lg font-jakarta">Conduct</span>
                 <h1 className="text-[48px] text-center font-bold font-jakarta">
                   A
                 </h1>
-                <span className="text-lg font-jakarta">Conduct</span>
+               
               </div>
             </div>
             <h1
-              className="text-[#344054] font-jakarta"
-              style={{
-                fontSize: 24,
-                fontWeight: "600",
-                fontFamily: "Plus Jakarta Sans",
-                marginTop: "3%",
-                marginBottom: "2%",
-              }}
+              className="text-[#344054] font-jakarta text-xl font-bold mt-10 mb-8"
+              // style={{
+              //   fontSize: 20,
+              //   fontWeight: "600",
+              //   fontFamily: "Plus Jakarta Sans",
+              //   marginTop: "3%",
+              //   marginBottom: "2%",
+              // }}
             >
               Student Information
             </h1>
-            <div className="flex flex-row justify-between border-b-[2px] border-[#e2e2e2] py-2 px-2">
+
+            <Table dataSource={teacherData} columns={teacherColumn} />
+            {/* <div className="flex flex-row justify-between border-b-[2px] border-[#e2e2e2] py-2 px-2">
               <div>
                 <span className="text-[16px] text-left text-[#344054] font-jakarta">
                   Age
@@ -473,7 +518,7 @@ function ViewStudent() {
                   Lideta
                 </h2>
               </div>
-            </div>
+            </div> */}
             <div className="mt-10 mb-10">
               <h1 className="text-xl font-bold mb-10 font-jakarta">
                 Guardian Information
