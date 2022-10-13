@@ -77,9 +77,10 @@
     color: #e66937;
 }
 
-.btn-confirm {
+.btn-confirm button{
     float: right;
     margin-top: -3.5rem;
+    color: #E7752B !important;
 }
 
 .tab-content Button:hover {
