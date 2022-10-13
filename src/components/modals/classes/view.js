@@ -182,11 +182,12 @@ function ViewClass() {
       title: "Class / Week",
       dataIndex: "class",
       key: "class",
-      render: (value) => {
-        if (value.schedule?.length) {
+      render: (value, data) => {
+        console.log("schedule", data);
+        if (data?.schedule) {
           return (
             <h1 className="text-[14px] font-[600] text-[#344054]">
-              {value.schedule.length}
+              {data.schedule.length}
             </h1>
           );
         } else {

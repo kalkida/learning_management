@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { Form, Input, Button, Select, TimePicker, message } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import CreateSubject from "../modals/subject/createSubject";
+
 import {
   addSingleCourseToClass,
   addSingleCourseToTeacher,
@@ -22,11 +24,11 @@ import { useNavigate } from "react-router-dom";
 import _default from "antd/lib/time-picker";
 
 const { Option } = Select;
-const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
+const days = ["Monday", "Tuesday", "Wednsday", "Thursday", "Friday"];
 const CreateCrouse = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
-
+  const [added, setAdded] = useState(1);
   const [classes, setClasses] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [subject, setSubject] = useState([]);
@@ -128,10 +130,6 @@ const CreateCrouse = () => {
     }
   };
 
-  const onCancle = () => {
-    navigate("/list-Course");
-  };
-
   const handleCourse = (e) => {
     setNewCourse({ ...newCourse, [e.target.name]: e.target.value });
   };
@@ -173,12 +171,13 @@ const CreateCrouse = () => {
         <h1 className="text-2xl font-bold font-jakarta text-[#344054] ">
           Add Course
         </h1>
-        <div className="pr-0 ">
+        <div className="pr-0  flex flex-row">
           <Button
-            className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
+            className="border-[#E7752B] border-[2px] text-[#E7752B] rounded-lg shadow-md -z-0 ml-10"
+            icon={<FontAwesomeIcon className="mr-2" icon={faArrowRight} />}
             onClick={createNewCourse}
           >
-            Submit <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
+            Submit
           </Button>
         </div>
       </div>
