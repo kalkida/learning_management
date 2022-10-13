@@ -415,9 +415,9 @@ export default function AddTeacher() {
         <h1 className="text-2xl font-[600] font-jakarta">List Of Teachers</h1>
       </div>
       <div className="list-sub">
-        <div className="flex flex-row justify-between w-[23%]">
+        <div className="flex flex-row w-[30%]">
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] mr-5"
             placeholder="Course"
             bordered={false}
             style={{ width: 120 }}

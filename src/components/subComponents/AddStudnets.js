@@ -179,13 +179,13 @@ export default function AddStudnets() {
       render: (_, record) => (
         <Space size="middle">
           <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
           >
             View{" "}
           </a>
           <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleUpdate(record)}
           >
             Update
@@ -239,7 +239,7 @@ export default function AddStudnets() {
             <Search
               placeholder="input search text"
               bordered={true}
-              // onSearch={onSearch}
+            // onSearch={onSearch}
             />
           </div>
           <Button
