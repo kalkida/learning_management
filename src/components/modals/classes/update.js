@@ -219,7 +219,7 @@ function UpdateClass() {
   };
 
   const rowSelectionCourse = {
-    selectedRowKeysCourses,
+    selectedRowKeys: selectedRowKeysCourses,
     onChange: onSelectChanges,
     selections: [
       Table.SELECTION_ALL,
