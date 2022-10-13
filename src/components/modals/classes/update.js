@@ -52,12 +52,14 @@ function UpdateClass() {
   const { state } = useLocation();
   const { data } = state;
   const [selectedRowKeys, setSelectedRowKeys] = useState(data.student);
-  const [selectedRowKeyss, setSelectedRowKeyss] = useState(data.course);
+  const [selectedRowKeysCourses, setSelectedRowKeyCourse] = useState(
+    data.course
+  );
   const [updateClass, setUpdateClass] = useState({
     level: data.level,
     student: data.student,
     section: data.section,
-    homeRoomTeacher: data.homeRoomTeacher,
+    homeRoomTeacher: data?.homeRoomTeacher,
     school_id: data.school_id,
     course: data.course,
     schedule: data.schedule,
@@ -184,12 +186,17 @@ function UpdateClass() {
 
   const handleUpdate = async () => {
     setLoading(true);
+    console.log(data);
     setDoc(
       doc(firestoreDb, "class", data.key),
-      { ...updateClass, student: selectedRowKeys, course: selectedRowKeyss },
+      {
+        ...updateClass,
+        student: selectedRowKeys,
+        course: selectedRowKeysCourses,
+      },
       { merge: true }
     )
-      .then((response) => {
+      .then((_) => {
         setLoading(false);
         updateClass.course.map((course) => {
           if (!data.course.includes(course)) {
@@ -207,11 +214,12 @@ function UpdateClass() {
     // }
   };
   const onSelectChanges = (newSelectedRowKeys) => {
-    setSelectedRowKeyss(newSelectedRowKeys);
+    console.log("slect", newSelectedRowKeys);
+    setSelectedRowKeyCourse(newSelectedRowKeys);
   };
 
-  const rowSelections = {
-    selectedRowKeyss,
+  const rowSelectionCourse = {
+    selectedRowKeys: selectedRowKeysCourses,
     onChange: onSelectChanges,
     selections: [
       Table.SELECTION_ALL,
@@ -229,7 +237,7 @@ function UpdateClass() {
 
             return true;
           });
-          setSelectedRowKeyss(newSelectedRowKeys);
+          setSelectedRowKeyCourse(newSelectedRowKeys);
         },
       },
       {
@@ -244,7 +252,7 @@ function UpdateClass() {
 
             return false;
           });
-          setSelectedRowKeyss(newSelectedRowKeys);
+          setSelectedRowKeyCourse(newSelectedRowKeys);
         },
       },
     ],
@@ -294,27 +302,6 @@ function UpdateClass() {
     ],
   };
 
-  const getCourse = async () => {
-    const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school)
-    );
-
-    const querySnapshot = await getDocs(q);
-    let temporary = [];
-    querySnapshot.forEach(async (doc) => {
-      var datause = doc.data();
-      if (data.course.includes(doc.id) || datause.class == "") {
-        datause.key = doc.id;
-        var subject = await fetchSubject(datause.subject);
-        var classs = await fetchClass(datause.class);
-        datause.subject = subject;
-        datause.class = classs;
-        temporary.push(datause);
-      }
-    });
-    setItem(temporary);
-  };
   const getStudent = async () => {
     const children = [];
     const q = query(
@@ -362,6 +349,8 @@ function UpdateClass() {
         key: doc.id,
       });
     });
+    setItem(children);
+
     setcourse(children);
     setSectionMainData(sectionArray);
   };
@@ -443,7 +432,7 @@ function UpdateClass() {
     getStudenters();
     getClass();
     getTeacher();
-    getCourse(data.course);
+
     setTimeout(() => {
       setLoading(true);
       setStudentLoading(false);
@@ -592,7 +581,7 @@ function UpdateClass() {
                     </div>
                     <Table
                       loading={studentLoading}
-                      rowSelection={rowSelections}
+                      rowSelection={rowSelectionCourse}
                       dataSource={item}
                       columns={courseColumns}
                     />

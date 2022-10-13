@@ -87,21 +87,16 @@ function CreateSubject() {
           onCancel={handleCancel}
           footer={[
             <Button key="back" onClick={handleCancel}>
-              Return
+              Exit
             </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={loading}
-              onClick={handleOk}
-            >
+            <Button key="submit" loading={loading} onClick={handleOk}>
               Submit
             </Button>,
           ]}
         >
           <Form
             labelCol={{ span: 4 }}
-            wrapperCol={{ span: 14 }}
+            wrapperCol={{ span: 20 }}
             layout="horizontal"
           >
             <Form.Item

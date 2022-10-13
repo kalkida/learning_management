@@ -379,7 +379,7 @@ export default function ListCourses() {
     <div className="bg-[#F9FAFB] h-[auto] p-6 -mt-20">
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Course</h1>
-        {/* <CreateSubject /> */}
+        <CreateSubject />
       </div>
       <div className="list-sub">
         <div className="flex flex-row  w-[30%]">
