@@ -31,20 +31,43 @@ import { Tooltip } from "antd";
 import "../modals/courses/style.css";
 
 const { Option } = Select;
+const LEVEL = ["1", " 2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+const SECTION = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
+];
 
 export default function ListClasses() {
   const navigate = useNavigate();
 
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-  const [isData, setIsData] = useState(false);
-  const [openView, setOpenView] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [updateComplete, setUpdateComplete] = useState(false);
-  const [viewData, setViewData] = useState();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const [rerender, setRerender] = useState(false);
   const [tableLoading, setTableLoading] = useState(true);
   const searchInput = useRef(null);
 
@@ -162,25 +185,14 @@ export default function ListClasses() {
     }
   };
 
-  const handleViewCancel = () => {
-    setOpenView(false);
-  };
-
   const handleView = (data) => {
     navigate("/view-class", { state: { data } });
-    // setViewData(data);
-    // setOpenView(true);
-  };
-
-  const handleUpdateCancel = () => {
-    setOpenUpdate(false);
   };
 
   const handleUpdate = (data) => {
     navigate("/update-class", { state: { data } });
-    // setViewData(data);
-    // setOpenUpdate(true);
   };
+
   const handleAdd = (data) => {
     navigate("/add-class");
   };
@@ -199,7 +211,6 @@ export default function ListClasses() {
       data.key = doc.id;
       temporary.push(data);
     });
-    console.log(temporary);
     setData(temporary);
     setTableLoading(false);
   };
@@ -252,13 +263,47 @@ export default function ListClasses() {
       ),
     },
   ];
-  const handleChange = (value) => {
+  const handleFilterLevel = async (value) => {
     console.log(`selected ${value}`);
+
+    const q = query(
+      collection(firestoreDb, "class"),
+      where("school_id", "==", uid.school),
+      where("level", "==", value)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    setData(temporary);
+  };
+
+  const handleFilterSection = async (value) => {
+    console.log(`selected ${value}`);
+
+    const q = query(
+      collection(firestoreDb, "class"),
+      where("school_id", "==", uid.school),
+      where("section", "==", value)
+    );
+    var temporary = [];
+    const snap = await getDocs(q);
+
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    setData(temporary);
   };
 
   useEffect(() => {
     getClasses();
-  }, [updateComplete]);
+  }, []);
 
   return (
     <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14">
@@ -266,34 +311,32 @@ export default function ListClasses() {
         List Of Class
       </h1>
       <div className="list-sub">
-        <div className="flex flex-row justify-between w-[25%]">
+        <div className="flex flex-row  w-[30%]">
           <Select
-            defaultValue="Subject"
-            className="rounded-lg"
-            style={{ width: "40%" }}
-            onChange={handleChange}
+            placeholder="Level"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] mr-5"
+            bordered={false}
+            style={{ width: 141 }}
+            onChange={handleFilterLevel}
           >
-            <Option value="Subject">Subject</Option>
-
-            <Option value="jack">Jack</Option>
-            <Option value="disabled" disabled>
-              Disabled
-            </Option>
-            <Option value="Yiminghe">yiminghe</Option>
+            {LEVEL.map((item, i) => (
+              <Option key={i} name="level" value={item}>
+                {item}
+              </Option>
+            ))}
           </Select>
           <Select
-            style={{ width: "40%" }}
-            defaultValue="Class"
-            className="rounded-lg"
-            onChange={handleChange}
+            bordered={false}
+            style={{ width: 141 }}
+            placeholder="Section"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white]"
+            onChange={handleFilterSection}
           >
-            <Option value="Grade">Grade</Option>
-
-            <Option value="jack">Jack</Option>
-            <Option value="disabled" disabled>
-              Disabled
-            </Option>
-            <Option value="Yiminghe">yiminghe</Option>
+            {SECTION.map((item, i) => (
+              <Option key={i} value={item}>
+                {item}
+              </Option>
+            ))}
           </Select>
         </div>
         <div className="course-search">
@@ -314,29 +357,12 @@ export default function ListClasses() {
       </div>
       {/* <CreateSection /> */}
       <br />
-
       <Table
         loading={tableLoading}
         style={{ marginTop: 20 }}
         columns={columns}
         dataSource={datas}
       />
-      {openView ? (
-        <View
-          handleCancel={handleViewCancel}
-          openView={openView}
-          data={viewData}
-        />
-      ) : null}
-      {openUpdate ? (
-        <Update
-          handleCancel={handleUpdateCancel}
-          openUpdate={openUpdate}
-          data={viewData}
-          setUpdateComplete={setUpdateComplete}
-          updateComplete={updateComplete}
-        />
-      ) : null}
     </div>
   );
 }
