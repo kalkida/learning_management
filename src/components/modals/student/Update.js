@@ -267,21 +267,24 @@ function UpdateStudents() {
       <div className="bg-[#F9FAFB] h-[100vh] p-2 -mt-14">
         <div className="add-header mb-6 items-center">
           < h1 className="text-[1.5rem] font-jakarta" > Edit Student</h1 >
-          <button onClick={async () => await updateStudent()}>
-            <FontAwesomeIcon className="mr-2" icon={faCheck} />Confirm
+          <button 
+          color="#E7752B"
+          className="btn-confirm  bg-[#E7752B] -mb-10"
+          onClick={async () => await updateStudent()}>
+            <FontAwesomeIcon className="mr-2 text-[#FFF] hover:text-[#E7752B]" icon={faCheck} />Confirm
           </button>
         </div >
 
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={
-              <p className="text-xl font-bold text-center ml-5 font-jakarta">Profile</p>
+              <p className="text-base font-bold text-center font-jakarta">Profile</p>
             } key="1">
 
               <div className="add-teacher">
                 <div className="avater-img">
                   <div>
-                    <h2>Student Picture</h2>
+                    <h2 className="text-[#475467] text-sm font-jakarta">Student Picture</h2>
                     <img src={file ? URL.createObjectURL(file) : data.avater ? data.avater : "img-5.jpg"} />
                   </div>
                   <div className="file-content">
@@ -446,8 +449,8 @@ function UpdateStudents() {
               <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}></div>
 
             </Tabs.TabPane>
-            <Tabs.TabPane tab={
-              <p className="text-xl font-bold text-center ml-5 font-jakarta">Course</p>
+            {/* <Tabs.TabPane tab={
+              <p className="text-base font-bold text-center  font-jakarta">Course</p>
             } key="2">
               <Button className="btn-confirm" onClick={handleUpdate}>
                 Edit Profile
@@ -463,7 +466,7 @@ function UpdateStudents() {
                   columns={columns}
                 />
               </div>
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
           </Tabs>
         </div>
       </div>
