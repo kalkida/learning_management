@@ -3,7 +3,8 @@ import { Space, Table, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Icon from "react-eva-icons";
-
+import { faAdd, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   collection,
   getDocs,
@@ -424,22 +425,12 @@ export default function ListCourses() {
               prefix={<SearchOutlined className="site-form-item-icon" />}
             />
           </div>
+
           <Button
+            className=" bg-[#E7752B] text-[white] "
+            icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
             onClick={() => edit()}
-            className="hover:border-[#E7752B] hover:border-[2px]"
-            style={{
-              padding: 10,
-              borderColor: "#E7752B",
-              borderWidth: 2,
-              color: "#E7752B",
-              borderRadius: 5,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "white",
-            }}
           >
-            <PlusOutlined />
             Add Course
           </Button>
         </div>

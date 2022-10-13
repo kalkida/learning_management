@@ -35,6 +35,8 @@ import {
   fetchClass,
 } from "../funcs";
 import Icon from "react-eva-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const { Option } = Select;
 
@@ -484,20 +486,11 @@ function UpdateClass() {
                   key="1"
                 >
                   <Button
-                    className="btn-confirm bg-[#E7752B] text-[white] flex flex-row "
+                    icon={<FontAwesomeIcon className="pr-2" icon={faEdit} />}
+                    className="btn-confirm bg-[#E7752B] text-[white] "
                     onClick={handleUpdate}
                   >
-                    <Icon
-                      name="edit-outline"
-                      fill="white"
-                      size="medium" // small, medium, large, xlarge
-                      animation={{
-                        type: "pulse", // zoom, pulse, shake, flip
-                        hover: true,
-                        infinite: false,
-                      }}
-                    />
-                    <p className="pl-2 text-white">Finish Review</p>
+                    Finish Review
                   </Button>
                   <div className="flex flex-row bg-white w-[100%]  border-[1px] rounded-lg p-4">
                     <div className="flex flex-row justify-between w-[100%]">
@@ -512,7 +505,7 @@ function UpdateClass() {
                             type={"number"}
                             className="rounded-lg"
                             defaultValue={data.level}
-                          // onChange={(e) => handleClass(e)}
+                            // onChange={(e) => handleClass(e)}
                           />
                         </div>
                       </div>
