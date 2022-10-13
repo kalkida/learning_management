@@ -127,72 +127,6 @@ function TeacherView() {
     },
   ];
 
-  const columnss = [
-    {
-      title: "Age",
-      dataIndex: "Age",
-      render: (text, record) => (
-        <div className="font-[500] text-sm font-jakarta">{age}</div>
-      ),
-    },
-    {
-      title: "Sex",
-      dataIndex: "Age",
-      render: (text, record) => (
-        <div className="font-[500] text-sm font-jakarta">{data.sex}</div>
-      ),
-    },
-    {
-      title: "PhoneNumber",
-      dataIndex: "Age",
-      render: (text, record) => (
-        <div className="font-[500] text-sm font-jakarta">
-          <h1>{data.phone}</h1>
-        </div>
-      ),
-    },
-    {
-      title: "Email",
-      dataIndex: "Age",
-      render: (text, record) => (
-        <div className="font-[500] text-sm font-jakarta">
-          <h1>{data.email}</h1>
-        </div>
-      ),
-    },
-    {
-      title: "Address",
-      dataIndex: "Age",
-      render: (text, record) => (
-        <div className="font-[500] text-sm font-jakarta">
-          <h1>Lideta</h1>
-        </div>
-      ),
-    },
-    {
-      title: "Working Since",
-      dataIndex: "Age",
-      render: (text, record) => (
-        <div className="font-[500] text-sm font-jakarta">
-          <h1>{workTime}</h1>
-        </div>
-      ),
-    },
-  ];
-
-  const classColumns = [
-    {
-      title: "Grade",
-      dataIndex: "level",
-      key: "course_name",
-    },
-    {
-      title: "Section",
-      dataIndex: "section",
-      key: "secticon",
-    },
-  ];
-
   return (
     <>
       <div className="w-[100%]  -mt-20">
@@ -241,7 +175,7 @@ function TeacherView() {
 
             <div className="flex flex-row  ">
               <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
-                Subject
+                Courses
               </h3>
               {data?.course ? (
                 <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2">
@@ -266,7 +200,7 @@ function TeacherView() {
                 className="btn-confirm bg-[#E7752B] "
                 icon={
                   <FontAwesomeIcon
-                    className="pr-2 text-sm text-[white]"
+                    className="pr-2 text-sm text-[white] hover:text-[#E7752B]"
                     icon={faPen}
                   />
                 }
@@ -276,58 +210,35 @@ function TeacherView() {
               </Button>
               <div className="flex flex-row justify-between w-[50%]">
                 <div>
-                  <h1 className="text-4xl font-bold  font-jakarta mb-4">7,8</h1>
-                  <span
-                    className="text-sm font-medium font-jakarta mb-8 "
-                    //   style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
-                  >
+                  <h1 className="text-4xl font-bold  font-jakarta mb-4 text-center">
+                    7,8
+                  </h1>
+                  <span className="text-sm font-medium font-jakarta mb-8 text-center ">
                     Assigned Grade
                   </span>
                 </div>
                 <div>
-                  <h1
-                    className="text-4xl font-bold font-jakarta mb-4"
-                    //  style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
-                  >
+                  <h1 className="text-4xl font-bold font-jakarta text-center mb-4">
                     {data.course.length}
                   </h1>
-                  <span
-                    className="text-sm font-medium mb-3 font-jakarta -ml-2 "
-                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
-                  >
+                  <span className="text-sm font-medium mb-3 font-jakarta -ml-2  text-center">
                     Courses
                   </span>
                 </div>
                 <div>
-                  <h1
-                    className="text-4xl font-bold font-jakarta  mb-4"
-                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
-                  >
-                    {weekClass}
+                  <h1 className="text-4xl font-bold font-jakarta  mb-4 text-center">
+                    {/* {weekClass} */}1
                   </h1>
-                  <span
-                    className="text-sm font-medium font-jakarta mb-4"
-                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
-                  >
+                  <span className="text-sm font-medium font-jakarta mb-4">
                     Classes/Week
                   </span>
                 </div>
-                {/* <div>
-                  <h1 
-                   className="text-5xl font-bold font-serif leading-none mb-4"
-                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'700',lineHeight:'60px',fontSize:48}}
-                  >{weekClass}</h1>
-                  <span
-                   className="text-sm font-medium font-serif" 
-                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'20px',fontSize:14}}
-                  >Classes/Week</span>
-                </div> */}
               </div>
               <div className="teacher-profile mt-10"></div>
               {/* </div> */}
               <Table dataSource={teacherData} columns={teacherColumn} />
             </Tabs.TabPane>
-            <Tabs.TabPane
+            {/* <Tabs.TabPane
               tab={
                 <p className="text-base font-bold text-center ml-5 font-jakarta">
                   Course
@@ -336,8 +247,14 @@ function TeacherView() {
               key="2"
             >
               <Button
-                icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-                className="btn-confirm"
+                color="#E7752B"
+                className="btn-confirm bg-[#E7752B] "
+                icon={
+                  <FontAwesomeIcon
+                    className="pr-2 text-sm text-[white] hover:text-[#E7752B]"
+                    icon={faPen}
+                  />
+                }
                 onClick={handleUpdate}
               >
                 Edit
@@ -349,19 +266,6 @@ function TeacherView() {
                   </h1>
                 </div>
                 <Table dataSource={data.course} columns={columns} />
-              </div>
-            </Tabs.TabPane>
-            {/* <Tabs.TabPane tab={
-                 <p className="text-base font-bold text-center ml-5 font-jakarta ">Class</p>
-            } key="3">
-              <Button className="btn-confirm" onClick={handleUpdate}>
-                Edit Profile
-              </Button>
-              <div className="teacher-course-list">
-                <div className="tch-cr-list">
-                  <h1 className="text-xl font-bold font-jakarta">Assigned Classes</h1>
-                </div>
-                <Table dataSource={data.class} columns={classColumns} />
               </div>
             </Tabs.TabPane> */}
           </Tabs>

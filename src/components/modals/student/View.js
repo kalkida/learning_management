@@ -11,7 +11,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faPenAlt } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faPenAlt, faPen } from "@fortawesome/free-solid-svg-icons";
 import Liner from "../../graph/Liner";
 import BarGraph from "../../graph/BarGraphStudent";
 import { fetchSubject, fetchParents } from "../funcs";
@@ -367,11 +367,17 @@ function ViewStudent() {
             }
             key="1"
           >
-            <Button className="btn-confirm" onClick={handleUpdate}>
-              <FontAwesomeIcon
-                icon={faPenAlt}
-                className=" text-[#E7752B] mr-2"
-              />{" "}
+            <Button
+              color="#E7752B"
+              className="btn-confirm bg-[#E7752B] "
+              icon={
+                <FontAwesomeIcon
+                  className="pr-2 text-sm text-[white] hover:text-[#E7752B]"
+                  icon={faPen}
+                />
+              }
+              onClick={handleUpdate}
+            >
               Edit
             </Button>
             <div className="flex flex-row justify-around border-[0px] border-[#e5e5e5] p-4 text-[#344054]">

@@ -64,9 +64,10 @@ export default function AdminDash() {
         flexDirection: "column",
         justifyContent: "center",
         backgroundColor: "#F9FAFB",
+        width: "100%",
       }}
     >
-      <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8">
+      <p className="text-center text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8">
         Hello Admin
       </p>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -110,10 +111,8 @@ export default function AdminDash() {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  justifyContent: "space-around",
                   width: "100%",
-                  paddingLeft: "2%",
-                  paddingRight: "2%",
                 }}
               >
                 <div>

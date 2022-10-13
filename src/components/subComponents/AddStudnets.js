@@ -18,7 +18,6 @@ import { PlusOutlined } from "@ant-design/icons";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
-
 const { Option } = Select;
 const { Search } = Input;
 
@@ -117,13 +116,19 @@ export default function AddStudnets() {
 
   const columns = [
     {
-      title: <p className="font-jakarta text-[#344054] font-[600]">FirstName</p>,
+      title: (
+        <p className="font-jakarta text-[#344054] font-[600]">FirstName</p>
+      ),
       dataIndex: "first_name",
       key: "first_name",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: <p className="font-jakarta text-[#344054] font-[600]">Guardian Phone Number</p>,
+      title: (
+        <p className="font-jakarta text-[#344054] font-[600]">
+          Guardian Phone Number
+        </p>
+      ),
       key: "phone",
       dataIndex: "phone",
       render: (value) => {
@@ -145,6 +150,13 @@ export default function AddStudnets() {
       title: <p className="font-jakarta text-[#344054] font-[600]">Email</p>,
       dataIndex: "email",
       key: "email",
+      render: (item) => {
+        if (item) {
+          return <h1>{item}</h1>;
+        } else {
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
+        }
+      },
     },
     {
       title: <p className="font-jakarta text-[#344054] font-[600]">Class</p>,
@@ -167,13 +179,13 @@ export default function AddStudnets() {
       render: (_, record) => (
         <Space size="middle">
           <a
-            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
           >
             View{" "}
           </a>
           <a
-            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleUpdate(record)}
           >
             Update
@@ -195,9 +207,7 @@ export default function AddStudnets() {
   return (
     <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-14">
       <div className="list-header mb-10">
-        <h1
-          className="text-2xl  font-[600] font-jakarta">
-          List Of Students</h1>
+        <h1 className="text-2xl  font-[600] font-jakarta">List Of Students</h1>
       </div>
       <div className="list-sub">
         <div className="list-filter">
@@ -229,8 +239,7 @@ export default function AddStudnets() {
             <Search
               placeholder="input search text"
               bordered={true}
-            // onSearch={onSearch}
-
+              // onSearch={onSearch}
             />
           </div>
           <Button
