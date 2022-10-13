@@ -20,35 +20,41 @@ function TeacherView() {
   const [age, setAge] = useState();
   const [expriance, setExpriance] = useState();
 
-  var getworkTime = new Date(JSON.parse(data.working_since));
-  const workTime =
-    getworkTime.getFullYear() +
-    "-" +
-    getworkTime.getMonth() +
-    "-" +
-    getworkTime.getDay();
+  var getworkTime = data.working_since
+    ? new Date(JSON.parse(data?.working_since))
+    : "";
+  const workTime = data.working_since
+    ? getworkTime.getFullYear() +
+      "-" +
+      getworkTime.getMonth() +
+      "-" +
+      getworkTime.getDay()
+    : null;
 
   useEffect(() => {
-    var weekClassSum = 0;
     data?.course.map((item, i) => {
       weekClassSum += item.schedule?.length;
     });
     var today = new Date();
-    var birthDate = new Date(JSON.parse(data.DOB));
+    var birthDate = new Date(JSON.parse(data?.DOB));
     var calage = today.getFullYear() - birthDate.getFullYear();
     var m = today.getMonth() - birthDate.getMonth();
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       calage--;
     }
-    var workDate = new Date(JSON.parse(data.working_since));
-    var calwork = today.getFullYear() - workDate.getFullYear();
-    var m = today.getMonth() - workDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < workDate.getDate())) {
-      calwork--;
+    if (data?.working_since) {
+      var weekClassSum = 0;
+
+      var workDate = new Date(JSON.parse(data?.working_since));
+      var calwork = today.getFullYear() - workDate.getFullYear();
+      var m = today.getMonth() - workDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < workDate.getDate())) {
+        calwork--;
+      }
+      setExpriance(calwork);
     }
     setWeekClass(weekClassSum);
     setAge(calage);
-    setExpriance(calwork);
   }, []);
 
   const handleUpdate = () => {
