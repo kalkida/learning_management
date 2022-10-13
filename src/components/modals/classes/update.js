@@ -62,7 +62,6 @@ function UpdateClass() {
     homeRoomTeacher: data?.homeRoomTeacher,
     school_id: data.school_id,
     course: data.course,
-    schedule: data.schedule,
   });
   const [updateComplete, setUpdateComplete] = useState([]);
 
@@ -186,7 +185,7 @@ function UpdateClass() {
 
   const handleUpdate = async () => {
     setLoading(true);
-    console.log(data);
+    console.log(updateClass);
     setDoc(
       doc(firestoreDb, "class", data.key),
       {
@@ -513,7 +512,7 @@ function UpdateClass() {
                             type={"number"}
                             className="rounded-lg"
                             defaultValue={data.level}
-                            // onChange={(e) => handleClass(e)}
+                          // onChange={(e) => handleClass(e)}
                           />
                         </div>
                       </div>
@@ -536,7 +535,7 @@ function UpdateClass() {
                           style={{
                             width: "100%",
                           }}
-                          value={data.homeRoomTeacher}
+                          defaultValue={data.homeRoomTeacher}
                           placeholder="Select Home room Teacher"
                           onChange={handleStudent}
                           optionLabelProp="label"
