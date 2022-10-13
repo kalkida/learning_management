@@ -224,10 +224,10 @@ const CreateNewStudnet = () => {
           <FontAwesomeIcon className="mr-2" icon={faCheck} />Confirm
         </button>
       </div >
-      <div className="add-teacher">
+      <div className="add-teacher bg-[#FFF]">
         <div className="avater-img">
           <div>
-            <h2>Student Picture</h2>
+            <h3 className="text-sm font-jakarta width-[20vh]">Student Picture</h3>
             <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
           </div>
           <div className="file-content">
