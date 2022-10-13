@@ -275,20 +275,24 @@ function UpdateStudents() {
           </button>
         </div >
 
-        <div className="tab-content">
+        {/* <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={
               <p className="text-base font-bold text-center font-jakarta">Profile</p>
-            } key="1">
+            } key="1"> */}
 
-              <div className="add-teacher">
+              <div className="add-teacher bg-[#FFF]">
                 <div className="avater-img">
                   <div>
-                    <h2 className="text-[#475467] text-sm font-jakarta">Student Picture</h2>
-                    <img src={file ? URL.createObjectURL(file) : data.avater ? data.avater : "img-5.jpg"} />
+                    <h3 className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">Student Picture</h3>
+                    <div className="rounded-full  border-[#E7752B] bg-[white]">
+                    <img
+                      className="w-[8vw] border-[2px] rounded-full"
+                    src={file ? URL.createObjectURL(file) : data.avater ? data.avater : "img-5.jpg"} />
+                    </div>
                   </div>
                   <div className="file-content">
-                    <span>
+                    <span className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch "  >
                       This will be displayed to you when you view this profile
                     </span>
 
@@ -448,7 +452,7 @@ function UpdateStudents() {
               </div>
               <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}></div>
 
-            </Tabs.TabPane>
+            {/* </Tabs.TabPane> */}
             {/* <Tabs.TabPane tab={
               <p className="text-base font-bold text-center  font-jakarta">Course</p>
             } key="2">
@@ -467,8 +471,8 @@ function UpdateStudents() {
                 />
               </div>
             </Tabs.TabPane> */}
-          </Tabs>
-        </div>
+          {/* </Tabs>
+        </div> */}
       </div>
     </>
   );

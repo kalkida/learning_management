@@ -228,10 +228,12 @@ const CreateNewStudnet = () => {
         <div className="avater-img">
           <div>
             <h3 className="text-sm font-jakarta width-[20vh]">Student Picture</h3>
+            <div className="rounded-full  border-[#E7752B] bg-[white]">
             <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
+            </div>
           </div>
           <div className="file-content">
-            <span>
+            <span className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">
               This will be displayed to you when you view this profile
             </span>
 
