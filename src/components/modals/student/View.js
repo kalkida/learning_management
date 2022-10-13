@@ -10,6 +10,8 @@ import {
   startAt,
   orderBy,
 } from "firebase/firestore";
+import PhoneInput from "react-phone-number-input";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPenAlt, faPen } from "@fortawesome/free-solid-svg-icons";
 import Liner from "../../graph/Liner";
@@ -111,9 +113,23 @@ function ViewStudent() {
       title: "Phone Number",
       dataIndex: "phone",
       key: "phone",
-      render: (item) => {
-        return <span>{item}</span>;
+      render: (value) => {
+        return (
+          <>
+            {value?.map((item, i) => (
+              <PhoneInput
+                placeholder="Enter Guardian Contact"
+                className=" bg-white px-2"
+                value={item}
+                disabled
+              />
+            ))}
+          </>
+        );
       },
+      // render: (item) => {
+      //   return <span>{item}{","}</span>;
+      // },
     },
     {
       title: "Email",
@@ -133,17 +149,26 @@ function ViewStudent() {
 
   const columns = [
     {
-      title: "Course",
-      dataIndex: "course_name",
-      key: "course_name",
+      title: "Guardians",
+      dataIndex: "guardian",
+      key: "guardian",
+      render: (item ,index) => {
+        return <h1>Guardian </h1>;
+      },
+      
     },
     {
-      title: "Subject",
-      dataIndex: "subject",
-      key: "subject",
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
       render: (item) => {
-        return <div>{item.name}</div>;
+        return <div>{item}</div>;
       },
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
   ];
 
@@ -245,14 +270,16 @@ function ViewStudent() {
   ]);
 
   return (
-    <div className="-mt-16 h-[100vh] overflow-scroll main scroll-smooth p-2">
+    <div className="-mt-20 h-[100vh] overflow-scroll main scroll-smooth p-2">
       <div className="flex flex-row justify-between  py-10 px-2">
         <div className="flex flex-row w-[40%] justify-between">
+        <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
           <img
-            className="rounded-full w-[8vw] border-[2px]"
+            className="w-[10vw] border-[2px] rounded-full"
             src={data.avater ? data.avater : "img-5.jpg"}
             alt="profile"
           />
+          </div>
           <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%] ">
             <div className="flex flex-row mb-2">
               <h3 className="text-lg font-bold font-jakarta ">
@@ -284,7 +311,7 @@ function ViewStudent() {
         <Tabs defaultActiveKey="0">
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center ml-5 font-jakarta">
+              <p className="text-base font-bold text-center  font-jakarta">
                 OverView
               </p>
             }
@@ -400,7 +427,7 @@ function ViewStudent() {
 
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center ml-5 font-jakarta">
+              <p className="text-base font-bold text-center  font-jakarta">
                 Profile
               </p>
             }
@@ -419,9 +446,9 @@ function ViewStudent() {
             >
               Edit
             </Button>
-            <div className="flex flex-row justify-around border-[0px] border-[#e5e5e5] text-[#344054]">
-              <div className="flex flex-col justify-center align-middle text-[#344054]">
-              <span className="text-lg text-center text-[#344054] font-jakarta">
+            <div className="flex flex-row justify-start justify-between border-[0px] border-[#e5e5e5] text-[#344054]">
+              <div className="flex flex-col justify-start align-middle text-[#344054]">
+              <span className="text-base text-center text-[#344054] font-jakarta">
                   Grade
                 </span>
                 <h1 className="text-[48px] text-center text-[#344054] font-bold font-jakarta">
@@ -429,23 +456,23 @@ function ViewStudent() {
                 </h1>
               
               </div>
-              <div className="flex flex-col justify-center align-middle text-[#344054] ">
-              <span className="text-lg font-jakarta">Sibilings</span>
-                <h1 className="text-[48px] text-center font-bold font-jakarta ">
+              <div className="flex flex-col justify-center  align-middle text-[#344054] ">
+              <span className="text-base font-jakarta  text-center text-[#344054]">Sibilings</span>
+                <h1 className="text-[48px] text-[#344054] text-center font-bold font-jakarta ">
                   2
                 </h1>
  
               </div>
-              <div className="flex flex-col justify-center align-middle text-[#344054]">
-              <span className="text-lg font-jakarta">Rank</span>
-                <h1 className="text-[48px] text-center font-bold font-jakarta">
+              <div className="flex flex-col justify-center  align-middle text-[#344054]">
+              <span className="text-base font-jakarta text-center text-[#344054]">Rank</span>
+                <h1 className="text-[48px] text-[#344054] text-center font-bold font-jakarta">
                   4
                 </h1>
           
               </div>
-              <div className="flex flex-col justify-center align-middle text-[#344054]">
-              <span className="text-lg font-jakarta">Conduct</span>
-                <h1 className="text-[48px] text-center font-bold font-jakarta">
+              <div className="flex flex-col justify-center mr-[40%] align-middle text-[#344054]">
+              <span className="text-base font-jakarta text-center text-[#344054]">Conduct</span>
+                <h1 className="text-[48px] text-[#344054] text-center font-bold font-jakarta">
                   A
                 </h1>
                
@@ -520,10 +547,11 @@ function ViewStudent() {
               </div>
             </div> */}
             <div className="mt-10 mb-10">
-              <h1 className="text-xl font-bold mb-10 font-jakarta">
+              <h1  className="text-[#344054] font-jakarta text-xl font-bold mb-8">
                 Guardian Information
               </h1>
-              {guardian.map((item, index) => (
+              <Table dataSource={guardian} columns={columns} />
+              {/* {guardian.map((item, index) => (
                 <div className="border-b-[2px] mt-2 flex flex-row justify-between w-[50vw] py-2">
                   <div>
                     <h1 className="text-lg font-jakarta mt-3 mb-10">
@@ -537,7 +565,7 @@ function ViewStudent() {
                     <h1>{item.phoneNumber}</h1>
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </Tabs.TabPane>
           {/* <Tabs.TabPane
@@ -570,7 +598,7 @@ function ViewStudent() {
           </Tabs.TabPane> */}
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center ml-5 font-jakarta">
+              <p className="text-base font-bold text-center  font-jakarta">
                 Attendance
               </p>
             }
