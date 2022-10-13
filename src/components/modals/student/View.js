@@ -207,7 +207,7 @@ function ViewStudent() {
 
   return (
     <div className="-mt-16 h-[100vh] overflow-scroll main scroll-smooth p-2">
-      <div className="flex flex-row justify-between border-b-[2px] py-10 px-2">
+      <div className="flex flex-row justify-between  py-10 px-2">
         <div className="flex flex-row w-[40%] justify-between">
           <img
             className="rounded-full w-[8vw] border-[2px]"
@@ -245,7 +245,7 @@ function ViewStudent() {
         <Tabs defaultActiveKey="0">
           <Tabs.TabPane
             tab={
-              <p className="text-xl font-bold text-center ml-5 font-jakarta">
+              <p className="text-base font-bold text-center ml-5 font-jakarta">
                 OverView
               </p>
             }
@@ -261,7 +261,7 @@ function ViewStudent() {
                   bordered={true}
                   className="w-[100%] min-h-[419px]"
                   title={
-                    <h1 className="text-[#475467] font-[600] mb-[10px]">
+                    <h1 className="text-[#475467] text-lg font-[600] mb-[10px]">
                       Daily Report
                     </h1>
                   }
@@ -301,7 +301,7 @@ function ViewStudent() {
                   bordered={true}
                   className="w-[100%] min-h-[419px]"
                   title={
-                    <h1 className="text-[#475467] font-[600] mb-[10px]">
+                    <h1 className="text-[#475467] text-lg font-[600] mb-[10px]">
                       Conduct
                     </h1>
                   }
@@ -330,7 +330,7 @@ function ViewStudent() {
                   bordered={true}
                   className="w-[100%] min-h-[419px]"
                   title={
-                    <h1 className="text-[#475467] font-[600] mb-[10px]">
+                    <h1 className="text-[#475467] text-lg font-[600] mb-[10px]">
                       Performance
                     </h1>
                   }
@@ -361,18 +361,18 @@ function ViewStudent() {
 
           <Tabs.TabPane
             tab={
-              <p className="text-xl font-bold text-center ml-5 font-jakarta">
+              <p className="text-base font-bold text-center ml-5 font-jakarta">
                 Profile
               </p>
             }
             key="1"
           >
             <Button
-              color="#E7752B"
-              className="btn-confirm bg-[#E7752B] "
+              color="#FFF"
+              className="btn-confirm  bg-[#E7752B] hover:bg-[#FFF] "
               icon={
                 <FontAwesomeIcon
-                  className="pr-2 text-sm text-[white] hover:text-[#E7752B]"
+                  className="pr-2 text-sm text-[#FFF] hover:text-[#E7752B]"
                   icon={faPen}
                 />
               }
@@ -495,10 +495,10 @@ function ViewStudent() {
               ))}
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane
+          {/* <Tabs.TabPane
             tab={
               <p className="text-xl font-bold text-center ml-5 font-jakarta">
-                Course
+                Course  
               </p>
             }
             key="2"
@@ -522,27 +522,27 @@ function ViewStudent() {
                 columns={columns}
               />
             </div>
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
           <Tabs.TabPane
             tab={
-              <p className="text-xl font-bold text-center ml-5 font-jakarta">
+              <p className="text-base font-bold text-center ml-5 font-jakarta">
                 Attendance
               </p>
             }
-            key="3"
+            key="2"
           >
-            <Button className="btn-confirm" onClick={handleUpdate}>
+            <Button className="btn-confirm  bg-[#E7752B]" onClick={handleUpdate}>
               <FontAwesomeIcon
                 icon={faPenAlt}
-                className="text-[#E7752B] mr-2"
+                className="text-[#FFF] mr-2 hover:text-[#E7752B]"
               />
               Edit
             </Button>
             <div className="st-at">
-              <h1 className="text-xl font-bold mb-10 font-jakarta">
+              {/* <h1 className="text-xl font-bold mb-10 font-jakarta">
                 {" "}
                 Attendance
-              </h1>
+              </h1> */}
               <div>
                 <Tabs defaultActiveKey="1">
                   <Tabs.TabPane tab="Monthly" key="1">
