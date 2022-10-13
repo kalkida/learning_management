@@ -435,7 +435,7 @@ function TeacherUpdate() {
                 <img
                   src={data.avater ? data.avater : "img-5.jpg"}
                   alt="profile"
-                  className="w-[8vw] rounded-full"
+                  className="w-[8vw] h-[6vw] rounded-full"
                 />
               </div>
               <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%]">
@@ -524,16 +524,16 @@ function TeacherUpdate() {
                       <h2 className="text-[14px] font-[500] font-jakarta text-[#475467] text-center">
                         Teacher Picture
                       </h2>
-                      <div className="border-[1px] border-[#E7752B] rounded-full">
+                      <div className="border-[1px]  border-[#E7752B] rounded-full !p-0">
                         <img
                           src={
                             file
                               ? URL.createObjectURL(file)
                               : data.avater
-                              ? data.avater
-                              : "img-5.jpg"
+                                ? data.avater
+                                : "img-5.jpg"
                           }
-                          className="rounded-full w-[3vw] h-[2vh]"
+                          className="rounded-full w-[100] !p-0"
                         />
                       </div>
                     </div>
@@ -681,8 +681,8 @@ function TeacherUpdate() {
               </Button>
 
               <div>
-                <div className="teacher-course-list">
-                  <h1 className="text-xl font-bold font-jakarta mb-6">
+                <div >
+                  <h1 className="text-xl font-bold font-jakarta mt-5 text-[#344054] mb-5 ">
                     Edit Courses
                   </h1>
                   <div className="tch-cr-list">

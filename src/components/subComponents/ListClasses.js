@@ -237,8 +237,6 @@ export default function ListClasses() {
     },
   ];
   const handleFilterLevel = async (value) => {
-    console.log(`selected ${value}`);
-
     const q = query(
       collection(firestoreDb, "class"),
       where("school_id", "==", uid.school), where("level", "==", value),
@@ -252,12 +250,9 @@ export default function ListClasses() {
       temporary.push(data);
     });
     setData(temporary);
-
   };
 
   const handleFilterSection = async (value) => {
-    console.log(`selected ${value}`);
-
     const q = query(
       collection(firestoreDb, "class"),
       where("school_id", "==", uid.school), where("section", "==", value),
@@ -271,7 +266,6 @@ export default function ListClasses() {
       temporary.push(data);
     });
     setData(temporary);
-
   };
 
   useEffect(() => {

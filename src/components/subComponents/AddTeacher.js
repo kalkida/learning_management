@@ -209,7 +209,6 @@ export default function AddTeacher() {
     });
     setTimeout(() => {
       setData(temporary);
-      console.log("temporary data", temporary);
       setTableTextLoading(false);
     }, 2000);
   };
@@ -410,7 +409,7 @@ export default function AddTeacher() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-[10vh]">
+    <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14">
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Teachers</h1>
       </div>
