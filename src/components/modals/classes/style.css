@@ -1,3 +1,7 @@
+
+
+
+
 .profile-header {
     display: flex;
     justify-content: space-between;
@@ -66,6 +70,11 @@
 .btn-confirm {
     float: right;
     margin-top: -3.5rem;
+    color: white !important;
+
+}
+.btn-confirm :hover{
+    color: #e66937 !important
 }
 
 .tab-content Button:hover {
@@ -352,14 +361,31 @@
 }
 .ant-table table { font-size: 14px; 
     font-family: 'plus jakarta Sans';
-    font-weight: 500;
-    line-height: 20px;
+
 
 }
 
 .ant-table table thead { font-size: 16px; 
     font-family: 'plus jakarta Sans';
-    font-weight: 800;
-    line-height: 24px;
 
+
+}
+
+.ant-table-thead .ant-table-cell:nth-child(even) {
+    background-color: #F2F4F7;
+}
+
+.ant-table-thead .ant-table-cell:nth-child(odd) {
+    background-color: #F2F4F7;
+}
+
+.ant-table-tbody .ant-table-cell:nth-child(even) {
+    background-color: #F9FAFB;
+}
+
+.ant-table-tbody .ant-table-cell:nth-child(odd) {
+    background-color: #F9FAFB;
+}
+.ant-picker .ant-tabs-tab.ant-tabs-tab-active{
+    background-color: #e66937;
 }

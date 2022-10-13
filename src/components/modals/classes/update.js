@@ -11,88 +11,137 @@ import {
   getDoc,
   deleteDoc,
 } from "firebase/firestore";
+
 import moment from "moment";
 import { firestoreDb, storage } from "../../../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Select, TimePicker, Tabs, Table, message, Spin } from "antd";
+import {
+  Button,
+  Select,
+  TimePicker,
+  Tabs,
+  Table,
+  message,
+  Spin,
+  Input,
+} from "antd";
 import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
-import { async } from "@firebase/util";
+import {
+  fetchSubject,
+  addSingleCourseToClass,
+  addClassIDToCourse,
+  fetchClass,
+} from "../funcs";
+import Icon from "react-eva-icons";
 
 const { Option } = Select;
 
 function UpdateClass() {
   const uid = useSelector((state) => state.user.profile);
-  const [input, setInput] = useState([]);
   const [loading, setLoading] = useState(false);
   const [courses, setcourse] = useState([]);
   const [item, setItem] = useState([]);
   const [students, setStudents] = useState([]);
   const [selected, setSelected] = useState([]);
   const [sectionMainData, setSectionMainData] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+
   const [studentLoading, setStudentLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
-
+  const [selectedRowKeys, setSelectedRowKeys] = useState(data.student);
+  const [selectedRowKeyss, setSelectedRowKeyss] = useState(data.course);
   const [updateClass, setUpdateClass] = useState({
     level: data.level,
     student: data.student,
     section: data.section,
+    homeRoomTeacher: data.homeRoomTeacher,
     school_id: data.school_id,
     course: data.course,
-    schedule: [],
+    schedule: data.schedule,
   });
-
   const [updateComplete, setUpdateComplete] = useState([]);
 
   const navigate = useNavigate();
-
-  const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
-
-  const handleScheduler = (value, i) => {};
-
-  const handleNewScheduler = (value, i) => {};
-
-  const handleDelete = () => {
-    deleteDoc(doc(firestoreDb, "class", data.key), updateClass)
-      .then((response) => {
-        setLoading(false);
-        message.success("Data is Deleted successfuly");
-        navigate("/list-class");
-      })
-      .catch((error) => {
-        message.error("Data is not Deleted, Try Again");
-        console.log(error);
-      });
-  };
-
   const columns = [
     {
-      title: "First Name",
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Name</h1>,
       dataIndex: "first_name",
       key: "first_name",
+      render: (item, data) => {
+        if (item) {
+          return (
+            <div>
+              {item}
+              {"  "}
+              {data.last_name}
+            </div>
+          );
+        } else {
+          return <div className=" text-[#515f76]">No Data</div>;
+        }
+      },
     },
     {
-      title: "Last Name",
-      dataIndex: "last_name",
-      key: "last_name",
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">ID</h1>,
+      dataIndex: "studentId",
+      key: "studentId",
+      render: (item, data) => {
+        if (item) {
+          return <div>{item}</div>;
+        } else {
+          return <div className=" text-[#515f76]">No Data</div>;
+        }
+      },
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Grade</h1>,
+      dataIndex: "studentId",
+      key: "studentId",
+      render: (item, data) => {
+        if (item) {
+          return <div>{item}</div>;
+        } else {
+          return <div className=" text-[#515f76]">No Data</div>;
+        }
+      },
+    },
+
+    {
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Sex</h1>,
+      dataIndex: "sex",
+      key: "sex",
+      render: (item) => {
+        if (item) {
+          return <div>{item}</div>;
+        } else {
+          return <div className=" text-[#515f76]">No Data</div>;
+        }
+      },
     },
     {
-      title: "class",
-      dataIndex: "level",
-      key: "level",
+      title: (
+        <h1 className="text-[16px] font-[600] text-[#344054]">
+          Assigned Class
+        </h1>
+      ),
+      dataIndex: "className",
+      key: "className",
+      render: (item) => {
+        if (item) {
+          return <div>{item}</div>;
+        } else {
+          return <div className="text-[#515f76]">No Data</div>;
+        }
+      },
     },
   ];
 
   const courseColumns = [
     {
-      title: "Course",
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Course</h1>,
       dataIndex: "course_name",
       key: "course_name",
       render: (item) => {
@@ -100,21 +149,53 @@ function UpdateClass() {
       },
     },
     {
-      title: "Subject",
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Subject</h1>,
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
-        // return <div>{item.level}</div>;
+        return <div>{item.name}</div>;
+      },
+    },
+    {
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Grade</h1>,
+      dataIndex: "class",
+      key: "class",
+      render: (item) => {
+        if (item) {
+          return <div>{item.level}</div>;
+        } else {
+          return <div className="text-[#515f76]">No Data</div>;
+        }
+      },
+    },
+    {
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Section</h1>,
+      dataIndex: "class",
+      key: "class",
+      render: (item) => {
+        if (item) {
+          return <div>{item.section}</div>;
+        } else {
+          return <div className="text-[#515f76]">No Data</div>;
+        }
       },
     },
   ];
 
   const handleUpdate = async () => {
-    console.log(updateClass);
     setLoading(true);
-    setDoc(doc(firestoreDb, "class", data.key), updateClass, { merge: true })
+    setDoc(
+      doc(firestoreDb, "class", data.key),
+      { ...updateClass, student: selectedRowKeys, course: selectedRowKeyss },
+      { merge: true }
+    )
       .then((response) => {
         setLoading(false);
+        updateClass.course.map((course) => {
+          if (!data.course.includes(course)) {
+            addClassIDToCourse(data.key, course);
+          }
+        });
         message.success("Data is updated successfuly");
         setUpdateComplete(!updateComplete);
         navigate("/list-classes");
@@ -125,35 +206,114 @@ function UpdateClass() {
       });
     // }
   };
-  const getCousreSubject = async (index) => {
-    var data = doc(firestoreDb, "subjects", index);
-    var response = await getDoc(data);
-    if (response.exists()) {
-      var dats = await response.data();
-      return dats;
-    } else {
-      return "";
-    }
+  const onSelectChanges = (newSelectedRowKeys) => {
+    setSelectedRowKeyss(newSelectedRowKeys);
   };
 
-  const getCourse = async (course) => {
+  const rowSelections = {
+    selectedRowKeyss,
+    onChange: onSelectChanges,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+        key: "odd",
+        text: "Select Odd Row",
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return false;
+            }
+
+            return true;
+          });
+          setSelectedRowKeyss(newSelectedRowKeys);
+        },
+      },
+      {
+        key: "even",
+        text: "Select Even Row",
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return true;
+            }
+
+            return false;
+          });
+          setSelectedRowKeyss(newSelectedRowKeys);
+        },
+      },
+    ],
+  };
+
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    selections: [
+      Table.SELECTION_ALL,
+      Table.SELECTION_INVERT,
+      Table.SELECTION_NONE,
+      {
+        key: "odd",
+        text: "Select Odd Row",
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return false;
+            }
+
+            return true;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+      {
+        key: "even",
+        text: "Select Even Row",
+        onSelect: (changableRowKeys) => {
+          let newSelectedRowKeys = [];
+          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
+            if (index % 2 !== 0) {
+              return true;
+            }
+
+            return false;
+          });
+          setSelectedRowKeys(newSelectedRowKeys);
+        },
+      },
+    ],
+  };
+
+  const getCourse = async () => {
     const q = query(
       collection(firestoreDb, "courses"),
-      where("course_id", "in", course)
+      where("school_id", "==", uid.school)
     );
 
     const querySnapshot = await getDocs(q);
     let temporary = [];
-    await querySnapshot.forEach(async (doc) => {
+    querySnapshot.forEach(async (doc) => {
       var datause = doc.data();
-      datause.key = doc.id;
-      var subject = await getCousreSubject(datause.subject);
-      console.log("data", subject);
-
-      // datause.subject = subject;
-      temporary.push(datause);
+      if (data.course.includes(doc.id) || datause.class == "") {
+        datause.key = doc.id;
+        var subject = await fetchSubject(datause.subject);
+        var classs = await fetchClass(datause.class);
+        datause.subject = subject;
+        datause.class = classs;
+        temporary.push(datause);
+      }
     });
-    await setItem(temporary);
+    setItem(temporary);
   };
   const getStudent = async () => {
     const children = [];
@@ -169,22 +329,6 @@ function UpdateClass() {
     });
     setStudents(children);
   };
-  const getStudents = async () => {
-    const children = [];
-    const q = query(
-      collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      var datas = doc.data();
-      if (data.student.includes(datas.student_id)) {
-        datas.key = doc.id;
-        children.push(datas);
-      }
-    });
-    setStudents(children);
-  };
 
   const getClass = async () => {
     const children = [];
@@ -192,16 +336,18 @@ function UpdateClass() {
 
     const q = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school),
-      where("class", "==", data.key)
+      where("school_id", "==", uid.school)
+      // where("class", "==", data.key)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
-      children.push({
-        ...datas,
-        key: doc.id,
-      });
+      if (datas.class == data.key || datas.class == "") {
+        children.push({
+          ...datas,
+          key: doc.id,
+        });
+      }
     });
 
     const sectionQuary = query(
@@ -224,17 +370,66 @@ function UpdateClass() {
     var students = data.student;
     students.map((id) => {
       getStudentID(id).then((stud) => {
-        console.log("students", stud);
         temp.push(stud);
       });
     });
-    console.log("temporary", temp);
-    await setSelected(temp);
+    setSelected(temp);
+  };
+  const getCourseData = async (ID) => {
+    const docRef = doc(firestoreDb, "courses", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+
+    return data;
+  };
+
+  const getClassData = async (ID) => {
+    const docRef = doc(firestoreDb, "class", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+    return data;
+  };
+  const getDatas = async (data, teach) => {
+    if (data.class) {
+      data.class?.map(async (item, index) => {
+        data.class[index] = await getClassData(item, teach);
+      });
+
+      data.course?.map(async (item, index) => {
+        data.course[index] = await getCourseData(item);
+      });
+      return data;
+    } else {
+      return data;
+    }
+  };
+  const getTeacher = async () => {
+    var value = [];
+    const q = query(
+      collection(firestoreDb, "teachers"),
+      where("school_id", "==", uid.school)
+    );
+
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      getDatas(data, doc.id).then((response) => {
+        value.push(response);
+      });
+    });
+    setTimeout(() => {
+      setTeachers(value);
+    }, 2000);
   };
 
   const getStudentID = async (ID) => {
-    console.log("dat", ID);
-
     const docRef = doc(firestoreDb, "students", ID);
     var data = "";
     var response = await getDoc(docRef);
@@ -242,226 +437,176 @@ function UpdateClass() {
       data = response.data();
     }
 
-    setStudentLoading(false);
-
     return data;
   };
   useEffect(() => {
     getStudenters();
     getClass();
-    getStudents();
+    getTeacher();
     getCourse(data.course);
     setTimeout(() => {
       setLoading(true);
+      setStudentLoading(false);
 
       getStudent();
     }, 2000);
   }, []);
 
   const handleStudent = (value) => {
-    setUpdateClass({ ...updateClass, student: value });
-  };
-  const handleCourse = (value) => {
-    setUpdateClass({ ...updateClass, course: value });
+    setUpdateClass({ ...updateClass, homeRoomTeacher: value });
   };
 
+  const handleClass = (e) => {
+    setUpdateClass({ ...updateClass, [e.target.name]: e.target.value });
+  };
   return (
-    <div className="bg-[#E8E8E8] p-10 h-[100vh]">
+    <div className="bg-[#F9FAFB]  h-[auto]">
       {loading ? (
         <>
-          {" "}
+          <div className="flex flex-row justify-between w-[100%] -mt-14 pb-4 ">
+            <div className="flex flex-row justify-center align-middle ">
+              <div className="flex flex-row">
+                <h1 className="text-lg font-bold font-jakarta mr-2">Class</h1>
+                <h2 className="text-lg font-bold font-jakarta">
+                  {data?.level}
+                </h2>
+                <h3 className="text-lg font-bold font-jakarta">
+                  {data?.section}
+                </h3>
+              </div>
+            </div>
+            <div className="flex flex-row">
+              <h3 className="text-lg font-semibold font-jakarta border-r-[2px] pr-2">
+                Assigned Students
+              </h3>
+              <h4 className="text-lg font-semibold font-jakarta pl-2">
+                {data?.student.length}
+              </h4>
+            </div>
+          </div>
           <div>
-            <h1 className="text-2xl font-bold -mt-4 font-serif"  
-            >
-              Edit Class {data.level} - {data.section}
-            </h1>
             <div className="tab-content">
               <Tabs defaultActiveKey="1">
                 <Tabs.TabPane
                   tab={
-                    <p className="text-xl font-serif font-bold text-center ml-0">
+                    <p className="text-sm font-[600] text-center ml-0 font-jakarta">
                       Profile
                     </p>
                   }
                   key="1"
                 >
-                  <Button className="btn-confirm" onClick={handleUpdate}>
-                    Edit Class
+                  <Button
+                    className="btn-confirm bg-[#E7752B] text-[white] flex flex-row "
+                    onClick={handleUpdate}
+                  >
+                    <Icon
+                      name="edit-outline"
+                      fill="white"
+                      size="medium" // small, medium, large, xlarge
+                      animation={{
+                        type: "pulse", // zoom, pulse, shake, flip
+                        hover: true,
+                        infinite: false,
+                      }}
+                    />
+                    <p className="pl-2 text-white">Finish Review</p>
                   </Button>
+                  <div className="flex flex-row bg-white w-[100%]  border-[1px] rounded-lg p-4">
+                    <div className="flex flex-row justify-between w-[100%]">
+                      <div>
+                        <div className="py-2">
+                          <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                            Grade
+                          </h1>
+
+                          <Input
+                            name="level"
+                            type={"number"}
+                            className="rounded-lg"
+                            defaultValue={data.level}
+                            // onChange={(e) => handleClass(e)}
+                          />
+                        </div>
+                      </div>
+                      <div className="py-2 ml-10">
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Section
+                        </h1>
+                        <Input
+                          className="rounded-lg"
+                          name="section"
+                          value={data.section}
+                          onChange={(e) => handleClass(e)}
+                        />
+                      </div>
+                      <div className="py-2 ml-10 w-[20vw]">
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Home room Teacher
+                        </h1>
+                        <Select
+                          style={{
+                            width: "100%",
+                          }}
+                          value={data.homeRoomTeacher}
+                          placeholder="Select Home room Teacher"
+                          onChange={handleStudent}
+                          optionLabelProp="label"
+                        >
+                          {teachers.map((item, index) => (
+                            <Option
+                              key={item.key}
+                              value={item.key}
+                              label={
+                                item.first_name +
+                                " " +
+                                (item.last_name ? item.last_name : "")
+                              }
+                            >
+                              {item.first_name +
+                                " " +
+                                (item.last_name ? item.last_name : "")}
+                            </Option>
+                          ))}
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
                   <div className="">
                     <div className="flex flex-row justify-between">
-                      <div>
-                        <h1
-                       className="text-lg font-bold font-serif" 
-                         // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:20}}
-                        >
-                          Assigned Students
-                        </h1>
-                      </div>
-                      <Select
-                        style={{ width: "20%" }}
-                        placeholder="select Students"
-                        onChange={handleStudent}
-                        defaultValue={data.student}
-                        optionLabelProp="label"
-                        mode="multiple"
-                        maxTagCount={2}
-                      >
-                        {students.map((item, index) => (
-                          <Option value={item.key} label={item.first_name}>
-                            {item.first_name +
-                              " " +
-                              (item.last_name ? item.last_name : "")}
-                          </Option>
-                        ))}
-                      </Select>
+                      <h1 className="text-lg font-[600] font-jakarta mb-[16px] mt-[32px]">
+                        Assigned Students
+                      </h1>
                     </div>
-                    {/* {data.student.length <= 0 ? ( */}
                     <Table
                       loading={studentLoading}
-                      dataSource={selected}
+                      dataSource={students}
+                      rowSelection={rowSelection}
                       columns={columns}
                     />
                   </div>
-                  <div className="-mb-10">
+                  <div className="mb-10">
                     <div className="flex flex-row justify-between">
-                      <h1
-                    className="text-lg font-bold font-serif mb-10" 
-                    //   style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'30px',fontSize:20 , paddingBottom:10 }}
-                      >
+                      <h1 className="text-lg font-[600] font-jakarta mb-[16px] mt-[32px]">
                         Assigned Courses
                       </h1>
-                      <Select
-                        style={{ width: "20%" }}
-                        placeholder="Asign Courses"
-                        onChange={handleCourse}
-                        defaultValue={data.course}
-                        optionLabelProp="label"
-                        mode="multiple"
-                        maxTagCount={4}
-                      >
-                        {courses.map((item, index) => (
-                          <Option
-                            value={item.course_id}
-                            label={item.course_name}
-                          >
-                            {item.course_name}
-                          </Option>
-                        ))}
-                      </Select>
                     </div>
-                    <Table dataSource={item} columns={courseColumns} />
+                    <Table
+                      loading={studentLoading}
+                      rowSelection={rowSelections}
+                      dataSource={item}
+                      columns={courseColumns}
+                    />
                   </div>
-                  <div className="schedule">
-                    <h1
-                     style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'30px',fontSize:20}}
-                    >
-                      Weekly Schedule
-                    </h1>
-                    <div className="up-card-schedule">
-                      <h2>
-                        Class{" "}
-                        {updateClass.class
-                          ? updateClass.class.level + updateClass.class.section
-                          : null}
-                      </h2>
-                      <div className="schedule-header">
-                        <div>
-                          <p> Period</p>
-                        </div>
-                        <div>
-                          <p> Start time</p>
-                          <p> End time</p>
-                        </div>
-                      </div>
-
-                      {data.schedule?.map((item, i) => (
-                        <>
-                          <Select
-                            style={{ width: "40%" }}
-                            placeholder="First Select Days"
-                            onChange={(e) => handleScheduler(e, i)}
-                            defaultValue={item.day}
-                            in
-                          >
-                            {days.map((item, index) => (
-                              <Option key={index} value={item} label={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                          <TimePicker.RangePicker
-                            style={{ width: "60%" }}
-                            format={"hh:mm"}
-                            use12Hours
-                            defaultValue={
-                              item.time.length
-                                ? [
-                                    moment(JSON.parse(item.time[0])),
-                                    moment(JSON.parse(item.time[1])),
-                                  ]
-                                : []
-                            }
-                            onChange={(e) => handleScheduler(e, i)}
-                          />
-                        </>
-                      ))}
-                      {input.map((item, i) => (
-                        <>
-                          <Select
-                            style={{ width: "40%" }}
-                            placeholder="First Select Days"
-                            onChange={(e) => handleNewScheduler(e, i)}
-                          >
-                            {days.map((item, index) => (
-                              <Option key={index} value={item} label={item}>
-                                {item}
-                              </Option>
-                            ))}
-                          </Select>
-                          <TimePicker.RangePicker
-                            style={{ width: "60%" }}
-                            format={"hh:mm"}
-                            use12Hours
-                            onChange={(e) => handleNewScheduler(e, i)}
-                          />
-                        </>
-                      ))}
-                      <Button
-                        style={{ float: "right" }}
-                        onClick={() => {
-                          setInput([...input, 0]);
-                          setUpdateClass({
-                            ...updateClass,
-                            schedule: [
-                              ...updateClass.schedule,
-                              { day: "", time: [] },
-                            ],
-                          });
-                        }}
-                      >
-                        Add New
-                      </Button>
-                    </div>
-                  </div>
-                  <Button
-                    className="btn-dlt"
-                    type="primary"
-                    danger
-                    onClick={handleDelete}
-                  >
-                    Delete
-                  </Button>
                 </Tabs.TabPane>
                 <Tabs.TabPane
                   tab={
-                    <p className="text-xl font-bold text-center ml-0 font-serif">
+                    <p className="text-sm font-[600] text-center ml-0 font-jakarta">
                       Attendance
                     </p>
                   }
                   key="2"
                 >
-                  <div  className="mt-14"/>
+                  <div className="mt-14" />
                   <AttendanceList />
                 </Tabs.TabPane>
               </Tabs>
@@ -478,60 +623,6 @@ function UpdateClass() {
         </div>
       )}
     </div>
-
-    // <div>
-    //     {data && openUpdate ? (
-    //         <Modal
-    //             visible={openUpdate}
-    //             title="Update Class"
-    //             onCancel={handleCancel}
-    //             footer={[
-    //                 <Button key="back" onClick={handleCancel}>
-    //                     Return
-    //                 </Button>,
-    //                 <Button key="submit" type='primary' loading={loading} onClick={handleUpdate}>
-    //                     Update
-    //                 </Button>,
-
-    //             ]}
-    //         >
-    //             <Form
-    //                 labelCol={{ span: 4 }}
-    //                 wrapperCol={{ span: 14 }}
-    //                 layout="horizontal"
-    //             >
-    //                 <Form.Item label="Level">
-    //                     <Input disabled name="level" defaultValue={data.level} onChange={(e) => handleClass(e)} />
-    //                 </Form.Item>
-
-    //                 <Form.Item label="Section">
-    //                     <Input disabled name="section" defaultValue={data.section} onChange={(e) => handleClass(e)} />
-    //                 </Form.Item>
-    //                 <Form.Item label="Students">
-    //                     <Select
-
-    //                         style={{
-    //                             width: "100%",
-    //                         }}
-    //                         placeholder="select Students"
-    //                         onChange={handleStudent}
-    //                         defaultValue={data.student}
-    //                         optionLabelProp="label"
-    //                         mode="multiple"
-    //                         maxTagCount={2}
-    //                     >
-    //                         {students.map((item, index) => (
-    //                             <Option value={item.key} label={item.first_name + " " + (item.last_name ? item.last_name : "")}>
-    //                                 {item.first_name + " " + (item.last_name ? item.last_name : "")}
-    //                             </Option>
-    //                         ))}
-    //                     </Select>
-    //                 </Form.Item>
-
-    //             </Form>
-    //         </Modal>)
-    //         : null}
-    // </div>
   );
 }
 

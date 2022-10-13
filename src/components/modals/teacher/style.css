@@ -7,6 +7,9 @@
 .profile-info h3 {
     color: #e66937 !important;
 }
+.button :hover{
+    color: white
+}
 
 .teacher-avater {
     display: flex;
@@ -77,7 +80,7 @@
     color: #e66937;
 }
 
-.btn-confirm {
+.btn-confirm button{
     float: right;
     margin-top: -3.5rem;
 }

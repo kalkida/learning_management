@@ -16,7 +16,6 @@ import "../modals/attendance/style.css";
 import { async } from "@firebase/util";
 import { SearchOutlined } from "@ant-design/icons";
 
-
 //const { Search } = Input;
 const { Option } = Select;
 
@@ -185,6 +184,8 @@ function AttendanceList() {
     return temporary;
   };
 
+  const currentURL = window.location.pathname;
+
   const getCourses = async () => {
     const q = query(
       collection(firestoreDb, "courses"),
@@ -280,53 +281,56 @@ function AttendanceList() {
 
   return (
     <>
-    <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14" >
-    <div  className="list-header mb-10">
-    <h1 className="text-2xl font-[600] font-jakarta">Attendance</h1>
-    </div>
-      <div className="at-filters">
-        <div  >
-        
-          <Select placeholder={"Select class"} onChange={handleFilterClass}>
-            {classes?.map((item, i) => (
-              <Option
-                key={item.key}
-                value={item.key}
-                lable={item.level + item.section}
-              >
-                {item.level + item.section}
-              </Option>
-            ))}
-          </Select>
-          <Select placeholder={"Select subject"} onChange={handleFilterSubject}>
-            {subject?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.name}>
-                {item.name}
-              </Option>
-            ))}
-          </Select>
-          <DatePicker
-            onChange={handlefilterAttenance}
-            placeholder="Select date"
-          />
+      <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14">
+        <div className="list-header mb-10">
+          {currentURL == "/attendance" ? (
+            <h1 className="text-2xl font-[600] font-jakarta">Attendance</h1>
+          ) : null}
+        </div>
+        <div className="at-filters">
+          <div>
+            <Select placeholder={"Select class"} onChange={handleFilterClass}>
+              {classes?.map((item, i) => (
+                <Option
+                  key={item.key}
+                  value={item.key}
+                  lable={item.level + item.section}
+                >
+                  {item.level + item.section}
+                </Option>
+              ))}
+            </Select>
+            <Select
+              placeholder={"Select subject"}
+              onChange={handleFilterSubject}
+            >
+              {subject?.map((item, i) => (
+                <Option key={item.key} value={item.key} lable={item.name}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+            <DatePicker
+              onChange={handlefilterAttenance}
+              placeholder="Select date"
+            />
+          </div>
+          <div>
+            <Input
+              style={{ width: 200 }}
+              className="mr-3 rounded-lg"
+              placeholder="Search"
+              prefix={<SearchOutlined className="site-form-item-icon" />}
+            />
+          </div>
         </div>
         <div>
-          <Input
-            style={{ width: 200 }}
-            className="mr-3 rounded-lg"
-            placeholder="Search"
-            prefix={<SearchOutlined className="site-form-item-icon" />}
+          <Table
+            loading={tableLoading}
+            dataSource={courseData}
+            columns={columns}
           />
-        
         </div>
-      </div>
-      <div>
-        <Table
-          loading={tableLoading}
-          dataSource={courseData}
-          columns={columns}
-        />
-      </div>
       </div>
     </>
   );

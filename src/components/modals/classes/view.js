@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, Select, Tabs, Table, Tag } from "antd";
+import { fetchTeacher } from "../funcs";
+import Icon from "react-eva-icons";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import "./style.css";
@@ -25,14 +27,17 @@ function ViewClass() {
   const [courseLoading, setCourseLoading] = useState(true);
   const [classData, setClassData] = useState([]);
   const [studentLoading, setStudentLoading] = useState(true);
+
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   var { data } = state;
+  const [selectedRowKeys, setSelectedRowKeys] = useState(data.course);
+
   const navigate = useNavigate();
 
   const scheduleColumn = [
     {
-      title: "Course",
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Subject</h1>,
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
@@ -64,10 +69,29 @@ function ViewClass() {
           return (
             <>
               {value?.map((item, i) => (
-                <Tag color="green">
-                  {moment(JSON.parse(item?.time[0])).format("hh:mm") +
-                    " to " +
-                    moment(JSON.parse(item?.time[1])).format("hh:mm")}
+                <Tag color="#EA8848">
+                  {moment(JSON.parse(item?.time[0])).format("hh:mm")}{" "}
+                </Tag>
+              ))}
+            </>
+          );
+        } else {
+          return <Tag color="red">No Data</Tag>;
+        }
+      },
+    },
+    {
+      title: "End Time",
+      dataIndex: "schedule",
+      key: "schedule",
+      render: (value) => {
+        moment.locale("en");
+        if (value?.time == undefined) {
+          return (
+            <>
+              {value?.map((item, i) => (
+                <Tag color="#EA8848">
+                  {moment(JSON.parse(item?.time[1])).format("hh:mm")}
                 </Tag>
               ))}
             </>
@@ -80,30 +104,74 @@ function ViewClass() {
   ];
   const columns = [
     {
-      title: "First Name",
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Name</h1>,
       dataIndex: "first_name",
       key: "first_name",
+      render: (_, value) => {
+        return (
+          <h1 className=" text-[#344054]">
+            {value.first_name}
+            {"  "}
+            {value.last_name}
+          </h1>
+        );
+      },
+    },
+
+    {
+      title: "ID",
+      dataIndex: "studentId",
+      key: "studentId",
+      render: (value) => {
+        if (value) {
+          return <h1 className=" text-[#344054]">{value}</h1>;
+        } else {
+          return (
+            <h1 className="text-[14px] font-light text-[#515f76]">No Data</h1>
+          );
+        }
+      },
     },
     {
-      title: "Last Name",
-      dataIndex: "last_name",
-      key: "last_name",
+      title: "Age",
+      dataIndex: "DOB",
+      key: "DOB",
+      render: (value) => {
+        if (value) {
+          const todays = Date.now();
+
+          return (
+            <h1 className=" text-[#344054]">
+              {/* {moment(JSON.parse(value)).format("mm-yy-dd")} */}
+              {moment(todays).year() - moment(JSON.parse(value)).year()}
+            </h1>
+          );
+        } else {
+          return (
+            <h1 className="text-[14px] font-light text-[#515f76]">No Data</h1>
+          );
+        }
+      },
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Level",
-      dataIndex: "level",
-      key: "level",
+      title: "Sex",
+      dataIndex: "sex",
+      key: "sex",
+      render: (value) => {
+        if (value) {
+          return <h1 className=" text-[#344054]">{value}</h1>;
+        } else {
+          return (
+            <h1 className="text-[14px] font-light text-[#515f76]">No Data</h1>
+          );
+        }
+      },
     },
   ];
 
   const courseColumns = [
     {
-      title: "Subject",
+      title: <h1 className="text-[16px] font-[600] text-[#344054]">Subject</h1>,
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
@@ -111,19 +179,38 @@ function ViewClass() {
       },
     },
     {
-      title: "Level",
+      title: "Class / Week",
       dataIndex: "class",
       key: "class",
-      render: (item) => {
-        return <div>{item.level}</div>;
+      render: (value) => {
+        if (value.schedule?.length) {
+          return (
+            <h1 className="text-[14px] font-[600] text-[#344054]">
+              {value.schedule.length}
+            </h1>
+          );
+        } else {
+          return <h1 className="text-[14px] font-light text-[#515f76]">0</h1>;
+        }
       },
     },
     {
-      title: "Section",
-      dataIndex: "class",
-      key: "class",
-      render: (item) => {
-        return <div>{item.section}</div>;
+      title: "Teacher",
+      dataIndex: "teachers",
+      key: "teachers",
+      width: "30%",
+      render: (item, other) => {
+        console.log("teachers", other);
+        return (
+          <div className=" text-[#344054]">
+            {other.teachers.map((teacher) => (
+              <h1>
+                {teacher.first_name}
+                {"   "} {teacher.last_name}
+              </h1>
+            ))}
+          </div>
+        );
       },
     },
   ];
@@ -216,6 +303,14 @@ function ViewClass() {
       setStudentLoading(false);
     }
   };
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
 
   const handleUpdate = () => {
     navigate("/update-class", { state: { data } });
@@ -226,17 +321,19 @@ function ViewClass() {
     getCourses();
   }, []);
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] p-4">
+    <div className="bg-[#F9FAFB] p-4">
       <div className="flex flex-row justify-between w-[100%] -mt-20 ">
         <div className="flex flex-row justify-center align-middle ">
           <div className="flex flex-row">
-            <h1 className="text-lg font-bold font-jakarta mr-2">Class</h1>
+            <h1 className="text-lg font-bold font-jakarta mr-2 text-[#1D2939]">
+              Class
+            </h1>
             <h2 className="text-lg font-bold font-jakarta">{data?.level}</h2>
             <h3 className="text-lg font-bold font-jakarta">{data?.section}</h3>
           </div>
         </div>
         <div className="flex flex-row">
-          <h3 className="text-lg font-semibold font-jakarta border-r-[2px] pr-2">
+          <h3 className="text-lg font-[600]  font-jakarta border-r-[2px] pr-2 text-[#344054]">
             Assigned Students
           </h3>
           <h4 className="text-lg font-semibold font-jakarta pl-2">
@@ -244,58 +341,77 @@ function ViewClass() {
           </h4>
         </div>
       </div>
-      <div className="w-[100%] mt-10">
-        <Tabs defaultActiveKey="1">
+      <div className="w-[100%] mt-7">
+        <Tabs defaultActiveKey="1" className="pb-30">
           <Tabs.TabPane
-           tab={
-            <p className="text-lg font-semibold text-center ml-5 font-jakarta">
-              Profile
-            </p>
-          }
+            tab={
+              <p className="text-sm font-[600] text-center ml-0 font-jakarta ">
+                Profile
+              </p>
+            }
             key="1"
           >
             <Button
-              icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-              className="btn-confirm"
+              className="btn-confirm text-center bg-[white] border-[1px] border-[#EA8848] rounded-lg"
               onClick={handleUpdate}
             >
-              Edit 
+              <div className="flex flex-row justify-around">
+                <Icon
+                  name="edit-outline"
+                  fill="#EA8848"
+                  size="medium" // small, medium, large, xlarge
+                  animation={{
+                    type: "pulse", // zoom, pulse, shake, flip
+                    hover: true,
+                    infinite: false,
+                  }}
+                />
+                <p className="font-[16px] text-[#EA8848]"> Edit</p>
+              </div>
             </Button>
-            <div className="asssign-teacher">
-              <h4
-                className="text-[24px] mb-10 font-serif font-bold"
-                //style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}
-              >
+            <div className="">
+              <h4 className="text-lg mb-[16px] mt-[32px] font-jakarta font-[600] text-[#344054]">
                 Assigned Students
               </h4>
-              <Table dataSource={students} columns={columns} />
+              <Table
+                dataSource={students}
+                columns={columns}
+                pagination={false}
+              />
             </div>
-            <div className="asssign-teacher -mt-10">
-              <h4
-                className="text-[24px] mb-10 font-serif font-bold"
-                //style={{ fontFamily:'Plus Jakarta Sans' , fontWeight:'600'}}
-              >
+            <div className="">
+              <h4 className="text-lg mb-[16px] mt-[32px] font-jakarta font-[600] text-[#344054">
                 Assigned Courses
               </h4>
-              <Table dataSource={datas} columns={courseColumns} />
+              <Table
+                loading={courseLoading}
+                dataSource={datas}
+                columns={courseColumns}
+                pagination={false}
+              />
             </div>
-            <div className="asssign-teacher">
-              <h4 className="text-[24px] mb-10 font-serif font-bold">
+            <div className="pb-0">
+              <h4 className="text-lg mb-[16px] mt-[32px] font-jakarta font-[600] text-[#344054]">
                 Weekly Schedule
               </h4>
-              <Table dataSource={datas} columns={scheduleColumn} />
+              <Table
+                loading={courseLoading}
+                dataSource={datas}
+                columns={scheduleColumn}
+              />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane
-           tab={
-            <p className="text-lg font-semibold text-center ml-5 font-jakarta">
-              Attendance
-            </p>
-          }
+            tab={
+              <p className="text-sm font-[600] text-center ml-0 font-jakarta">
+                Attendance
+              </p>
+            }
             key="2"
           >
-              <div className="mt-14"></div>
-            <AttendanceList />
+            <div className="mt-14 -ml-8">
+              <AttendanceList />
+            </div>
           </Tabs.TabPane>
         </Tabs>
       </div>

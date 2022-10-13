@@ -302,10 +302,11 @@ export default function AddTeacher() {
     navigate("/add-teacher");
   };
 
-
   const columns = [
     {
-      title: <p className="font-jakarta text-[#344054] font-[600]">First Name </p>,
+      title: (
+        <p className="font-jakarta text-[#344054] font-[600]">First Name </p>
+      ),
       dataIndex: "first_name",
       key: "first_name",
       render: (text, data) => {
@@ -315,7 +316,9 @@ export default function AddTeacher() {
       },
     },
     {
-      title: <p className="font-jakarta text-[#344054] font-[600]">Last Name </p>,
+      title: (
+        <p className="font-jakarta text-[#344054] font-[600]">Last Name </p>
+      ),
       dataIndex: "last_name",
       key: "last_name",
       render: (text, data) => {
@@ -333,7 +336,7 @@ export default function AddTeacher() {
           return (
             <>
               {value.map((item) => (
-                 <div className="text-[#344054]">{item.course_name}</div>
+                <div className="text-[#344054]">{item.course_name}</div>
               ))}
             </>
           );
@@ -343,7 +346,9 @@ export default function AddTeacher() {
       },
     },
     {
-      title: <p className="font-jakarta text-[#344054] font-[600]">Phone Number </p>,
+      title: (
+        <p className="font-jakarta text-[#344054] font-[600]">Phone Number </p>
+      ),
       key: "phone",
       dataIndex: "phone",
       render: (text) => <a>{text}</a>,
@@ -358,8 +363,14 @@ export default function AddTeacher() {
           return (
             <>
               {value?.map((item, i) => (
-                <div className="text-[#344054]">{item.level + item.section}</div>
-
+                <>
+                  {" "}
+                  {item ? (
+                    <div className="text-[#344054]">
+                      {item.level + item.section}
+                    </div>
+                  ) : null}
+                </>
               ))}
             </>
           );
@@ -387,7 +398,7 @@ export default function AddTeacher() {
           >
             Update
           </a>
-          </Space>
+        </Space>
       ),
     },
   ];
@@ -401,12 +412,12 @@ export default function AddTeacher() {
   return (
     <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-[10vh]">
       <div className="list-header mb-10">
-      <h1 className="text-2xl font-[600] font-jakarta">List Of Teachers</h1>
+        <h1 className="text-2xl font-[600] font-jakarta">List Of Teachers</h1>
       </div>
       <div className="list-sub">
         <div className="flex flex-row justify-between w-[23%]">
           <Select
-           className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
             placeholder="Course"
             bordered={false}
             style={{ width: 120 }}
@@ -438,14 +449,13 @@ export default function AddTeacher() {
         </div>
         <div className="course-search">
           <div>
-          <Input
-            style={{ width: 200 }}
-            className="mr-3 rounded-lg"
-            placeholder="Search"
-            //onSearch={onSearch}
-            prefix={<SearchOutlined className="site-form-item-icon" />}
-          />
-           
+            <Input
+              style={{ width: 200 }}
+              className="mr-3 rounded-lg"
+              placeholder="Search"
+              //onSearch={onSearch}
+              prefix={<SearchOutlined className="site-form-item-icon" />}
+            />
           </div>
           {/* add padding  */}
           <Button
@@ -466,17 +476,16 @@ export default function AddTeacher() {
             <PlusOutlined />
             Add Teacher
           </Button>
-            {/* <Link to={"/add-teacher"}>
+          {/* <Link to={"/add-teacher"}>
               <PlusOutlined />
               Add teacher
             </Link> */}
-      
         </div>
       </div>
 
       <br />
 
-      <Table  loading={tableLoading}columns={columns} dataSource={datas} />
+      <Table loading={tableLoading} columns={columns} dataSource={datas} />
     </div>
   );
 }

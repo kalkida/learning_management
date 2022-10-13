@@ -64,10 +64,10 @@ export default function AdminDash() {
         flexDirection: "column",
         justifyContent: "center",
         backgroundColor: "#F9FAFB",
-
+        width: "100%",
       }}
     >
-      <p className="text-center w-[90vw] text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8">
+      <p className="text-center text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8">
         Hello Admin
       </p>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -81,11 +81,11 @@ export default function AdminDash() {
               </h1>
             }
           >
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            <div className="flex flex-row w-[100%] flex-wrap justify-between">
               <div className=" flex flex-col justify-center">
                 <Progress type="circle" strokeColor={"#EA8848"} percent={75} />
               </div>
-              <div className="flex flex-col justify-center ml-12">
+              <div className="flex flex-col justify-center  ">
                 <h1 className="text-md flex flex-row">
                   {" "}
                   <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>7
@@ -111,10 +111,8 @@ export default function AdminDash() {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  justifyContent: "space-around",
                   width: "100%",
-                  paddingLeft: "2%",
-                  paddingRight: "2%",
                 }}
               >
                 <div>
@@ -123,7 +121,7 @@ export default function AdminDash() {
                       type="circle"
                       strokeColor={"#EA8848"}
                       percent={75}
-                      width={80}
+                      width={"10vh"}
                     />
                   </div>
                   <h1 className="text-center">Weekly</h1>
@@ -134,7 +132,7 @@ export default function AdminDash() {
                       type="circle"
                       strokeColor={"#EA8848"}
                       percent={75}
-                      width={80}
+                      width={"10vh"}
                     />
                   </div>
                   <h1 className="text-center">Monthly</h1>
@@ -145,7 +143,7 @@ export default function AdminDash() {
                       type="circle"
                       strokeColor={"#EA8848"}
                       percent={75}
-                      width={80}
+                      width={"10vh"}
                     />
                   </div>
                   <h1 className="text-center">Yearly</h1>
@@ -196,7 +194,7 @@ export default function AdminDash() {
             <Liner />
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} >
+        <Grid item xs={12} sm={6} md={4}>
           <Card
             bordered={true}
             className="w-[100%] min-h-[419px]"

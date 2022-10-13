@@ -19,7 +19,7 @@ import { MailFilled } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import {
   doc,
   setDoc,
@@ -72,7 +72,7 @@ function TeacherUpdate() {
       console.log(updateTeacher);
       setDoc(
         doc(firestoreDb, "teachers", data.key),
-        { ...updateTeacher, class: selectedClassKeys },
+        { ...updateTeacher },
         {
           merge: true,
         }
@@ -185,7 +185,7 @@ function TeacherUpdate() {
       });
       setUpdateTeacher({ ...updateTeacher, class: classArr });
       setUpdateTeacher({ ...updateTeacher, course: courseArr });
-      setSelectedClassKeys(classArr);
+      // setSelectedClassKeys(classArr);
       setSelectedRowKeysCourse(courseArr);
     }
   };
@@ -428,142 +428,114 @@ function TeacherUpdate() {
   return (
     <>
       <div>
-      <div className="w-[100%] p-2 -mt-20">
-        <div className=" flex flex-row  pb-2 -mt-4 justify-between  py-10 px-2">
-          <div className=" flex flex-row  w-[40%] justify-between ">
-            <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
-              <img
-                src={data.avater ? data.avater : "img-5.jpg"}
-                alt="profile"
-                className="w-[8vw] rounded-full"
-              />
-            </div>
-            <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%]">
-              <div className="flex flex-row">
-              <h3 className="text-lg font-bold font-jakarta ">
-                {data.first_name + " " + data.last_name}
-              </h3>
+        <div className="w-[100%] -mt-20">
+          <div className=" flex flex-row  pb-2 -mt-4 justify-between  py-7 ">
+            <div className=" flex flex-row  w-[40%] justify-between ">
+              <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
+                <img
+                  src={data.avater ? data.avater : "img-5.jpg"}
+                  alt="profile"
+                  className="w-[8vw] rounded-full"
+                />
               </div>
-              <div className="flex flex-row align-bottom">
-                <div>
-                  <MailFilled className="text-[#E7752B]" />
+              <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%]">
+                <div className="flex flex-row">
+                  <h3 className="text-lg font-bold font-jakarta ">
+                    {data.first_name + " " + data.last_name}
+                  </h3>
                 </div>
-                <div>
-                  <h3 className="text-md text-[#E7752B] p-1 font-jakarta">Contact</h3>
+                <div className="flex flex-row align-bottom">
+                  <div>
+                    <MailFilled className="text-[#E7752B]" />
+                  </div>
+                  <div>
+                    <h3 className="text-md text-[#E7752B] p-1 font-jakarta">
+                      Contact
+                    </h3>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col align-middle">
-          <div className="flex flex-row ">
-            <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
-              Class
-            </h3>
-            {/* <div className="flex flex-row">
-              <h3 className="font-bold pr-2 border-r-[1px] font-serif">Class</h3> */}
-              {data?.class ? (
-                <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
-                p-[1px] ml-2">
-                  {data?.class?.map(
-                    (item, i) => item.level + item.section + ","
-                  )}
-                </h4>
-              ) : (
-                <Tag>Teacher is not Assigned</Tag>
-              )}
-            </div>
-        
-            <div className="flex flex-row ">
-            <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
-              Subject
-            </h3>
-              {data?.course ? (
-                <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
-                text-[#667085] p-[1px] ml-2">
-                  {data?.course?.slice(0,2).map((item, i) => item.course_name + ",")}
-                </h4>
-              ) : (
-                <Tag>Teacher is not Assigned</Tag>
-              )}
-            </div>
-          </div>
-        </div>
-          {/* <div className="teacher-avater">
-            <img
-              src={updateTeacher.avater ? updateTeacher.avater : "img-5.jpg"}
-              alt="profile"
-            />
-            <div className="profile-info">
-              <h2
-              className="text-xl font-bold font-serif"  >
-                {updateTeacher.first_name + " " + updateTeacher.last_name}
-              </h2>
-              <h3>Contact</h3>
-            </div>
-          </div>
-          <div className="header-extra-th">
-            <div>
-              <h3  
-              className="text-sm font-bold font-serif" 
-              >Class</h3>
-              <h4
-               className="text-sm font-serif" 
-              >
-                {data.class?.map((item, i) => item.level + item.section + ",")}
-              </h4>
-            </div>
-            <div>
-              <h3 
-               className="text-sm font-bold font-serif" 
-               >Subject</h3>
-              <h4  
-               className="text-sm font-serif" 
-              >{data.course?.map((item, i) => item.course_name + ",")}</h4>
-            </div> */}
-            {/* <div className="flex flex-row mt-4 justify-center ">
-                <Button
-                  className=" bg-[#E7752B] text-white items-center rounded-lg "
-                  onClick={handleUpdate}
-                >
-                  Finalize Review
-                  <CheckOutlined className="mb-2" />
-                </Button>
+            <div className="flex flex-col justify-center">
+              <div className="flex flex-row justify-end">
+                <h3 className="text-lg font-[500] font-jakarta text-[#344054]">
+                  Class
+                </h3>
 
-              </div> */}
+                {data?.class ? (
+                  <h4
+                    className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] 
+                p-[1px] ml-2"
+                  >
+                    {data?.class?.map(
+                      (item, i) => item.level + item.section + ","
+                    )}
+                  </h4>
+                ) : (
+                  <Tag>Teacher is not Assigned</Tag>
+                )}
+              </div>
 
-          {/* </div> */}
+              <div className="flex flex-row ">
+                <h3 className="text-lg font-[600] font-jakarta text-[#344054]">
+                  Subject
+                </h3>
+                {data?.course ? (
+                  <h4
+                    className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta
+                text-[#667085] p-[1px] ml-2"
+                  >
+                    {data?.course
+                      ?.slice(0, 2)
+                      .map((item, i) => item.course_name + ",")}
+                  </h4>
+                ) : (
+                  <Tag>Teacher is not Assigned</Tag>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
-            <Tabs.TabPane tab={
-                 <p className="text-base font-bold text-center font-jakarta">Edit Profile</p>
-            } key="1">
-              <Button   className="btn-confirm " onClick={handleUpdate}>
+            <Tabs.TabPane
+              tab={
+                <p className="text-base font-bold text-center font-jakarta">
+                  Edit Profile
+                </p>
+              }
+              key="1"
+            >
+              <Button
+                icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
+                className="btn-confirm  bg-[#E7752B]"
+                onClick={handleUpdate}
+              >
                 Finalize review
-                <CheckOutlined className="mb-10" />
               </Button>
 
-              <h1
-                className="text-xl font-bold font-jakarta mt-10 mb-5 "  
-                >Edit Profile</h1>
-              <div className="add-teacher bg-[#FFF] ">
-               
+              <h1 className="text-xl font-bold font-jakarta mt-5 text-[#344054] mb-5 ">
+                Edit Profile
+              </h1>
+              <div className="p-2 border-[1px] rounded-lg bg-[#FFF] ">
                 <div>
                   <div className="avater-img">
                     <div>
-                      <h2
-                      className="text-base font-bold font-jakarta"  
-                     // style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'600',lineHeight:'28px',fontSize:16}}
-                      >Teacher Picture</h2>
-                      <img
-                        src={
-                          file
-                            ? URL.createObjectURL(file)
-                            : data.avater
-                            ? data.avater
-                            : "img-5.jpg"
-                        }
-                      /> 
+                      <h2 className="text-[14px] font-[500] font-jakarta text-[#475467] text-center">
+                        Teacher Picture
+                      </h2>
+                      <div className="border-[1px] border-[#E7752B] rounded-full">
+                        <img
+                          src={
+                            file
+                              ? URL.createObjectURL(file)
+                              : data.avater
+                              ? data.avater
+                              : "img-5.jpg"
+                          }
+                          className="rounded-full w-[3vw] h-[2vh]"
+                        />
+                      </div>
                     </div>
                     <div className="file-content">
                       <span className="font-jakarta text-sm">
@@ -572,7 +544,7 @@ function TeacherUpdate() {
 
                       <div className="img-btn">
                         {/* <input type="file" onChange={handleChange} accept="/image/*" /> */}
-                        <button>
+                        <button className="rounded-sm">
                           <input
                             type="file"
                             id="browse"
@@ -596,9 +568,9 @@ function TeacherUpdate() {
                   <div className="add-form">
                     <div className="col">
                       <div className="py-2">
-                        <label
-                      className="text-[#344054] pb-[6px] font-jakarta"
-                        >First Name</label>
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          First Name
+                        </h1>
                         <Input
                           defaultValue={updateTeacher.first_name}
                           name="first_name"
@@ -606,9 +578,9 @@ function TeacherUpdate() {
                         />
                       </div>
                       <div className="py-2">
-                        <label
-                          className="text-[#344054] pb-[6px] font-jakarta"
-                        >Last Name</label>
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Last Name
+                        </h1>
                         <Input
                           defaultValue={updateTeacher.last_name}
                           name="last_name"
@@ -618,9 +590,9 @@ function TeacherUpdate() {
                     </div>
                     <div className="col">
                       <div className="py-2">
-                        <label
-                          className="text-[#344054] pb-[6px] font-jakarta"
-                        >Phone</label>
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Phone
+                        </h1>
                         <Input
                           defaultValue={updateTeacher.phone}
                           name="phone"
@@ -628,9 +600,9 @@ function TeacherUpdate() {
                         />
                       </div>
                       <div className="py-2">
-                        <label
-                          className="text-[#344054] pb-[6px] font-jakarta" 
-                        >Email</label>
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Email
+                        </h1>
                         <Input
                           defaultValue={updateTeacher.email}
                           name="email"
@@ -640,9 +612,9 @@ function TeacherUpdate() {
                     </div>
                     <div className="col">
                       <div className="py-2">
-                        <label
-                          className="text-[#344054] pb-[6px] font-jakarta" 
-                        >Date Of Birth</label>
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Date Of Birth
+                        </h1>
                         <DatePicker
                           style={{ width: "100%" }}
                           onChange={handleDob}
@@ -654,9 +626,9 @@ function TeacherUpdate() {
                         />
                       </div>
                       <div className="py-2">
-                        <label
-                          className="text-[#344054] pb-[6px] font-jakarta" 
-                        >Sex</label>
+                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                          Sex
+                        </h1>
                         <Select
                           defaultValue={updateTeacher.sex}
                           placeholder="Select Gender"
@@ -674,9 +646,9 @@ function TeacherUpdate() {
                         </Select>
                       </div>
                       <div className="py-2">
-                        <label 
-                          className="text-[#344054] pb-[6px] font-jakarta" 
-                        >Working Since</label>
+                        <label className="text-[#344054] pb-[6px] font-jakarta">
+                          Working Since
+                        </label>
                         <DatePicker
                           style={{ width: "100%" }}
                           onChange={handleWork}
@@ -692,18 +664,27 @@ function TeacherUpdate() {
                 </div>
               </div>
             </Tabs.TabPane>
-            <Tabs.TabPane tab={
-                 <p className="text-base font-bold text-center ml-5 font-jakarta">Edit Course</p>
-            } key="2">
-              <Button 
-               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-              className="btn-confirm" onClick={handleUpdate}>
-                Edit
+            <Tabs.TabPane
+              tab={
+                <p className="text-base font-bold text-center ml-5 font-jakarta">
+                  Edit Course
+                </p>
+              }
+              key="2"
+            >
+              <Button
+                icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
+                className="btn-confirm  bg-[#E7752B]"
+                onClick={handleUpdate}
+              >
+                Finalize review
               </Button>
 
               <div>
                 <div className="teacher-course-list">
-                  <h1  className="text-xl font-bold font-jakarta mb-6" >Edit Courses</h1>
+                  <h1 className="text-xl font-bold font-jakarta mb-6">
+                    Edit Courses
+                  </h1>
                   <div className="tch-cr-list">
                     <div>
                       <Select
@@ -728,21 +709,14 @@ function TeacherUpdate() {
                       </Select>
                     </div>
                     <div>
-                    <Input
-            style={{ width: 200 }}
-            className="mr-3 rounded-lg"
-            placeholder="Search"
-            //onSearch={onSearch}
-            prefix={<SearchOutlined className="site-form-item-icon" />}
-          />
-                      {/* <Search
-                        placeholder="input search text"
-                        allowClear
-                        // onSearch={onSearch}
-                        style={{
-                          width: 200,
-                        }}
-                      /> */}
+                      <Input
+                        style={{ width: 200 }}
+                        className="mr-3 rounded-lg"
+                        placeholder="Search"
+                        prefix={
+                          <SearchOutlined className="site-form-item-icon" />
+                        }
+                      />
                     </div>
                   </div>
                   <Table
@@ -753,27 +727,6 @@ function TeacherUpdate() {
                 </div>
               </div>
             </Tabs.TabPane>
-            {/* <Tabs.TabPane tab={
-                 <p className="text-xl font-bold text-center ml-5 font-jakarta">Class</p>
-            } key="3">
-              <Button 
-                icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-              className="btn-confirm" onClick={handleUpdate}>
-                Edit
-              </Button>
-
-              <div>
-                <div className="teacher-course-list">
-                  <h1  className="text-xl font-bold font-jakarta mb-10" >Add/Remove Class</h1>
-
-                  <Table
-                    rowSelection={rowSelectionClass}
-                    dataSource={classOption}
-                    columns={classColumns}
-                  />
-                </div>
-              </div>
-            </Tabs.TabPane> */}
           </Tabs>
         </div>
       </div>
