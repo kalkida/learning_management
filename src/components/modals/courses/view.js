@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Input, Button, Select, TimePicker, Tabs, Table } from "antd";
 import moment from "moment";
-import "./style.css";
+import "../courses/style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
@@ -85,8 +85,8 @@ function ViewCourse() {
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Assigned Teachers
             </h3>
-            <h4 
-            className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
+            <h4
+              className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
             p-[1px] ml-2">
               {data.teachers.length}
             </h4>
@@ -114,7 +114,8 @@ function ViewCourse() {
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-              className="btn-confirm"
+              className="btn-confirm text-[#E7752B]"
+
               onClick={handleUpdate}
             >
               Edit Course

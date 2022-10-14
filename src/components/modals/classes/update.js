@@ -187,7 +187,6 @@ function UpdateClass() {
 
   const handleUpdate = async () => {
     setLoading(true);
-    console.log(updateClass);
     setDoc(
       doc(firestoreDb, "class", data.key),
       {
@@ -212,10 +211,8 @@ function UpdateClass() {
         message.error("Data is not updated");
         console.log(error);
       });
-    // }
   };
   const onSelectChanges = (newSelectedRowKeys) => {
-    console.log("slect", newSelectedRowKeys);
     setSelectedRowKeyCourse(newSelectedRowKeys);
   };
 
@@ -365,6 +362,7 @@ function UpdateClass() {
     });
     setSelected(temp);
   };
+
   const getCourseData = async (ID) => {
     const docRef = doc(firestoreDb, "courses", ID);
     var data = "";
@@ -385,6 +383,7 @@ function UpdateClass() {
     });
     return data;
   };
+
   const getDatas = async (data, teach) => {
     if (data.class) {
       data.class?.map(async (item, index) => {
@@ -399,6 +398,7 @@ function UpdateClass() {
       return data;
     }
   };
+
   const getTeacher = async () => {
     var value = [];
     const q = query(
@@ -429,6 +429,7 @@ function UpdateClass() {
 
     return data;
   };
+
   useEffect(() => {
     getStudenters();
     getClass();
@@ -449,6 +450,7 @@ function UpdateClass() {
   const handleClass = (e) => {
     setUpdateClass({ ...updateClass, [e.target.name]: e.target.value });
   };
+
   return (
     <div className="bg-[#F9FAFB]  h-[auto]">
       {loading ? (

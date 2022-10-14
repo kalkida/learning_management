@@ -142,7 +142,7 @@ function TeacherView() {
               <img
                 src={data.avater ? data.avater : "img-5.jpg"}
                 alt="profile"
-                className="w-[8vw] border-[2px] rounded-full"
+                className="w-[8vw] h-[6vw] border-[2px] rounded-full"
               />
             </div>
             <div className="flex flex-col justify-center align-baseline mt-2 ml-5 w-[100%]">
@@ -203,10 +203,10 @@ function TeacherView() {
             >
               <Button
                 color="#E7752B"
-                className="btn-confirm bg-[#E7752B] "
+                className="btn-confirm  "
                 icon={
                   <FontAwesomeIcon
-                    className="pr-2 text-sm text-[white] hover:text-[#E7752B]"
+                    className="pr-2 text-sm hover:text-[#E7752B] hover:bg-[white]"
                     icon={faPen}
                   />
                 }

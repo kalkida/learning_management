@@ -264,8 +264,6 @@ export default function ListClasses() {
     },
   ];
   const handleFilterLevel = async (value) => {
-    console.log(`selected ${value}`);
-
     const q = query(
       collection(firestoreDb, "class"),
       where("school_id", "==", uid.school),
@@ -283,8 +281,6 @@ export default function ListClasses() {
   };
 
   const handleFilterSection = async (value) => {
-    console.log(`selected ${value}`);
-
     const q = query(
       collection(firestoreDb, "class"),
       where("school_id", "==", uid.school),
