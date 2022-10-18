@@ -31,8 +31,35 @@ import { Tooltip } from "antd";
 import "../modals/courses/style.css";
 
 const { Option } = Select;
-const LEVEL = ['1', ' 2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-const SECTION = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+const LEVEL = ["1", " 2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+const SECTION = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K",
+  "L",
+  "M",
+  "N",
+  "O",
+  "P",
+  "Q",
+  "R",
+  "S",
+  "T",
+  "U",
+  "V",
+  "W",
+  "X",
+  "Y",
+  "Z",
+];
 
 export default function ListClasses() {
   const navigate = useNavigate();
@@ -221,13 +248,13 @@ export default function ListClasses() {
       render: (_, record) => (
         <Space size="middle">
           <a
-            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
           >
             View{" "}
           </a>
           <a
-            className="p-2 text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleUpdate(record)}
           >
             Update
@@ -239,7 +266,8 @@ export default function ListClasses() {
   const handleFilterLevel = async (value) => {
     const q = query(
       collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school), where("level", "==", value),
+      where("school_id", "==", uid.school),
+      where("level", "==", value)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -255,7 +283,8 @@ export default function ListClasses() {
   const handleFilterSection = async (value) => {
     const q = query(
       collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school), where("section", "==", value),
+      where("school_id", "==", uid.school),
+      where("section", "==", value)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -287,7 +316,9 @@ export default function ListClasses() {
             onChange={handleFilterLevel}
           >
             {LEVEL.map((item, i) => (
-              <Option key={i} name="level" value={item}>{item}</Option>
+              <Option key={i} name="level" value={item}>
+                {item}
+              </Option>
             ))}
           </Select>
           <Select
@@ -298,7 +329,9 @@ export default function ListClasses() {
             onChange={handleFilterSection}
           >
             {SECTION.map((item, i) => (
-              <Option key={i} value={item}>{item}</Option>
+              <Option key={i} value={item}>
+                {item}
+              </Option>
             ))}
           </Select>
         </div>
@@ -326,7 +359,6 @@ export default function ListClasses() {
         columns={columns}
         dataSource={datas}
       />
-
     </div>
   );
 }

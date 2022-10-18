@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Icon from "react-eva-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faPen } from "@fortawesome/free-solid-svg-icons";
 
 import {
   Input,
@@ -42,7 +43,6 @@ function UpdateCourse() {
   const { data } = state;
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
-  const [courses, setCourses] = useState({});
   const [input, setInput] = useState([]);
   const [classes, setClasses] = useState([]);
   const [subjectData, setSubjectData] = useState();
@@ -55,7 +55,8 @@ function UpdateCourse() {
   );
   const [loading, setLoading] = useState(false);
   const [teacherView, setTeacherView] = useState(true);
-  const [teacherData, setTeacherData] = useState(data.teachers);
+  const [selectedRowKeys, setSelectedRowKeys] = useState(data.teachers);
+
   const [updateCourse, setUpdateCourse] = useState({
     course_name: data.course_name,
     subject: data.subject?.key,
@@ -65,6 +66,13 @@ function UpdateCourse() {
     description: data.description,
     school_id: data.school_id,
   });
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
 
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
 
@@ -211,19 +219,6 @@ function UpdateCourse() {
     return data;
   };
 
-  const handleTeacher = (value) => {
-    setTeacherView(false);
-    const teacherdata = [];
-    value.map(async (item, i) => {
-      const respose = await getTeacherID(item);
-      teacherdata.push(respose);
-    });
-    setTeacherData(teacherdata);
-    setUpdateCourse({ ...updateCourse, teachers: value });
-    setTimeout(() => {
-      setTeacherView(true);
-    }, 2000);
-  };
   const handleScheduler = (value, i) => {
     updateCourse.schedule[i].day = value;
     console.log(updateCourse);
@@ -254,26 +249,15 @@ function UpdateCourse() {
       title: "First Name",
       dataIndex: "first_name",
       key: "first_name",
+      width: "50%",
     },
     {
       title: "Last Name",
       dataIndex: "last_name",
       key: "last_name",
+      width: "50%",
     },
   ];
-
-  const handleDelete = () => {
-    deleteDoc(doc(firestoreDb, "courses", data.key), updateCourse)
-      .then((response) => {
-        setLoading(false);
-        message.success("Data is Deleted successfuly");
-        navigate("/list-course");
-      })
-      .catch((error) => {
-        message.error("Data is not Deleted, Try Again");
-        console.log(error);
-      });
-  };
 
   return (
     <>
@@ -310,13 +294,13 @@ function UpdateCourse() {
                   {subjectData?.name}
                 </h4>
               </div>
-              <div className="flex flex-row mt-4 justify-center ">
+              <div className="flex flex-row mt-4 justify-end ">
                 <Button
+                  icon={<FontAwesomeIcon className="pr-2" icon={faPen} />}
                   className=" bg-[#E7752B] text-white items-center rounded-lg "
                   onClick={handleUpdate}
                 >
                   Finalize Review
-                  <CheckOutlined className="mb-2" />
                 </Button>
               </div>
             </div>
@@ -394,46 +378,22 @@ function UpdateCourse() {
                 </div>
               </div>
             </div>
-            <div className="asssign-teacher">
+            <div className="mt-10">
               <div className="assign-header">
                 <h4 className="font-[600] font-jakarta text-[#344054] text-lg">
                   Edit Teachers
                 </h4>
-                <Select
-                  style={{ width: "30%" }}
-                  showArrow={true}
-                  placeholder="select Teachers"
-                  className="font-jakarta text-[#344054]"
-                  onChange={handleTeacher}
-                  optionLabelProp="label"
-                  mode="multiple"
-                  defaultValue={data.teachers}
-                  maxTagCount={2}
-                >
-                  {teachers.map((item, index) => (
-                    <Option
-                      key={item.key}
-                      value={item.key}
-                      label={
-                        item.first_name +
-                        " " +
-                        (item.last_name ? item.last_name : "")
-                      }
-                    >
-                      {item.first_name +
-                        " " +
-                        (item.last_name ? item.last_name : "")}
-                    </Option>
-                  ))}
-                </Select>
               </div>
               {teacherView ? (
                 <Table
-                  className="p-2 bg-[white] font-jakarta text-[#344054] rounded-lg border-[1px] border-[#D0D5DD]"
+                  // className="p-2 bg-[white] font-jakarta text-[#344054] rounded-lg border-[1px] border-[#D0D5DD]"
                   dataSource={teachers}
+                  rowSelection={rowSelection}
                   columns={columns}
                 />
-              ) : null}
+              ) : (
+                <Spin />
+              )}
             </div>
             <div className="mb-20 rounded-lg">
               <h4

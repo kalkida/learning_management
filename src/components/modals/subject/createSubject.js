@@ -13,6 +13,8 @@ import {
 import { firestoreDb, storage } from "../../../firebase";
 import uuid from "react-uuid";
 import TextArea from "antd/lib/input/TextArea";
+import { faAdd, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function CreateSubject() {
   const uid = useSelector((state) => state.user.profile);
@@ -61,22 +63,10 @@ function CreateSubject() {
   return (
     <>
       <Button
+        icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
+        className=" bg-[#E7752B] text-[white] "
         onClick={showModal}
-        style={{
-          padding: 8,
-          borderColor: "#E7752B",
-          borderWidth: 2,
-          // marginTop: 20,
-          color: "#E7752B",
-          borderRadius: 5,
-          // float: "right",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
       >
-        <PlusOutlined />
         Add Subject
       </Button>
       {open ? (
