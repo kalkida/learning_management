@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@coreui/react-chartjs": "^2.1.0",
+    "@craco/craco": "^6.4.5",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
@@ -21,6 +22,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.22.8",
     "chart.js": "^3.9.1",
+    "craco-less": "^2.0.0",
     "dompurify": "^2.4.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
@@ -45,10 +47,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [
