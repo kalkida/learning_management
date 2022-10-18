@@ -165,7 +165,9 @@ function TeacherView() {
           </div>
           <div className="flex flex-col justify-center">
             <div className="flex flex-row justify-end ">
-              <h3 className="text-lg  font-jakarta text-[#344054]">Class</h3>
+              <h3 className="text-lg font-semibold  font-jakarta text-[#344054]">
+                Class
+              </h3>
               {/* <div className="flex flex-row">
               <h3 className="font-bold pr-2 border-r-[1px] font-serif">Class</h3> */}
               {data?.class ? (
@@ -175,7 +177,7 @@ function TeacherView() {
                   )}
                 </h4>
               ) : (
-                <Tag>Teacher is not Assigned</Tag>
+                <Tag className="ml-2">not Assigned</Tag>
               )}
             </div>
 
@@ -202,11 +204,10 @@ function TeacherView() {
               key="1"
             >
               <Button
-                color="#E7752B"
-                className="btn-confirm  "
+                className="float-right -mt-14 text-[#E7752B]"
                 icon={
                   <FontAwesomeIcon
-                    className="pr-2 text-sm hover:text-[#E7752B] hover:bg-[white]"
+                    className="pr-2 text-sm text-[#E7752B] bg-[white]"
                     icon={faPen}
                   />
                 }

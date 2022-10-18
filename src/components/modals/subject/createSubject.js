@@ -64,43 +64,11 @@ function CreateSubject() {
     <>
       <Button
         icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
-        // className="btn-confirm bg-[#E7752B] text-[white] "
+        className=" bg-[#E7752B] text-[white] "
         onClick={showModal}
-        style={{
-          padding: 8,
-          borderColor: "#E7752B",
-          borderWidth: 2,
-          // marginTop: 20,
-          color: "#E7752B",
-          borderRadius: 5,
-          // float: "right",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
       >
         Add Subject
       </Button>
-      {/* <Button
-        onClick={showModal}
-        style={{
-          padding: 8,
-          borderColor: "#E7752B",
-          borderWidth: 2,
-          // marginTop: 20,
-          color: "#E7752B",
-          borderRadius: 5,
-          // float: "right",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
-      >
-        <PlusOutlined />
-        Add Subject
-      </Button> */}
       {open ? (
         <Modal
           visible={open}

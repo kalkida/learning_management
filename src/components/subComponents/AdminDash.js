@@ -82,10 +82,15 @@ export default function AdminDash() {
             }
           >
             <div className="flex flex-row w-[100%] flex-wrap justify-between">
-              <div className=" flex flex-col justify-center">
-                <Progress type="circle" strokeColor={"#EA8848"} percent={75} />
+              <div className=" flex flex-col justify-center px-6">
+                <Progress
+                  type="circle"
+                  strokeColor={"#EA8848"}
+                  percent={75}
+                  width={"9vw"}
+                />
               </div>
-              <div className="flex flex-col justify-center  ">
+              <div className="flex flex-col justify-center px-6  ">
                 <h1 className="text-md flex flex-row">
                   {" "}
                   <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>7
@@ -121,7 +126,7 @@ export default function AdminDash() {
                       type="circle"
                       strokeColor={"#EA8848"}
                       percent={75}
-                      width={"10vh"}
+                      width={"6vw"}
                     />
                   </div>
                   <h1 className="text-center">Weekly</h1>
@@ -132,7 +137,7 @@ export default function AdminDash() {
                       type="circle"
                       strokeColor={"#EA8848"}
                       percent={75}
-                      width={"10vh"}
+                      width={"6vw"}
                     />
                   </div>
                   <h1 className="text-center">Monthly</h1>
@@ -143,7 +148,7 @@ export default function AdminDash() {
                       type="circle"
                       strokeColor={"#EA8848"}
                       percent={75}
-                      width={"10vh"}
+                      width={"6vw"}
                     />
                   </div>
                   <h1 className="text-center">Yearly</h1>

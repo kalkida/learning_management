@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import "./style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPen } from "@fortawesome/free-solid-svg-icons";
 import {
   collection,
   getDocs,
@@ -353,22 +353,16 @@ function ViewClass() {
             key="1"
           >
             <Button
-              className="btn-confirm text-center bg-[white] border-[1px] border-[#EA8848] rounded-lg"
+              icon={
+                <FontAwesomeIcon
+                  className="pr-2 text-[#EA8848]"
+                  icon={faEdit}
+                />
+              }
+              className=" text-center bg-[white] border-[2px] border-[#EA8848] text-[#EA8848] rounded-lg float-right -mt-14"
               onClick={handleUpdate}
             >
-              <div className="flex flex-row justify-around">
-                <Icon
-                  name="edit-outline"
-                  fill="#EA8848"
-                  size="medium" // small, medium, large, xlarge
-                  animation={{
-                    type: "pulse", // zoom, pulse, shake, flip
-                    hover: true,
-                    infinite: false,
-                  }}
-                />
-                <p className="font-[16px] text-[#EA8848]"> Edit</p>
-              </div>
+              Edit
             </Button>
             <div className="">
               <h4 className="text-lg mb-[16px] mt-[32px] font-jakarta font-[600] text-[#344054]">
