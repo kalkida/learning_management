@@ -5,8 +5,9 @@ import store from "./redux/store";
 import Routing from "./routing";
 import { persistStore } from "redux-persist";
 
-import "antd/dist/antd.css";
+// import "antd/dist/antd.css";
 import "./App.css";
+import "./App.less";
 
 function App() {
   const persist = persistStore(store);

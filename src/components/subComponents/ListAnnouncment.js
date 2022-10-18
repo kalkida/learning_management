@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { EditorState, ContentState, convertFromHTML } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import DOMPurify from "dompurify";
+import { convertToRaw } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
@@ -235,6 +238,7 @@ export default function ListAnnouncment() {
                 className="mt-2 font-jakarta border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
               />
             </div>
+
             <Editor
               editorState={editorState}
               style={{ padding: 10 }}
@@ -249,7 +253,8 @@ export default function ListAnnouncment() {
                 onClick={() => uploadData()}
                 className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 font-jakarta right-0"
               >
-                Post{"  "}<Icon name="checkmark-outline" size="small" />
+                Post{"  "}
+                <Icon name="checkmark-outline" size="small" />
               </button>
             </div>
           </div>

@@ -18,6 +18,19 @@ function ViewCourse() {
       title: "Day",
       dataIndex: "day",
       key: "day",
+      render: (text, record) => {
+        console.log();
+
+        if (text) {
+          return <div className="font-[500] text-sm font-jakarta">{text}</div>;
+        } else {
+          return (
+            <div className=" text-[#515f76]font-jakarta font-light font-jakarta ">
+              No Data{" "}
+            </div>
+          );
+        }
+      },
     },
     {
       title: "Start time",
@@ -26,11 +39,19 @@ function ViewCourse() {
       render: (text, record) => {
         console.log();
 
-        return (
-          <div className="font-[500] text-sm font-jakarta">
-            {moment(JSON.parse(record?.time[0])).format("hh:mm")}
-          </div>
-        );
+        if (record?.time?.length) {
+          return (
+            <div className="font-[500] text-sm font-jakarta">
+              {moment(JSON.parse(record?.time[0])).format("hh:mm")}
+            </div>
+          );
+        } else {
+          return (
+            <div className=" text-[#515f76] font-jakarta font-light">
+              No Data{" "}
+            </div>
+          );
+        }
       },
     },
     {
@@ -40,11 +61,19 @@ function ViewCourse() {
       render: (text, record) => {
         console.log(record);
 
-        return (
-          <div className="font-[500] text-sm font-jakarta">
-            {moment(JSON.parse(record?.time[1])).format("hh:mm")}
-          </div>
-        );
+        if (record?.time?.length) {
+          return (
+            <div className="font-[500] text-sm font-jakarta">
+              {moment(JSON.parse(record?.time[1])).format("hh:mm")}
+            </div>
+          );
+        } else {
+          return (
+            <div className=" text-[#515f76] font-jakarta font-light">
+              No Data{" "}
+            </div>
+          );
+        }
       },
     },
   ];
@@ -87,7 +116,8 @@ function ViewCourse() {
             </h3>
             <h4
               className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
-            p-[1px] ml-2">
+            p-[1px] ml-2"
+            >
               {data.teachers.length}
             </h4>
           </div>
@@ -95,8 +125,10 @@ function ViewCourse() {
             <h3 className="text-lg font-semibold font-jakarta">
               Class per week
             </h3>
-            <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
-              text-[#667085] p-[1px] ml-2">
+            <h4
+              className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
+              text-[#667085] p-[1px] ml-2"
+            >
               {data.schedule.length}
             </h4>
           </div>
@@ -106,7 +138,7 @@ function ViewCourse() {
         <Tabs className="bg-[#F9FAFB]" defaultActiveKey="1">
           <Tabs.TabPane
             tab={
-              <p className="text-lg font-semibold text-center ml-5 font-jakarta">
+              <p className="text-lg font-semibold text-center ml-0 font-jakarta">
                 Profile
               </p>
             }
@@ -114,8 +146,7 @@ function ViewCourse() {
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-              className="btn-confirm text-[#E7752B]"
-
+              className="float-right -mt-14 text-[#E7752B]"
               onClick={handleUpdate}
             >
               Edit Course
@@ -132,7 +163,7 @@ function ViewCourse() {
               />
             </div>
             <div className="text-xl mt-10">
-              <p className="text-lg font-semibold text-left ml-5 font-jakarta">
+              <p className="text-lg font-semibold text-left ml-0 font-jakarta">
                 Assigned Teachers
               </p>
               <Table
