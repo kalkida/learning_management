@@ -25,11 +25,9 @@ ChartJS.register(
 export const options = {
   responsive: true,
   plugins: {
-    legend: {
-      position: "top",
-    },
+    legend: false,
     title: {
-      display: true,
+      display: false,
       text: "Teacher Number",
     },
   },

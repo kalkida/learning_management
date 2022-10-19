@@ -1,21 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import Icon from "react-eva-icons";
 import {
   Button,
-  Modal,
-  Form,
   Select,
   Input,
   DatePicker,
-  Row,
-  Col,
   Tag,
   message,
   Tabs,
   Table,
+  Spin,
 } from "antd";
 import moment from "moment";
-import { MailFilled } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,15 +25,13 @@ import {
   where,
   query,
   getDoc,
-  updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
+import { fetchSubject, fetchClass, fetchclassFromCourse } from "../funcs";
 import "./style.css";
-import { CheckOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
-const { Search } = Input;
 const gender = ["Male", "Female", "Other"];
 
 function TeacherUpdate() {
@@ -45,14 +40,17 @@ function TeacherUpdate() {
   const { data } = state;
 
   const valueRef = useRef();
-
+  const [subjects, setSubjects] = useState([]);
   const [classOption, setClassOption] = useState([]);
   const [courseOption, setCourseOption] = useState([]);
+  const [subjectloaded, setSubjectLoaded] = useState(false);
   const [file, setFile] = useState("");
   const [subject, setSubject] = useState([]);
-  const [selectedRowKeysCourse, setSelectedRowKeysCourse] = useState([]);
-  const [selectedClassKeys, setSelectedClassKeys] = useState([]);
-  const [classData, setClassData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedRowKeysCourse, setSelectedRowKeysCourse] = useState(
+    data.course
+  );
+  console.log(data.course);
   const [updateTeacher, setUpdateTeacher] = useState({
     avater: data.avater,
     email: data.email,
@@ -77,7 +75,7 @@ function TeacherUpdate() {
           merge: true,
         }
       )
-        .then((response) => {
+        .then((_) => {
           message.success("Data is updated successfuly");
           navigate("/list-teacher");
         })
@@ -100,9 +98,13 @@ function TeacherUpdate() {
 
               if (updateTeacher.avater !== null) {
                 console.log(updateTeacher);
-                setDoc(doc(firestoreDb, "teachers", data.key), updateTeacher, {
-                  merge: true,
-                })
+                setDoc(
+                  doc(firestoreDb, "teachers", data.key),
+                  { ...updateTeacher },
+                  {
+                    merge: true,
+                  }
+                )
                   .then((response) => {
                     message.success("Data is updated successfuly");
                     navigate("/list-teacher");
@@ -168,9 +170,10 @@ function TeacherUpdate() {
       datas.key = doc.id;
       getData(datas).then((response) => children.push(response));
     });
-    setTimeout(() => {
-      setCourseOption(children);
-    }, 2000);
+    // setTimeout(() => {
+    setCourseOption(children);
+    setLoading(false);
+    // }, 2000);
   };
 
   const getID = () => {
@@ -185,9 +188,34 @@ function TeacherUpdate() {
       });
       setUpdateTeacher({ ...updateTeacher, class: classArr });
       setUpdateTeacher({ ...updateTeacher, course: courseArr });
-      // setSelectedClassKeys(classArr);
-      setSelectedRowKeysCourse(courseArr);
+      // setSelectedRowKeysCourse(courseArr);
     }
+  };
+  const getSubjectTeacher = async () => {
+    const coursess = [];
+    const q = query(
+      collection(firestoreDb, "subject"),
+      where("school_id", "==", data.school_id)
+    );
+    const querySnapshot = await getDocs(q);
+    await querySnapshot.forEach((doc) => {
+      var datas = doc.data();
+      courseOption.map((item) => {
+        if (data.course.includes(item.course_id)) {
+          if (item.subject.name == datas.name) {
+            console.log(item);
+            coursess.push({
+              ...datas,
+              key: doc.id,
+            });
+            setSubjectLoaded(true);
+          } else {
+            setSubjectLoaded(true);
+          }
+        }
+      });
+    });
+    await setSubjects(coursess);
   };
 
   const getSubject = async () => {
@@ -207,29 +235,9 @@ function TeacherUpdate() {
     setSubject(coursess);
   };
 
-  const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
-    var datas = "";
-    await getDoc(docRef).then((response) => {
-      datas = response.data();
-      datas.key = response.id;
-    });
-    return datas;
-  };
-
-  const getSubjectData = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
-  };
-
   const getData = async (data) => {
-    data.class = await getClassData(data.class);
-    data.subject = await getSubjectData(data.subject);
+    data.class = await fetchClass(data.class);
+    data.subject = await fetchSubject(data.subject);
     return data;
   };
 
@@ -284,15 +292,21 @@ function TeacherUpdate() {
     textinput.value = fileinput.value;
     setFile(event.target.files[0]);
   }
+  const getClassToSet = async (courses) => {
+    var classId = [];
+    courses.map((item) => {
+      fetchclassFromCourse(item).then((res) => {
+        classId.push(res.class);
+      });
+    });
 
-  const onSelectChange = (course) => {
-    setUpdateTeacher({ ...updateTeacher, course: course });
-    setSelectedRowKeysCourse(course);
+    await setUpdateTeacher({ ...updateTeacher, class: classId });
   };
 
-  const onSelectChangeClass = (clas) => {
-    setUpdateTeacher({ ...updateTeacher, class: clas });
-    setSelectedClassKeys(clas);
+  const onSelectChange = async (course) => {
+    setUpdateTeacher({ ...updateTeacher, course: course });
+    setSelectedRowKeysCourse(course);
+    await getClassToSet(course);
   };
 
   const rowSelection = {
@@ -330,46 +344,6 @@ function TeacherUpdate() {
             return false;
           });
           setSelectedRowKeysCourse(newSelectedRowKeys);
-        },
-      },
-    ],
-  };
-
-  const rowSelectionClass = {
-    selectedRowKeys: selectedClassKeys,
-    onChange: onSelectChangeClass,
-    selections: [
-      Table.SELECTION_ALL,
-      Table.SELECTION_INVERT,
-      Table.SELECTION_NONE,
-      {
-        key: "odd",
-        text: "Select Odd Row",
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-            if (index % 2 !== 0) {
-              return false;
-            }
-
-            return true;
-          });
-          setSelectedClassKeys(newSelectedRowKeys);
-        },
-      },
-      {
-        key: "even",
-        text: "Select Even Row",
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-            if (index % 2 !== 0) {
-              return true;
-            }
-
-            return false;
-          });
-          setSelectedClassKeys(newSelectedRowKeys);
         },
       },
     ],
@@ -422,315 +396,342 @@ function TeacherUpdate() {
     getClass();
     getCourse();
     getID();
+    setTimeout(() => {
+      getSubjectTeacher();
+    }, 3000);
     getSubject();
   }, []);
 
   return (
-    <>
-      <div>
-        <div className="w-[100%] -mt-20">
-          <div className=" flex flex-row  pb-2 -mt-4 justify-between  py-7 ">
-            <div className=" flex flex-row  w-[40%] justify-between ">
-              <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
-                <img
-                  src={data.avater ? data.avater : "img-5.jpg"}
-                  alt="profile"
-                  className="w-[8vw] h-[6vw] rounded-full"
-                />
+    <div className="bg-[#F9FAFB] min-h-[100vh]">
+      <div className="w-[100%] -mt-20">
+        <div className=" flex flex-row  pb-2 -mt-4 justify-between  py-7 ">
+          <div className=" flex flex-row  w-[40%] justify-between ">
+            <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
+              <img
+                src={data.avater ? data.avater : "img-5.jpg"}
+                alt="profile"
+                className="w-[8vw] h-[6vw] rounded-full"
+              />
+            </div>
+            <div className="flex flex-col justify-center  mt-2 ml-5 w-[100%]">
+              <div className="flex flex-row">
+                <h3 className="text-lg font-bold font-jakarta text-[#344054] ">
+                  {data.first_name + " " + data.last_name}
+                </h3>
               </div>
-              <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%]">
-                <div className="flex flex-row">
-                  <h3 className="text-lg font-bold font-jakarta ">
-                    {data.first_name + " " + data.last_name}
+              <div className="flex flex-row align-bottom">
+                <Icon
+                  name="message-square-outline"
+                  fill="#E7752B"
+                  size="large"
+                  animation={{
+                    type: "pulse",
+                    hover: true,
+                    infinite: false,
+                  }}
+                />
+                <div>
+                  <h3 className="text-md text-[#E7752B] pl-1 font-jakarta">
+                    Contact
                   </h3>
-                </div>
-                <div className="flex flex-row align-bottom">
-                  <div>
-                    <MailFilled className="text-[#E7752B]" />
-                  </div>
-                  <div>
-                    <h3 className="text-md text-[#E7752B] p-1 font-jakarta">
-                      Contact
-                    </h3>
-                  </div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col justify-center">
-              <div className="flex flex-row justify-end">
-                <h3 className="text-lg font-[500] font-jakarta text-[#344054]">
-                  Class
-                </h3>
+          </div>
+          <div className="flex flex-col justify-center">
+            <div className="flex flex-row justify-end">
+              <h3 className="text-lg font-[500] font-jakarta text-[#344054] border-r-2 pr-2">
+                Class
+              </h3>
 
-                {data?.class ? (
-                  <h4
-                    className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] 
+              {data?.class ? (
+                <h4
+                  className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] 
                 p-[1px] ml-2"
-                  >
-                    {data?.class?.map(
-                      (item, i) => item.level + item.section + ","
-                    )}
-                  </h4>
-                ) : (
-                  <Tag>Teacher is not Assigned</Tag>
-                )}
-              </div>
+                >
+                  {data?.class?.map(
+                    (item, i) => item.level + item.section + ","
+                  )}
+                </h4>
+              ) : (
+                <a className="ml-2 pt-1">Not Assigned</a>
+              )}
+            </div>
 
-              <div className="flex flex-row ">
-                <h3 className="text-lg font-[600] font-jakarta text-[#344054]">
-                  Subject
-                </h3>
-                {data?.course ? (
-                  <h4
-                    className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta
+            <div className="flex flex-row ">
+              <h3 className="text-lg font-[600] font-jakarta text-[#344054]">
+                Subject
+              </h3>
+              <div>
+                {subjectloaded ? (
+                  <div>
+                    {data?.course ? (
+                      <h4
+                        className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta
                 text-[#667085] p-[1px] ml-2"
-                  >
-                    {data?.course
-                      ?.slice(0, 2)
-                      .map((item, i) => item.course_name + ",")}
-                  </h4>
+                      >
+                        {subjects
+                          ?.slice(0, 2)
+                          .map((item, i) => item.name + ",")}
+                      </h4>
+                    ) : (
+                      <a className="ml-2 pt-1">Not Assigned</a>
+                    )}
+                  </div>
                 ) : (
-                  <Tag>Teacher is not Assigned</Tag>
+                  <Spin size="small" style={{ padding: 5 }} />
                 )}
               </div>
             </div>
           </div>
         </div>
-        <div className="tab-content">
-          <Tabs defaultActiveKey="1">
-            <Tabs.TabPane
-              tab={
-                <p className="text-base font-bold text-center font-jakarta">
-                  Edit Profile
-                </p>
-              }
-              key="1"
-            >
-              <Button
-                icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
-                className="btn-confirm  bg-[#E7752B]"
-                onClick={handleUpdate}
-              >
-                Finalize review
-              </Button>
-
-              <h1 className="text-xl font-bold font-jakarta mt-5 text-[#344054] mb-5 ">
+      </div>
+      <div>
+        <Tabs defaultActiveKey="1">
+          <Tabs.TabPane
+            tab={
+              <p className="text-base text-center font-jakarta -mb-2">
                 Edit Profile
-              </h1>
-              <div className="p-2 border-[1px] rounded-lg bg-[#FFF] ">
-                <div>
-                  <div className="avater-img">
-                    <div>
-                      <h2 className="text-[14px] font-[500] font-jakarta text-[#475467] text-center">
-                        Teacher Picture
-                      </h2>
-                      <div className="border-[1px]  border-[#E7752B] rounded-full !p-0">
-                        <img
-                          src={
-                            file
-                              ? URL.createObjectURL(file)
-                              : data.avater
-                                ? data.avater
-                                : "img-5.jpg"
-                          }
-                          className="rounded-full w-[100] !p-0"
-                        />
-                      </div>
-                    </div>
-                    <div className="file-content">
-                      <span className="font-jakarta text-sm">
-                        This will be displayed to you when you view this profile
-                      </span>
+              </p>
+            }
+            key="1"
+          >
+            <Button
+              icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
+              className="!border-[#E7752B] !border-[2px] !text-[#E7752B] hover:shadow-[#E7752B] hover:shadow-sm float-right -mt-14"
+              onClick={handleUpdate}
+            >
+              Finalize review
+            </Button>
 
-                      <div className="img-btn">
-                        {/* <input type="file" onChange={handleChange} accept="/image/*" /> */}
-                        <button className="rounded-sm">
-                          <input
-                            type="file"
-                            id="browse"
-                            name="files"
-                            style={{ display: "none" }}
-                            onChange={handleFile}
-                            accept="/image/*"
-                          />
-                          <input type="hidden" id="filename" readonly="true" />
-                          <input
-                            type="button"
-                            value="Add Photo"
-                            id="fakeBrowse"
-                            onClick={HandleBrowseClick}
-                          />
-                        </button>
-                        <button onClick={onRemove}>Remove</button>
-                      </div>
+            <h1 className="text-xl font-bold font-jakarta mt-5 text-[#344054] ">
+              Edit Profile
+            </h1>
+            <div className="p-2 border-[1px] rounded-lg bg-[#FFF] ">
+              <div className="mt-[32px]">
+                <div className="ml-5 flex flex-row">
+                  <div>
+                    <h2 className="text-[14px] font-[500] font-jakarta text-[#475467] text-center">
+                      Teacher Picture
+                    </h2>
+                    <div className="rounded-full border-[2px] border-[#E7752B] bg-[white] w-[6vw]">
+                      <img
+                        src={
+                          file
+                            ? URL.createObjectURL(file)
+                            : data.avater
+                            ? data.avater
+                            : "img-5.jpg"
+                        }
+                        className="rounded-full w-[6vw] !p-0"
+                      />
                     </div>
                   </div>
-                  <div className="add-form">
-                    <div className="col">
-                      <div className="py-2">
-                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                          First Name
-                        </h1>
-                        <Input
-                          defaultValue={updateTeacher.first_name}
-                          name="first_name"
-                          onChange={(e) => handleChangeTeacher(e)}
+                  <div className="flex flex-col justify-end ml-3 -mt-2">
+                    <span className="font-jakarta text-[12px] mb-2">
+                      This will be displayed to you when you view this profile
+                    </span>
+
+                    <div className="img-btn">
+                      {/* <input type="file" onChange={handleChange} accept="/image/*" /> */}
+                      <button className="border-[2px] border-[#E7752B] text-[12px] rounded-lg bg-[#E7752B] text-white">
+                        <input
+                          type="file"
+                          id="browse"
+                          name="files"
+                          style={{ display: "none" }}
+                          onChange={handleFile}
+                          accept="/image/*"
                         />
-                      </div>
-                      <div className="py-2">
-                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                          Last Name
-                        </h1>
-                        <Input
-                          defaultValue={updateTeacher.last_name}
-                          name="last_name"
-                          onChange={(e) => handleChangeTeacher(e)}
+                        <input type="hidden" id="filename" readonly="true" />
+                        <input
+                          type="button"
+                          value="Change Photo"
+                          id="fakeBrowse"
+                          onClick={HandleBrowseClick}
                         />
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="py-2">
-                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                          Phone
-                        </h1>
-                        <Input
-                          defaultValue={updateTeacher.phone}
-                          name="phone"
-                          onChange={(e) => handleChangeTeacher(e)}
-                        />
-                      </div>
-                      <div className="py-2">
-                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                          Email
-                        </h1>
-                        <Input
-                          defaultValue={updateTeacher.email}
-                          name="email"
-                          onChange={(e) => handleChangeTeacher(e)}
-                        />
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="py-2">
-                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                          Date Of Birth
-                        </h1>
-                        <DatePicker
-                          style={{ width: "100%" }}
-                          onChange={handleDob}
-                          defaultValue={
-                            updateTeacher.DOB
-                              ? moment(JSON.parse(updateTeacher.DOB))
-                              : ""
-                          }
-                        />
-                      </div>
-                      <div className="py-2">
-                        <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                          Sex
-                        </h1>
-                        <Select
-                          defaultValue={updateTeacher.sex}
-                          placeholder="Select Gender"
-                          onChange={handleGender}
-                          optionLabelProp="label"
-                          style={{
-                            width: "100%",
-                          }}
-                        >
-                          {gender.map((item, index) => (
-                            <Option key={item.index} value={item} label={item}>
-                              {item}
-                            </Option>
-                          ))}
-                        </Select>
-                      </div>
-                      <div className="py-2">
-                        <label className="text-[#344054] pb-[6px] font-jakarta">
-                          Working Since
-                        </label>
-                        <DatePicker
-                          style={{ width: "100%" }}
-                          onChange={handleWork}
-                          defaultValue={
-                            updateTeacher.working_since
-                              ? moment(JSON.parse(updateTeacher.working_since))
-                              : ""
-                          }
-                        />
-                      </div>
+                      </button>
+                      <button
+                        className="border-[2px] border-[#E7752B] text-[12px] rounded-lg text-[#E7752B]"
+                        onClick={onRemove}
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Tabs.TabPane>
-            <Tabs.TabPane
-              tab={
-                <p className="text-base font-bold text-center ml-5 font-jakarta">
-                  Edit Course
-                </p>
-              }
-              key="2"
-            >
-              <Button
-                icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
-                className="btn-confirm  bg-[#E7752B]"
-                onClick={handleUpdate}
-              >
-                Finalize review
-              </Button>
-
-              <div>
-                <div >
-                  <h1 className="text-xl font-bold font-jakarta mt-5 text-[#344054] mb-5 ">
-                    Edit Courses
-                  </h1>
-                  <div className="tch-cr-list">
-                    <div>
+                <div className="add-form">
+                  <div className="col">
+                    <div className="py-2">
+                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                        First Name
+                      </h1>
+                      <Input
+                        className="!border-[2px]"
+                        defaultValue={updateTeacher.first_name}
+                        name="first_name"
+                        onChange={(e) => handleChangeTeacher(e)}
+                      />
+                    </div>
+                    <div className="py-2">
+                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                        Last Name
+                      </h1>
+                      <Input
+                        className="!border-[2px]"
+                        defaultValue={updateTeacher.last_name}
+                        name="last_name"
+                        onChange={(e) => handleChangeTeacher(e)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="py-2">
+                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                        Phone
+                      </h1>
+                      <Input
+                        className="!border-[2px]"
+                        defaultValue={updateTeacher.phone}
+                        name="phone"
+                        onChange={(e) => handleChangeTeacher(e)}
+                      />
+                    </div>
+                    <div className="py-2">
+                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                        Email
+                      </h1>
+                      <Input
+                        className="!border-[2px]"
+                        defaultValue={updateTeacher.email}
+                        name="email"
+                        onChange={(e) => handleChangeTeacher(e)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="py-2">
+                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                        Date Of Birth
+                      </h1>
+                      <DatePicker
+                        className="!border-[2px]"
+                        style={{ width: "100%", height: "4vh" }}
+                        onChange={handleDob}
+                        defaultValue={
+                          updateTeacher.DOB
+                            ? moment(JSON.parse(updateTeacher.DOB))
+                            : ""
+                        }
+                      />
+                    </div>
+                    <div className="-mt-2">
+                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                        Sex
+                      </h1>
                       <Select
-                        placeholder={"Subject"}
-                        onChange={handleFilterSubject}
+                        className="!border-[2px] h-[4vh]"
+                        defaultValue={updateTeacher.sex}
+                        placeholder="Select Gender"
+                        onChange={handleGender}
+                        optionLabelProp="label"
+                        style={{
+                          width: "100%",
+                        }}
                       >
-                        {subject?.map((item, i) => (
-                          <Option key={item.key} value={item.key}>
-                            {item.name}
-                          </Option>
-                        ))}
-                      </Select>
-                      <Select
-                        placeholder={"Class"}
-                        onChange={handleFilterClass}
-                      >
-                        {classOption?.map((item, i) => (
-                          <Option key={item.key} value={item.key}>
-                            {item.level + item.section}
+                        {gender.map((item, index) => (
+                          <Option key={item.index} value={item} label={item}>
+                            {item}
                           </Option>
                         ))}
                       </Select>
                     </div>
-                    <div>
-                      <Input
-                        style={{ width: 200 }}
-                        className="mr-3 rounded-lg"
-                        placeholder="Search"
-                        prefix={
-                          <SearchOutlined className="site-form-item-icon" />
+                    <div className="-mt-2">
+                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                        Working Since
+                      </h1>
+
+                      <DatePicker
+                        className="!border-[2px] h-[2rem] w-[100%]"
+                        onChange={handleWork}
+                        defaultValue={
+                          updateTeacher.working_since
+                            ? moment(JSON.parse(updateTeacher.working_since))
+                            : ""
                         }
                       />
                     </div>
                   </div>
-                  <Table
-                    rowSelection={rowSelection}
-                    dataSource={courseOption}
-                    columns={columns}
-                  />
                 </div>
               </div>
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
+            </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            tab={
+              <p className="text-base  text-center font-jakarta -mb-2 ">
+                Edit Course
+              </p>
+            }
+            key="2"
+          >
+            <Button
+              icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
+              className="!border-[#E7752B] !border-[2px] !text-[#E7752B] hover:shadow-[#E7752B] hover:shadow-sm float-right -mt-14"
+              onClick={handleUpdate}
+            >
+              Finalize review
+            </Button>
+
+            <div>
+              <div>
+                <h1 className="text-xl font-bold font-jakarta mt-5 text-[#344054]">
+                  Assigned Courses
+                </h1>
+                <div className="tch-cr-list">
+                  <div>
+                    <Select
+                      placeholder={"Subject"}
+                      onChange={handleFilterSubject}
+                    >
+                      {subject?.map((item, i) => (
+                        <Option key={item.key} value={item.key}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </Select>
+                    <Select placeholder={"Class"} onChange={handleFilterClass}>
+                      {classOption?.map((item, i) => (
+                        <Option key={item.key} value={item.key}>
+                          {item.level + item.section}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                  <div>
+                    <Input
+                      style={{ width: 200 }}
+                      className="mr-3 rounded-lg"
+                      placeholder="Search"
+                      prefix={
+                        <SearchOutlined className="site-form-item-icon" />
+                      }
+                    />
+                  </div>
+                </div>
+                <Table
+                  loading={loading}
+                  rowSelection={rowSelection}
+                  dataSource={courseOption}
+                  columns={columns}
+                  pagination={{ position: ["bottomCenter"] }}
+                />
+              </div>
+            </div>
+          </Tabs.TabPane>
+        </Tabs>
       </div>
-    </>
+    </div>
   );
 }
 
