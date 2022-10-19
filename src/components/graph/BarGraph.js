@@ -23,13 +23,8 @@ ChartJS.register(
 export const options = {
   responsive: true,
   plugins: {
-    legend: {
-      position: "top",
-    },
-    title: {
-      display: true,
-      text: "Student Population",
-    },
+    legend: false,
+    title: false,
   },
 };
 
@@ -51,12 +46,13 @@ export const data = {
   datasets: [
     {
       label: "Male",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 60 })),
       backgroundColor: "#EA8848",
+      innerHeight: "20vh",
     },
     {
       label: "Female",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 60 })),
       backgroundColor: "#F6C9AC",
     },
   ],

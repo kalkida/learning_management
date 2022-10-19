@@ -427,7 +427,7 @@ export default function ListCourses() {
           </div>
 
           <Button
-            className=" bg-[#E7752B] text-[white] "
+            className=" !text-[#E7752B] "
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
             onClick={() => edit()}
           >
