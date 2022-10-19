@@ -225,7 +225,7 @@ export default function AddTeacher() {
   const getClass = async () => {
     const q = query(
       collection(firestoreDb, "class"),
-      where("school_id", "in", uid.school)
+      where("school_id", "==", uid.school)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -288,7 +288,6 @@ export default function AddTeacher() {
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
-        temporary.push(data);
         getData(data).then((response) => temporary.push(response));
       });
       setTimeout(() => {
@@ -331,7 +330,7 @@ export default function AddTeacher() {
       key: "course",
       dataIndex: "course",
       render: (value) => {
-        if (Array.isArray(value)) {
+        if (value?.length) {
           return (
             <>
               {value.map((item) => (
@@ -340,7 +339,7 @@ export default function AddTeacher() {
             </>
           );
         } else {
-          return <Tag>Course Not Assigned</Tag>;
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
       },
     },
@@ -350,7 +349,13 @@ export default function AddTeacher() {
       ),
       key: "phone",
       dataIndex: "phone",
-      render: (text) => <a>{text}</a>,
+      render: (text) => {
+        if (text) {
+          return <a>{text}</a>
+        } else {
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
+        }
+      }
     },
     {
       title: <p className="font-jakarta text-[#344054] font-[600]">Class </p>,
@@ -374,7 +379,7 @@ export default function AddTeacher() {
             </>
           );
         } else {
-          return <Tag color="red">Class Not Assigned</Tag>;
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
       },
     },
