@@ -10,10 +10,12 @@ import {
   startAt,
   orderBy,
 } from "firebase/firestore";
+import { Select } from "antd";
 import PhoneInput from "react-phone-number-input";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faPenAlt, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faPenAlt, faPen , } from "@fortawesome/free-solid-svg-icons";
 import Liner from "../../graph/Liner";
 import BarGraph from "../../graph/BarGraphStudent";
 import { fetchSubject, fetchParents } from "../funcs";
@@ -31,6 +33,14 @@ function ViewStudent() {
   const { data } = state;
   const [age, setAge] = useState();
   const [teacherData, setTeacherData] = useState([data]);
+  const [isHover, setIsHover] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHover(true);
+ };
+ const handleMouseLeave = () => {
+    setIsHover(false);
+ };
 
   const getClassData = async (id) => {
     const q = query(
@@ -307,61 +317,77 @@ function ViewStudent() {
           </div>
         </div>
       </div>
-      <div className="tab-content">
+      <div className="tab-content -mt-6 ">
         <Tabs defaultActiveKey="0">
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center  font-jakarta">
-                OverView
+              <p className="text-base font-bold text-center  font-jakarta -mb-2">
+                Overview
               </p>
             }
             key="0"
           >
+                  <Button
+                className="float-right -mt-14 text-[#E7752B]"
+                icon={
+                  <FontAwesomeIcon
+                    className="pr-2 text-sm text-[#E7752B] bg-[white]"
+                    icon={faPen}
+                  />
+                }
+                onClick={handleUpdate}
+              >
+                Edit
+              </Button>
+              {/* <Button
+              color="#FFF"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+           //   
+           
+              style={{ backgroundColor: isHover ? '#FFF' :  '#E7752B',}}
+              className="btn-confirm "
+              icon={
+                <FontAwesomeIcon
+                  className="pr-2 hover:text-[#E7752B]  "
+                  icon={faPen}
+                />
+              }
+              onClick={handleUpdate}
+            >
+              Edit
+            </Button> */}
+            
             <Grid
               container
               rowSpacing={1}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
-              <Grid item xs={12} sm={12} md={4}>
-                <Card
-                  bordered={true}
-                  className="w-[100%] min-h-[419px]"
-                  title={
-                    <h1 className="text-[#475467] text-lg font-[600] mb-[10px]">
-                      Daily Report
-                    </h1>
-                  }
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      marginTop: "10%",
-                    }}
-                  >
-                    <div className=" flex flex-col justify-center">
-                      <Progress
-                        type="circle"
-                        strokeColor={"#EA8848"}
-                        percent={75}
-                        width={200}
-                      />
-                    </div>
-                    <div className="flex flex-col justify-center ml-12">
-                      <h1 className="text-md flex flex-row">
-                        {" "}
-                        <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>
-                        7 Assignments
-                      </h1>
-                      <h1 className="text-md flex flex-row">
-                        {" "}
-                        <a className="w-5 mr-2 h-2 mt-2 bg-[#98A2B3] rounded-lg"></a>
-                        2 Participating Clubs
-                      </h1>
-                    </div>
-                  </div>
-                </Card>
-              </Grid>
+               <Grid item xs={12} sm={12} md={4}>
+          <Card
+            bordered={true}
+            className="w-[100%] min-h-[419px] h-[100%]"
+            title={
+              <h1 className="text-[#475467] font-[600] mb-[10px]">
+                Daily Report
+              </h1>
+            }
+          >
+            <div className="flex flex-row w-[100%] flex-wrap justify-around">
+            
+              <div className="flex flex-col justify-center "
+              style={{  marginTop:"50%" , color:'#98A2B3'}}
+              >
+                <h1 className="text-[20px] text-[#98A2B3] ">
+                  {/* {" "}
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a> */}
+                  Data Not Available Yet
+                </h1>
+          
+              </div>
+            </div>
+          </Card>
+        </Grid>
               <Grid item xs={12} sm={6} md={4}>
                 <Card
                   bordered={true}
@@ -418,7 +444,7 @@ function ViewStudent() {
                 </Card>
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <Card bordered={true} className="w-[100%]  mb-10">
+                <Card bordered={true} className="w-[100%]  ">
                   <BarGraph />
                 </Card>
               </Grid>
@@ -427,25 +453,25 @@ function ViewStudent() {
 
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center  font-jakarta">
+              <p className="text-base font-bold text-center  font-jakarta -mb-2">
                 Profile
               </p>
             }
             key="1"
-          >
-            <Button
-              color="#FFF"
-              className="btn-confirm hover:bg-[#FFF] "
-              icon={
-                <FontAwesomeIcon
-                  className="pr-2 text-sm text-[#E7752B] hover:text-[#E7752B]"
-                  icon={faPen}
-                />
-              }
-              onClick={handleUpdate}
-            >
-              Edit
-            </Button>
+          > 
+             <Button
+                className="float-right -mt-14 text-[#E7752B]"
+                icon={
+                  <FontAwesomeIcon
+                    className="pr-2 text-sm text-[#E7752B] bg-[white]"
+                    icon={faPen}
+                  />
+                }
+                onClick={handleUpdate}
+              >
+                Edit
+              </Button>
+
             <div className="flex flex-row justify-start justify-between border-[0px] border-[#e5e5e5] text-[#344054]">
               <div className="flex flex-col justify-start align-middle text-[#344054]">
                 <span className="text-base text-center text-[#344054] font-jakarta">
@@ -479,7 +505,7 @@ function ViewStudent() {
               </div>
             </div>
             <h1
-              className="text-[#344054] font-jakarta text-xl font-bold mt-10 mb-8"
+              className="text-[#344054] font-jakarta text-xl font-bold mt-4 mb-8"
             // style={{
             //   fontSize: 20,
             //   fontWeight: "600",
@@ -492,134 +518,39 @@ function ViewStudent() {
             </h1>
 
             <Table dataSource={teacherData} columns={teacherColumn} />
-            {/* <div className="flex flex-row justify-between border-b-[2px] border-[#e2e2e2] py-2 px-2">
-              <div>
-                <span className="text-[16px] text-left text-[#344054] font-jakarta">
-                  Age
-                </span>
-                <h2 className="text-left text-[16px] font-bold font-jakarta">
-                  {age}
-                </h2>
-              </div>
-              <div>
-                <span className="text-[16px] text-left text-[#344054] font-jakarta">
-                  Sex
-                </span>
-                <h2 className="text-left text-[14px] font-bold text-[#344054] font-jakarta">
-                  {data.sex}
-                </h2>
-              </div>
-              <div>
-                <span className="text-[16px] text-left text-[#344054] font-jakarta">
-                  Phone Number
-                </span>
-                {data.phone.map((item, index) => (
-                  <h2 className="text-left text-[14px] font-bold text-[#344054] font-jakarta">
-                    {item}
-                  </h2>
-                ))}
-              </div>
-              <div>
-                <span className="text-[16px] text-left text-[#344054] font-jakarta">
-                  Email
-                </span>
-                <h2 className="text-left text-[14px] font-bold font-jakarta">
-                  {data.email}
-                </h2>
-              </div>
-              <div>
-                <span
-                  className="text-[16px] text-[#344054] font-jakarta"
-                  // style={{fontFamily:'Plus Jakarta Sans',
-                  // fontWeight:'500', fontSize:16,color:'#667085'
-                  // }}
-                >
-                  Location
-                </span>
-                <h2
-                  className="text-left text-[14px] font-bold font-jakarta"
-                  // style={{fontFamily:'Plus Jakarta Sans',
-                  //  fontWeight:'600', fontSize:18
-                  //  }}
-                >
-                  Lideta
-                </h2>
-              </div>
-            </div> */}
-            <div className="mt-10 mb-10">
+            <div className="mb-10">
               <h1 className="text-[#344054] font-jakarta text-xl font-bold mb-8">
                 Guardian Information
               </h1>
               <Table dataSource={guardian} columns={columns} />
-              {/* {guardian.map((item, index) => (
-                <div className="border-b-[2px] mt-2 flex flex-row justify-between w-[50vw] py-2">
-                  <div>
-                    <h1 className="text-lg font-jakarta mt-3 mb-10">
-                      Guardian {index + 1}
-                    </h1>
-                  </div>
-                  <div>
-                    <span className="font-light text-xs font-jakarta">
-                      Phone Number
-                    </span>
-                    <h1>{item.phoneNumber}</h1>
-                  </div>
-                </div>
-              ))} */}
             </div>
           </Tabs.TabPane>
-          {/* <Tabs.TabPane
-            tab={
-              <p className="text-xl font-bold text-center ml-5 font-jakarta">
-                Course  
-              </p>
-            }
-            key="2"
-          >
-            <Button className="btn-confirm" onClick={handleUpdate}>
-              <FontAwesomeIcon
-                icon={faPenAlt}
-                className="text-[#E7752B] mr-2"
-              />{" "}
-              Edit
-            </Button>
-            <div className="teacher-course-list">
-              <div className="tch-cr-list">
-                <h1 className="text-xl font-bold text-center ml-5 font-jakarta">
-                  Assigned Courses
-                </h1>
-              </div>
-              <Table
-                loading={loadingCourse}
-                dataSource={courses}
-                columns={columns}
-              />
-            </div>
-          </Tabs.TabPane> */}
+    
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center  font-jakarta">
+              <p className="text-base font-bold text-center  font-jakarta -mb-2">
                 Attendance
               </p>
             }
             key="2"
           >
-            <Button className="btn-confirm  " onClick={handleUpdate}>
-              <FontAwesomeIcon
-                icon={faPenAlt}
-                className="text-[#FFF] mr-2 hover:text-[#E7752B]"
-              />
-              Edit
-            </Button>
             <div className="st-at">
               {/* <h1 className="text-xl font-bold mb-10 font-jakarta">
                 {" "}
                 Attendance
               </h1> */}
               <div>
-                <Tabs defaultActiveKey="1">
-                  <Tabs.TabPane tab="Monthly" key="1">
-                    <div className="st-at-tags">
+                {/* <Tabs defaultActiveKey="1">
+                  <Tabs.TabPane tab="2022" key="1"> */}
+                    <Select
+                  placeholder="2022"
+                     style={{ width: 120 , alignSelf:'flex-start' , justifyContent:'flex-start'}}
+           // onChange={handleFilterClass}
+                 >
+               </Select>
+                 
+                    <div className="st-at-tags  mt-0">
+                  
                       <div>
                         <Tag color="#eb3131">5</Tag>
                         <Tag color="red">Days Absent</Tag>
@@ -638,7 +569,7 @@ function ViewStudent() {
                       </div>
                     </div>
 
-                    <div className="calender-card">
+                    <div className="calender-card mt-10">
                       {attendanceData?.map((item, index) => (
                         <div key={index} className="site-calendar-card">
                           <Calendar
@@ -663,8 +594,8 @@ function ViewStudent() {
                         </div>
                       ))}
                     </div>
-                  </Tabs.TabPane>
-                </Tabs>
+                  {/* </Tabs.TabPane>
+                </Tabs> */}
               </div>
             </div>
           </Tabs.TabPane>

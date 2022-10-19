@@ -17,6 +17,7 @@ import "../modals/courses/style.css";
 import { PlusOutlined } from "@ant-design/icons";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { SearchOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -236,11 +237,18 @@ export default function AddStudnets() {
         </div>
         <div className="course-search">
           <div>
-            <Search
+          <Input
+              style={{ width: 200 }}
+              className="mr-3 rounded-lg"
+              placeholder="Search"
+              //onSearch={onSearch}
+              prefix={<SearchOutlined className="site-form-item-icon" />}
+            />
+            {/* <Search
               placeholder="input search text"
               bordered={true}
-            // onSearch={onSearch}
-            />
+              // onSearch={onSearch}
+            /> */}
           </div>
           <Button
             onClick={() => add()}
