@@ -45,7 +45,7 @@ function AttendanceView() {
       dataIndex: "class",
       key: "name",
       render: (_, record) => (
-        <a>{record.first_name + " " + record.last_name}</a>
+        <p>{record.first_name + " " + record.last_name}</p>
       ),
     },
     {
@@ -56,13 +56,13 @@ function AttendanceView() {
         return <p>{item}</p>;
       },
     },
-    
+
     {
       title: "Sex",
       dataIndex: "class",
       key: "name",
       render: (_, record) => (
-        <a>{record.sex}</a>
+        <p>{record.sex}</p>
       ),
     },
 
@@ -127,27 +127,27 @@ function AttendanceView() {
   return (
     <>
       <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14" >
-   
-      <h1 className="view-header">
-      Attendance {data.class.level + data.class.section} 
-      </h1>
-      <div  className="list-header mb-5" />
-      <div className="at-filters">
-        <div>
-          <DatePicker onChange={onFilter} placeholder={"Selecet Date"} />
+
+        <h1 className="view-header">
+          Attendance {data.class.level + data.class.section}
+        </h1>
+        <div className="list-header mb-5" />
+        <div className="at-filters">
+          <div>
+            <DatePicker onChange={onFilter} placeholder={"Selecet Date"} />
+          </div>
+          <div>
+            <Input
+              style={{ width: 200 }}
+              className="mr-3 rounded-lg"
+              placeholder="Search"
+              prefix={<SearchOutlined className="site-form-item-icon" />}
+            />
+          </div>
         </div>
         <div>
-        <Input
-            style={{ width: 200 }}
-            className="mr-3 rounded-lg"
-            placeholder="Search"
-            prefix={<SearchOutlined className="site-form-item-icon" />}
-          />
+          <Table loading={loading} dataSource={Students} columns={columns} />
         </div>
-      </div>
-      <div>
-        <Table loading={loading} dataSource={Students} columns={columns} />
-      </div>
       </div>
     </>
   );

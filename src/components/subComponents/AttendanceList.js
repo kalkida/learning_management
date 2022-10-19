@@ -38,7 +38,7 @@ function AttendanceList() {
       dataIndex: "course_name",
       key: "name",
       render: (_, record) => (
-        <a onClick={() => onView(record)}>{record.course_name}</a>
+        <a className="text-[black]" onClick={() => onView(record)}>{record.course_name}</a>
       ),
     },
     {
@@ -46,7 +46,7 @@ function AttendanceList() {
       dataIndex: "class",
       key: "course",
       render: (_, record) => (
-        <a onClick={() => onView(record)}>{record.class.level}</a>
+        <a className="text-[black]" onClick={() => onView(record)}>{record.class.level}</a>
       ),
     },
     {
@@ -54,7 +54,7 @@ function AttendanceList() {
       dataIndex: "class",
       key: "age",
       render: (_, record) => (
-        <a onClick={() => onView(record)}>{record.class.section}</a>
+        <a className="text-[black]" onClick={() => onView(record)}>{record.class.section}</a>
       ),
     },
     {
@@ -62,7 +62,7 @@ function AttendanceList() {
       dataIndex: "attendance",
       key: "sex",
       render: (_, record) => (
-        <a onClick={() => onView(record)}>{record.attendace?.length}</a>
+        <a className="text-[black]" onClick={() => onView(record)}>{record.attendace?.length}</a>
       ),
     },
     {
@@ -70,7 +70,7 @@ function AttendanceList() {
       dataIndex: "attendance",
       key: "sex",
       render: (_, record) => (
-        <a onClick={() => onView(record)}>
+        <a className="text-[black]" onClick={() => onView(record)}>
           {record.class.student?.length - record.attendace?.length}
         </a>
       ),
