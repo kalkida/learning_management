@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Form, Input, Button, Select, DatePicker, Space, Table } from "antd";
-import { addSingleTeacherToCourse } from "../modals/funcs";
+import {
+  addSingleTeacherToCourse,
+  fetchClass,
+  fetchSubject,
+  fetchclassFromCourse,
+} from "../modals/funcs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -38,7 +43,6 @@ const CreateNewTeacher = () => {
   const [classLoading, setClassLoading] = useState(true);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [selectedClassKeys, setSelectedClassKeys] = useState([]);
   const [subject, setSubject] = useState();
   const schools = useSelector((state) => state.user.profile.school);
   const uid = useSelector((state) => state.user.profile);
@@ -47,7 +51,7 @@ const CreateNewTeacher = () => {
     email: "",
     first_name: "",
     last_name: "",
-    class: "",
+    class: [],
     course: [],
     DOB: "",
     sex: "",
@@ -58,15 +62,16 @@ const CreateNewTeacher = () => {
 
   const valueRef = useRef();
 
-  const onSelectChange = (newSelectedRowKeys) => {
-    setNewUser({ ...newUser, course: newSelectedRowKeys });
-    setSelectedRowKeys(newSelectedRowKeys);
+  const getClassToSet = async (courses) => {
+    courses.map(async (item) => {
+      var set = await fetchclassFromCourse(item);
+      await setNewUser({ ...newUser, class: [...newUser.class, set.class] });
+    });
   };
 
-  const onSelectChangeClass = (newSelectedRowKeys) => {
-    console.log("its me ", newSelectedRowKeys);
-    setNewUser({ ...newUser, class: newSelectedRowKeys });
-    setSelectedClassKeys(newSelectedRowKeys);
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+    getClassToSet(newSelectedRowKeys);
   };
 
   const rowSelection = {
@@ -109,50 +114,13 @@ const CreateNewTeacher = () => {
     ],
   };
 
-  const rowSelectionClass = {
-    selectedClassKeys,
-    onChange: onSelectChangeClass,
-    selections: [
-      Table.SELECTION_ALL,
-      Table.SELECTION_INVERT,
-      Table.SELECTION_NONE,
-      {
-        key: "odd",
-        text: "Select Odd Row",
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-            if (index % 2 !== 0) {
-              return false;
-            }
-
-            return true;
-          });
-          setSelectedClassKeys(newSelectedRowKeys);
-        },
-      },
-      {
-        key: "even",
-        text: "Select Even Row",
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((_, index) => {
-            if (index % 2 !== 0) {
-              return true;
-            }
-
-            return false;
-          });
-          setSelectedRowKeys(newSelectedRowKeys);
-        },
-      },
-    ],
-  };
-
   async function handleUpload() {
     if (!file) {
       var newUserUUID = uuid();
-      setDoc(doc(firestoreDb, "teachers", newUserUUID), newUser);
+      setDoc(doc(firestoreDb, "teachers", newUserUUID), {
+        ...newUser,
+        course: selectedRowKeys,
+      });
       setDoc(doc(firestoreDb, "users", newUserUUID), {
         phoneNumber: newUser.phone,
         role: {
@@ -225,29 +193,9 @@ const CreateNewTeacher = () => {
     setClassLoading(false);
   };
 
-  const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
-  };
-
-  const getSubjectData = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
-  };
-
   const getData = async (data) => {
-    data.class = await getClassData(data.class);
-    data.subject = await getSubjectData(data.subject);
+    data.class = await fetchClass(data.class);
+    data.subject = await fetchSubject(data.subject);
     return data;
   };
 
@@ -609,6 +557,7 @@ const CreateNewTeacher = () => {
               rowSelection={rowSelection}
               dataSource={coursesData}
               columns={columns}
+              pagination={{ position: ["bottomCenter"] }}
             />
           </div>
         </div>

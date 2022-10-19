@@ -47,10 +47,7 @@ function TeacherUpdate() {
   const [file, setFile] = useState("");
   const [subject, setSubject] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRowKeysCourse, setSelectedRowKeysCourse] = useState(
-    data.course
-  );
-  console.log(data.course);
+  const [selectedRowKeysCourse, setSelectedRowKeysCourse] = useState([]);
   const [updateTeacher, setUpdateTeacher] = useState({
     avater: data.avater,
     email: data.email,
@@ -70,7 +67,7 @@ function TeacherUpdate() {
       console.log(updateTeacher);
       setDoc(
         doc(firestoreDb, "teachers", data.key),
-        { ...updateTeacher },
+        { ...updateTeacher, course: selectedRowKeysCourse },
         {
           merge: true,
         }
@@ -100,7 +97,7 @@ function TeacherUpdate() {
                 console.log(updateTeacher);
                 setDoc(
                   doc(firestoreDb, "teachers", data.key),
-                  { ...updateTeacher },
+                  { ...updateTeacher, course: selectedRowKeysCourse },
                   {
                     merge: true,
                   }
@@ -170,10 +167,16 @@ function TeacherUpdate() {
       datas.key = doc.id;
       getData(datas).then((response) => children.push(response));
     });
-    // setTimeout(() => {
+    var courseId = [];
+    data.course.map((course) => {
+      courseId.push(course.course_id);
+    });
+    setSelectedRowKeysCourse(courseId);
+    setTimeout(() => {
+      getSubjectTeacher();
+    }, 3000);
     setCourseOption(children);
     setLoading(false);
-    // }, 2000);
   };
 
   const getID = () => {
@@ -293,20 +296,18 @@ function TeacherUpdate() {
     setFile(event.target.files[0]);
   }
   const getClassToSet = async (courses) => {
-    var classId = [];
-    courses.map((item) => {
-      fetchclassFromCourse(item).then((res) => {
-        classId.push(res.class);
+    courses.map(async (item) => {
+      var set = await fetchclassFromCourse(item);
+      await setUpdateTeacher({
+        ...updateTeacher,
+        class: [...updateTeacher.class, set.class],
       });
     });
-
-    await setUpdateTeacher({ ...updateTeacher, class: classId });
   };
 
-  const onSelectChange = async (course) => {
-    setUpdateTeacher({ ...updateTeacher, course: course });
+  const onSelectChange = (course) => {
     setSelectedRowKeysCourse(course);
-    await getClassToSet(course);
+    getClassToSet(course);
   };
 
   const rowSelection = {
@@ -379,26 +380,11 @@ function TeacherUpdate() {
     },
   ];
 
-  const classColumns = [
-    {
-      title: "Grade",
-      dataIndex: "level",
-      key: "level",
-    },
-    {
-      title: "Section",
-      dataIndex: "section",
-      key: "secticon",
-    },
-  ];
-
   useEffect(() => {
     getClass();
     getCourse();
     getID();
-    setTimeout(() => {
-      getSubjectTeacher();
-    }, 3000);
+
     getSubject();
   }, []);
 
