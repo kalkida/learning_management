@@ -83,7 +83,7 @@
 .tab-content Button {
     border: 2px solid #e66937;
     border-radius: 5px;
-    color: #e66937;
+    color: #333;
 }
 
 .btn-confirm {
@@ -92,12 +92,12 @@
     background-color: #E7752B;
 }
 
-.tab-content Button:hover {
+/* .tab-content Button:hover {
     border: 2px solid #e66937;
     border-radius: 5px;
-    color: #e66937;
+    color: #FFF;
     box-shadow: 0px 0px 6px #e66937;
-}
+} */
 
 .teacher-static {
     display: flex;
