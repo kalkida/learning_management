@@ -217,7 +217,7 @@ const CreateNewStudnet = () => {
     getClass();
   }, []);
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] p-4 -mt-14">
+    <div className="bg-[#F9FAFB] h-[100vh]  -mt-14">
       <div className="add-header mb-10 items-center">
         < h1 className="text-[1.5rem] font-jakarta" > Add Student</h1 >
         <button onClick={async () => await createNewStudent()}>
@@ -229,7 +229,7 @@ const CreateNewStudnet = () => {
           <div>
             <h3 className="text-sm font-jakarta width-[20vh]">Student Picture</h3>
             <div className="rounded-full  border-[#E7752B] bg-[white]">
-            <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
+              <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
             </div>
           </div>
           <div className="file-content">

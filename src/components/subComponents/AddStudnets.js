@@ -205,11 +205,11 @@ export default function AddStudnets() {
   }, [updateComplete]);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-14">
-      <div className="list-header mb-10">
+    <div className="bg-[#F9FAFB] h-[100vh]  -mt-14">
+      <div className="list-header mb-2">
         <h1 className="text-2xl  font-[600] font-jakarta">List Of Students</h1>
       </div>
-      <div className="list-sub">
+      <div className="list-sub mb-10">
         <div className="list-filter">
           <Select
             placeholder="Grade"

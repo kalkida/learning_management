@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Tabs, Table, Tag, Calendar, Typography } from "antd";
+import { Button, Tabs, Table, Tag, Calendar, Typography, DatePicker, Badge } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import {
@@ -13,6 +13,7 @@ import {
 import PhoneInput from "react-phone-number-input";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { MailOutlined } from "@ant-design/icons";
 import { faEnvelope, faPenAlt, faPen } from "@fortawesome/free-solid-svg-icons";
 import Liner from "../../graph/Liner";
 import BarGraph from "../../graph/BarGraphStudent";
@@ -21,6 +22,7 @@ import moment from "moment";
 import { Card, Progress } from "antd";
 import Grid from "@mui/material/Grid";
 import "./style.css";
+import { borderRadius } from "@mui/system";
 
 function ViewStudent() {
   const navigate = useNavigate();
@@ -270,8 +272,8 @@ function ViewStudent() {
   ]);
 
   return (
-    <div className="-mt-20 h-[100vh] overflow-scroll main scroll-smooth p-2">
-      <div className="flex flex-row justify-between  py-10 px-2">
+    <div className="-mt-20 h-[100vh] overflow-scroll main scroll-smooth">
+      <div className="flex flex-row justify-between  pt-10">
         <div className="flex flex-row w-[40%] justify-between">
           <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
             <img
@@ -289,11 +291,8 @@ function ViewStudent() {
                 ID: {data.studentId}
               </h4>
             </div>
-            <a className="border-[0px] border-[#E7752B]  rounded-lg flex flex-row  text-[#E7752B] hover:text-[#E7752B] ">
-              <FontAwesomeIcon
-                icon={faEnvelope}
-                className="p-1 text-[#E7752B] mr-1"
-              />
+            <a className="border-[0px] border-[#E7752B] font-jakarta items-center rounded-lg flex flex-row  text-[#E7752B] hover:text-[#E7752B] ">
+              <MailOutlined className="mr-2" />
               Contacts
             </a>
           </div>
@@ -311,12 +310,19 @@ function ViewStudent() {
         <Tabs defaultActiveKey="0">
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center  font-jakarta">
+              <p className="text-base  text-center font-[500] font-jakarta">
                 OverView
               </p>
             }
             key="0"
           >
+            <Button className="btn-confirm  !text-[#E7752B]" onClick={handleUpdate}>
+              <FontAwesomeIcon
+                icon={faPenAlt}
+                className="text-[#E7752B] mr-2 hover:text-[#E7752B]"
+              />
+              Edit
+            </Button>
             <Grid
               container
               rowSpacing={1}
@@ -325,29 +331,23 @@ function ViewStudent() {
               <Grid item xs={12} sm={12} md={4}>
                 <Card
                   bordered={true}
-                  className="w-[100%] min-h-[419px]"
+                  className="w-[100%] min-h-[419px] h-[100%] "
                   title={
                     <h1 className="text-[#475467] text-lg font-[600] mb-[10px]">
                       Daily Report
                     </h1>
                   }
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      marginTop: "10%",
-                    }}
-                  >
+                  <div className="flex flex-row w-[100%]  flex-wrap justify-around">
                     <div className=" flex flex-col justify-center">
                       <Progress
                         type="circle"
                         strokeColor={"#EA8848"}
                         percent={75}
-                        width={200}
+                        width={"15rem"}
                       />
                     </div>
-                    <div className="flex flex-col justify-center ml-12">
+                    <div className="flex flex-col justify-center mt-4">
                       <h1 className="text-md flex flex-row">
                         {" "}
                         <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>
@@ -427,23 +427,17 @@ function ViewStudent() {
 
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center  font-jakarta">
+              <p className="text-base font-[500] text-center  font-jakarta">
                 Profile
               </p>
             }
             key="1"
           >
-            <Button
-              color="#FFF"
-              className="btn-confirm hover:bg-[#FFF] "
-              icon={
-                <FontAwesomeIcon
-                  className="pr-2 text-sm text-[#E7752B] hover:text-[#E7752B]"
-                  icon={faPen}
-                />
-              }
-              onClick={handleUpdate}
-            >
+            <Button className="btn-confirm  !text-[#E7752B]" onClick={handleUpdate}>
+              <FontAwesomeIcon
+                icon={faPenAlt}
+                className="text-[#E7752B] mr-2 hover:text-[#E7752B]"
+              />
               Edit
             </Button>
             <div className="flex flex-row justify-start justify-between border-[0px] border-[#e5e5e5] text-[#344054]">
@@ -597,17 +591,13 @@ function ViewStudent() {
             </div>
           </Tabs.TabPane> */}
           <Tabs.TabPane
-            tab={
-              <p className="text-base font-bold text-center  font-jakarta">
-                Attendance
-              </p>
-            }
+            tab={<p className="text-base text-center font-[500] font-jakarta">Attendance </p>}
             key="2"
           >
-            <Button className="btn-confirm  " onClick={handleUpdate}>
+            <Button className="btn-confirm  !text-[#E7752B]" onClick={handleUpdate}>
               <FontAwesomeIcon
                 icon={faPenAlt}
-                className="text-[#FFF] mr-2 hover:text-[#E7752B]"
+                className="text-[#E7752B] mr-2 hover:text-[#E7752B]"
               />
               Edit
             </Button>
@@ -617,54 +607,52 @@ function ViewStudent() {
                 Attendance
               </h1> */}
               <div>
-                <Tabs defaultActiveKey="1">
-                  <Tabs.TabPane tab="Monthly" key="1">
-                    <div className="st-at-tags">
-                      <div>
-                        <Tag color="#eb3131">5</Tag>
-                        <Tag color="red">Days Absent</Tag>
-                      </div>
-                      <div>
-                        <Tag color="#ebb031">3</Tag>
-                        <Tag color="gold">Days Late</Tag>
-                      </div>
-                      <div>
-                        <Tag color="#9beb31">4</Tag>
-                        <Tag color="lime">Days Present</Tag>
-                      </div>
-                      <div>
-                        <Tag color="#31b6eb">0</Tag>
-                        <Tag color="blue">Days without Records</Tag>
-                      </div>
+                <div className="flex justify-between mb-4 ">
+                  <div className="flex p-4 items-center">
+                    <DatePicker />
+                  </div>
+                  <div className="flex flex-row justify-end bg-white p-4 ">
+                    <div className="flex items-center mr-5">
+                      <div className="bg-[#fc0303] w-[2rem] h-[0.5rem] mr-1" style={{ borderRadius: "10px" }} />
+                      <span >Absent</span>
+                    </div>
+                    <div className="flex items-center mr-5">
+                      <div className="bg-[#f5c702] w-[2rem] h-[0.5rem] mr-1" style={{ borderRadius: "10px" }} />
+                      <span color="gold">Holydays</span>
+                    </div>
+                    <div className="flex items-center mr-5">
+                      <div className="bg-[#c7c4b7] w-[2rem] h-[0.5rem] mr-1" style={{ borderRadius: "10px" }} />
+                      <span color="lime">No Class</span>
                     </div>
 
-                    <div className="calender-card">
-                      {attendanceData?.map((item, index) => (
-                        <div key={index} className="site-calendar-card">
-                          <Calendar
-                            value={moment(item.defaultDate)}
-                            headerRender={() => {
-                              return (
-                                <div
-                                  style={{ padding: 8, textAlign: "center" }}
-                                >
-                                  <Typography.Title level={4}>
-                                    {" "}
-                                    {item.month}
-                                  </Typography.Title>
-                                </div>
-                              );
-                            }}
-                            dateCellRender={(date) =>
-                              dateCellRender(date, item.absentDays)
-                            }
-                            fullscreen={false}
-                          />
-                        </div>
-                      ))}
+                  </div>
+                </div>
+
+                <div className="calender-card">
+                  {attendanceData?.map((item, index) => (
+                    <div key={index} className="site-calendar-card">
+                      <Calendar
+                        value={moment(item.defaultDate)}
+                        headerRender={() => {
+                          return (
+                            <div
+                              style={{ padding: 8, textAlign: "center" }}
+                            >
+                              <Typography.Title level={4}>
+                                {" "}
+                                {item.month}
+                              </Typography.Title>
+                            </div>
+                          );
+                        }}
+                        dateCellRender={(date) =>
+                          dateCellRender(date, item.absentDays)
+                        }
+                        fullscreen={false}
+                      />
                     </div>
-                  </Tabs.TabPane>
-                </Tabs>
+                  ))}
+                </div>
               </div>
             </div>
           </Tabs.TabPane>

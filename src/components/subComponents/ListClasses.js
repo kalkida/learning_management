@@ -302,7 +302,7 @@ export default function ListClasses() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14">
+    <div className="bg-[#F9FAFB] h-[100vh]  -mt-14">
       <h1 className="text-2xl mb-7 font-[600] font-jakarta text-[#344054] ">
         List Of Class
       </h1>

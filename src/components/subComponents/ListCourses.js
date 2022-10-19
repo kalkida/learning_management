@@ -377,7 +377,7 @@ export default function ListCourses() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[auto] p-6 -mt-20">
+    <div className="bg-[#F9FAFB] h-[100vh] -mt-14">
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Course</h1>
         <CreateSubject />
@@ -385,8 +385,8 @@ export default function ListCourses() {
       <div className="list-sub">
         <div className="flex flex-row  w-[30%]">
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] mr-5"
-            defaultValue="Subject"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-4"
+            placeholder="Subject"
             bordered={false}
             style={{ width: 141 }}
             onChange={handleFilterSubject}
@@ -400,7 +400,7 @@ export default function ListCourses() {
           <Select
             className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
             style={{ width: 141 }}
-            defaultValue="Class"
+            placeholder="Class"
             bordered={false}
             onChange={handleFilterClass}
           >

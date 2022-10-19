@@ -414,7 +414,7 @@ export default function AddTeacher() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14">
+    <div className="bg-[#F9FAFB] h-[100vh] -mt-14">
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Teachers</h1>
       </div>
