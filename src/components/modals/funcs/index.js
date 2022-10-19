@@ -34,6 +34,7 @@ const checkClassExists = async (teacherId) => {
   });
 };
 
+
 // check if course Exists and remove
 const existanceCheckcourse = async (id) => {
   const classRef = doc(firestoreDb, "courses", id);
@@ -109,6 +110,7 @@ const addSingleCourseToTeacher = async (courseId, teacherId) => {
   await updateDoc(teacherRef, {
     course: arrayUnion(courseId),
   });
+  console.log("course course   ",courseId);
 };
 
 const removeSingleCourseToTeacher = async (courseId, teacherId) => {
@@ -120,11 +122,12 @@ const removeSingleCourseToTeacher = async (courseId, teacherId) => {
 
 // add class to teacher
 const addSingleClassToTeacher = async (classId, teacherId) => {
-  await checkClassExists(teacherId);
   const teacherRef = doc(firestoreDb, "teachers", teacherId);
+  await checkClassExists(teacherId);
   await updateDoc(teacherRef, {
     class: arrayUnion(classId),
   });
+  console.log("class course   ",classId);
 };
 const removeSingleClassToTeacher = async (classId, teacherId) => {
   const teacherRef = doc(firestoreDb, "teachers", teacherId);
@@ -140,7 +143,26 @@ const addSingleTeacherToCourse = async (teacherId, courseId) => {
   await updateDoc(teacherRef, {
     teachers: arrayUnion(teacherId),
   });
+  console.log("teacher course   ",teacherId);
 };
+
+const addTeacherexits = async (teacherId, classId , courseId) => {
+   await checkCourseExists(teacherId);
+   const teacherRef = doc(firestoreDb, "teacher", teacherId);
+   await updateDoc(teacherRef, {
+     class: arrayUnion(classId),
+     course: arrayUnion(courseId)
+  });
+}
+
+// const addSingleTeacherToCourse = async (teacherId, courseId) => {
+//   await checkClassExists(teacherId);
+//   const teacherRef = doc(firestoreDb, "courses", courseId);
+//   await updateDoc(teacherRef, {
+//     teachers: arrayUnion(teacherId),
+//   });
+// };
+
 const removeTeacherClassfromCourse = async (teacherId, courseId) => {
   const teacherRef = doc(firestoreDb, "courses", courseId);
   await updateDoc(teacherRef, {
@@ -157,7 +179,6 @@ const createParentwhithStudent = async (phoneNumber, schoolId) => {
       isParent: true,
       isTeacher: false,
     },
-
     school: schoolId,
   };
   const uid = uuid();

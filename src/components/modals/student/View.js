@@ -13,7 +13,8 @@ import {
 import PhoneInput from "react-phone-number-input";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faPenAlt, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faPenAlt, faPen , } from "@fortawesome/free-solid-svg-icons";
 import Liner from "../../graph/Liner";
 import BarGraph from "../../graph/BarGraphStudent";
 import { fetchSubject, fetchParents } from "../funcs";
@@ -31,6 +32,14 @@ function ViewStudent() {
   const { data } = state;
   const [age, setAge] = useState();
   const [teacherData, setTeacherData] = useState([data]);
+  const [isHover, setIsHover] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHover(true);
+ };
+ const handleMouseLeave = () => {
+    setIsHover(false);
+ };
 
   const getClassData = async (id) => {
     const q = query(
@@ -317,6 +326,24 @@ function ViewStudent() {
             }
             key="0"
           >
+              <Button
+              color="#FFF"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+           //   
+           
+              style={{ backgroundColor: isHover ? '#FFF' :  '#E7752B',}}
+              className="btn-confirm "
+              icon={
+                <FontAwesomeIcon
+                  className="pr-2 hover:text-[#E7752B]  "
+                  icon={faPen}
+                />
+              }
+              onClick={handleUpdate}
+            >
+              Edit
+            </Button>
             <Grid
               container
               rowSpacing={1}
@@ -433,12 +460,23 @@ function ViewStudent() {
             }
             key="1"
           >
+             {/* <button 
+             className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
+          >
+            Confirm
+            <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
+          </button> */} 
             <Button
               color="#FFF"
-              className="btn-confirm hover:bg-[#FFF] "
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+           //   
+           
+              style={{ backgroundColor: isHover ? '#FFF' :  '#E7752B',}}
+              className="btn-confirm "
               icon={
                 <FontAwesomeIcon
-                  className="pr-2 text-sm text-[#E7752B] hover:text-[#E7752B]"
+                  className="pr-2 hover:text-[#E7752B]  "
                   icon={faPen}
                 />
               }
@@ -604,13 +642,31 @@ function ViewStudent() {
             }
             key="2"
           >
-            <Button className="btn-confirm  " onClick={handleUpdate}>
+             <Button
+              color="#FFF"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+           //   
+           
+              style={{ backgroundColor: isHover ? '#FFF' :  '#E7752B',}}
+              className="btn-confirm "
+              icon={
+                <FontAwesomeIcon
+                  className="pr-2 hover:text-[#E7752B]  "
+                  icon={faPen}
+                />
+              }
+              onClick={handleUpdate}
+            >
+              Edit
+            </Button>
+            {/* <Button className="btn-confirm  " onClick={handleUpdate}>
               <FontAwesomeIcon
                 icon={faPenAlt}
                 className="text-[#FFF] mr-2 hover:text-[#E7752B]"
               />
               Edit
-            </Button>
+            </Button> */}
             <div className="st-at">
               {/* <h1 className="text-xl font-bold mb-10 font-jakarta">
                 {" "}
