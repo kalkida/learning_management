@@ -14,13 +14,8 @@ import { Select } from "antd";
 import PhoneInput from "react-phone-number-input";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-<<<<<<< HEAD
 import { MailOutlined } from "@ant-design/icons";
 import { faEnvelope, faPenAlt, faPen } from "@fortawesome/free-solid-svg-icons";
-=======
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope, faPenAlt, faPen , } from "@fortawesome/free-solid-svg-icons";
->>>>>>> e2403dd6063a70c6afdeaa330f88dbbab0e475a2
 import Liner from "../../graph/Liner";
 import BarGraph from "../../graph/BarGraphStudent";
 import { fetchSubject, fetchParents } from "../funcs";
@@ -320,7 +315,7 @@ function ViewStudent() {
           </div>
         </div>
       </div>
-      <div className="tab-content -mt-6 ">
+      <div className="tab-content">
         <Tabs defaultActiveKey="0">
           <Tabs.TabPane
             tab={
@@ -358,7 +353,7 @@ function ViewStudent() {
                         type="circle"
                         strokeColor={"#EA8848"}
                         percent={75}
-                        width={"15rem"}
+                        width={"14rem"}
                       />
                     </div>
                     <div className="flex flex-col justify-center mt-4">
