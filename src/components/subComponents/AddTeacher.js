@@ -161,7 +161,8 @@ export default function AddTeacher() {
       data.key = response.id;
     } else {
       console.log("none exist data", data);
-      removeSingleClassToTeacher(ID, teach);
+      console.log("data  ",ID , "and  ",teach)
+      //removeSingleClassToTeacher(ID, teach);
     }
 
     return data;
@@ -186,6 +187,7 @@ export default function AddTeacher() {
 
       data.course?.map(async (item, index) => {
         data.course[index] = await getCourseData(item);
+        console.log("courses  :", data.course)
       });
       return data;
     } else {
