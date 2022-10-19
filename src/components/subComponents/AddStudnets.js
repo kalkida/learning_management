@@ -118,15 +118,15 @@ export default function AddStudnets() {
   const columns = [
     {
       title: (
-        <p className="font-jakarta text-[#344054] font-[600]">FirstName</p>
+        <p className="font-jakarta font-[600]">FirstName</p>
       ),
       dataIndex: "first_name",
       key: "first_name",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <p>{text}</p>,
     },
     {
       title: (
-        <p className="font-jakarta text-[#344054] font-[600]">
+        <p className="font-jakarta  font-[600]">
           Guardian Phone Number
         </p>
       ),
@@ -148,7 +148,7 @@ export default function AddStudnets() {
       },
     },
     {
-      title: <p className="font-jakarta text-[#344054] font-[600]">Email</p>,
+      title: <p className="font-jakarta  font-[600]">Email</p>,
       dataIndex: "email",
       key: "email",
       render: (item) => {
@@ -160,7 +160,7 @@ export default function AddStudnets() {
       },
     },
     {
-      title: <p className="font-jakarta text-[#344054] font-[600]">Class</p>,
+      title: <p className="font-jakarta  font-[600]">Class</p>,
       dataIndex: "class",
       key: "class",
       render: (item) => {
@@ -174,7 +174,7 @@ export default function AddStudnets() {
     },
 
     {
-      title: <p className="font-jakarta text-[#344054] font-[600]">Action</p>,
+      title: <p className="font-jakarta  font-[600]">Action</p>,
       key: "action",
       width: "10%",
       render: (_, record) => (
@@ -226,7 +226,7 @@ export default function AddStudnets() {
           <Select
             style={{ width: 120 }}
             placeholder="Section"
-            onChange={handleFilterSection}
+            onChange={handleFilterSection} o
           >
             {classes?.map((item, i) => (
               <Option key={item.key} value={item.section} lable={item.section}>

@@ -6,16 +6,29 @@ import { Card, Progress, Select } from "antd";
 import Grid from "@mui/material/Grid";
 import { firestoreDb } from "../../firebase";
 import { getDocs, query, collection, where } from "firebase/firestore";
+import { async } from "@firebase/util";
 
 const { Option } = Select;
 export default function AdminDash() {
+
   const [students, setStudents] = useState([]);
   const [male, setMale] = useState([]);
   const [female, setfemale] = useState([]);
   const [teachermale, setmaleteacher] = useState([]);
   const [teacherfemale, setfemailteacher] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
+  const [studentAttendance, setstudentAttendance] = useState([]);
+  const [attendStudents, setAttendStudents] = useState();
   const schools = useSelector((state) => state.user.profile);
+
+  var Student = [];
+  const value = new Date();
+  const date = value.getDate() < 10 ? "0" + value.getDate() : value.getDate();
+  const month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
+  const year = value.getFullYear();
+
+  const filterDate = year + "-" + month + "-" + date;
+
   const getStudents = async () => {
     const q = query(
       collection(firestoreDb, "students"),
@@ -26,17 +39,20 @@ export default function AdminDash() {
     snap.forEach((doc) => {
       var data = doc.data();
       data.key = doc.id;
-
       temporary.push(data);
     });
     var male = temporary.filter((doc) => doc.sex === "Male");
     var femail = temporary.filter((doc) => doc.sex === "Female");
+
+    Student = temporary;
+    setStudents(temporary);
     setMale(male);
     setfemale(femail);
-    setStudents(temporary);
   };
+
   useEffect(() => {
     getStudents();
+    getAbsentStudent();
     getTeacher();
   }, []);
 
@@ -56,6 +72,46 @@ export default function AdminDash() {
     setfemailteacher(femail);
     setmaleteacher(male);
     setTeacherData(temporary);
+  };
+
+  const getAbsentStudent = async () => {
+
+    var temporary = []
+    const queryCourse = query(
+      collection(firestoreDb, "courses"),
+      where("school_id", "==", schools.school),
+    );
+    const snapCourse = await getDocs(queryCourse);
+
+    snapCourse.forEach(async (docs) => {
+      const queryAttendace = query(
+        collection(firestoreDb, "attendanceanddaily", `${docs.id}/attendace`),
+        where("date", "==", filterDate),
+      );
+
+      const snap = await getDocs(queryAttendace);
+      snap.forEach((doc) => {
+        var data = doc.data();
+        data.key = data.id;
+        var hasData = false;
+        temporary.forEach((item) => {
+          if ((item.studentId == data.studentId)) {
+            hasData = true;
+          }
+        })
+        if (!hasData) {
+          temporary.push(data);
+        }
+
+      });
+    })
+    setTimeout(() => {
+      const calc = ((Student.length - temporary.length) / Student.length) * 100;
+      setAttendStudents(calc)
+      setstudentAttendance(temporary)
+
+    }, 1000);
+
   };
 
   return (
@@ -87,14 +143,15 @@ export default function AdminDash() {
                 <Progress
                   type="circle"
                   strokeColor={"#EA8848"}
-                  percent={75}
+                  percent={attendStudents}
                   width={"9rem"}
                 />
               </div>
               <div className="flex flex-col justify-center ">
                 <h1 className="text-[16px] flex flex-row">
                   {" "}
-                  <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>7
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>
+                  {studentAttendance.length}{" "}
                   Absent Students
                 </h1>
                 <h1 className="text-[16px] flex flex-row">
