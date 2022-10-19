@@ -261,7 +261,7 @@ const Layouts = () => {
             {[
               {
                 text: (
-                  <p className="text-[#344054] font-[500] font-jakarta text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-[500] font-jakarta text-[16px] text-left h-2">
                     Home
                   </p>
                 ),
@@ -301,7 +301,7 @@ const Layouts = () => {
               // },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left h-2">
                     Announcment
                   </p>
                 ),
@@ -321,7 +321,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left h-2">
                     Course
                   </p>
                 ),
@@ -341,7 +341,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
                     Classes
                   </p>
                 ),
@@ -361,7 +361,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
                     Teacher
                   </p>
                 ),
@@ -381,7 +381,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
                     Students
                   </p>
                 ),
@@ -401,7 +401,7 @@ const Layouts = () => {
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
                     Attendance
                   </p>
                 ),
@@ -481,7 +481,7 @@ const Layouts = () => {
             ))}
 
             <ListItem
-              style={{ position: "fixed", bottom: 0, width: open ? 234 : 65 }}
+              style={{ position: "fixed", bottom: 20, width: open ? 234 : 65 }}
               disablePadding
               sx={{
                 display: "block",
@@ -516,7 +516,7 @@ const Layouts = () => {
                   {role["isAdmin"] == true ? (
                     <ListItemText
                       primary={
-                        <p className="text-[#344054] font-jakarta text-[16px] text-left pt-1">
+                        <p className="text-[#344054] font-jakarta text-[16px] text-left h-2 ">
                           Admin
                         </p>
                       }

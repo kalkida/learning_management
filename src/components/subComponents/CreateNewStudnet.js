@@ -226,18 +226,18 @@ const CreateNewStudnet = () => {
       </div >
       <div className="add-teacher bg-[#FFF]">
         <div className="avater-img">
-          <div>
-            <h3 className="text-sm font-jakarta width-[20vh]">Student Picture</h3>
+          <div className="-mx-6">
+            <h3 className="text-sm font-jakarta -mb-2 color-[#475467]">Student Picture</h3>
             <div className="rounded-full  border-[#E7752B] bg-[white]">
             <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
             </div>
           </div>
-          <div className="file-content">
-            <span className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">
+          <div className="file-content ml-10" style={{ marginTop:20}}>
+            <span className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch width[v-20h] ">
               This will be displayed to you when you view this profile
             </span>
 
-            <div className="img-btn">
+            <div className="img-btn -mt-2">
               <button>
                 <input
                   type="file"
@@ -263,8 +263,8 @@ const CreateNewStudnet = () => {
         <div className="flex flex-row justify-between">
           <div className="flex flex-col w-[40%] mr-10">
             <div className="py-4">
-              <label>First Name</label>
-              <Input name="first_name" placeholder="Eneter First Name" onChange={(e) => handleStudent(e)} />
+              <label style={{ paddingBottom:6}}>First Name</label>
+              <Input style={{marginTop:6}} className="py-6 mt-6" name="first_name" placeholder="Enter First Name" onChange={(e) => handleStudent(e)} />
             </div>
 
             <div>
@@ -275,6 +275,7 @@ const CreateNewStudnet = () => {
                 optionLabelProp="label"
                 style={{
                   width: "100%",
+                  marginTop:6
                 }}
               >
                 {classData.map((item, index) => (
@@ -286,14 +287,14 @@ const CreateNewStudnet = () => {
             </div>
             <div className="py-4">
               <label>Date of Birth</label>
-              <DatePicker style={{ width: "100%" }} onChange={handleDob} />
+              <DatePicker style={{ width: "100%" ,marginTop:6 }} onChange={handleDob} />
             </div>
 
           </div>
           <div className="flex flex-col w-[40%]  mr-10">
             <div className="py-4">
               <label>Last Name</label>
-              <Input name="last_name" placeholder="Enter Last Name" onChange={(e) => handleStudent(e)} />
+              <Input style={{marginTop:6}}name="last_name" placeholder="Enter Last Name" onChange={(e) => handleStudent(e)} />
             </div>
             <div>
               <label>Sex </label>
@@ -303,6 +304,7 @@ const CreateNewStudnet = () => {
                 optionLabelProp="label"
                 style={{
                   width: "100%",
+                  marginTop:6
                 }}
               >
                 {gender.map((item, index) => (
@@ -314,7 +316,7 @@ const CreateNewStudnet = () => {
             </div>
             <div className="py-4">
               <label>Email</label>
-              <Input name="email" placeholder="Enter Email Address" onChange={(e) => handleStudent(e)} />
+              <Input style={{marginTop:6}} name="email" placeholder="Enter Email Address" onChange={(e) => handleStudent(e)} />
             </div>
           </div>
           <div className="flex flex-col w-[40%] mr-10">
@@ -324,7 +326,8 @@ const CreateNewStudnet = () => {
                 return (
                   <PhoneInput
                     placeholder="Enter Guardian Contact"
-                    className="py-1 border-[1px] bg-white px-2 mb-2"
+                    className="py-1 border-[1px] bg-white px-2 mb-2 mt-6"
+                    style={{marginTop:6}}
                     country="ET"
                     onChange={(e) => setPhone(e, index)}
                   />
@@ -341,9 +344,9 @@ const CreateNewStudnet = () => {
                 </Button>
               ) : null}
             </div>
-            <div>
+            <div className="-py-6 -mt-2">
               <label>Student Id</label>
-              <Input name="studentId" placeholder="Enter Student Id" onChange={(e) => handleStudent(e)} />
+              <Input style={{marginTop:6}} name="studentId" placeholder="Enter Student Id" onChange={(e) => handleStudent(e)} />
             </div>
             {/* <div>
               <Button

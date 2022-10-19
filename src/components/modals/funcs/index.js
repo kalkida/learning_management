@@ -219,6 +219,15 @@ const fetchTeacher = async (sectionId) => {
     return "";
   }
 };
+const fetchclassFromCourse = async (sectionId) => {
+  const teacherRef = doc(firestoreDb, "courses", sectionId);
+  const docSnap = await getDoc(teacherRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return "";
+  }
+};
 
 const fetchClass = async (sectionId) => {
   const teacherRef = doc(firestoreDb, "class", sectionId);
@@ -244,6 +253,7 @@ export {
   removeSingleClassToTeacher,
   createParentwhithStudent,
   addSingleClassToCourses,
+  fetchclassFromCourse,
   fetchParents,
   fetchSubject,
   fetchClass,

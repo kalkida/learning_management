@@ -316,12 +316,12 @@ function ViewStudent() {
           </div>
         </div>
       </div>
-      <div className="tab-content">
+      <div className="tab-content -mt-6 ">
         <Tabs defaultActiveKey="0">
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center  font-jakarta">
-                OverView
+              <p className="text-base font-bold text-center  font-jakarta -mb-2">
+                Overview
               </p>
             }
             key="0"
@@ -344,12 +344,47 @@ function ViewStudent() {
             >
               Edit
             </Button>
+            
             <Grid
               container
               rowSpacing={1}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
-              <Grid item xs={12} sm={12} md={4}>
+               <Grid item xs={12} sm={12} md={4}>
+          <Card
+            bordered={true}
+            className="w-[100%] min-h-[419px] h-[100%]"
+            title={
+              <h1 className="text-[#475467] font-[600] mb-[10px]">
+                Daily Report
+              </h1>
+            }
+          >
+            <div className="flex flex-row w-[100%] flex-wrap justify-around">
+              <div className=" flex flex-col justify-center">
+                <Progress
+                  type="circle"
+                  strokeColor={"#EA8848"}
+                  percent={75}
+                  width={"9rem"}
+                />
+              </div>
+              <div className="flex flex-col justify-center ">
+                <h1 className="text-[16px] flex flex-row">
+                  {" "}
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>
+                  7 Assignments
+                </h1>
+                <h1 className="text-[16px] flex flex-row">
+                  {" "}
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#98A2B3] rounded-lg"></a>
+                  2 Participating Clubs
+                </h1>
+              </div>
+            </div>
+          </Card>
+        </Grid>
+              {/* <Grid item xs={12} sm={12} md={4}>
                 <Card
                   bordered={true}
                   className="w-[100%] min-h-[419px]"
@@ -388,7 +423,7 @@ function ViewStudent() {
                     </div>
                   </div>
                 </Card>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={6} md={4}>
                 <Card
                   bordered={true}
@@ -454,7 +489,7 @@ function ViewStudent() {
 
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center  font-jakarta">
+              <p className="text-base font-bold text-center  font-jakarta -mb-2">
                 Profile
               </p>
             }
@@ -517,7 +552,7 @@ function ViewStudent() {
               </div>
             </div>
             <h1
-              className="text-[#344054] font-jakarta text-xl font-bold mt-10 mb-8"
+              className="text-[#344054] font-jakarta text-xl font-bold mt-4 mb-8"
             // style={{
             //   fontSize: 20,
             //   fontWeight: "600",
@@ -584,7 +619,7 @@ function ViewStudent() {
                 </h2>
               </div>
             </div> */}
-            <div className="mt-10 mb-10">
+            <div className="mb-10">
               <h1 className="text-[#344054] font-jakarta text-xl font-bold mb-8">
                 Guardian Information
               </h1>
@@ -636,7 +671,7 @@ function ViewStudent() {
           </Tabs.TabPane> */}
           <Tabs.TabPane
             tab={
-              <p className="text-base font-bold text-center  font-jakarta">
+              <p className="text-base font-bold text-center  font-jakarta -mb-2">
                 Attendance
               </p>
             }
@@ -674,7 +709,7 @@ function ViewStudent() {
               </h1> */}
               <div>
                 <Tabs defaultActiveKey="1">
-                  <Tabs.TabPane tab="Monthly" key="1">
+                  <Tabs.TabPane tab="2022" key="1">
                     <div className="st-at-tags">
                       <div>
                         <Tag color="#eb3131">5</Tag>

@@ -23,7 +23,6 @@ import "../modals/courses/style.css";
 import "../modals/teacher/style.css";
 import { SearchOutlined } from "@ant-design/icons";
 const { Option } = Select;
-const { Search } = Input;
 
 const gender = ["Male", "Female", "Other"];
 
@@ -31,7 +30,6 @@ const CreateNewTeacher = () => {
   const navigate = useNavigate();
   const [percent, setPercent] = useState(0);
 
-  const [loading, setLoading] = useState(true);
   const [file, setFile] = useState("");
 
   const [classData, setClassData] = useState([]);
@@ -416,30 +414,41 @@ const CreateNewTeacher = () => {
     setFile(event.target.files[0]);
   }
   return (
-    <>
-      <div className="bg-[#F9FAFB] h-[auto] pb-20  px-6 -mt-14">
-        <div className="add-header mb-10">
-          <h1 className="text-2xl font-bold font-jakarta text-[#344054] ">Add Teacher</h1>
-          <button 
-             className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
-          onClick={async () => await createNewTeacher()}>
+    <div className="-mt-14">
+      <div className="bg-[#F9FAFB] h-[auto] pb-20 ">
+        <div className="add-header mb-6">
+          <h1 className="text-2xl font-bold font-jakarta text-[#344054] ">
+            Add Teacher
+          </h1>
+          <button
+            className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
+            onClick={async () => await createNewTeacher()}
+          >
             Confirm
             <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
           </button>
         </div>
-        <div className="add-teacher bg-[#FFF]">
-          <div className="avater-img">
+        <div className="rounded-[6px] border-[1px] bg-[#FFF]">
+          <div className="ml-5 flex flex-row mt-[32px]">
             <div>
-              <h2 className="text-[#344054] pb-[6px] font-jakarta">Teacher Picture</h2>
-              <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
+              <h2 className="text-[14px] font-[500] font-jakarta text-[#475467] text-center">
+                Teacher Picture
+              </h2>
+              <div className="rounded-full border-[2px] border-[#E7752B] bg-[white] w-[6vw]">
+                <img
+                  src={file ? URL.createObjectURL(file) : "img-5.jpg"}
+                  className="w-[8vw] h-[6vw] rounded-full"
+                />
+              </div>
             </div>
-            <div className="file-content">
-              <span>
+            <div className="flex flex-col justify-end ml-3 -mt-2">
+              <span className="font-jakarta text-[12px] mb-2">
                 This will be displayed to you when you view this profile
               </span>
 
               <div className="img-btn">
-                <button>
+                {/* <input type="file" onChange={handleChange} accept="/image/*" /> */}
+                <button className="border-[2px] border-[#E7752B] text-[12px] rounded-lg bg-[#E7752B] text-white">
                   <input
                     type="file"
                     id="browse"
@@ -451,54 +460,76 @@ const CreateNewTeacher = () => {
                   <input type="hidden" id="filename" readonly="true" />
                   <input
                     type="button"
-                    value="Add Photo"
+                    value="Change Photo"
                     id="fakeBrowse"
                     onClick={HandleBrowseClick}
                   />
                 </button>
-                <button onClick={onRemove}>Remove</button>
+                <button
+                  className="border-[2px] border-[#E7752B] text-[12px] rounded-lg text-[#E7752B]"
+                  onClick={onRemove}
+                >
+                  Remove
+                </button>
               </div>
             </div>
           </div>
-
           <div className="add-form">
             <div className="col">
-              <div  className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">First Name</h1>
+              <div className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                  First Name
+                </h1>
                 <Input
+                  className="!border-[2px]"
                   name="first_name"
-                  className="rounded-lg"
                   onChange={(e) => handleChangeTeacher(e)}
                 />
               </div>
               <div className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">Last Name</h1>
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                  Last Name
+                </h1>
                 <Input
+                  className="!border-[2px]"
                   name="last_name"
-                  className="rounded-lg"
                   onChange={(e) => handleChangeTeacher(e)}
                 />
               </div>
             </div>
             <div className="col">
-              <div  className="py-2">
+              <div className="py-2">
                 <h1 className="text-[#344054] pb-[6px] font-jakarta">Phone</h1>
-                <Input name="phone"  className="rounded-lg" onChange={(e) => handleChangeTeacher(e)} />
+                <Input
+                  className="!border-[2px]"
+                  name="phone"
+                  onChange={(e) => handleChangeTeacher(e)}
+                />
               </div>
-
-              <div  className="py-2">
+              <div className="py-2">
                 <h1 className="text-[#344054] pb-[6px] font-jakarta">Email</h1>
-                <Input name="email"  className="rounded-lg" onChange={(e) => handleChangeTeacher(e)} />
+                <Input
+                  className="!border-[2px]"
+                  name="email"
+                  onChange={(e) => handleChangeTeacher(e)}
+                />
               </div>
             </div>
             <div className="col">
-              <div  className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">Date of Birth</h1>
-                <DatePicker style={{ width: "100%" }} onChange={handleDob} />
+              <div className="py-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                  Date Of Birth
+                </h1>
+                <DatePicker
+                  className="!border-[2px]"
+                  style={{ width: "100%", height: "4vh" }}
+                  onChange={handleDob}
+                />
               </div>
-              <div  className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">Sex </h1>
+              <div className="-mt-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">Sex</h1>
                 <Select
+                  className="!border-[2px] h-[4vh]"
                   placeholder="Select Gender"
                   onChange={handleGender}
                   optionLabelProp="label"
@@ -513,18 +544,27 @@ const CreateNewTeacher = () => {
                   ))}
                 </Select>
               </div>
-              <div  className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">Working since</h1>
-                <DatePicker style={{ width: "100%" }} onChange={handleWork} />
+              <div className="-mt-2">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                  Working Since
+                </h1>
+
+                <DatePicker
+                  className="!border-[2px] h-[2rem] w-[100%]"
+                  onChange={handleWork}
+                />
               </div>
             </div>
           </div>
         </div>
-          <div style={{ padding: 20  }}>
-            <div className="list-header">
-              <h1 className=" pt-2 font-jakarta font-semibold text-xl  text-[#344054] my-5">Courses </h1>
-            </div>
-            <div className="list-sub">
+        <div>
+          <div className="list-header">
+            <h1 className=" pt-2 font-jakarta font-semibold text-xl  text-[#344054] my-5">
+              Courses{" "}
+            </h1>
+          </div>
+          <div className="bg-[#FFFFFF] p-[24px] border-[1px]">
+            <div className="list-sub mb-2">
               <div className="list-filter">
                 <Select
                   placeholder="Subject"
@@ -555,24 +595,15 @@ const CreateNewTeacher = () => {
               </div>
               <div className="course-search">
                 <div>
-                <Input
-            style={{ width: 200 }}
-            className="mr-3 rounded-lg"
-            placeholder="Search"
-            prefix={<SearchOutlined className="site-form-item-icon" />}
-          />
-                  {/* <Search
-                    placeholder="input search text"
-                    allowClear
-                    // onSearch={onSearch}
-                    style={{
-                      width: 200,
-                    }}
-                  /> */}
+                  <Input
+                    style={{ width: 200 }}
+                    className="mr-3 rounded-lg"
+                    placeholder="Search"
+                    prefix={<SearchOutlined className="site-form-item-icon" />}
+                  />
                 </div>
               </div>
             </div>
-            <br />
             <Table
               loading={courseLoading}
               rowSelection={rowSelection}
@@ -581,21 +612,8 @@ const CreateNewTeacher = () => {
             />
           </div>
         </div>
-        <div>
-          <div style={{ padding: 20 , marginTop:-20}}>
-            <div className="list-header">
-              <h1 className=" pt-2 font-jakarta font-semibold text-xl  text-[#344054] my-5">Add Class </h1>
-            </div>
-            <br />
-            <Table
-              loading={classLoading}
-              rowSelection={rowSelectionClass}
-              dataSource={classData}
-              columns={classColumns}
-            />
-          </div>
-        </div>
-    </>
+      </div>
+    </div>
   );
 };
 

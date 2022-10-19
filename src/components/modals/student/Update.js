@@ -284,7 +284,8 @@ function UpdateStudents() {
               <div className="add-teacher bg-[#FFF]">
                 <div className="avater-img">
                   <div>
-                    <h3 className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">Student Picture</h3>
+                    <h3 className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">
+                      Student Picture</h3>
                     <div className="rounded-full  border-[#E7752B] bg-[white]">
                     <img
                       className="w-[8vw] border-[2px] rounded-full"

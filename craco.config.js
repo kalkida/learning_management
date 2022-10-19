@@ -7,7 +7,10 @@ module.exports = {
       options: {
         lessLoaderOptions: {
           lessOptions: {
-            modifyVars: { "@primary-color": "#E7752B" },
+            modifyVars: {
+              "@primary-color": "#E7752B",
+              "@border-color-base": "#EAECF0",
+            },
             javascriptEnabled: true,
           },
         },
