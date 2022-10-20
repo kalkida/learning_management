@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Select, Tabs, Table, Tag } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MailOutlined } from "@ant-design/icons";
+import { fetchSubject } from "../funcs";
+import Icon from "react-eva-icons";
+
 import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-
 
 function TeacherView() {
   const navigate = useNavigate();
@@ -22,10 +23,10 @@ function TeacherView() {
     : "";
   const workTime = data.working_since
     ? getworkTime.getFullYear() +
-    "-" +
-    getworkTime.getMonth() +
-    "-" +
-    getworkTime.getDay()
+      "-" +
+      getworkTime.getMonth() +
+      "-" +
+      getworkTime.getDay()
     : null;
 
   useEffect(() => {
@@ -116,7 +117,7 @@ function TeacherView() {
       key: "course_name",
       render: (item) => {
         if (item) {
-          return <div>{item.split(" ")[1]}</div>
+          return <div>{item.split(" ")[1]}</div>;
         } else {
           return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
@@ -144,7 +145,16 @@ function TeacherView() {
               </div>
               <div className="flex flex-row align-bottom">
                 <div>
-                  <MailOutlined className="!text-[#E7752B] mr-1" />
+                  <Icon
+                    name="message-square-outline"
+                    fill="#E7752B"
+                    size="large"
+                    animation={{
+                      type: "pulse",
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
                 </div>
                 <div>
                   <h3 className="text-md text-[#E7752B] p-1 font-jakarta">
@@ -191,7 +201,11 @@ function TeacherView() {
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane
-              tab={<span className="text-base font-jakarta text-center ">Profile</span>}
+              tab={
+                <span className="text-base font-jakarta text-center ">
+                  Profile
+                </span>
+              }
               key="1"
             >
               <Button
@@ -236,7 +250,11 @@ function TeacherView() {
               <Table dataSource={teacherData} columns={teacherColumn} />
             </Tabs.TabPane>
             <Tabs.TabPane
-              tab={<span className="text-base font-jakarta text-center ">Course</span>}
+              tab={
+                <span className="text-base font-jakarta text-center ">
+                  Course
+                </span>
+              }
               key="2"
             >
               <Button
