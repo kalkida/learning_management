@@ -67,13 +67,15 @@ function ViewClass() {
         moment.locale("en");
         if (value?.time == undefined) {
           return (
-            <>
+            <div className="flex flex-col w-[28%] ">
               {value?.map((item, i) => (
-                <Tag color="#EA8848">
+                <Tag 
+                className= "!mb-2"
+                color="#EA8848">
                   {moment(JSON.parse(item?.time[0])).format("hh:mm")}{" "}
                 </Tag>
               ))}
-            </>
+            </div>
           );
         } else {
           return <Tag color="red">No Data</Tag>;
@@ -88,13 +90,15 @@ function ViewClass() {
         moment.locale("en");
         if (value?.time == undefined) {
           return (
-            <>
+            <div className="flex flex-col w-[25%] ">
               {value?.map((item, i) => (
-                <Tag color="#EA8848">
+                <Tag 
+                className="!mb-2"
+                color="#EA8848">
                   {moment(JSON.parse(item?.time[1])).format("hh:mm")}
                 </Tag>
               ))}
-            </>
+              </div>  
           );
         } else {
           return <Tag color="red">No Data</Tag>;
@@ -359,7 +363,7 @@ function ViewClass() {
                   icon={faEdit}
                 />
               }
-              className=" text-center  border-[2px] !border-[#E7752B] !text-[#E7752B] rounded-lg float-right -mt-14"
+              className=" text-center  border-[2px] !border-[#E7752B] !text-[#E7752B] rounded-lg float-right -mt-24"
               onClick={handleUpdate}
             >
               Edit

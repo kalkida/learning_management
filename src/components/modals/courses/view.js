@@ -5,12 +5,83 @@ import "../courses/style.css";
 import AttendanceList from "../../subComponents/AttendanceList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { fetchTeacher } from "../funcs";
+import { useState, useEffect } from "react";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { firestoreDb } from "../../../firebase";
 
 const { Option } = Select;
 
 function ViewCourse() {
+  const [datas, setData] = useState([]);
   const { state } = useLocation();
   const { data } = state;
+  const [teachers , setTeachers]= useState([])
+
+  console.log("data   ", data)
+
+  // const getClassData = async (ID) => {
+  //   const docRef = doc(firestoreDb, "class", ID);
+
+  //   var data = "";
+  //   await getDoc(docRef).then((response) => {
+  //     data = response.data();
+  //     data.key = response.id;
+  //   });
+  //   return data;
+  // };
+
+  const getTeacherData = async (ID) => {
+    console.log("id: " + ID)
+    const docRef = doc(firestoreDb, "teachers", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      console.log("data: " + data);
+      data.key = response.id;
+    });
+    return data;
+  };
+  const getData = async (data) => {
+    console.log("teacher    ",data.teachers)
+    data.teachers?.map(async (item, index) => {
+      console.log("item  is   ",index)
+      data.teachers[index] = await getTeacherData(item);
+     
+    });
+    return data;
+  };
+   
+ 
+  const getStudents = async (ids) => {
+    var temporary = [];
+    console.log("ids   ",ids);
+    if (ids.length > 0) {
+      const q = query(collection(firestoreDb, "teachers"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        var data = doc.data();
+        console.log("data: " + data.first_name);
+        console.log("data doc: " + doc.id);
+        if (ids.includes(doc.id)) {
+          temporary.push(data);
+        }
+        console.log("temporary: " + temporary)
+      });
+      setTeachers(temporary);
+    }
+  };
+
+  useEffect(() => {
+    getStudents(data.teachers);
+  }, []);
 
   const navigate = useNavigate();
   const columnsA = [
@@ -82,11 +153,15 @@ function ViewCourse() {
       // title: "AsignedTeachers",
       dataIndex: "first_name",
       key: "first_name",
-      render: (text, record) => (
+      render: (text, record) => {
+        console.log("record    ",record)
+
+        return(
         <div className="font-[500] text-sm font-jakarta">
           {record.first_name} {record.last_name}
         </div>
-      ),
+        )
+      },
     },
   ];
   const handleUpdate = () => {
