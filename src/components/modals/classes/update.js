@@ -207,7 +207,7 @@ function UpdateClass() {
         message.success("Data is updated successfuly");
         setUpdateComplete(!updateComplete);
         navigate("/list-classes");
-      })
+      })  
       .catch((error) => {
         message.error("Data is not updated");
         console.log(error);

@@ -6,17 +6,52 @@ import "../courses/style.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { fetchTeacher } from "../funcs";
+import { useState, useEffect } from "react";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { firestoreDb } from "../../../firebase";
-import { collection, query, where, getDocs, } from "firebase/firestore";
+
+const { Option } = Select;
 
 function ViewCourse() {
-
+  const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
   const [student, setStudent] = useState([])
   const [loading, setLoading] = useState(true)
   const { state } = useLocation();
   const { data } = state;
+  const [teachers, setTeachers] = useState([])
+
+
+  const getStudents = async (ids) => {
+    var temporary = [];
+    console.log("ids   ", ids);
+    if (ids.length > 0) {
+      const q = query(collection(firestoreDb, "teachers"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        var data = doc.data();
+        console.log("data: " + data.first_name);
+        console.log("data doc: " + doc.id);
+        if (ids.includes(doc.id)) {
+          temporary.push(data);
+        }
+        console.log("temporary: " + temporary)
+      });
+      setTeachers(temporary);
+    }
+  };
+
+  useEffect(() => {
+    getStudents(data.teachers);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -83,11 +118,15 @@ function ViewCourse() {
       // title: "AsignedTeachers",
       dataIndex: "first_name",
       key: "first_name",
-      render: (text, record) => (
-        <div className="font-[500] text-sm font-jakarta">
-          {record.first_name} {record.last_name}
-        </div>
-      ),
+      render: (text, record) => {
+        console.log("record    ", record)
+
+        return (
+          <div className="font-[500] text-sm font-jakarta">
+            {record.first_name} {record.last_name}
+          </div>
+        )
+      },
     },
   ];
 

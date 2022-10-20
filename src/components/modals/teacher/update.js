@@ -95,7 +95,6 @@ function TeacherUpdate() {
               updateTeacher.avater = valueRef.current;
 
               if (updateTeacher.avater !== null) {
-                console.log(updateTeacher);
                 setDoc(
                   doc(firestoreDb, "teachers", data.key),
                   { ...updateTeacher, course: selectedRowKeysCourse },
@@ -443,9 +442,7 @@ function TeacherUpdate() {
                 {subjectloaded ? (
                   <div>
                     {data?.course ? (
-                      <h4
-                        className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] p-[1px] ml-2"
-                      >
+                      <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] p-[1px] ml-2">
                         {subjects
                           ?.slice(0, 2)
                           .map((item, i) => item.name + ",")}
@@ -496,8 +493,8 @@ function TeacherUpdate() {
                           file
                             ? URL.createObjectURL(file)
                             : data.avater
-                              ? data.avater
-                              : "img-5.jpg"
+                            ? data.avater
+                            : "img-5.jpg"
                         }
                         className="rounded-full w-[6vw] !p-0"
                       />
@@ -592,7 +589,7 @@ function TeacherUpdate() {
                       </h1>
                       <DatePicker
                         // className="!border-[2px]"
-                        style={{ width: "100%", }}
+                        style={{ width: "100%" }}
                         onChange={handleDob}
                         defaultValue={
                           updateTeacher.DOB
