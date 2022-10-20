@@ -93,7 +93,7 @@ function ViewCourse() {
     navigate("/update-course", { state: { data } });
   };
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] p-4">
+    <div className="bg-[#F9FAFB] h-[100vh] py-4">
       <div className="flex flex-row justify-between w-[100%] -mt-20 ">
         <div className="flex flex-row justify-between align-middle h-[78px]">
           <div className="rounded-full  border-[2px] border-[#E7752B] mr-10">
@@ -109,8 +109,8 @@ function ViewCourse() {
             </h2>
           </div>
         </div>
-        <div className="flex flex-col justify-center align-middle">
-          <div className="flex flex-row">
+        <div className="flex flex-col justify-center ">
+          <div className="flex flex-row justify-end">
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
               Assigned Teachers
             </h3>
@@ -121,7 +121,7 @@ function ViewCourse() {
               {data.teachers.length}
             </h4>
           </div>
-          <div className="flex flex-row">
+          <div className="flex flex-row justify-end">
             <h3 className="text-lg font-semibold font-jakarta">
               Class per week
             </h3>
@@ -138,15 +138,15 @@ function ViewCourse() {
         <Tabs className="bg-[#F9FAFB]" defaultActiveKey="1">
           <Tabs.TabPane
             tab={
-              <p className="text-lg font-semibold text-center ml-0 font-jakarta">
+              <span className="text-lg font-[500] text-center ml-0 font-jakarta">
                 Profile
-              </p>
+              </span>
             }
             key="1"
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-              className="float-right -mt-14 text-[#E7752B]"
+              className="float-right -mt-14 !text-[#E7752B]"
               onClick={handleUpdate}
             >
               Edit Course
@@ -187,9 +187,9 @@ function ViewCourse() {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <p className="text-lg font-semibold text-center ml-5 font-jakarta">
+              <span className="text-lg font-[500] text-center  font-jakarta">
                 Attendance
-              </p>
+              </span>
             }
             key="2"
           >

@@ -161,7 +161,8 @@ export default function AddTeacher() {
       data.key = response.id;
     } else {
       console.log("none exist data", data);
-      removeSingleClassToTeacher(ID, teach);
+      console.log("data  ", ID, "and  ", teach)
+      //removeSingleClassToTeacher(ID, teach);
     }
 
     return data;
@@ -186,6 +187,7 @@ export default function AddTeacher() {
 
       data.course?.map(async (item, index) => {
         data.course[index] = await getCourseData(item);
+        console.log("courses  :", data.course)
       });
       return data;
     } else {
@@ -225,7 +227,7 @@ export default function AddTeacher() {
   const getClass = async () => {
     const q = query(
       collection(firestoreDb, "class"),
-      where("school_id", "in", uid.school)
+      where("school_id", "==", uid.school)
     );
     var temporary = [];
     const snap = await getDocs(q);
@@ -288,7 +290,6 @@ export default function AddTeacher() {
       snap.forEach(async (doc) => {
         var data = doc.data();
         data.key = doc.id;
-        temporary.push(data);
         getData(data).then((response) => temporary.push(response));
       });
       setTimeout(() => {
@@ -331,7 +332,7 @@ export default function AddTeacher() {
       key: "course",
       dataIndex: "course",
       render: (value) => {
-        if (Array.isArray(value)) {
+        if (value?.length) {
           return (
             <>
               {value.map((item) => (
@@ -340,7 +341,7 @@ export default function AddTeacher() {
             </>
           );
         } else {
-          return <Tag>Course Not Assigned</Tag>;
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
       },
     },
@@ -350,7 +351,13 @@ export default function AddTeacher() {
       ),
       key: "phone",
       dataIndex: "phone",
-      render: (text) => <a>{text}</a>,
+      render: (text) => {
+        if (text) {
+          return <a>{text}</a>
+        } else {
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
+        }
+      }
     },
     {
       title: <p className="font-jakarta text-[#344054] font-[600]">Class </p>,
@@ -374,7 +381,7 @@ export default function AddTeacher() {
             </>
           );
         } else {
-          return <Tag color="red">Class Not Assigned</Tag>;
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
       },
     },
@@ -384,7 +391,7 @@ export default function AddTeacher() {
       key: "action",
       width: "10%",
       render: (_, record) => (
-        <Space size="middle">
+        <div className="flex flex-row justify-around">
           <a
             className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
@@ -397,7 +404,7 @@ export default function AddTeacher() {
           >
             Update
           </a>
-        </Space>
+        </div>
       ),
     },
   ];
@@ -409,14 +416,14 @@ export default function AddTeacher() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14">
+    <div className="bg-[#F9FAFB] h-[100vh] -mt-14">
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Teachers</h1>
       </div>
       <div className="list-sub">
         <div className="flex flex-row w-[30%]">
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] mr-5"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5"
             placeholder="Course"
             bordered={false}
             style={{ width: 120 }}

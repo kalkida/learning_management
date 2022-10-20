@@ -64,7 +64,7 @@ function CreateSubject() {
     <>
       <Button
         icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
-        className=" !text-[#E7752B] "
+        className=" !text-[#E7752B] !border-[#E7752B]"
         onClick={showModal}
       >
         Add Subject

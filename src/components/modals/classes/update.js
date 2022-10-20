@@ -57,6 +57,7 @@ function UpdateClass() {
   const [selectedRowKeysCourses, setSelectedRowKeyCourse] = useState(
     data.course
   );
+
   const [updateClass, setUpdateClass] = useState({
     level: data.level,
     student: data.student,
@@ -101,8 +102,8 @@ function UpdateClass() {
     },
     {
       title: <h1 className="text-[16px] font-[600] text-[#344054]">Grade</h1>,
-      dataIndex: "studentId",
-      key: "studentId",
+      dataIndex: "grade",
+      key: "grade",
       render: (item, data) => {
         if (item) {
           return <div>{item}</div>;
@@ -124,22 +125,22 @@ function UpdateClass() {
         }
       },
     },
-    {
-      title: (
-        <h1 className="text-[16px] font-[600] text-[#344054]">
-          Assigned Class
-        </h1>
-      ),
-      dataIndex: "className",
-      key: "className",
-      render: (item) => {
-        if (item) {
-          return <div>{item}</div>;
-        } else {
-          return <div className="text-[#515f76]">No Data</div>;
-        }
-      },
-    },
+    // {
+    //   title: (
+    //     <h1 className="text-[16px] font-[600] text-[#344054]">
+    //       Assigned Class
+    //     </h1>
+    //   ),
+    //   dataIndex: "className",
+    //   key: "className",
+    //   render: (item) => {
+    //     if (item) {
+    //       return <div>{item}</div>;
+    //     } else {
+    //       return <div className="text-[#515f76]">No Data</div>;
+    //     }
+    //   },
+    // },
   ];
 
   const courseColumns = [
@@ -153,19 +154,19 @@ function UpdateClass() {
     },
     {
       title: <h1 className="text-[16px] font-[600] text-[#344054]">Subject</h1>,
-      dataIndex: "subject",
-      key: "subject",
+      dataIndex: "course_name",
+      key: "course_name",
       render: (item) => {
-        return <div>{item.name}</div>;
+        return <div>{item.split(" ")[0]}</div>;
       },
     },
     {
       title: <h1 className="text-[16px] font-[600] text-[#344054]">Grade</h1>,
-      dataIndex: "class",
-      key: "class",
+      dataIndex: "course_name",
+      key: "course_name",
       render: (item) => {
         if (item) {
-          return <div>{item.level}</div>;
+          return <div>{item.split(" ")[1].split("")[0]}</div>;
         } else {
           return <div className="text-[#515f76]">No Data</div>;
         }
@@ -173,11 +174,11 @@ function UpdateClass() {
     },
     {
       title: <h1 className="text-[16px] font-[600] text-[#344054]">Section</h1>,
-      dataIndex: "class",
-      key: "class",
+      dataIndex: "course_name",
+      key: "course_name",
       render: (item) => {
         if (item) {
-          return <div>{item.section}</div>;
+          return <div>{item.split(" ")[1].split("")[1]}</div>;
         } else {
           return <div className="text-[#515f76]">No Data</div>;
         }
@@ -481,15 +482,15 @@ function UpdateClass() {
               <Tabs defaultActiveKey="1">
                 <Tabs.TabPane
                   tab={
-                    <p className="text-sm font-[600] text-center ml-0 font-jakarta">
+                    <span className="text-lg font-[500] text-center ml-0 font-jakarta">
                       Profile
-                    </p>
+                    </span>
                   }
                   key="1"
                 >
                   <Button
                     icon={<FontAwesomeIcon className="pr-2" icon={faEdit} />}
-                    className="btn-confirm bg-[#E7752B] text-[white] "
+                    className="btn-confirm !border-[#E7752B] !text-[#E7752B] "
                     onClick={handleUpdate}
                   >
                     Finish Review
@@ -506,8 +507,8 @@ function UpdateClass() {
                             name="level"
                             type={"number"}
                             className="rounded-lg"
-                            defaultValue={data.level}
-                            // onChange={(e) => handleClass(e)}
+                            value={data.level}
+                          // onChange={(e) => handleClass(e)}
                           />
                         </div>
                       </div>
@@ -519,7 +520,7 @@ function UpdateClass() {
                           className="rounded-lg"
                           name="section"
                           value={data.section}
-                          onChange={(e) => handleClass(e)}
+                        // onChange={(e) => handleClass(e)}
                         />
                       </div>
                       <div className="py-2 ml-10 w-[20vw]">
@@ -583,9 +584,9 @@ function UpdateClass() {
                 </Tabs.TabPane>
                 <Tabs.TabPane
                   tab={
-                    <p className="text-sm font-[600] text-center ml-0 font-jakarta">
+                    <span className="text-lg font-[500] text-center ml-0 font-jakarta">
                       Attendance
-                    </p>
+                    </span>
                   }
                   key="2"
                 >

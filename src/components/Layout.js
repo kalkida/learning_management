@@ -279,26 +279,26 @@ const Layouts = () => {
                 ),
                 link: "/admin",
               },
-              {
-                text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
-                    Message
-                  </p>
-                ),
-                Icon: (
-                  <Icon
-                    name="message-square-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
-                link: "/message",
-              },
+              // {
+              //   text: (
+              //     <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+              //       Message
+              //     </p>
+              //   ),
+              //   Icon: (
+              //     <Icon
+              //       name="message-square-outline"
+              //       fill="#667085"
+              //       size="large" // small, medium, large, xlarge
+              //       animation={{
+              //         type: "pulse", // zoom, pulse, shake, flip
+              //         hover: true,
+              //         infinite: false,
+              //       }}
+              //     />
+              //   ),
+              //   link: "/message",
+              // },
               {
                 text: (
                   <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left h-2">

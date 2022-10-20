@@ -8,8 +8,6 @@ import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 
-const { Option } = Select;
-
 function TeacherView() {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -103,31 +101,25 @@ function TeacherView() {
     },
     {
       title: "Subject",
-      dataIndex: "subject",
-      key: "subject",
+      dataIndex: "course_name",
+      key: "course_name",
       render: (item) => {
         if (item) {
-          return <div>{item?.name}</div>;
+          return <div>{item.split(" ")[0]}</div>;
         } else {
-          return <Tag>Teacher Not Assigned To class</Tag>;
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
       },
     },
     {
       title: "Class",
-      dataIndex: "class",
-      key: "class",
+      dataIndex: "course_name",
+      key: "course_name",
       render: (item) => {
         if (item) {
-          return (
-            <div>
-              {item.level}
-              {"   "}
-              {item.section}
-            </div>
-          );
+          return <div>{item.split(" ")[1]}</div>;
         } else {
-          return <Tag>Teacher is Not Assigned</Tag>;
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
       },
     },
@@ -136,7 +128,7 @@ function TeacherView() {
   return (
     <>
       <div className="w-[100%]  -mt-20">
-        <div className=" flex flex-row  pb-2 -mt-4 justify-between  py-7 ">
+        <div className=" flex flex-row  mb-1 -mt-4 justify-between  py-7 ">
           <div className="flex flex-row  w-[40%] justify-between ">
             <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
               <img
@@ -147,7 +139,7 @@ function TeacherView() {
             </div>
             <div className="flex flex-col justify-center align-baseline mt-2 ml-5 w-[100%]">
               <div className="flex flex-row">
-                <h3 className="text-lg font-bold font-jakarta ">
+                <h3 className="text-lg font-bold font-jakarta capitalize">
                   {data.first_name + " " + data.last_name}
                 </h3>
               </div>
@@ -209,11 +201,15 @@ function TeacherView() {
         <div className="tab-content">
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane
-              tab={<p className="text-base font-bold text-center ">Profile</p>}
+              tab={
+                <span className="text-base font-jakarta text-center ">
+                  Profile
+                </span>
+              }
               key="1"
             >
               <Button
-                className="float-right -mt-14 text-[#E7752B]"
+                className="float-right -mt-14 !text-[#E7752B]"
                 icon={
                   <FontAwesomeIcon
                     className="pr-2 text-sm text-[#E7752B] bg-[white]"
@@ -224,7 +220,7 @@ function TeacherView() {
               >
                 Edit
               </Button>
-              <div className="flex flex-row justify-between w-[50%]">
+              <div className="flex flex-row justify-between w-[50%] mb-10">
                 <div>
                   <h1 className="text-4xl font-bold  font-jakarta mb-4 text-center">
                     7,8
@@ -250,24 +246,23 @@ function TeacherView() {
                   </span>
                 </div>
               </div>
-              <div className="teacher-profile mt-10"></div>
-              {/* </div> */}
+
               <Table dataSource={teacherData} columns={teacherColumn} />
             </Tabs.TabPane>
-            {/* <Tabs.TabPane
+            <Tabs.TabPane
               tab={
-                <p className="text-base font-bold text-center ml-5 font-jakarta">
+                <span className="text-base font-jakarta text-center ">
                   Course
-                </p>
+                </span>
               }
               key="2"
             >
               <Button
                 color="#E7752B"
-                className="btn-confirm bg-[#E7752B] "
+                className="float-right -mt-14 !text-[#E7752B]"
                 icon={
                   <FontAwesomeIcon
-                    className="pr-2 text-sm text-[white] hover:text-[#E7752B]"
+                    className="pr-2 text-sm text-[#E7752B] bg-[white]"
                     icon={faPen}
                   />
                 }
@@ -283,7 +278,7 @@ function TeacherView() {
                 </div>
                 <Table dataSource={data.course} columns={columns} />
               </div>
-            </Tabs.TabPane> */}
+            </Tabs.TabPane>
           </Tabs>
         </div>
       </div>

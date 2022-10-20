@@ -17,6 +17,9 @@ import "../modals/courses/style.css";
 import { PlusOutlined } from "@ant-design/icons";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { SearchOutlined } from "@ant-design/icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -177,7 +180,7 @@ export default function AddStudnets() {
       key: "action",
       width: "10%",
       render: (_, record) => (
-        <Space size="middle">
+        <div className="flex flex-row justify-around">
           <a
             className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
@@ -190,7 +193,7 @@ export default function AddStudnets() {
           >
             Update
           </a>
-        </Space>
+        </div>
       ),
     },
   ];
@@ -205,11 +208,11 @@ export default function AddStudnets() {
   }, [updateComplete]);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] p-6 -mt-14">
-      <div className="list-header mb-10">
+    <div className="bg-[#F9FAFB] h-[100vh]  -mt-14">
+      <div className="list-header mb-2">
         <h1 className="text-2xl  font-[600] font-jakarta">List Of Students</h1>
       </div>
-      <div className="list-sub">
+      <div className="list-sub mb-10">
         <div className="list-filter">
           <Select
             placeholder="Grade"
@@ -236,28 +239,20 @@ export default function AddStudnets() {
         </div>
         <div className="course-search">
           <div>
-            <Search
-              placeholder="input search text"
-              bordered={true}
-            // onSearch={onSearch}
+            <Input
+              style={{ width: 200 }}
+              className="mr-3 rounded-lg"
+              placeholder="Search"
+              //onSearch={onSearch}
+              prefix={<SearchOutlined className="site-form-item-icon" />}
             />
+
           </div>
           <Button
             onClick={() => add()}
-            className="hover:border-[#E7752B] hover:border-[2px]"
-            style={{
-              padding: 10,
-              borderColor: "#E7752B",
-              borderWidth: 2,
-              color: "#E7752B",
-              borderRadius: 5,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "white",
-            }}
+            icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
+            className="hover:border-[#E7752B] hover:font-[500] !text-[#E7752B] !border-[#E7752B]"
           >
-            <PlusOutlined />
             Add Student
           </Button>
         </div>

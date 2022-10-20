@@ -29,6 +29,7 @@ import {
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
 import { fetchSubject, fetchClass, fetchclassFromCourse } from "../funcs";
+import { MailOutlined } from "@ant-design/icons";
 import "./style.css";
 
 const { Option } = Select;
@@ -405,22 +406,11 @@ function TeacherUpdate() {
                   {data.first_name + " " + data.last_name}
                 </h3>
               </div>
-              <div className="flex flex-row align-bottom">
-                <Icon
-                  name="message-square-outline"
-                  fill="#E7752B"
-                  size="large"
-                  animation={{
-                    type: "pulse",
-                    hover: true,
-                    infinite: false,
-                  }}
-                />
-                <div>
-                  <h3 className="text-md text-[#E7752B] pl-1 font-jakarta">
-                    Contact
-                  </h3>
-                </div>
+              <div className="flex flex-row align-bottom text-[#E7752B] items-center">
+                <MailOutlined className="mr-2" />
+                <h3 className="text-md text-[#E7752B] mb-0 font-jakarta">
+                  Contact
+                </h3>
               </div>
             </div>
           </div>
@@ -445,17 +435,14 @@ function TeacherUpdate() {
             </div>
 
             <div className="flex flex-row ">
-              <h3 className="text-lg font-[600] font-jakarta text-[#344054]">
+              <h3 className="text-lg font-[500] font-jakarta text-[#344054] border-r-2 pr-2">
                 Subject
               </h3>
               <div>
                 {subjectloaded ? (
                   <div>
                     {data?.course ? (
-                      <h4
-                        className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta
-                text-[#667085] p-[1px] ml-2"
-                      >
+                      <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] p-[1px] ml-2">
                         {subjects
                           ?.slice(0, 2)
                           .map((item, i) => item.name + ",")}
@@ -601,8 +588,8 @@ function TeacherUpdate() {
                         Date Of Birth
                       </h1>
                       <DatePicker
-                        className="!border-[2px]"
-                        style={{ width: "100%", height: "4vh" }}
+                        // className="!border-[2px]"
+                        style={{ width: "100%" }}
                         onChange={handleDob}
                         defaultValue={
                           updateTeacher.DOB
@@ -616,7 +603,7 @@ function TeacherUpdate() {
                         Sex
                       </h1>
                       <Select
-                        className="!border-[2px] h-[4vh]"
+                        // className="!border-[2px] h-[4vh]"
                         defaultValue={updateTeacher.sex}
                         placeholder="Select Gender"
                         onChange={handleGender}
@@ -638,7 +625,7 @@ function TeacherUpdate() {
                       </h1>
 
                       <DatePicker
-                        className="!border-[2px] h-[2rem] w-[100%]"
+                        className=" w-[100%]"
                         onChange={handleWork}
                         defaultValue={
                           updateTeacher.working_since
