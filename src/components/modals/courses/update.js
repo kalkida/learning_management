@@ -68,6 +68,8 @@ function UpdateCourse() {
   });
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
+    console.log(newSelectedRowKeys);
+    updateCourse.teachers= newSelectedRowKeys
   };
   const rowSelection = {
     selectedRowKeys,
@@ -86,11 +88,13 @@ function UpdateCourse() {
   const handleUpdate = async () => {
     setLoading(true);
     updateCourse.course_name = selectedSubject + " " + selectedLevel;
+    console.log("teacher update    ", updateCourse.teachers)
     updateCourse.teachers?.map((item, i) => {
       if (typeof item === "object") {
         updateCourse.teachers[i] = item.key;
       }
     });
+    console.log(updateCourse.teachers)
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
       .then((_) => {
         setLoading(false);
