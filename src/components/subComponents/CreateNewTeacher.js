@@ -211,7 +211,6 @@ const CreateNewTeacher = () => {
       data.key = doc.id;
       getData(data).then((response) => {
         temporary.push(response);
-        console.log(response);
       });
     });
 
@@ -469,7 +468,7 @@ const CreateNewTeacher = () => {
                   Date Of Birth
                 </h1>
                 <DatePicker
-                  className="!border-[2px]"
+                  // className="!border-[2px]"
                   style={{ width: "100%", height: "4vh" }}
                   onChange={handleDob}
                 />
@@ -477,7 +476,7 @@ const CreateNewTeacher = () => {
               <div className="-mt-2">
                 <h1 className="text-[#344054] pb-[6px] font-jakarta">Sex</h1>
                 <Select
-                  className="!border-[2px] h-[4vh]"
+                  // className="!border-[2px] h-[4vh]"
                   placeholder="Select Gender"
                   onChange={handleGender}
                   optionLabelProp="label"
@@ -498,7 +497,7 @@ const CreateNewTeacher = () => {
                 </h1>
 
                 <DatePicker
-                  className="!border-[2px] h-[2rem] w-[100%]"
+                  className=" w-[100%]"
                   onChange={handleWork}
                 />
               </div>

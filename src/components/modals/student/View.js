@@ -23,7 +23,7 @@ import moment from "moment";
 import { Card, Progress } from "antd";
 import Grid from "@mui/material/Grid";
 import "./style.css";
-import { borderRadius } from "@mui/system";
+
 
 function ViewStudent() {
   const navigate = useNavigate();
@@ -293,7 +293,7 @@ function ViewStudent() {
           </div>
           <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%] ">
             <div className="flex flex-row mb-2">
-              <h3 className="text-lg font-bold font-jakarta ">
+              <h3 className="text-lg font-bold font-jakarta capitalize">
                 {data.first_name + " " + data.last_name}
               </h3>
               <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta  text-[#667085] p-[1px] ml-2">
@@ -319,9 +319,9 @@ function ViewStudent() {
         <Tabs defaultActiveKey="0">
           <Tabs.TabPane
             tab={
-              <p className="text-base  text-center font-[500] font-jakarta">
+              <span className="text-base  text-center font-[500] font-jakarta">
                 OverView
-              </p>
+              </span>
             }
             key="0"
           >
@@ -335,38 +335,22 @@ function ViewStudent() {
             <Grid
               container
               rowSpacing={1}
-              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+              columnSpacing={1}
             >
               <Grid item xs={12} sm={12} md={4}>
                 <Card
                   bordered={true}
-                  className="w-[100%] min-h-[419px] h-[100%] "
-                  title={
-                    <h1 className="text-[#475467] text-lg font-[600] mb-[10px]">
-                      Daily Report
-                    </h1>
-                  }
+                  className="w-[100%] min-h-[419px] h-[100%]"
+                  title={<h1 className="text-[#475467] font-[600] mb-[10px]"> Daily Report</h1>}
                 >
-                  <div className="flex flex-row w-[100%]  flex-wrap justify-around">
-                    <div className=" flex flex-col justify-center">
-                      <Progress
-                        type="circle"
-                        strokeColor={"#EA8848"}
-                        percent={75}
-                        width={"14rem"}
-                      />
-                    </div>
-                    <div className="flex flex-col justify-center mt-4">
-                      <h1 className="text-md flex flex-row">
-                        {" "}
-                        <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>
-                        7 Assignments
+                  <div className="flex flex-row w-[100%] mt-[25%] flex-wrap justify-around">
+                    <div className="flex flex-col items-center  justify-center text-[#98A2B3]"
+
+                    >
+                      <h1 className="text-[20px] text-[#98A2B3] ">
+                        Data Not Available Yet
                       </h1>
-                      <h1 className="text-md flex flex-row">
-                        {" "}
-                        <a className="w-5 mr-2 h-2 mt-2 bg-[#98A2B3] rounded-lg"></a>
-                        2 Participating Clubs
-                      </h1>
+
                     </div>
                   </div>
                 </Card>
@@ -436,9 +420,9 @@ function ViewStudent() {
 
           <Tabs.TabPane
             tab={
-              <p className="text-base font-[500] text-center  font-jakarta">
+              <span className="text-base font-[500] text-center  font-jakarta">
                 Profile
-              </p>
+              </span>
             }
             key="1"
           >
@@ -483,13 +467,6 @@ function ViewStudent() {
             </div>
             <h1
               className="text-[#344054] font-jakarta text-xl font-bold mt-4 mb-8"
-            // style={{
-            //   fontSize: 20,
-            //   fontWeight: "600",
-            //   fontFamily: "Plus Jakarta Sans",
-            //   marginTop: "3%",
-            //   marginBottom: "2%",
-            // }}
             >
               Student Information
             </h1>
@@ -504,21 +481,10 @@ function ViewStudent() {
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<p className="text-base text-center font-[500] font-jakarta">Attendance </p>}
+            tab={<span className="text-base text-center font-[500] font-jakarta">Attendance </span>}
             key="2"
           >
-            <Button className="btn-confirm  !text-[#E7752B]" onClick={handleUpdate}>
-              <FontAwesomeIcon
-                icon={faPenAlt}
-                className="text-[#E7752B] mr-2 hover:text-[#E7752B]"
-              />
-              Edit
-            </Button>
             <div className="st-at">
-              {/* <h1 className="text-xl font-bold mb-10 font-jakarta">
-                {" "}
-                Attendance
-              </h1> */}
               <div>
                 <div className="flex justify-between mb-4 ">
                   <div className="flex p-4 items-center">

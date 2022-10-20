@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Space, Table, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Icon from "react-eva-icons";
-import { faAdd, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   collection,
@@ -15,14 +14,12 @@ import {
 } from "firebase/firestore";
 import { firebaseAuth, firestoreDb } from "../../firebase";
 import { Button } from "antd";
-import { Link } from "react-router-dom";
 import CreateSubject from "../modals/subject/createSubject";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 import "../modals/courses/style.css";
 
 const { Option } = Select;
@@ -427,7 +424,7 @@ export default function ListCourses() {
           </div>
 
           <Button
-            className=" !text-[#E7752B] "
+            className=" !text-[#E7752B] !border-[#E7752B]"
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
             onClick={() => edit()}
           >

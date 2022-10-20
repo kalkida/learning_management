@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Tag, Modal, Button } from "antd";
+import { Space, Table, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -11,23 +11,15 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { firebaseAuth, firestoreDb } from "../../firebase";
-import { Link } from "react-router-dom";
-import { async } from "@firebase/util";
-import View from "../modals/classes/view";
-import Update from "../modals/classes/update";
-import CreateSection from "../modals/section/createSection";
 import "../modals/courses/style.css";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
-import {
-  InfoCircleOutlined,
-  UserOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import { Tooltip } from "antd";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import "../modals/courses/style.css";
 
 const { Option } = Select;
@@ -246,7 +238,7 @@ export default function ListClasses() {
       key: "action",
       width: "10%",
       render: (_, record) => (
-        <Space size="middle">
+        <div className="flex flex-row justify-around">
           <a
             className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
@@ -259,7 +251,7 @@ export default function ListClasses() {
           >
             Update
           </a>
-        </Space>
+        </div>
       ),
     },
   ];
@@ -310,7 +302,7 @@ export default function ListClasses() {
         <div className="flex flex-row  w-[30%]">
           <Select
             placeholder="Level"
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] mr-5"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5"
             bordered={false}
             style={{ width: 141 }}
             onChange={handleFilterLevel}
@@ -344,9 +336,10 @@ export default function ListClasses() {
           />
           <Button
             onClick={() => handleAdd()}
-            className="border-[2px] border-[#E7752B] flex flex-row justify-center text-[#E7752B] bg-white rounded-md  "
+            icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
+            className="border-[2px] !border-[#E7752B] flex flex-row justify-center !text-[#E7752B] bg-white rounded-md  "
           >
-            <PlusOutlined className="p-[1px] text-[#E7752B]" />
+
             Add Classes
           </Button>
         </div>

@@ -161,7 +161,7 @@ export default function AddTeacher() {
       data.key = response.id;
     } else {
       console.log("none exist data", data);
-      console.log("data  ",ID , "and  ",teach)
+      console.log("data  ", ID, "and  ", teach)
       //removeSingleClassToTeacher(ID, teach);
     }
 
@@ -391,7 +391,7 @@ export default function AddTeacher() {
       key: "action",
       width: "10%",
       render: (_, record) => (
-        <Space size="middle">
+        <div className="flex flex-row justify-around">
           <a
             className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleView(record)}
@@ -404,7 +404,7 @@ export default function AddTeacher() {
           >
             Update
           </a>
-        </Space>
+        </div>
       ),
     },
   ];
@@ -423,7 +423,7 @@ export default function AddTeacher() {
       <div className="list-sub">
         <div className="flex flex-row w-[30%]">
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] mr-5"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5"
             placeholder="Course"
             bordered={false}
             style={{ width: 120 }}

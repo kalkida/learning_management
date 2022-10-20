@@ -166,14 +166,14 @@ const CreateCrouse = () => {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[auto] pb-20  px-6 -mt-14">
+    <div className="bg-[#F9FAFB] h-[auto] pb-20  -mt-14">
       <div className="flex flex-row justify-between -mt-10 mb-8 z-0">
         <h1 className="text-2xl font-bold font-jakarta text-[#344054] ">
           Add Course
         </h1>
         <div className="pr-0  flex flex-row">
           <Button
-            className="border-[#E7752B] border-[2px] text-[#E7752B] rounded-lg shadow-md -z-0 ml-10"
+            className="!border-[#E7752B] border-[2px] !text-[#E7752B] rounded-lg shadow-md -z-0 ml-10"
             icon={<FontAwesomeIcon className="mr-2" icon={faArrowRight} />}
             onClick={createNewCourse}
           >

@@ -138,7 +138,7 @@ function TeacherView() {
             </div>
             <div className="flex flex-col justify-center align-baseline mt-2 ml-5 w-[100%]">
               <div className="flex flex-row">
-                <h3 className="text-lg font-bold font-jakarta ">
+                <h3 className="text-lg font-bold font-jakarta capitalize">
                   {data.first_name + " " + data.last_name}
                 </h3>
               </div>
@@ -195,7 +195,7 @@ function TeacherView() {
               key="1"
             >
               <Button
-                className="float-right -mt-14 text-[#E7752B]"
+                className="float-right -mt-14 !text-[#E7752B]"
                 icon={
                   <FontAwesomeIcon
                     className="pr-2 text-sm text-[#E7752B] bg-[white]"
@@ -241,7 +241,7 @@ function TeacherView() {
             >
               <Button
                 color="#E7752B"
-                className="float-right -mt-14 text-[#E7752B]"
+                className="float-right -mt-14 !text-[#E7752B]"
                 icon={
                   <FontAwesomeIcon
                     className="pr-2 text-sm text-[#E7752B] bg-[white]"

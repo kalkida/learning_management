@@ -364,13 +364,13 @@ const CreateClasses = () => {
 
   return (
     <>
-      <div className="bg-[#F9FAFB] h-[auto] pb-20  px-6 -mt-14">
+      <div className="bg-[#F9FAFB] h-[auto] pb-20 -mt-14">
         <div className="flex flex-row justify-between -mt-10 mb-8 z-0">
           <h1 className="text-2xl font-bold font-jakarta text-[#344054] ">
             Add Class
           </h1>
           <Button
-            className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
+            className="!border-[#E7752B] !text-[#E7752B] rounded-lg shadow-md -z-0"
             onClick={() => createNewClass()}
           >
             Confirm

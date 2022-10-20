@@ -322,7 +322,7 @@ function ViewClass() {
     getCourses();
   }, []);
   return (
-    <div className="bg-[#F9FAFB] p-4">
+    <div className="bg-[#F9FAFB] py-4">
       <div className="flex flex-row justify-between w-[100%] -mt-20 ">
         <div className="flex flex-row justify-center align-middle ">
           <div className="flex flex-row">
@@ -346,9 +346,9 @@ function ViewClass() {
         <Tabs defaultActiveKey="1" className="pb-30">
           <Tabs.TabPane
             tab={
-              <p className="text-sm font-[600] text-center ml-0 font-jakarta ">
+              <span className="text-lg font-[500] text-center ml-0 font-jakarta ">
                 Profile
-              </p>
+              </span>
             }
             key="1"
           >
@@ -359,7 +359,7 @@ function ViewClass() {
                   icon={faEdit}
                 />
               }
-              className=" text-center bg-[white] border-[2px] border-[#EA8848] text-[#EA8848] rounded-lg float-right -mt-14"
+              className=" text-center  border-[2px] !border-[#E7752B] !text-[#E7752B] rounded-lg float-right -mt-14"
               onClick={handleUpdate}
             >
               Edit
@@ -398,9 +398,9 @@ function ViewClass() {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <p className="text-sm font-[600] text-center ml-0 font-jakarta">
+              <span className="text-lg font-[500] text-center ml-0 font-jakarta">
                 Attendance
-              </p>
+              </span>
             }
             key="2"
           >

@@ -262,7 +262,7 @@ function UpdateCourse() {
   return (
     <>
       {loading ? (
-        <div className="bg-[#F9FAFB] h-[100vh] p-4">
+        <div className="bg-[#F9FAFB] h-[100vh] py-4">
           <div className="flex flex-row justify-between w-[100%] -mt-20 border-b-[1px] p-3">
             <div className="flex flex-row justify-between align-middle h-[78px]">
               <div className="rounded-full  border-[2px] border-[#E7752B] mr-10">
@@ -297,7 +297,7 @@ function UpdateCourse() {
               <div className="flex flex-row mt-4 justify-end ">
                 <Button
                   icon={<FontAwesomeIcon className="pr-2" icon={faPen} />}
-                  className=" bg-[#E7752B] text-white items-center rounded-lg "
+                  className=" !text-[#E7752B] !border-[#E7752B] items-center rounded-lg "
                   onClick={handleUpdate}
                 >
                   Finalize Review
@@ -328,7 +328,7 @@ function UpdateCourse() {
                 <div className="flex flex-col mt-[24px]">
                   <span
                     className="text-sm font-jakarta font-[500"
-                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
+                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
                   >
                     Subject
                   </span>
@@ -444,9 +444,9 @@ function UpdateCourse() {
                       defaultValue={
                         item.time.length
                           ? [
-                              moment(JSON.parse(item.time[0])),
-                              moment(JSON.parse(item.time[1])),
-                            ]
+                            moment(JSON.parse(item.time[0])),
+                            moment(JSON.parse(item.time[1])),
+                          ]
                           : []
                       }
                       onChange={(e) => handleSchedulerTime(e, i)}
