@@ -25,13 +25,15 @@ function ViewClass() {
   const [datas, setData] = useState([]);
   const [students, setStudents] = useState([]);
   const [courseLoading, setCourseLoading] = useState(true);
-  const [classData, setClassData] = useState([]);
+  const [studentClass, setStudentClass] = useState([]);
   const [studentLoading, setStudentLoading] = useState(true);
 
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   var { data } = state;
   const [selectedRowKeys, setSelectedRowKeys] = useState(data.course);
+
+  console.log(data)
 
   const navigate = useNavigate();
 
@@ -102,6 +104,7 @@ function ViewClass() {
       },
     },
   ];
+
   const columns = [
     {
       title: <h1 className="text-[16px] font-[600] text-[#344054]">Name</h1>,
@@ -142,7 +145,6 @@ function ViewClass() {
 
           return (
             <h1 className=" text-[#344054]">
-              {/* {moment(JSON.parse(value)).format("mm-yy-dd")} */}
               {moment(todays).year() - moment(JSON.parse(value)).year()}
             </h1>
           );
@@ -183,7 +185,6 @@ function ViewClass() {
       dataIndex: "class",
       key: "class",
       render: (value, data) => {
-        console.log("schedule", data);
         if (data?.schedule) {
           return (
             <h1 className="text-[14px] font-[600] text-[#344054]">
@@ -201,7 +202,6 @@ function ViewClass() {
       key: "teachers",
       width: "30%",
       render: (item, other) => {
-        console.log("teachers", other);
         return (
           <div className=" text-[#344054]">
             {other.teachers.map((teacher) => (
@@ -215,6 +215,54 @@ function ViewClass() {
       },
     },
   ];
+
+  const studentColumns = [
+    {
+      title: "Student Name",
+      dataIndex: "class",
+      key: "name",
+      render: (_, record) => (
+        <p>{record.first_name + " " + record.last_name}</p>
+      ),
+    },
+    {
+      title: "Id",
+      dataIndex: "studentId",
+      key: "studentId",
+      render: (item, record) => {
+        return <p>{item}</p>;
+      },
+    },
+
+    {
+      title: "Sex",
+      dataIndex: "class",
+      key: "name",
+      render: (_, record) => (
+        <p>{record.sex}</p>
+      ),
+    },
+
+    {
+      title: "Days Absent",
+      dataIndex: "attendance",
+      key: "attendance",
+      render: (_, record) => (
+        <a
+          className={
+            record.attendace
+              ? record.attendace.length <= 0
+                ? "bg-lime-600 p-1 text-white rounded-sm"
+                : "bg-[red] p-2 text-[white] rounded-sm"
+              : null
+          }
+        >
+          {record.attendace ? record.attendace.length : 0}
+        </a>
+      ),
+    },
+  ];
+
   const getSchool = async () => {
     const docRef = doc(firestoreDb, "schools", uid.school);
     const docSnap = await getDoc(docRef);
@@ -225,6 +273,7 @@ function ViewClass() {
     } else {
     }
   };
+
   const getClassData = async (ID) => {
     const docRef = doc(firestoreDb, "class", ID);
 
@@ -271,12 +320,10 @@ function ViewClass() {
       where("school_id", "in", branches.branches)
     );
     var temporary = [];
-    console.log(data.course);
     const snap = await getDocs(q);
     for (var i = 0; i < data.course.length; i++) {
       snap.forEach(async (doc) => {
         var datause = doc.data();
-        console.log(datause);
         datause.key = doc.id;
         if (datause.key == data.course[i]) {
           getData(datause).then((response) => temporary.push(response));
@@ -287,6 +334,48 @@ function ViewClass() {
       setData(temporary);
       setCourseLoading(false);
     }, 2000);
+  };
+
+  const getStudentByClass = async () => {
+    console.log(data.key)
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school), where("class", "==", data.key)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var datas = doc.data();
+      datas.key = doc.id;
+      data.course?.forEach(async (key) => {
+        datas.attendance = await getAttendace(doc.id, key)
+      })
+      temporary.push(datas);
+    });
+
+    setTimeout(() => {
+      console.log(temporary)
+      setStudentClass(temporary)
+      setStudentLoading(false)
+    }, 2000);
+
+  }
+
+  const getAttendace = async (ID, key) => {
+    const q = query(
+      collection(firestoreDb, "attendanceanddaily", `${key}/attendace`),
+      where("studentId", "==", ID)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    return temporary;
   };
 
   const getStudents = async (ids) => {
@@ -301,7 +390,6 @@ function ViewClass() {
         }
       });
       setStudents(temporary);
-      setStudentLoading(false);
     }
   };
   const onSelectChange = (newSelectedRowKeys) => {
@@ -320,6 +408,7 @@ function ViewClass() {
   useEffect(() => {
     getStudents(data.student);
     getCourses();
+    getStudentByClass();
   }, []);
   return (
     <div className="bg-[#F9FAFB] py-4">
@@ -404,8 +493,8 @@ function ViewClass() {
             }
             key="2"
           >
-            <div className="mt-14 -ml-8">
-              <AttendanceList />
+            <div className="mt-10 ">
+              <Table loading={studentLoading} dataSource={studentClass} columns={studentColumns} />
             </div>
           </Tabs.TabPane>
         </Tabs>

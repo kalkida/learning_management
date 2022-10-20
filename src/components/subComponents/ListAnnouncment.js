@@ -179,6 +179,8 @@ export default function ListAnnouncment() {
       .then((response) => {
         setShowEdit(false);
         message.success("Data is updated successfuly");
+        setEditorState("")
+        setShowPost(true);
         getBlog();
       })
       .catch((error) => {

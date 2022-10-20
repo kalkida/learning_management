@@ -214,7 +214,7 @@ export default function ListCourses() {
     setTimeout(() => {
       setData(temporary);
       setTableTextLoading(false);
-    }, 2000);
+    }, 5000);
   };
 
   const getClass = async () => {

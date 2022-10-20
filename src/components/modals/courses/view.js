@@ -1,26 +1,31 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Input, Button, Select, TimePicker, Tabs, Table } from "antd";
 import moment from "moment";
 import "../courses/style.css";
-import AttendanceList from "../../subComponents/AttendanceList";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-
-const { Option } = Select;
+import { useEffect, useState } from "react";
+import { firestoreDb } from "../../../firebase";
+import { collection, query, where, getDocs, } from "firebase/firestore";
 
 function ViewCourse() {
+
+  const uid = useSelector((state) => state.user.profile);
+  const [student, setStudent] = useState([])
+  const [loading, setLoading] = useState(true)
   const { state } = useLocation();
   const { data } = state;
 
   const navigate = useNavigate();
+
   const columnsA = [
     {
       title: "Day",
       dataIndex: "day",
       key: "day",
       render: (text, record) => {
-        console.log();
-
         if (text) {
           return <div className="font-[500] text-sm font-jakarta">{text}</div>;
         } else {
@@ -37,8 +42,6 @@ function ViewCourse() {
       dataIndex: "time",
       key: "time",
       render: (text, record) => {
-        console.log();
-
         if (record?.time?.length) {
           return (
             <div className="font-[500] text-sm font-jakarta">
@@ -59,8 +62,6 @@ function ViewCourse() {
       dataIndex: "time",
       key: "time",
       render: (text, record) => {
-        console.log(record);
-
         if (record?.time?.length) {
           return (
             <div className="font-[500] text-sm font-jakarta">
@@ -89,9 +90,100 @@ function ViewCourse() {
       ),
     },
   ];
+
+  const studentColumns = [
+    {
+      title: "Student Name",
+      dataIndex: "class",
+      key: "name",
+      render: (_, record) => (
+        <p>{record.first_name + " " + record.last_name}</p>
+      ),
+    },
+    {
+      title: "Id",
+      dataIndex: "studentId",
+      key: "studentId",
+      render: (item, record) => {
+        return <p>{item}</p>;
+      },
+    },
+
+    {
+      title: "Sex",
+      dataIndex: "class",
+      key: "name",
+      render: (_, record) => (
+        <p>{record.sex}</p>
+      ),
+    },
+
+    {
+      title: "Days Absent",
+      dataIndex: "attendance",
+      key: "attendance",
+      render: (_, record) => (
+        <a
+          className={
+            record.attendace
+              ? record.attendace.length <= 0
+                ? "bg-lime-600 p-1 text-white rounded-sm"
+                : "bg-[red] p-2 text-[white] rounded-sm"
+              : null
+          }
+        >
+          {record.attendace ? record.attendace.length : 0}
+        </a>
+      ),
+    },
+  ];
+
   const handleUpdate = () => {
     navigate("/update-course", { state: { data } });
   };
+
+  const getStudent = async () => {
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school), where("course", "array-contains", data.key)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      data.attendance = await getAttendace(doc.id)
+      temporary.push(data);
+    });
+
+    setTimeout(() => {
+      setStudent(temporary)
+      setLoading(false)
+    }, 2000);
+
+  }
+
+  const getAttendace = async (ID) => {
+    const q = query(
+      collection(firestoreDb, "attendanceanddaily", `${data.key}/attendace`),
+      where("studentId", "==", ID)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    return temporary;
+  };
+
+  useEffect(() => {
+    getStudent();
+  }, [])
+
   return (
     <div className="bg-[#F9FAFB] h-[100vh] py-4">
       <div className="flex flex-row justify-between w-[100%] -mt-20 ">
@@ -194,7 +286,7 @@ function ViewCourse() {
             key="2"
           >
             <div className="mt-14"></div>
-            <AttendanceList />
+            <Table loading={loading} dataSource={student} columns={studentColumns} />
           </Tabs.TabPane>
         </Tabs>
       </div>
