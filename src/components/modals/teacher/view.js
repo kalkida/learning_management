@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Select, Tabs, Table, Tag } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchSubject } from "../funcs";
-import { MailFilled } from "@ant-design/icons";
-import moment from "moment";
+import Icon from "react-eva-icons";
+
 import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
@@ -153,7 +153,16 @@ function TeacherView() {
               </div>
               <div className="flex flex-row align-bottom">
                 <div>
-                  <MailFilled className="text-[#E7752B]" />
+                  <Icon
+                    name="message-square-outline"
+                    fill="#E7752B"
+                    size="large"
+                    animation={{
+                      type: "pulse",
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
                 </div>
                 <div>
                   <h3 className="text-md text-[#E7752B] p-1 font-jakarta">

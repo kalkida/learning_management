@@ -94,7 +94,6 @@ function TeacherUpdate() {
               updateTeacher.avater = valueRef.current;
 
               if (updateTeacher.avater !== null) {
-                console.log(updateTeacher);
                 setDoc(
                   doc(firestoreDb, "teachers", data.key),
                   { ...updateTeacher, course: selectedRowKeysCourse },
