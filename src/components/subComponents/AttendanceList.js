@@ -281,7 +281,7 @@ function AttendanceList() {
 
   return (
     <>
-      <div className="bg-[#F9FAFB] h-[100vh] px-8 -mt-14">
+      <div className="bg-[#F9FAFB] h-[100vh] -mt-14">
         <div className="list-header mb-10">
           {currentURL == "/attendance" ? (
             <h1 className="text-2xl font-[600] font-jakarta">Attendance</h1>
@@ -289,7 +289,7 @@ function AttendanceList() {
         </div>
         <div className="at-filters">
           <div>
-            <Select placeholder={"Select class"} onChange={handleFilterClass}>
+            <Select placeholder={"Select class"} onChange={handleFilterClass} className="!mr-4">
               {classes?.map((item, i) => (
                 <Option
                   key={item.key}
