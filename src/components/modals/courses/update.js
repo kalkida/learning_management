@@ -41,6 +41,7 @@ const { Option } = Select;
 function UpdateCourse() {
   const { state } = useLocation();
   const { data } = state;
+  console.log("dat", data);
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
   const [input, setInput] = useState([]);
@@ -69,7 +70,7 @@ function UpdateCourse() {
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
     console.log(newSelectedRowKeys);
-    updateCourse.teachers= newSelectedRowKeys
+    updateCourse.teachers = newSelectedRowKeys;
   };
   const rowSelection = {
     selectedRowKeys,
@@ -88,13 +89,13 @@ function UpdateCourse() {
   const handleUpdate = async () => {
     setLoading(true);
     updateCourse.course_name = selectedSubject + " " + selectedLevel;
-    console.log("teacher update    ", updateCourse.teachers)
+    console.log("teacher update    ", updateCourse.teachers);
     updateCourse.teachers?.map((item, i) => {
       if (typeof item === "object") {
         updateCourse.teachers[i] = item.key;
       }
     });
-    console.log(updateCourse.teachers)
+    console.log(updateCourse.teachers);
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
       .then((_) => {
         setLoading(false);
@@ -332,7 +333,7 @@ function UpdateCourse() {
                 <div className="flex flex-col mt-[24px]">
                   <span
                     className="text-sm font-jakarta font-[500"
-                  //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
+                    //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
                   >
                     Subject
                   </span>
@@ -448,9 +449,9 @@ function UpdateCourse() {
                       defaultValue={
                         item.time.length
                           ? [
-                            moment(JSON.parse(item.time[0])),
-                            moment(JSON.parse(item.time[1])),
-                          ]
+                              moment(JSON.parse(item.time[0])),
+                              moment(JSON.parse(item.time[1])),
+                            ]
                           : []
                       }
                       onChange={(e) => handleSchedulerTime(e, i)}

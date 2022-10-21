@@ -302,15 +302,9 @@ export default function ListCourses() {
     {
       title: "Action",
       key: "action",
-      width: "10%",
+      width: "5%",
       render: (_, record) => (
-        <div className="flex flex-row justify-around">
-          <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleView(record)}
-          >
-            View{" "}
-          </a>
+        <div className="flex flex-row justify-around z-0">
           <a
             className="py-1 px-2 text-[12px] text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
             onClick={() => handleUpdate(record)}
@@ -377,7 +371,6 @@ export default function ListCourses() {
     <div className="bg-[#F9FAFB] h-[100vh] -mt-14">
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Course</h1>
-        <CreateSubject />
       </div>
       <div className="list-sub">
         <div className="flex flex-row  w-[30%]">
@@ -422,9 +415,10 @@ export default function ListCourses() {
               prefix={<SearchOutlined className="site-form-item-icon" />}
             />
           </div>
+          <CreateSubject />
 
           <Button
-            className=" !text-[#E7752B] !border-[#E7752B]"
+            className=" !text-[#E7752B] !border-[#E7752B] ml-2"
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
             onClick={() => edit()}
           >
@@ -435,7 +429,17 @@ export default function ListCourses() {
 
       <br />
 
-      <Table loading={tableLoading} columns={columns} dataSource={datas} />
+      <Table
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => handleView(record), // click row
+          };
+        }}
+        pagination={{ position: ["bottomCenter"] }}
+        loading={tableLoading}
+        columns={columns}
+        dataSource={datas}
+      />
     </div>
   );
 }

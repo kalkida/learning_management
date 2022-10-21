@@ -28,7 +28,12 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
-import { fetchSubject, fetchClass, fetchclassFromCourse } from "../funcs";
+import {
+  fetchSubject,
+  fetchClass,
+  fetchclassFromCourse,
+  addSingleTeacherToCourse,
+} from "../funcs";
 import { MailOutlined } from "@ant-design/icons";
 import "./style.css";
 
@@ -54,7 +59,7 @@ function TeacherUpdate() {
     email: data.email,
     first_name: data.first_name,
     last_name: data.last_name,
-    class: data.class,
+    class: [],
     course: data.course,
     phone: data.phone,
     DOB: data.DOB,
@@ -62,6 +67,7 @@ function TeacherUpdate() {
     working_since: data.working_since,
     school_id: data.school_id,
   });
+  // class object is not updating properly so fix it
 
   const handleUpdate = () => {
     if (!file) {
@@ -74,6 +80,9 @@ function TeacherUpdate() {
         }
       )
         .then((_) => {
+          selectedRowKeysCourse.map((items) => {
+            addSingleTeacherToCourse(data.key, items);
+          });
           message.success("Data is updated successfuly");
           navigate("/list-teacher");
         })

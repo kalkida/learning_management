@@ -6,7 +6,7 @@ import "../courses/style.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { fetchTeacher } from "../funcs";
+import { fetchTeacher, fetchCourse } from "../funcs";
 import { useState, useEffect } from "react";
 import {
   collection,
@@ -23,12 +23,11 @@ const { Option } = Select;
 function ViewCourse() {
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-  const [student, setStudent] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [student, setStudent] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
-  const [teachers, setTeachers] = useState([])
-
+  const [teachers, setTeachers] = useState([]);
 
   const getStudents = async (ids) => {
     var temporary = [];
@@ -43,7 +42,7 @@ function ViewCourse() {
         if (ids.includes(doc.id)) {
           temporary.push(data);
         }
-        console.log("temporary: " + temporary)
+        console.log("temporary: " + temporary);
       });
       setTeachers(temporary);
     }
@@ -119,13 +118,13 @@ function ViewCourse() {
       dataIndex: "first_name",
       key: "first_name",
       render: (text, record) => {
-        console.log("record    ", record)
+        console.log("record    ", record);
 
         return (
           <div className="font-[500] text-sm font-jakarta">
             {record.first_name} {record.last_name}
           </div>
-        )
+        );
       },
     },
   ];
@@ -152,9 +151,7 @@ function ViewCourse() {
       title: "Sex",
       dataIndex: "class",
       key: "name",
-      render: (_, record) => (
-        <p>{record.sex}</p>
-      ),
+      render: (_, record) => <p>{record.sex}</p>,
     },
 
     {
@@ -184,7 +181,8 @@ function ViewCourse() {
   const getStudent = async () => {
     const q = query(
       collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school), where("course", "array-contains", data.key)
+      where("school_id", "==", uid.school),
+      where("course", "array-contains", data.key)
     );
     var temporary = [];
 
@@ -192,16 +190,15 @@ function ViewCourse() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      data.attendance = await getAttendace(doc.id)
+      data.attendance = await getAttendace(doc.id);
       temporary.push(data);
     });
 
     setTimeout(() => {
-      setStudent(temporary)
-      setLoading(false)
+      setStudent(temporary);
+      setLoading(false);
     }, 2000);
-
-  }
+  };
 
   const getAttendace = async (ID) => {
     const q = query(
@@ -221,7 +218,7 @@ function ViewCourse() {
 
   useEffect(() => {
     getStudent();
-  }, [])
+  }, []);
 
   return (
     <div className="bg-[#F9FAFB] h-[100vh] py-4">
@@ -325,7 +322,11 @@ function ViewCourse() {
             key="2"
           >
             <div className="mt-14"></div>
-            <Table loading={loading} dataSource={student} columns={studentColumns} />
+            <Table
+              loading={loading}
+              dataSource={student}
+              columns={studentColumns}
+            />
           </Tabs.TabPane>
         </Tabs>
       </div>
