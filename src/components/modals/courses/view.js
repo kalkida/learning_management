@@ -6,22 +6,18 @@ import "../courses/style.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { fetchTeacher } from "../funcs";
 import { useState, useEffect } from "react";
 import {
   collection,
   getDocs,
   query,
   where,
-  doc,
-  getDoc,
 } from "firebase/firestore";
 import { firestoreDb } from "../../../firebase";
 
-const { Option } = Select;
 
 function ViewCourse() {
-  const [datas, setData] = useState([]);
+
   const uid = useSelector((state) => state.user.profile);
   const [student, setStudent] = useState([])
   const [loading, setLoading] = useState(true)

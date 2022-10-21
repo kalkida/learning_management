@@ -634,7 +634,7 @@ const Layouts = () => {
         <Box
           component="main"
           sx={{ flexGrow: 1, p: 3 }}
-          className="bg-[#F9FAFB] w-[100%] overflow-hidden"
+          className="bg-[#F9FAFB] w-[100%] overflow-x-hidden "
         >
           <DrawerHeader />
           <Content className="bg-[#F9FAFB] h-[auto] w-[100%]">
