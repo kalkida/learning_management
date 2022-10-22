@@ -299,21 +299,21 @@ export default function ListCourses() {
       },
     },
 
-    {
-      title: "Action",
-      key: "action",
-      width: "5%",
-      render: (_, record) => (
-        <div className="flex flex-row justify-around z-0">
-          <a
-            className="py-1 px-2 text-[12px] text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleUpdate(record)}
-          >
-            Update
-          </a>
-        </div>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   width: "5%",
+    //   render: (_, record) => (
+    //     <div className="flex flex-row justify-around z-0">
+    //       <a
+    //         className="py-1 px-2 text-[12px] text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+    //         onClick={() => handleUpdate(record)}
+    //       >
+    //         Update
+    //       </a>
+    //     </div>
+    //   ),
+    // },
   ];
   const handleFilterSubject = async (value) => {
     if (value) {

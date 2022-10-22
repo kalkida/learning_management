@@ -56,7 +56,7 @@ function UpdateCourse() {
   );
   const [loading, setLoading] = useState(false);
   const [teacherView, setTeacherView] = useState(true);
-  const [selectedRowKeys, setSelectedRowKeys] = useState(data.teachers);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const [updateCourse, setUpdateCourse] = useState({
     course_name: data.course_name,
@@ -69,33 +69,39 @@ function UpdateCourse() {
   });
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
-    console.log(newSelectedRowKeys);
+
     updateCourse.teachers = newSelectedRowKeys;
   };
+
   const rowSelection = {
-    selectedRowKeys,
+    selectedRowKeys: selectedRowKeys,
     onChange: onSelectChange,
   };
 
   const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
 
   useEffect(() => {
+    var arrayData = [];
     getCourseData();
+
     setTimeout(() => {
       setLoading(true);
     }, 2000);
+
+    data.teachers?.map((item) => {
+      arrayData.push(item.key);
+    });
+    setSelectedRowKeys(arrayData);
   }, []);
 
   const handleUpdate = async () => {
     setLoading(true);
     updateCourse.course_name = selectedSubject + " " + selectedLevel;
-    console.log("teacher update    ", updateCourse.teachers);
     updateCourse.teachers?.map((item, i) => {
       if (typeof item === "object") {
         updateCourse.teachers[i] = item.key;
       }
     });
-    console.log(updateCourse.teachers);
     setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
       .then((_) => {
         setLoading(false);
@@ -198,6 +204,7 @@ function UpdateCourse() {
   useEffect(() => {
     setClassesData(updateCourse.class);
   }, []);
+
   const handleCourse = (e) => {
     setUpdateCourse({ ...updateCourse, [e.target.name]: e.target.value });
   };
@@ -228,6 +235,7 @@ function UpdateCourse() {
     updateCourse.schedule[i].day = value;
     console.log(updateCourse);
   };
+
   const handleSchedulerTime = (value, i) => {
     console.log(value, i);
     const timeValue = [];
@@ -391,7 +399,6 @@ function UpdateCourse() {
               </div>
               {teacherView ? (
                 <Table
-                  // className="p-2 bg-[white] font-jakarta text-[#344054] rounded-lg border-[1px] border-[#D0D5DD]"
                   dataSource={teachers}
                   rowSelection={rowSelection}
                   columns={columns}
