@@ -496,10 +496,7 @@ const CreateNewTeacher = () => {
                   Working Since
                 </h1>
 
-                <DatePicker
-                  className=" w-[100%]"
-                  onChange={handleWork}
-                />
+                <DatePicker className=" w-[100%]" onChange={handleWork} />
               </div>
             </div>
           </div>

@@ -33,7 +33,7 @@ function ViewClass() {
   var { data } = state;
   const [selectedRowKeys, setSelectedRowKeys] = useState(data.course);
 
-  console.log(data)
+  console.log(data);
 
   const navigate = useNavigate();
 
@@ -71,16 +71,14 @@ function ViewClass() {
           return (
             <div className="flex flex-col w-[3.7rem] ">
               {value?.map((item, i) => (
-                <Tag
-                  className="!mb-2"
-                  color="#EA8848">
+                <a className="!mb-2" color="#EA8848">
                   {moment(JSON.parse(item?.time[0])).format("hh:mm")}{" "}
-                </Tag>
+                </a>
               ))}
             </div>
           );
         } else {
-          return <Tag color="red">No Data</Tag>;
+          return <a color="red">No Data</a>;
         }
       },
     },
@@ -94,16 +92,14 @@ function ViewClass() {
           return (
             <div className="flex flex-col w-[3.7rem] ">
               {value?.map((item, i) => (
-                <Tag
-                  className="!mb-2"
-                  color="#EA8848">
+                <a className="!mb-2" color="#EA8848">
                   {moment(JSON.parse(item?.time[1])).format("hh:mm")}
-                </Tag>
+                </a>
               ))}
             </div>
           );
         } else {
-          return <Tag color="red">No Data</Tag>;
+          return <a>No Data</a>;
         }
       },
     },
@@ -242,9 +238,7 @@ function ViewClass() {
       title: "Sex",
       dataIndex: "class",
       key: "name",
-      render: (_, record) => (
-        <p>{record.sex}</p>
-      ),
+      render: (_, record) => <p>{record.sex}</p>,
     },
 
     {
@@ -302,8 +296,9 @@ function ViewClass() {
   const getTeacherData = async (ID) => {
     const docRef = doc(firestoreDb, "teachers", ID);
     var data = "";
-    await getDoc(docRef).then((response) => {
+    getDoc(docRef).then((response) => {
       data = response.data();
+      console.log(data);
       data.key = response.id;
     });
     return data;
@@ -341,10 +336,10 @@ function ViewClass() {
   };
 
   const getStudentByClass = async () => {
-    console.log(data.key)
     const q = query(
       collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school), where("class", "==", data.key)
+      where("school_id", "==", uid.school),
+      where("class", "==", data.key)
     );
     var temporary = [];
 
@@ -353,18 +348,16 @@ function ViewClass() {
       var datas = doc.data();
       datas.key = doc.id;
       data.course?.forEach(async (key) => {
-        datas.attendance = await getAttendace(doc.id, key)
-      })
+        datas.attendance = await getAttendace(doc.id, key);
+      });
       temporary.push(datas);
     });
 
     setTimeout(() => {
-      console.log(temporary)
-      setStudentClass(temporary)
-      setStudentLoading(false)
+      setStudentClass(temporary);
+      setStudentLoading(false);
     }, 2000);
-
-  }
+  };
 
   const getAttendace = async (ID, key) => {
     const q = query(
@@ -428,7 +421,7 @@ function ViewClass() {
         </div>
         <div className="flex flex-row">
           <h3 className="text-lg font-[600]  font-jakarta border-r-[2px] pr-2 text-[#344054]">
-            Assigned Students
+            Number of Student{" "}
           </h3>
           <h4 className="text-lg font-semibold font-jakarta pl-2">
             {data?.student.length}
@@ -447,12 +440,9 @@ function ViewClass() {
           >
             <Button
               icon={
-                <FontAwesomeIcon
-                  className="pr-2 text-[#EA8848]"
-                  icon={faEdit}
-                />
+                <FontAwesomeIcon className="pr-2 text-[#EA8848]" icon={faPen} />
               }
-              className=" text-center  border-[2px] !border-[#E7752B] !text-[#E7752B] rounded-lg float-right -mt-14"
+              className=" text-center  border-[2px] !border-[#E7752B] !text-[#E7752B] !rounded-[8px] float-right -mt-14"
               onClick={handleUpdate}
             >
               Edit
@@ -486,6 +476,7 @@ function ViewClass() {
                 loading={courseLoading}
                 dataSource={datas}
                 columns={scheduleColumn}
+                pagination={{ position: ["bottomCenter"] }}
               />
             </div>
           </Tabs.TabPane>
@@ -498,7 +489,11 @@ function ViewClass() {
             key="2"
           >
             <div className="mt-10 ">
-              <Table loading={studentLoading} dataSource={studentClass} columns={studentColumns} />
+              <Table
+                loading={studentLoading}
+                dataSource={studentClass}
+                columns={studentColumns}
+              />
             </div>
           </Tabs.TabPane>
         </Tabs>

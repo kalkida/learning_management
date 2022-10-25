@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Space, Table, Button } from "antd";
 import { useSelector } from "react-redux";
+import moment from "moment";
 import {
   collection,
   getDocs,
@@ -120,58 +121,61 @@ export default function AddStudnets() {
   const columns = [
     {
       title: (
-        <p className="font-jakarta font-[600]">FirstName</p>
+        <p className="font-jakarta font-[600] text-[16px] text-[#344054]">
+          FirstName
+        </p>
       ),
       dataIndex: "first_name",
       key: "first_name",
       render: (text) => <p>{text}</p>,
     },
     {
-      title: (
-        <p className="font-jakarta  font-[600]">
-          Guardian Phone Number
-        </p>
-      ),
-      key: "phone",
-      dataIndex: "phone",
+      title: <p className="font-jakarta  font-[600]">ID</p>,
+      key: "studentId",
+      dataIndex: "studentId",
       render: (value) => {
-        return (
-          <>
-            {value?.map((item, i) => (
-              <PhoneInput
-                placeholder="Enter Guardian Contact"
-                className=" bg-white px-2"
-                value={item}
-                disabled
-              />
-            ))}
-          </>
-        );
+        return <p>{value}</p>;
       },
     },
     {
-      title: <p className="font-jakarta  font-[600]">Email</p>,
-      dataIndex: "email",
-      key: "email",
-      render: (item) => {
-        if (item) {
-          return <h1>{item}</h1>;
-        } else {
-          return <div className="text-[#D0D5DD] font-light">No Data</div>;
-        }
-      },
-    },
-    {
-      title: <p className="font-jakarta  font-[600]">Class</p>,
+      title: <p className="font-jakarta  font-[600]">Grade</p>,
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return (
-          <h1>
-            {item?.level}
-            {item?.section}
-          </h1>
-        );
+        return <h1>{item?.level}</h1>;
+      },
+    },
+    {
+      title: <p className="font-jakarta  font-[600]">Section</p>,
+      dataIndex: "class",
+      key: "class",
+      render: (item) => {
+        return <h1>{item?.section}</h1>;
+      },
+    },
+    {
+      title: <p className="font-jakarta  font-[600]">Age</p>,
+      dataIndex: "DOB",
+      key: "DOB",
+      render: (item) => {
+        var today = new Date();
+        var birthDate = new Date(JSON.parse(item));
+        var age = today - birthDate;
+        var newAge = moment(age).format("YY");
+
+        return <h1>{newAge}</h1>;
+      },
+    },
+    {
+      title: <p className="font-jakarta  font-[600]">Gender</p>,
+      dataIndex: "sex",
+      key: "sex",
+      render: (item) => {
+        if (item == "Male") {
+          return <h1>M</h1>;
+        } else {
+          return <h1>F</h1>;
+        }
       },
     },
 
@@ -228,7 +232,8 @@ export default function AddStudnets() {
           <Select
             style={{ width: 120 }}
             placeholder="Section"
-            onChange={handleFilterSection} o
+            onChange={handleFilterSection}
+            o
           >
             {classes?.map((item, i) => (
               <Option key={item.key} value={item.section} lable={item.section}>
@@ -246,7 +251,6 @@ export default function AddStudnets() {
               //onSearch={onSearch}
               prefix={<SearchOutlined className="site-form-item-icon" />}
             />
-
           </div>
           <Button
             onClick={() => add()}

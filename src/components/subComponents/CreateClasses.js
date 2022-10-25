@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Input, Button, Select, message, TimePicker, Table, Tag } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faCheck } from "@fortawesome/free-solid-svg-icons";
 import {
   doc,
   setDoc,
@@ -370,11 +370,11 @@ const CreateClasses = () => {
             Add Class
           </h1>
           <Button
-            className="!border-[#E7752B] !text-[#E7752B] rounded-lg shadow-md -z-0"
+            className="!border-[#E7752B] !text-[white] hover:!text-[white] !rounded-[6px] shadow-md -z-0 !bg-[#E7752B]"
+            icon={<FontAwesomeIcon className="mr-2" icon={faCheck} />}
             onClick={() => createNewClass()}
           >
             Confirm
-            <FontAwesomeIcon className="ml-2" icon={faArrowRight} />
           </Button>
         </div>
         <div className="bg-[white] p-4 border-[1px] rounded-lg">
@@ -386,7 +386,7 @@ const CreateClasses = () => {
                 <Input
                   name="level"
                   type={"number"}
-                  className="rounded-lg"
+                  className="!rounded-[6px] border-[#EAECF0] border-[2px]"
                   onChange={(e) => handleClass(e)}
                 />
               </div>
@@ -394,7 +394,7 @@ const CreateClasses = () => {
             <div className="py-2 ml-10">
               <h1 className="text-[#344054] pb-[6px] font-jakarta">Section</h1>
               <Input
-                className="rounded-lg"
+                className="!rounded-[6px] border-[#EAECF0] border-[2px]"
                 name="section"
                 onChange={(e) => handleClass(e)}
               />
@@ -404,6 +404,8 @@ const CreateClasses = () => {
                 Home room Teacher
               </h1>
               <Select
+                bordered={false}
+                className="!rounded-[6px] border-[#EAECF0] border-[2px]"
                 style={{
                   width: "100%",
                 }}
@@ -440,6 +442,7 @@ const CreateClasses = () => {
               rowSelection={rowSelections}
               dataSource={coursesData}
               columns={courseColumn}
+              pagination={{ position: ["bottomCenter"] }}
             />
           </div>
         </div>
@@ -468,6 +471,7 @@ const CreateClasses = () => {
                 rowSelection={rowSelection}
                 dataSource={students}
                 columns={columns}
+                pagination={{ position: ["bottomCenter"] }}
               />
             </div>
           </div>

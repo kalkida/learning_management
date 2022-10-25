@@ -6,29 +6,21 @@ import "../courses/style.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { fetchTeacher, fetchCourse } from "../funcs";
 import { useState, useEffect } from "react";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { firestoreDb } from "../../../firebase";
 
-
 function ViewCourse() {
-
   const uid = useSelector((state) => state.user.profile);
-  const [student, setStudent] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [student, setStudent] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
-  const [teachers, setTeachers] = useState([])
-
+  const [teachers, setTeachers] = useState([]);
 
   const getStudents = async (ids) => {
     var temporary = [];
-    console.log("ids   ", ids);
     if (ids.length > 0) {
       const q = query(collection(firestoreDb, "teachers"));
       const querySnapshot = await getDocs(q);
@@ -39,7 +31,6 @@ function ViewCourse() {
         if (ids.includes(doc.id)) {
           temporary.push(data);
         }
-        console.log("temporary: " + temporary)
       });
       setTeachers(temporary);
     }
@@ -47,6 +38,7 @@ function ViewCourse() {
 
   useEffect(() => {
     getStudents(data.teachers);
+    console.log(data);
   }, []);
 
   const navigate = useNavigate();
@@ -111,17 +103,17 @@ function ViewCourse() {
   ];
   const columns = [
     {
-      // title: "AsignedTeachers",
+      title: "Name",
       dataIndex: "first_name",
       key: "first_name",
       render: (text, record) => {
-        console.log("record    ", record)
+        console.log("record    ", record);
 
         return (
           <div className="font-[500] text-sm font-jakarta">
             {record.first_name} {record.last_name}
           </div>
-        )
+        );
       },
     },
   ];
@@ -148,9 +140,7 @@ function ViewCourse() {
       title: "Sex",
       dataIndex: "class",
       key: "name",
-      render: (_, record) => (
-        <p>{record.sex}</p>
-      ),
+      render: (_, record) => <p>{record.sex}</p>,
     },
 
     {
@@ -180,7 +170,8 @@ function ViewCourse() {
   const getStudent = async () => {
     const q = query(
       collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school), where("course", "array-contains", data.key)
+      where("school_id", "==", uid.school),
+      where("course", "array-contains", data.key)
     );
     var temporary = [];
 
@@ -188,16 +179,15 @@ function ViewCourse() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
-      data.attendance = await getAttendace(doc.id)
+      data.attendance = await getAttendace(doc.id);
       temporary.push(data);
     });
 
     setTimeout(() => {
-      setStudent(temporary)
-      setLoading(false)
+      setStudent(temporary);
+      setLoading(false);
     }, 2000);
-
-  }
+  };
 
   const getAttendace = async (ID) => {
     const q = query(
@@ -217,7 +207,7 @@ function ViewCourse() {
 
   useEffect(() => {
     getStudent();
-  }, [])
+  }, []);
 
   return (
     <div className="bg-[#F9FAFB] h-[100vh] py-4">
@@ -239,24 +229,24 @@ function ViewCourse() {
         <div className="flex flex-col justify-center ">
           <div className="flex flex-row justify-end">
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
-              Assigned Teachers
+              Class
             </h3>
             <h4
               className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
             p-[1px] ml-2"
             >
-              {data.teachers.length}
+              {data.class.level + data.class.section}
             </h4>
           </div>
           <div className="flex flex-row justify-end">
-            <h3 className="text-lg font-semibold font-jakarta">
-              Class per week
+            <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
+              Class
             </h3>
             <h4
-              className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
+              className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta
               text-[#667085] p-[1px] ml-2"
             >
-              {data.schedule.length}
+              {data.subject.name}
             </h4>
           </div>
         </div>
@@ -276,18 +266,20 @@ function ViewCourse() {
               className="float-right -mt-14 !text-[#E7752B]"
               onClick={handleUpdate}
             >
-              Edit Course
+              Edit
             </Button>
             <div className=" rounded-2xl border-[0px]">
               <h4 className="mb-2 font-semibold text-sm font-jakarta text-[#344054]">
                 Coures Description
               </h4>
-              <Input.TextArea
+              {/* <Input.TextArea
+                disabled
                 className="border-[1px] rounded-sm"
                 width="100%"
                 rows={4}
                 defaultValue={data.description}
-              />
+              /> */}
+              <p className="border-[1px] rounded-sm p-3">{data.description}</p>
             </div>
             <div className="text-xl mt-10">
               <p className="text-lg font-semibold text-left ml-0 font-jakarta">
@@ -321,7 +313,11 @@ function ViewCourse() {
             key="2"
           >
             <div className="mt-14"></div>
-            <Table loading={loading} dataSource={student} columns={studentColumns} />
+            <Table
+              loading={loading}
+              dataSource={student}
+              columns={studentColumns}
+            />
           </Tabs.TabPane>
         </Tabs>
       </div>

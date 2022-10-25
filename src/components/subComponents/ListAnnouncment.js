@@ -54,7 +54,9 @@ export default function ListAnnouncment() {
       .then((response) => {
         getBlog();
         message.success("Announcement successfully added");
-        setShowPost(false);
+        // setShowPost(false);
+        setEditorState("");
+        setAnmounceData("");
       })
       .catch((error) => message.error("Something is wrong, Try Again"));
   };
@@ -179,7 +181,7 @@ export default function ListAnnouncment() {
       .then((response) => {
         setShowEdit(false);
         message.success("Data is updated successfuly");
-        setEditorState("")
+        setEditorState("");
         setShowPost(true);
         getBlog();
       })

@@ -28,7 +28,12 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
-import { fetchSubject, fetchClass, fetchclassFromCourse } from "../funcs";
+import {
+  fetchSubject,
+  fetchClass,
+  fetchclassFromCourse,
+  addSingleTeacherToCourse,
+} from "../funcs";
 import { MailOutlined } from "@ant-design/icons";
 import "./style.css";
 
@@ -62,6 +67,7 @@ function TeacherUpdate() {
     working_since: data.working_since,
     school_id: data.school_id,
   });
+  // class object is not updating properly so fix it
 
   const handleUpdate = () => {
     if (!file) {
@@ -74,6 +80,9 @@ function TeacherUpdate() {
         }
       )
         .then((_) => {
+          selectedRowKeysCourse.map((items) => {
+            addSingleTeacherToCourse(data.key, items);
+          });
           message.success("Data is updated successfuly");
           navigate("/list-teacher");
         })
@@ -296,13 +305,16 @@ function TeacherUpdate() {
     setFile(event.target.files[0]);
   }
   const getClassToSet = async (courses) => {
+    var temporary = [];
     courses.map(async (item) => {
       var set = await fetchclassFromCourse(item);
-      await setUpdateTeacher({
-        ...updateTeacher,
-        class: [...updateTeacher.class, set.class],
-      });
+      temporary.push(set.class);
     });
+    await setUpdateTeacher({
+      ...updateTeacher,
+      class: temporary,
+    });
+    console.log("tempory", temporary);
   };
 
   const onSelectChange = (course) => {

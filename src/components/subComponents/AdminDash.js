@@ -10,7 +10,6 @@ import { async } from "@firebase/util";
 
 const { Option } = Select;
 export default function AdminDash() {
-
   const [students, setStudents] = useState([]);
   const [male, setMale] = useState([]);
   const [female, setfemale] = useState([]);
@@ -19,12 +18,16 @@ export default function AdminDash() {
   const [teacherData, setTeacherData] = useState([]);
   const [studentAttendance, setstudentAttendance] = useState([]);
   const [attendStudents, setAttendStudents] = useState();
+  const [classes, setClasses] = useState([]);
   const schools = useSelector((state) => state.user.profile);
 
   var Student = [];
   const value = new Date();
   const date = value.getDate() < 10 ? "0" + value.getDate() : value.getDate();
-  const month = value.getMonth() + 1 < 10 ? "0" + (value.getMonth() + 1) : value.getMonth() + 1;
+  const month =
+    value.getMonth() + 1 < 10
+      ? "0" + (value.getMonth() + 1)
+      : value.getMonth() + 1;
   const year = value.getFullYear();
 
   const filterDate = year + "-" + month + "-" + date;
@@ -74,19 +77,33 @@ export default function AdminDash() {
     setTeacherData(temporary);
   };
 
+  const getAbsentClass = async () => {
+    var temporary = [];
+    const queryCourse = query(
+      collection(firestoreDb, "class"),
+      where("school_id", "==", schools.school)
+    );
+    const snapCourse = await getDocs(queryCourse);
+    snapCourse.forEach((doc) => {
+      var data = doc.data();
+      temporary.push(data);
+    });
+    setClasses(temporary);
+  };
   const getAbsentStudent = async () => {
+    getAbsentClass();
 
-    var temporary = []
+    var temporary = [];
     const queryCourse = query(
       collection(firestoreDb, "courses"),
-      where("school_id", "==", schools.school),
+      where("school_id", "==", schools.school)
     );
     const snapCourse = await getDocs(queryCourse);
 
     snapCourse.forEach(async (docs) => {
       const queryAttendace = query(
         collection(firestoreDb, "attendanceanddaily", `${docs.id}/attendace`),
-        where("date", "==", filterDate),
+        where("date", "==", filterDate)
       );
 
       const snap = await getDocs(queryAttendace);
@@ -95,23 +112,20 @@ export default function AdminDash() {
         data.key = data.id;
         var hasData = false;
         temporary.forEach((item) => {
-          if ((item.studentId == data.studentId)) {
+          if (item.studentId == data.studentId) {
             hasData = true;
           }
-        })
+        });
         if (!hasData) {
           temporary.push(data);
         }
-
       });
-    })
+    });
     setTimeout(() => {
       const calc = ((Student.length - temporary.length) / Student.length) * 100;
-      setAttendStudents(calc)
-      setstudentAttendance(temporary)
-
+      setAttendStudents(calc);
+      setstudentAttendance(temporary);
     }, 1000);
-
   };
 
   return (
@@ -124,7 +138,7 @@ export default function AdminDash() {
         width: "100%",
       }}
     >
-      <p className="text-center text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8">
+      <p className="text-center text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8 border-b-[#EAECF0] border-b-[2px]">
         Hello Admin
       </p>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
@@ -151,13 +165,12 @@ export default function AdminDash() {
                 <h1 className="text-[16px] flex flex-row">
                   {" "}
                   <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>
-                  {studentAttendance.length}{" "}
-                  Absent Students
+                  {studentAttendance.length} Absent Students
                 </h1>
                 <h1 className="text-[16px] flex flex-row">
                   {" "}
-                  <a className="w-5 mr-2 h-2 mt-2 bg-[#98A2B3] rounded-lg"></a>2
-                  Absent Teachers
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#98A2B3] rounded-lg"></a>
+                  {students.length - studentAttendance.length} Present Students
                 </h1>
               </div>
             </div>
@@ -310,7 +323,7 @@ export default function AdminDash() {
           <Card bordered={true} className="w-[100%]  mb-10">
             <div className="flex flex-row justify-between align-bottom">
               <div>
-                <h1 className="text-4xl text-[#0B1354]">3600</h1>
+                <h1 className="text-4xl text-[#0B1354]">{students.length}</h1>
                 <h1 className="text-[16px] text-[#98A2B3]">Student Number</h1>
               </div>
               <div className="w-[100px]">
@@ -319,7 +332,7 @@ export default function AdminDash() {
                 </Select>
               </div>
             </div>
-            <BarGraph />
+            <BarGraph datas2={classes} />
           </Card>
         </Grid>
       </Grid>

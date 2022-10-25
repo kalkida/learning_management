@@ -299,27 +299,21 @@ export default function ListCourses() {
       },
     },
 
-    {
-      title: "Action",
-      key: "action",
-      width: "10%",
-      render: (_, record) => (
-        <div className="flex flex-row justify-around">
-          <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleView(record)}
-          >
-            View{" "}
-          </a>
-          <a
-            className="py-1 px-2 text-[12px] text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleUpdate(record)}
-          >
-            Update
-          </a>
-        </div>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   width: "5%",
+    //   render: (_, record) => (
+    //     <div className="flex flex-row justify-around z-0">
+    //       <a
+    //         className="py-1 px-2 text-[12px] text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+    //         onClick={() => handleUpdate(record)}
+    //       >
+    //         Update
+    //       </a>
+    //     </div>
+    //   ),
+    // },
   ];
   const handleFilterSubject = async (value) => {
     if (value) {
@@ -377,7 +371,6 @@ export default function ListCourses() {
     <div className="bg-[#F9FAFB] h-[100vh] -mt-14">
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Course</h1>
-        <CreateSubject />
       </div>
       <div className="list-sub">
         <div className="flex flex-row  w-[30%]">
@@ -385,7 +378,11 @@ export default function ListCourses() {
             className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-4"
             placeholder="Subject"
             bordered={false}
-            style={{ width: 141 }}
+            style={{
+              width: 141,
+              borderRadius: "8px",
+              borderWidth: 2,
+            }}
             onChange={handleFilterSubject}
           >
             {subject?.map((item, i) => (
@@ -396,7 +393,11 @@ export default function ListCourses() {
           </Select>
           <Select
             className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
-            style={{ width: 141 }}
+            style={{
+              width: 141,
+              borderRadius: "8px",
+              borderWidth: 2,
+            }}
             placeholder="Class"
             bordered={false}
             onChange={handleFilterClass}
@@ -415,16 +416,25 @@ export default function ListCourses() {
         <div className="course-search">
           <div>
             <Input
-              style={{ width: 200 }}
+              style={{
+                width: 200,
+                borderRadius: "8px",
+                borderWidth: 2,
+              }}
               className="mr-3 rounded-lg"
               placeholder="Search"
               onSearch={onSearch}
               prefix={<SearchOutlined className="site-form-item-icon" />}
             />
           </div>
+          <CreateSubject />
 
           <Button
-            className=" !text-[#E7752B] !border-[#E7752B]"
+            style={{
+              borderRadius: "8px",
+              borderWidth: 1,
+            }}
+            className=" !text-[#E7752B] !border-[#E7752B] ml-2 round"
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
             onClick={() => edit()}
           >
@@ -435,7 +445,17 @@ export default function ListCourses() {
 
       <br />
 
-      <Table loading={tableLoading} columns={columns} dataSource={datas} />
+      <Table
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => handleView(record), // click row
+          };
+        }}
+        pagination={{ position: ["bottomCenter"] }}
+        loading={tableLoading}
+        columns={columns}
+        dataSource={datas}
+      />
     </div>
   );
 }

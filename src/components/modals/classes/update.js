@@ -35,7 +35,7 @@ import {
   fetchClass,
 } from "../funcs";
 import Icon from "react-eva-icons";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const { Option } = Select;
@@ -207,7 +207,7 @@ function UpdateClass() {
         message.success("Data is updated successfuly");
         setUpdateComplete(!updateComplete);
         navigate("/list-classes");
-      })  
+      })
       .catch((error) => {
         message.error("Data is not updated");
         console.log(error);
@@ -300,6 +300,7 @@ function UpdateClass() {
       },
     ],
   };
+  console.log(data);
 
   const getStudent = async () => {
     const children = [];
@@ -456,23 +457,25 @@ function UpdateClass() {
     <div className="bg-[#F9FAFB]  h-[auto]">
       {loading ? (
         <>
-          <div className="flex flex-row justify-between w-[100%] -mt-14 pb-4 ">
+          <div className="flex flex-row justify-between w-[100%] -mt-14 pb-1 ">
             <div className="flex flex-row justify-center align-middle ">
               <div className="flex flex-row">
-                <h1 className="text-lg font-bold font-jakarta mr-2">Class</h1>
-                <h2 className="text-lg font-bold font-jakarta">
+                <h1 className="text-xl font-bold font-jakarta mr-2 text-[#1D2939]">
+                  Class
+                </h1>
+                <h2 className="text-xl font-bold font-jakarta text-[#1D2939]">
                   {data?.level}
                 </h2>
-                <h3 className="text-lg font-bold font-jakarta">
+                <h3 className="text-xl font-bold font-jakarta text-[#1D2939]">
                   {data?.section}
                 </h3>
               </div>
             </div>
             <div className="flex flex-row">
               <h3 className="text-lg font-semibold font-jakarta border-r-[2px] pr-2">
-                Assigned Students
+                Number of Student{" "}
               </h3>
-              <h4 className="text-lg font-semibold font-jakarta pl-2">
+              <h4 className="text-lg font-[500] text-[#667085] font-jakarta pl-2">
                 {data?.student.length}
               </h4>
             </div>
@@ -489,8 +492,8 @@ function UpdateClass() {
                   key="1"
                 >
                   <Button
-                    icon={<FontAwesomeIcon className="pr-2" icon={faEdit} />}
-                    className="btn-confirm !border-[#E7752B] !text-[#E7752B] "
+                    icon={<FontAwesomeIcon className="pr-2" icon={faPen} />}
+                    className="!bg-[#E7752B] !text-[white] float-right -mt-16 hover:!text-[white] "
                     onClick={handleUpdate}
                   >
                     Finish Review
@@ -506,9 +509,9 @@ function UpdateClass() {
                           <Input
                             name="level"
                             type={"number"}
-                            className="rounded-lg"
+                            className="!rounded-lg"
                             value={data.level}
-                          // onChange={(e) => handleClass(e)}
+                            // onChange={(e) => handleClass(e)}
                           />
                         </div>
                       </div>
@@ -517,10 +520,10 @@ function UpdateClass() {
                           Section
                         </h1>
                         <Input
-                          className="rounded-lg"
+                          className="!rounded-lg"
                           name="section"
                           value={data.section}
-                        // onChange={(e) => handleClass(e)}
+                          // onChange={(e) => handleClass(e)}
                         />
                       </div>
                       <div className="py-2 ml-10 w-[20vw]">
@@ -528,6 +531,8 @@ function UpdateClass() {
                           Home room Teacher
                         </h1>
                         <Select
+                          bordered={false}
+                          className="border-[2px] border-[#EAECF0] !rounded-[6px]"
                           style={{
                             width: "100%",
                           }}
