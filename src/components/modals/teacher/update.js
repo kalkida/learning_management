@@ -59,7 +59,7 @@ function TeacherUpdate() {
     email: data.email,
     first_name: data.first_name,
     last_name: data.last_name,
-    class: [],
+    class: data.class,
     course: data.course,
     phone: data.phone,
     DOB: data.DOB,
@@ -305,13 +305,16 @@ function TeacherUpdate() {
     setFile(event.target.files[0]);
   }
   const getClassToSet = async (courses) => {
+    var temporary = [];
     courses.map(async (item) => {
       var set = await fetchclassFromCourse(item);
-      await setUpdateTeacher({
-        ...updateTeacher,
-        class: [...updateTeacher.class, set.class],
-      });
+      temporary.push(set.class);
     });
+    await setUpdateTeacher({
+      ...updateTeacher,
+      class: temporary,
+    });
+    console.log("tempory", temporary);
   };
 
   const onSelectChange = (course) => {

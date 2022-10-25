@@ -21,7 +21,6 @@ function ViewCourse() {
 
   const getStudents = async (ids) => {
     var temporary = [];
-    console.log("ids   ", ids);
     if (ids.length > 0) {
       const q = query(collection(firestoreDb, "teachers"));
       const querySnapshot = await getDocs(q);
@@ -32,7 +31,6 @@ function ViewCourse() {
         if (ids.includes(doc.id)) {
           temporary.push(data);
         }
-        console.log("temporary: " + temporary);
       });
       setTeachers(temporary);
     }
@@ -40,6 +38,7 @@ function ViewCourse() {
 
   useEffect(() => {
     getStudents(data.teachers);
+    console.log(data);
   }, []);
 
   const navigate = useNavigate();
@@ -104,7 +103,7 @@ function ViewCourse() {
   ];
   const columns = [
     {
-      // title: "AsignedTeachers",
+      title: "Name",
       dataIndex: "first_name",
       key: "first_name",
       render: (text, record) => {
@@ -230,24 +229,24 @@ function ViewCourse() {
         <div className="flex flex-col justify-center ">
           <div className="flex flex-row justify-end">
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
-              Assigned Teachers
+              Class
             </h3>
             <h4
               className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
             p-[1px] ml-2"
             >
-              {data.teachers.length}
+              {data.class.level + data.class.section}
             </h4>
           </div>
           <div className="flex flex-row justify-end">
-            <h3 className="text-lg font-semibold font-jakarta">
-              Class per week
+            <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
+              Class
             </h3>
             <h4
-              className="border-l-[2px] pl-2 text-lg font-bold font-jakarta
+              className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta
               text-[#667085] p-[1px] ml-2"
             >
-              {data.schedule.length}
+              {data.subject.name}
             </h4>
           </div>
         </div>
@@ -267,18 +266,20 @@ function ViewCourse() {
               className="float-right -mt-14 !text-[#E7752B]"
               onClick={handleUpdate}
             >
-              Edit Course
+              Edit
             </Button>
             <div className=" rounded-2xl border-[0px]">
               <h4 className="mb-2 font-semibold text-sm font-jakarta text-[#344054]">
                 Coures Description
               </h4>
-              <Input.TextArea
+              {/* <Input.TextArea
+                disabled
                 className="border-[1px] rounded-sm"
                 width="100%"
                 rows={4}
                 defaultValue={data.description}
-              />
+              /> */}
+              <p className="border-[1px] rounded-sm p-3">{data.description}</p>
             </div>
             <div className="text-xl mt-10">
               <p className="text-lg font-semibold text-left ml-0 font-jakarta">

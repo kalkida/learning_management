@@ -63,6 +63,10 @@ function CreateSubject() {
   return (
     <>
       <Button
+        style={{
+          borderRadius: "8px",
+          borderWidth: 1,
+        }}
         icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
         className=" !text-[white] !bg-[#E7752B] hover:!text-[white]"
         onClick={showModal}

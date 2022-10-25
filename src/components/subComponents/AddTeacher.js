@@ -161,7 +161,7 @@ export default function AddTeacher() {
       data.key = response.id;
     } else {
       console.log("none exist data", data);
-      console.log("data  ", ID, "and  ", teach)
+      console.log("data  ", ID, "and  ", teach);
       //removeSingleClassToTeacher(ID, teach);
     }
 
@@ -186,9 +186,14 @@ export default function AddTeacher() {
       });
 
       data.course?.map(async (item, index) => {
-        data.course[index] = await getCourseData(item);
-        console.log("courses  :", data.course)
+        var course = await getCourseData(item);
+        var subject = await fetchSubject(course.subject);
+        course.subject = subject;
+        data.course[index] = course;
+
+        console.log("courses  :", data.course);
       });
+
       return data;
     } else {
       return data;
@@ -250,6 +255,7 @@ export default function AddTeacher() {
     snap.forEach(async (doc) => {
       var data = doc.data();
       data.key = doc.id;
+      data.subject = await fetchSubject(data.subject);
       temporary.push(data);
     });
     setCourse(temporary);
@@ -305,64 +311,42 @@ export default function AddTeacher() {
   const columns = [
     {
       title: (
-        <p className="font-jakarta text-[#344054] font-[600]">First Name </p>
+        <p className="font-jakarta text-[#344054] font-[600]">Full Name </p>
       ),
       dataIndex: "first_name",
       key: "first_name",
+      width: "20%",
       render: (text, data) => {
         return (
-          <p className="text-[14px] font-jakarta text-[#344054]">{text}</p>
+          <p className="text-[14px] font-jakarta text-[#344054]">
+            {data.first_name} {data.last_name}
+          </p>
         );
       },
     },
     {
-      title: (
-        <p className="font-jakarta text-[#344054] font-[600]">Last Name </p>
-      ),
+      title: <p className="font-jakarta text-[#344054] font-[600]">Subject </p>,
       dataIndex: "last_name",
       key: "last_name",
+      width: "20%",
+
       render: (text, data) => {
         return (
-          <p className="text-[14px] font-jakarta text-[#344054]">{text}</p>
+          <div>
+            {data.course.map((item) => (
+              <p className="text-[14px] font-jakarta text-[#344054]">
+                {item?.subject?.name}
+              </p>
+            ))}
+          </div>
         );
       },
-    },
-    {
-      title: <p className="font-jakarta text-[#344054] font-[600]">Course </p>,
-      key: "course",
-      dataIndex: "course",
-      render: (value) => {
-        if (value?.length) {
-          return (
-            <>
-              {value.map((item) => (
-                <div className="text-[#344054]">{item.course_name}</div>
-              ))}
-            </>
-          );
-        } else {
-          return <div className="text-[#D0D5DD] font-light">No Data</div>;
-        }
-      },
-    },
-    {
-      title: (
-        <p className="font-jakarta text-[#344054] font-[600]">Phone Number </p>
-      ),
-      key: "phone",
-      dataIndex: "phone",
-      render: (text) => {
-        if (text) {
-          return <a>{text}</a>
-        } else {
-          return <div className="text-[#D0D5DD] font-light">No Data</div>;
-        }
-      }
     },
     {
       title: <p className="font-jakarta text-[#344054] font-[600]">Class </p>,
       dataIndex: "class",
       key: "class",
+      width: "20%",
 
       render: (value) => {
         if (value?.length) {
@@ -385,27 +369,33 @@ export default function AddTeacher() {
         }
       },
     },
-
     {
-      title: "Action",
-      key: "action",
-      width: "10%",
-      render: (_, record) => (
-        <div className="flex flex-row justify-around">
-          <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleView(record)}
-          >
-            View{" "}
-          </a>
-          <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleUpdate(record)}
-          >
-            Update
-          </a>
-        </div>
-      ),
+      title: <p className="font-jakarta  font-[600]">Sex</p>,
+      dataIndex: "sex",
+      key: "sex",
+      width: "20%",
+
+      render: (item) => {
+        if (item == "Male") {
+          return <h1>M</h1>;
+        } else {
+          return <h1>F</h1>;
+        }
+      },
+    },
+    {
+      title: <p className="font-jakarta text-[#344054] font-[600]">Contact </p>,
+      key: "phone",
+      dataIndex: "phone",
+      width: "20%",
+
+      render: (text) => {
+        if (text) {
+          return <a>{text}</a>;
+        } else {
+          return <div className="text-[#D0D5DD] font-light">No Data</div>;
+        }
+      },
     },
   ];
 
@@ -421,24 +411,24 @@ export default function AddTeacher() {
         <h1 className="text-2xl font-[600] font-jakarta">List Of Teachers</h1>
       </div>
       <div className="list-sub">
-        <div className="flex flex-row w-[30%]">
+        <div className="flex flex-row w-[50%]">
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5"
-            placeholder="Course"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px]"
+            placeholder="Subject"
             bordered={false}
-            style={{ width: 120 }}
+            style={{ width: 161 }}
             onChange={handleFilterSubject}
           >
             {course?.map((item, i) => (
               <Option key={item.key} value={item.key} lable={item.course_name}>
-                {item.course_name}
+                {item.subject.name}
               </Option>
             ))}
           </Select>
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
-            style={{ width: 120 }}
-            placeholder="Class"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px] "
+            style={{ width: 161 }}
+            placeholder="Grade"
             bordered={false}
             onChange={handleFilterClass}
           >
@@ -448,7 +438,24 @@ export default function AddTeacher() {
                 value={item.key}
                 lable={item.level + item.section}
               >
-                {item.level + item.section}
+                {item.level}
+              </Option>
+            ))}
+          </Select>
+          <Select
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !rounded-[6px]"
+            style={{ width: 161 }}
+            placeholder="Section"
+            bordered={false}
+            onChange={handleFilterClass}
+          >
+            {classes?.map((item, i) => (
+              <Option
+                key={item.key}
+                value={item.key}
+                lable={item.level + item.section}
+              >
+                {item.section}
               </Option>
             ))}
           </Select>
@@ -457,7 +464,7 @@ export default function AddTeacher() {
           <div>
             <Input
               style={{ width: 200 }}
-              className="mr-3 rounded-lg"
+              className="mr-3 !rounded-[6px]"
               placeholder="Search"
               //onSearch={onSearch}
               prefix={<SearchOutlined className="site-form-item-icon" />}
@@ -491,7 +498,17 @@ export default function AddTeacher() {
 
       <br />
 
-      <Table loading={tableLoading} columns={columns} dataSource={datas} />
+      <Table
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => handleView(record), // click row
+          };
+        }}
+        loading={tableLoading}
+        columns={columns}
+        dataSource={datas}
+        pagination={{ position: ["bottomCenter"] }}
+      />
     </div>
   );
 }

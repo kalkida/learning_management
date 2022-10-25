@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPen, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import {
   Input,
@@ -296,21 +296,33 @@ function UpdateCourse() {
                 <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
                   Class
                 </h3>
-                <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] p-[1px] ml-2">
+                <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] p-[1px] ml-2">
                   {singleClass?.level}
                   {singleClass?.section}
                 </h4>
               </div>
               <div className="flex flex-row">
                 <h3 className="text-lg font-semibold font-jakarta">Subject</h3>
-                <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta  text-[#667085] p-[1px] ml-2">
+                <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2">
                   {subjectData?.name}
                 </h4>
               </div>
               <div className="flex flex-row mt-4 justify-end ">
                 <Button
-                  icon={<FontAwesomeIcon className="pr-2" icon={faPen} />}
-                  className=" !text-[#E7752B] !border-[#E7752B] items-center rounded-lg "
+                  style={{
+                    borderRadius: "8px",
+                    borderWidth: 1,
+                  }}
+                  icon={
+                    <FontAwesomeIcon
+                      className="pl-2"
+                      icon={faCheck}
+                      pull={"right"}
+                      beat
+                      style={{ paddingTop: 4 }}
+                    />
+                  }
+                  className=" !text-[white] !bg-[#E7752B] items-center rounded-lg hover:!text-white"
                   onClick={handleUpdate}
                 >
                   Finalize Review
@@ -324,7 +336,7 @@ function UpdateCourse() {
               Edit Course
             </p>
 
-            <div className="bg-[#FFFFFF] rounded-sm border-[2px] p-[24px]">
+            <div className="bg-[#FFFFFF] !rounded-[8px] border-[2px] p-[24px]">
               <div className="py-2 flex flex-col justify-around">
                 <div className="w-[100%]">
                   <h4 className="text-base font-jakarta text-[#344054] mb-[6px] font-semibold mt-2">
@@ -332,7 +344,7 @@ function UpdateCourse() {
                   </h4>
                   <Input.TextArea
                     name="description"
-                    className="border-[1px] rounded-sm"
+                    className="border-[2px] !rounded-[6px]"
                     rows={6}
                     defaultValue={updateCourse.description}
                     onChange={(e) => handleCourse(e)}
@@ -340,13 +352,14 @@ function UpdateCourse() {
                 </div>
                 <div className="flex flex-col mt-[24px]">
                   <span
-                    className="text-sm font-jakarta font-[500"
+                    className="text-sm font-jakarta font-[500]"
                     //style={{ fontFamily:'Plus Jakarta Sans', fontWeight:'500',lineHeight:'24px',fontSize:14}}
                   >
                     Subject
                   </span>
                   <Select
-                    className="rounded-xl mt-2"
+                    bordered={false}
+                    className="!rounded-[6px] mt-2 border-[2px] border-[#EAECF0]"
                     style={{
                       width: "40%",
                     }}
@@ -368,7 +381,8 @@ function UpdateCourse() {
                       Class
                     </span>
                     <Select
-                      className="mt-2"
+                      bordered={false}
+                      className="!rounded-[6px] mt-2 border-[2px] border-[#EAECF0]"
                       style={{
                         width: "100%",
                       }}
@@ -407,14 +421,14 @@ function UpdateCourse() {
                 <Spin />
               )}
             </div>
-            <div className="mb-20 rounded-lg">
+            <div className="mb-20 !rounded-[8px] ">
               <h4
                 // className="text-xl pt-2"
                 className="textbase pt-2 font-jakarta font-semibold text-lg text-[#344054] mb-[24px]"
               >
                 Edit Schedule
               </h4>
-              <div className="up-card-schedule pb-10 border-[2px] rounded-sm bg-[white]">
+              <div className="up-card-schedule pb-10 border-[2px] rounded-[8px] bg-[white]">
                 <h2 className="text-lg py-2">
                   Class{"  "}
                   {singleClass?.level}

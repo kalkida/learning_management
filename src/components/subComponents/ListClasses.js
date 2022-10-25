@@ -212,6 +212,8 @@ export default function ListClasses() {
       title: <p className="font-jakarta text-[#344054] font-[600]">Class</p>,
       dataIndex: "class",
       key: "class",
+      sorter: (a, b) => a.level - b.level,
+
       render: (text, data) => (
         <a className="text-[14px] font-jakarta text-[#344054]">
           {data.level}
@@ -221,9 +223,11 @@ export default function ListClasses() {
       ),
     },
     {
-      title: "Level",
+      title: "Grade",
       dataIndex: "level",
       key: "level",
+      sorter: (a, b) => a.level - b.level,
+
       render: (text) => <a className="text-[#344054]">{text}</a>,
     },
 
@@ -231,26 +235,17 @@ export default function ListClasses() {
       title: "Section",
       key: "section",
       dataIndex: "section",
+      sorter: (a, b) => a.section - b.section,
+
       render: (text) => <a className="text-[#344054]">{text}</a>,
     },
     {
-      title: "Action",
-      key: "action",
-      width: "10%",
+      title: "Number Of Students",
+      key: "class",
+      width: "20%",
       render: (_, record) => (
         <div className="flex flex-row justify-around">
-          <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleView(record)}
-          >
-            View{" "}
-          </a>
-          <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleUpdate(record)}
-          >
-            Update
-          </a>
+          {record.student.length}
         </div>
       ),
     },
@@ -301,8 +296,8 @@ export default function ListClasses() {
       <div className="list-sub">
         <div className="flex flex-row  w-[30%]">
           <Select
-            placeholder="Level"
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5"
+            placeholder="Grade"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px]"
             bordered={false}
             style={{ width: 141 }}
             onChange={handleFilterLevel}
@@ -317,7 +312,7 @@ export default function ListClasses() {
             bordered={false}
             style={{ width: 141 }}
             placeholder="Section"
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white]"
+            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !rounded-[6px]"
             onChange={handleFilterSection}
           >
             {SECTION.map((item, i) => (
@@ -330,27 +325,33 @@ export default function ListClasses() {
         <div className="course-search">
           <Input
             style={{ width: 200 }}
-            className="mr-3 rounded-lg"
+            className="mr-3 border-[#EAECF0] !rounded-lg"
             placeholder="Search"
             prefix={<SearchOutlined className="site-form-item-icon" />}
           />
           <Button
+            bordered={false}
             onClick={() => handleAdd()}
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
-            className="border-[2px] !border-[#E7752B] flex flex-row justify-center !text-[#E7752B] bg-white rounded-md  "
+            className="border-[2px] !border-[#E7752B] flex flex-row justify-center !text-[#E7752B] bg-white !rounded-lg "
           >
-
-            Add Classes
+            Add Class
           </Button>
         </div>
       </div>
       {/* <CreateSection /> */}
       <br />
       <Table
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => handleView(record), // click row
+          };
+        }}
         loading={tableLoading}
         style={{ marginTop: 20 }}
         columns={columns}
         dataSource={datas}
+        pagination={{ position: ["bottomCenter"] }}
       />
     </div>
   );

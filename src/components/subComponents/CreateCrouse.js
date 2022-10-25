@@ -173,11 +173,15 @@ const CreateCrouse = () => {
         </h1>
         <div className="pr-0  flex flex-row">
           <Button
-            className="!border-[#E7752B] border-[2px] !text-[#E7752B] rounded-lg shadow-md -z-0 ml-10"
+            style={{
+              borderRadius: "8px",
+              borderWidth: 1,
+            }}
+            className="!border-[#E7752B] !bg-[#E7752B] border-[2px] hover:!text-white !text-[white] rounded-lg shadow-md -z-0 ml-10"
             icon={<FontAwesomeIcon className="mr-2" icon={faArrowRight} />}
             onClick={createNewCourse}
           >
-            Submit
+            Confirm
           </Button>
         </div>
       </div>
@@ -217,9 +221,13 @@ const CreateCrouse = () => {
                 Subject
               </h3>
               <Select
+                bordered={false}
                 style={{
                   width: "50%",
+                  borderRadius: "8px",
+                  borderWidth: 1,
                 }}
+                // dropdownStyle={{ borderRadius: 20 }}
                 placeholder="select Subjects"
                 onChange={handleSubject}
                 optionLabelProp="label"
@@ -253,8 +261,11 @@ const CreateCrouse = () => {
                 Class
               </h3>
               <Select
+                bordered={false}
                 style={{
                   width: "50%",
+                  borderRadius: "8px",
+                  borderWidth: 1,
                 }}
                 placeholder="select Classes"
                 onChange={handleClass}
@@ -284,8 +295,11 @@ const CreateCrouse = () => {
                 Teachers
               </h3>
               <Select
+                bordered={false}
                 style={{
                   width: "50%",
+                  borderRadius: "8px",
+                  borderWidth: 1,
                 }}
                 placeholder="select Teachers"
                 onChange={handleTeacher}
@@ -343,7 +357,12 @@ const CreateCrouse = () => {
           {input.map((item, i) => (
             <div className=" my-2 rounded-lg">
               <Select
-                style={{ width: "33%" }}
+                bordered={false}
+                style={{
+                  width: "33%",
+                  borderRadius: "8px",
+                  borderWidth: 1,
+                }}
                 className="rounded-lg border-[0px] outline-none"
                 placeholder="First Select Days"
                 onChange={(e) => handleScheduler(e, i)}

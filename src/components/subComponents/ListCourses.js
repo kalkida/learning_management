@@ -378,7 +378,11 @@ export default function ListCourses() {
             className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-4"
             placeholder="Subject"
             bordered={false}
-            style={{ width: 141 }}
+            style={{
+              width: 141,
+              borderRadius: "8px",
+              borderWidth: 2,
+            }}
             onChange={handleFilterSubject}
           >
             {subject?.map((item, i) => (
@@ -389,7 +393,11 @@ export default function ListCourses() {
           </Select>
           <Select
             className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
-            style={{ width: 141 }}
+            style={{
+              width: 141,
+              borderRadius: "8px",
+              borderWidth: 2,
+            }}
             placeholder="Class"
             bordered={false}
             onChange={handleFilterClass}
@@ -408,7 +416,11 @@ export default function ListCourses() {
         <div className="course-search">
           <div>
             <Input
-              style={{ width: 200 }}
+              style={{
+                width: 200,
+                borderRadius: "8px",
+                borderWidth: 2,
+              }}
               className="mr-3 rounded-lg"
               placeholder="Search"
               onSearch={onSearch}
@@ -418,7 +430,11 @@ export default function ListCourses() {
           <CreateSubject />
 
           <Button
-            className=" !text-[#E7752B] !border-[#E7752B] ml-2"
+            style={{
+              borderRadius: "8px",
+              borderWidth: 1,
+            }}
+            className=" !text-[#E7752B] !border-[#E7752B] ml-2 round"
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
             onClick={() => edit()}
           >

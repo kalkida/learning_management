@@ -173,6 +173,8 @@ export default function AddStudnets() {
       render: (item) => {
         if (item == "Male") {
           return <h1>M</h1>;
+        } else {
+          return <h1>F</h1>;
         }
       },
     },
