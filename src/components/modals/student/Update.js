@@ -18,7 +18,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
 
-
 const { Option } = Select;
 const { Search } = Input;
 
@@ -262,35 +261,48 @@ function UpdateStudents() {
 
   return (
     <>
-
       <div className="bg-[#F9FAFB] h-[100vh] p-2 -mt-14">
         <div className="add-header mb-6 items-center">
-          < h1 className="text-[1.5rem] font-jakarta" > Edit Student</h1 >
+          <h1 className="text-[1.5rem] font-jakarta text-[#344054]">
+            {" "}
+            Edit Student
+          </h1>
           <Button
-            className="btn-confirm bg-[#E7752B] !hover:text-[#E7752B] -mb-10"
+            className=" !bg-[#E7752B] hover:!text-[white] -mb-0"
             icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
-            onClick={async () => await handleUpdate()}>
+            onClick={async () => await handleUpdate()}
+          >
             Confirm
           </Button>
-        </div >
-        <div className="add-teacher bg-[#FFF]">
-          <div className="avater-img">
-            <div>
-              <h3 className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">
-                Student Picture</h3>
+        </div>
+        <div className="p-6 bg-[#FFF] border-[1px] border-[#D0D5DD] rounded-lg">
+          <div className="flex flex-row">
+            <div className="flex flex-col">
+              <div>
+                <h3 className="text-[#475467] text-sm font-jakarta  ">
+                  Student Picture
+                </h3>
+              </div>
               <div className="rounded-full  border-[#E7752B] bg-[white]">
                 <img
-                  className="w-[8vw] border-[2px] rounded-full"
-                  src={file ? URL.createObjectURL(file) : data.avater ? data.avater : "img-5.jpg"} />
+                  className="w-[8vw] h-[8vw] border-[2px] rounded-full"
+                  src={
+                    file
+                      ? URL.createObjectURL(file)
+                      : data.avater
+                      ? data.avater
+                      : "img-5.jpg"
+                  }
+                />
               </div>
             </div>
-            <div className="file-content">
-              <span className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch "  >
+            <div className="flex flex-col justify-center ml-10">
+              <span className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">
                 This will be displayed to you when you view this profile
               </span>
 
-              <div className="img-btn">
-                <button>
+              <div className="flex flex-row mt-2 ">
+                <button className="p-2 bg-[#E7752B] rounded-[8px] text-white mr-4">
                   <input
                     type="file"
                     id="browse"
@@ -307,16 +319,22 @@ function UpdateStudents() {
                     onClick={HandleBrowseClick}
                   />
                 </button>
-                <button onClick={onRemove}>Remove</button>
+                <button
+                  className="p-2 border-[#E7752B] border-[1px] rounded-[8px] text-[#E7752B]"
+                  onClick={onRemove}
+                >
+                  Remove
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between mt-10">
             <div className="flex flex-col w-[40%] mr-10">
-              <div className="py-4">
-                <label>First Name</label>
+              <div className="">
+                <p className="!pb-[6px] font-jakarta">First Name</p>
                 <Input
+                  className="!rounded-[6px]"
                   name="first_name"
                   placeholder="Eneter First Name"
                   defaultValue={updateStudent.first_name}
@@ -325,7 +343,7 @@ function UpdateStudents() {
               </div>
 
               <div>
-                <label>Class</label>
+                <p className="pb-[6px] mt-[35px] font-jakarta">Class</p>
                 <Select
                   placeholder="Select Class"
                   defaultValue={data.class}
@@ -346,9 +364,10 @@ function UpdateStudents() {
                   ))}
                 </Select>
               </div>
-              <div className="py-4">
-                <label>Date of Birth</label>
-                <DatePicker style={{ width: "100%" }}
+              <div>
+                <p className="pb-[6px] mt-[35px] font-jakarta">Date of Birth</p>
+                <DatePicker
+                  style={{ width: "100%" }}
                   onChange={handleDob}
                   defaultValue={
                     updateStudent.DOB
@@ -357,11 +376,10 @@ function UpdateStudents() {
                   }
                 />
               </div>
-
             </div>
             <div className="flex flex-col w-[40%]  mr-10">
-              <div className="py-4">
-                <label>Last Name</label>
+              <div>
+                <p className="pb-[6px] font-jakarta">Last Name</p>
                 <Input
                   name="last_name"
                   placeholder="Enter Last Name"
@@ -370,7 +388,7 @@ function UpdateStudents() {
                 />
               </div>
               <div>
-                <label>Sex </label>
+                <p className="pb-[6px] mt-[35px] font-jakarta">Sex </p>
                 <Select
                   placeholder="Select Gender"
                   onChange={handleGender}
@@ -387,8 +405,8 @@ function UpdateStudents() {
                   ))}
                 </Select>
               </div>
-              <div className="py-4">
-                <label>Email</label>
+              <div>
+                <p className="pb-[6px] mt-[35px] font-jakarta">Email</p>
                 <Input
                   name="email"
                   placeholder="Enter Email Address"

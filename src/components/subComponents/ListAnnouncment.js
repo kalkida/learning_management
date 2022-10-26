@@ -375,14 +375,14 @@ export default function ListAnnouncment() {
           </div>
         </div>
       ) : null}
-      <div className="mb-10">
-        <h1 className="text-2xl text-[#344054] font-[500] font-jakarta leading-10 mb-5">
+      <div className="mb-10 bg-[#FFFFFF] border-[1px] rounded-md">
+        <h1 className="text-2xl text-[#344054] font-[500] font-jakarta leading-10 mt-6 pl-[24px]">
           Latest Announcements
         </h1>
-        <div className="p-6 bg-[#FFFFFF] border-[1px] rounded-md">
+        <div className="px-8">
           {announcment.map((item, index) => (
             <div key={index} className="mt-0 flex flex-col mb-4">
-              <h1 className="text-lg mb-2 font-bold font-jakarta capitalize text-[#344054]  ">
+              <h1 className="text-lg mb-2 font-bold font-jakarta capitalize text-[#344054]   ">
                 {item.title}
               </h1>
               <ReactReadMoreReadLess

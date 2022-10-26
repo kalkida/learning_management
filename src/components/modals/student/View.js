@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, Tabs, Table, Tag, Calendar, Typography, DatePicker, Badge } from "antd";
+import {
+  Button,
+  Tabs,
+  Table,
+  Tag,
+  Calendar,
+  Typography,
+  DatePicker,
+  Badge,
+} from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import {
@@ -23,7 +32,6 @@ import moment from "moment";
 import { Card, Progress } from "antd";
 import Grid from "@mui/material/Grid";
 import "./style.css";
-
 
 function ViewStudent() {
   const navigate = useNavigate();
@@ -111,6 +119,7 @@ function ViewStudent() {
       title: "Age",
       dataIndex: "DOB",
       key: "DOB",
+      width: "20%",
       render: (item) => {
         return <span>{age}</span>;
       },
@@ -119,43 +128,31 @@ function ViewStudent() {
       title: "Sex",
       dataIndex: "sex",
       key: "sex",
+      width: "20%",
     },
     {
-      title: "Phone Number",
+      title: "",
       dataIndex: "phone",
       key: "phone",
-      render: (value) => {
-        return (
-          <>
-            {value?.map((item, i) => (
-              <PhoneInput
-                placeholder="Enter Guardian Contact"
-                className=" bg-white px-2"
-                value={item}
-                disabled
-              />
-            ))}
-          </>
-        );
-      },
-      // render: (item) => {
-      //   return <span>{item}{","}</span>;
-      // },
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
 
-    {
-      title: "Location",
-      dataIndex: "working_since",
-      key: "working_since",
       render: (item) => {
-        return <span>Lideta</span>;
+        return <span></span>;
       },
     },
+    // {
+    //   title: "Email",
+    //   dataIndex: "email",
+    //   key: "email",
+    // },
+
+    // {
+    //   title: "Location",
+    //   dataIndex: "working_since",
+    //   key: "working_since",
+    //   render: (item) => {
+    //     return <span>Lideta</span>;
+    //   },
+    // },
   ];
 
   const columns = [
@@ -166,7 +163,6 @@ function ViewStudent() {
       render: (item, index) => {
         return <h1>Guardian </h1>;
       },
-
     },
     {
       title: "Phone Number",
@@ -309,7 +305,7 @@ function ViewStudent() {
         <div className="flex flex-col  align-middle">
           <div className="flex flex-row">
             <h3 className="text-lg font-semibold font-jakarta">Class</h3>
-            <h4 className="border-l-[2px] pl-2 text-lg font-bold font-jakarta  text-[#667085] p-[1px] ml-2">
+            <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2">
               {data.class?.level + data.class?.section}
             </h4>
           </div>
@@ -320,37 +316,38 @@ function ViewStudent() {
           <Tabs.TabPane
             tab={
               <span className="text-base  text-center font-[500] font-jakarta">
-                OverView
+                Overview
               </span>
             }
             key="0"
           >
-            <Button className="btn-confirm  !text-[#E7752B]" onClick={handleUpdate}>
+            <Button
+              className="btn-confirm  !text-[#E7752B]"
+              onClick={handleUpdate}
+            >
               <FontAwesomeIcon
                 icon={faPen}
                 className="text-[#E7752B] mr-2 hover:text-[#E7752B]"
               />
               Edit
             </Button>
-            <Grid
-              container
-              rowSpacing={1}
-              columnSpacing={1}
-            >
+            <Grid container rowSpacing={1} columnSpacing={1}>
               <Grid item xs={12} sm={12} md={4}>
                 <Card
                   bordered={true}
                   className="w-[100%] min-h-[419px] h-[100%]"
-                  title={<h1 className="text-[#475467] font-[600] mb-[10px]"> Daily Report</h1>}
+                  title={
+                    <h1 className="text-[#475467] font-[600] mb-[10px]">
+                      {" "}
+                      Daily Report
+                    </h1>
+                  }
                 >
                   <div className="flex flex-row w-[100%] mt-[25%] flex-wrap justify-around">
-                    <div className="flex flex-col items-center  justify-center text-[#98A2B3]"
-
-                    >
+                    <div className="flex flex-col items-center  justify-center text-[#98A2B3]">
                       <h1 className="text-[20px] text-[#98A2B3] ">
                         Data Not Available Yet
                       </h1>
-
                     </div>
                   </div>
                 </Card>
@@ -374,9 +371,9 @@ function ViewStudent() {
                         strokeColor={"#32D583"}
                         percent={(100 * 6) / 10}
                         showInfo={false}
-                      // success={{
-                      //   percent: (100 * 6) / 10,
-                      // }}
+                        // success={{
+                        //   percent: (100 * 6) / 10,
+                        // }}
                       />
                       <h1 className="text-[14px] ">Total</h1>
                     </div>
@@ -410,11 +407,11 @@ function ViewStudent() {
                   <Liner />
                 </Card>
               </Grid>
-              <Grid item xs={12} sm={12} md={12}>
+              {/* <Grid item xs={12} sm={12} md={12}>
                 <Card bordered={true} className="w-[100%]  ">
                   <BarGraph />
                 </Card>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Tabs.TabPane>
 
@@ -426,7 +423,10 @@ function ViewStudent() {
             }
             key="1"
           >
-            <Button className="btn-confirm  !text-[#E7752B]" onClick={handleUpdate}>
+            <Button
+              className="btn-confirm  !text-[#E7752B]"
+              onClick={handleUpdate}
+            >
               <FontAwesomeIcon
                 icon={faPen}
                 className="text-[#E7752B] mr-2 hover:text-[#E7752B]"
@@ -441,69 +441,93 @@ function ViewStudent() {
                 <h1 className="text-[48px] text-center text-[#344054] font-bold font-jakarta">
                   {data.class?.level}
                 </h1>
-
               </div>
               <div className="flex flex-col justify-center  align-middle text-[#344054] ">
-                <span className="text-base font-jakarta  text-center text-[#344054]">Sibilings</span>
+                <span className="text-base font-jakarta  text-center text-[#344054]">
+                  Sibilings
+                </span>
                 <h1 className="text-[48px] text-[#344054] text-center font-bold font-jakarta ">
                   2
                 </h1>
-
               </div>
               <div className="flex flex-col justify-center  align-middle text-[#344054]">
-                <span className="text-base font-jakarta text-center text-[#344054]">Rank</span>
+                <span className="text-base font-jakarta text-center text-[#344054]">
+                  Rank
+                </span>
                 <h1 className="text-[48px] text-[#344054] text-center font-bold font-jakarta">
                   4
                 </h1>
-
               </div>
               <div className="flex flex-col justify-center mr-[40%] align-middle text-[#344054]">
-                <span className="text-base font-jakarta text-center text-[#344054]">Conduct</span>
+                <span className="text-base font-jakarta text-center text-[#344054]">
+                  Conduct
+                </span>
                 <h1 className="text-[48px] text-[#344054] text-center font-bold font-jakarta">
                   A
                 </h1>
-
               </div>
             </div>
-            <h1
-              className="text-[#344054] font-jakarta text-xl font-bold mt-4 mb-8"
-            >
+            <h1 className="text-[#344054] font-jakarta text-xl font-bold mt-4 mb-8">
               Student Information
             </h1>
 
-            <Table dataSource={teacherData} columns={teacherColumn} />
+            <Table
+              className="mb-10"
+              dataSource={teacherData}
+              columns={teacherColumn}
+              pagination={false}
+            />
             <div className="mb-10">
               <h1 className="text-[#344054] font-jakarta text-xl font-bold mb-8">
                 Guardian Information
               </h1>
-              <Table dataSource={guardian} columns={columns} />
+              <Table
+                dataSource={guardian}
+                columns={columns}
+                pagination={{ position: ["bottomCenter"] }}
+              />
             </div>
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<span className="text-base text-center font-[500] font-jakarta">Attendance </span>}
+            tab={
+              <span className="text-base text-center font-[500] font-jakarta">
+                Attendance{" "}
+              </span>
+            }
             key="2"
           >
             <div className="st-at">
               <div>
                 <div className="flex justify-between mb-4 ">
-                  <div className="flex p-4 items-center">
-                    <DatePicker />
+                  <div className="flex py-4 items-center">
+                    <DatePicker
+                      picker="year"
+                      className="!rounded-[6px] border-[2px]"
+                    />
                   </div>
                   <div className="flex flex-row justify-end bg-white p-4 ">
                     <div className="flex items-center mr-5">
-                      <div className="bg-[#fc0303] w-[2rem] h-[0.5rem] mr-1" style={{ borderRadius: "10px" }} />
-                      <span >Absent</span>
+                      <div
+                        className="bg-[#fc0303] w-[2rem] h-[0.5rem] mr-1"
+                        style={{ borderRadius: "10px" }}
+                      />
+                      <span>Absent</span>
                     </div>
                     <div className="flex items-center mr-5">
-                      <div className="bg-[#f5c702] w-[2rem] h-[0.5rem] mr-1" style={{ borderRadius: "10px" }} />
+                      <div
+                        className="bg-[#f5c702] w-[2rem] h-[0.5rem] mr-1"
+                        style={{ borderRadius: "10px" }}
+                      />
                       <span color="gold">Holydays</span>
                     </div>
                     <div className="flex items-center mr-5">
-                      <div className="bg-[#c7c4b7] w-[2rem] h-[0.5rem] mr-1" style={{ borderRadius: "10px" }} />
+                      <div
+                        className="bg-[#c7c4b7] w-[2rem] h-[0.5rem] mr-1"
+                        style={{ borderRadius: "10px" }}
+                      />
                       <span color="lime">No Class</span>
                     </div>
-
                   </div>
                 </div>
 
@@ -514,9 +538,7 @@ function ViewStudent() {
                         value={moment(item.defaultDate)}
                         headerRender={() => {
                           return (
-                            <div
-                              style={{ padding: 8, textAlign: "center" }}
-                            >
+                            <div style={{ padding: 8, textAlign: "center" }}>
                               <Typography.Title level={4}>
                                 {" "}
                                 {item.month}

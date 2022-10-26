@@ -122,7 +122,7 @@ export default function AddStudnets() {
     {
       title: (
         <p className="font-jakarta font-[600] text-[16px] text-[#344054]">
-          FirstName
+          Name
         </p>
       ),
       dataIndex: "first_name",
@@ -167,7 +167,7 @@ export default function AddStudnets() {
       },
     },
     {
-      title: <p className="font-jakarta  font-[600]">Gender</p>,
+      title: <p className="font-jakarta  font-[600]">Sex</p>,
       dataIndex: "sex",
       key: "sex",
       render: (item) => {
@@ -179,27 +179,27 @@ export default function AddStudnets() {
       },
     },
 
-    {
-      title: <p className="font-jakarta  font-[600]">Action</p>,
-      key: "action",
-      width: "10%",
-      render: (_, record) => (
-        <div className="flex flex-row justify-around">
-          <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleView(record)}
-          >
-            View{" "}
-          </a>
-          <a
-            className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-            onClick={() => handleUpdate(record)}
-          >
-            Update
-          </a>
-        </div>
-      ),
-    },
+    // {
+    //   title: <p className="font-jakarta  font-[600]">Action</p>,
+    //   key: "action",
+    //   width: "10%",
+    //   render: (_, record) => (
+    //     <div className="flex flex-row justify-around">
+    //       <a
+    //         className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+    //         onClick={() => handleView(record)}
+    //       >
+    //         View{" "}
+    //       </a>
+    //       <a
+    //         className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
+    //         onClick={() => handleUpdate(record)}
+    //       >
+    //         Update
+    //       </a>
+    //     </div>
+    //   ),
+    // },
   ];
 
   const add = () => {
@@ -219,6 +219,8 @@ export default function AddStudnets() {
       <div className="list-sub mb-10">
         <div className="list-filter">
           <Select
+            bordered={false}
+            className="!rounded-[6px] border-[#EAECF0] border-[2px]"
             placeholder="Grade"
             style={{ width: 120 }}
             onChange={handleFilterClass}
@@ -230,6 +232,8 @@ export default function AddStudnets() {
             ))}
           </Select>
           <Select
+            bordered={false}
+            className="!rounded-[6px] border-[#EAECF0] border-[2px]"
             style={{ width: 120 }}
             placeholder="Section"
             onChange={handleFilterSection}
@@ -246,7 +250,7 @@ export default function AddStudnets() {
           <div>
             <Input
               style={{ width: 200 }}
-              className="mr-3 rounded-lg"
+              className="mr-3 !rounded-[6px]"
               placeholder="Search"
               //onSearch={onSearch}
               prefix={<SearchOutlined className="site-form-item-icon" />}
@@ -255,7 +259,7 @@ export default function AddStudnets() {
           <Button
             onClick={() => add()}
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
-            className="hover:border-[#E7752B] hover:font-[500] !text-[#E7752B] !border-[#E7752B]"
+            className="hover:border-[#E7752B] hover:font-[500] !text-[#E7752B] !border-[#E7752B] !rounded-[6px] "
           >
             Add Student
           </Button>
@@ -263,6 +267,11 @@ export default function AddStudnets() {
       </div>
 
       <Table
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => handleView(record), // click row
+          };
+        }}
         loading={loading}
         style={{ marginTop: 20 }}
         columns={columns}

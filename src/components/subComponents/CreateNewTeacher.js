@@ -511,6 +511,8 @@ const CreateNewTeacher = () => {
             <div className="list-sub mb-2">
               <div className="list-filter">
                 <Select
+                  bordered={false}
+                  className="border-[2px] !rounded-[6px]"
                   placeholder="Subject"
                   style={{ width: 120 }}
                   onChange={handleFilterSubject}
@@ -522,8 +524,27 @@ const CreateNewTeacher = () => {
                   ))}
                 </Select>
                 <Select
+                  bordered={false}
+                  className="border-[2px] !rounded-[6px]"
+                  style={{ width: 120, marginRight: 15 }}
+                  placeholder="Grade"
+                  onChange={handleFilterClass}
+                >
+                  {classData?.map((item, i) => (
+                    <Option
+                      key={item.key}
+                      value={item.key}
+                      label={item.level + item.section}
+                    >
+                      {item.level + item.section}
+                    </Option>
+                  ))}
+                </Select>
+                <Select
+                  bordered={false}
+                  className="border-[2px] !rounded-[6px]"
                   style={{ width: 120 }}
-                  placeholder="Class"
+                  placeholder="Section"
                   onChange={handleFilterClass}
                 >
                   {classData?.map((item, i) => (
@@ -541,7 +562,7 @@ const CreateNewTeacher = () => {
                 <div>
                   <Input
                     style={{ width: 200 }}
-                    className="mr-3 rounded-lg"
+                    className="mr-3 !rounded-lg"
                     placeholder="Search"
                     prefix={<SearchOutlined className="site-form-item-icon" />}
                   />
