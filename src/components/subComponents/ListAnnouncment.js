@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { EditorState, ContentState, convertFromHTML } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import DOMPurify from "dompurify";
-import { convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
+import ReactReadMoreReadLess from "react-read-more-read-less";
+
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Modal } from "antd";
 import {
   query,
   collection,
@@ -31,6 +31,7 @@ export default function ListAnnouncment() {
   const [editorState, setEditorState] = useState("");
   const [editData, setEditData] = useState({});
   const [showEdit, setShowEdit] = useState(false);
+  const [deletData, setDeletData] = useState({});
   const [anounceData, setAnmounceData] = useState({
     title: "",
     body: "",
@@ -42,6 +43,39 @@ export default function ListAnnouncment() {
     school: data,
     archived: false,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpens, setIsModalOpens] = useState(false);
+
+  const showModal = (id) => {
+    setDeletData(id);
+
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    handleDelete(deletData.key);
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const showModals = (id) => {
+    // setDeletData(id);
+
+    setIsModalOpens(true);
+  };
+
+  const handleOks = () => {
+    // handleDelete(deletData.key);
+    uploadData();
+    setIsModalOpens(false);
+  };
+
+  const handleCancels = () => {
+    setIsModalOpens(false);
+  };
 
   const shownewPost = () => {
     setEditorState("");
@@ -116,7 +150,6 @@ export default function ListAnnouncment() {
   };
 
   const onSelect = (e) => {
-    console.log(e);
     const value = e;
     switch (value) {
       case "all":
@@ -217,11 +250,12 @@ export default function ListAnnouncment() {
           </div>
           <div className="flex flex-col p-6  border-[1px] bg-[#FFFFFF] rounded-md">
             <div className="flex flex-row justify-between w-[15vw] mt-5 mb-5">
-              <h1 className="text-lg font-bold">To:</h1>
+              <h1 className="text-lg font-bold text-[#344054]">To:</h1>
               <Select
+                bordered={false}
                 defaultValue="Select Audiance"
                 onChange={(e) => onSelect(e)}
-                className="w-[20vh] border-[#EAECF0] hover:border-[#EAECF0]"
+                className="w-[20vh] border-[#EAECF0] hover:border-[#EAECF0] !rounded-[6px] border-[2px]"
               >
                 <Option key={1} value={"all"}>
                   All
@@ -235,31 +269,47 @@ export default function ListAnnouncment() {
               </Select>
             </div>
             <div className="flex flex-col">
-              <h1 className="text-lg font-bold font-jakarta">Header</h1>
+              <h1 className="text-lg font-bold font-jakarta text-[#344054]">
+                Header
+              </h1>
               <input
+                placeholder="Please update student’s progress using laba "
                 onChange={onChange}
                 type="text"
                 className="mt-2 font-jakarta border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
               />
             </div>
+            <h1 className="text-lg font-bold font-jakarta text-[#344054]">
+              Main Text
+            </h1>
 
             <Editor
               editorState={editorState}
               style={{ padding: 10 }}
               toolbarClassName="toolbarClassName"
               wrapperClassName="wrapperClassName"
-              editorClassName="p-2 h-[auto]"
+              editorClassName="p-2 h-[auto] border-b-[#D0D5DD] border-b-[2px] bg-[#FCFCFD]"
               onEditorStateChange={onEditorStateChange}
               onChange={onEditorChange}
             />
             <div className="flex flex-row justify-end">
-              <button
-                onClick={() => uploadData()}
-                className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 font-jakarta right-0"
-              >
-                Post{"  "}
-                <Icon name="checkmark-outline" size="small" />
-              </button>
+              {anounceData.title != "" ? (
+                <button
+                  onClick={() => showModals()}
+                  className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 font-jakarta right-0"
+                >
+                  Post{"  "}
+                  <Icon name="checkmark-outline" size="small" />
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 font-jakarta right-0"
+                >
+                  Post{"  "}
+                  <Icon name="checkmark-outline" size="small" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -277,7 +327,7 @@ export default function ListAnnouncment() {
               <Select
                 defaultValue="Select Audiance"
                 onChange={(e) => onSelect(e)}
-                className="w-[20vh] border-[#EAECF0] hover:border-[#EAECF0]"
+                className="w-[20vh] border-[#EAECF0] hover:border-[#EAECF0] !rounded-[6px]"
               >
                 <Option key={1} value={1}>
                   Parents
@@ -292,6 +342,7 @@ export default function ListAnnouncment() {
               <input
                 onChange={onEdit}
                 type="text"
+                placeholder="Please update student’s progress using laba"
                 className="mt-2 border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] font-jakarta active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
                 defaultValue={editData.title}
               />
@@ -325,7 +376,7 @@ export default function ListAnnouncment() {
         </div>
       ) : null}
       <div className="mb-10">
-        <h1 className="text-2xl text-[#344054] font-bold font-jakarta leading-10 mb-5">
+        <h1 className="text-2xl text-[#344054] font-[500] font-jakarta leading-10 mb-5">
           Latest Announcements
         </h1>
         <div className="p-6 bg-[#FFFFFF] border-[1px] rounded-md">
@@ -334,49 +385,48 @@ export default function ListAnnouncment() {
               <h1 className="text-lg mb-2 font-bold font-jakarta capitalize text-[#344054]  ">
                 {item.title}
               </h1>
-
-              <div
-                className="preview"
-                style={{
-                  fontFamily: "Plus Jackarta Sans",
-                  fontSize: 16,
-                  fontWeight: "500",
-                  color: "#667085",
-                }}
-                dangerouslySetInnerHTML={createMarkup(item.body)}
-              ></div>
+              <ReactReadMoreReadLess
+                charLimit={200}
+                readMoreText={"Show more ▼"}
+                readLessText={"Show less ▲"}
+                readMoreClassName="text-[#E7752B]"
+                readLessClassName="text-[#E7752B]"
+              >
+                {item.body}
+              </ReactReadMoreReadLess>
               <div
                 style={{
                   float: "right",
-                  width: 100,
+                  width: "50%%",
                   display: "flex",
-                  marginTop: 10,
-                  justifyContent: "space-between",
+                  marginTop: 0,
+                  justifyContent: "flex-end",
                 }}
               >
-                <button onClick={() => openEdit(item)}>
-                  <EditOutlined
-                    className="shadow-lg"
-                    style={{
-                      color: "#E7752B",
-                      marginRight: 5,
-                      fontSize: 22,
-                      borderWidth: 1,
-                      borderColor: "#E7752B",
-                      padding: 3,
-                    }}
+                <button
+                  style={{ marginRight: 10 }}
+                  onClick={() => openEdit(item)}
+                >
+                  <Icon
+                    fill="#E7752B"
+                    name="edit-outline"
+                    size="large"
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }} // small, medium, large, xlarge
                   />
                 </button>
-                <button onClick={() => handleDelete(item.key)}>
-                  <DeleteOutlined
-                    className="shadow-lg"
-                    style={{
-                      color: "#E7752B",
-                      marginRight: 5,
-                      fontSize: 22,
-                      borderWidth: 1,
-                      borderColor: "#E7752B",
-                      padding: 3,
+                <button onClick={() => showModal(item)}>
+                  <Icon
+                    fill="#E7752B"
+                    name="trash-2-outline"
+                    size="large"
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
                     }}
                   />
                 </button>
@@ -409,6 +459,50 @@ export default function ListAnnouncment() {
           ))}
         </div>
       </div>
+
+      <Modal
+        title={<h1 className="text-[#1D2939] text-[30px]">Remove Post</h1>}
+        open={isModalOpen}
+        onOk={handleOk}
+        okText="Remove Permanently"
+        okType="danger"
+        onCancel={handleCancel}
+      >
+        <h1 className="text-[#344054] text-[24px]">{deletData.title}</h1>
+        <p className="text-[#667085] text-justify">{deletData.body}</p>
+      </Modal>
+
+      <Modal
+        title={<h1 className="text-[#1D2939] text-[30px]">Confirm Post</h1>}
+        open={isModalOpens}
+        onOk={handleOks}
+        okText="Post"
+        okType="primary"
+        onCancel={handleCancels}
+      >
+        <h1 className="text-[#344054] text-[24px]">{anounceData?.title}</h1>
+        {/* <p className="text-[#667085] text-justify">{editData}</p> */}
+        <Editor
+          editorState={editorState}
+          defaultContentState={"hkshdkdghdhgkj"}
+          toolbarClassName="toolbarClassName"
+          wrapperClassName="wrapperClassName"
+          disabled={true}
+          editorClassName="p-2 h-[auto]"
+          onEditorStateChange={onEditorStateChange}
+          onChange={onEditorEdit}
+        />
+        {/* <div
+          className="preview"
+          style={{
+            fontFamily: "Plus Jackarta Sans",
+            fontSize: 16,
+            fontWeight: "500",
+            color: "#667085",
+          }}
+          dangerouslySetInnerHTML={createMarkup(editData)}
+        ></div> */}
+      </Modal>
     </div>
   );
 }
