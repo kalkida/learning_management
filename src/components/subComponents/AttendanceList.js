@@ -13,7 +13,6 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 
 import "../modals/attendance/style.css";
-import { async } from "@firebase/util";
 import { SearchOutlined } from "@ant-design/icons";
 
 //const { Search } = Input;

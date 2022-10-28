@@ -3,7 +3,6 @@ import { Button, Select, Table, Input, DatePicker, Tag } from "antd";
 import { useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { async } from "@firebase/util";
 import { SearchOutlined } from "@ant-design/icons";
 
 function AttendanceView() {
@@ -71,15 +70,7 @@ function AttendanceView() {
       dataIndex: "attendance",
       key: "attendance",
       render: (_, record) => (
-        <a
-          className={
-            record.attendace
-              ? record.attendace.length <= 0
-                ? "bg-lime-600 p-1 text-white rounded-sm"
-                : "bg-[red] p-2 text-[white] rounded-sm"
-              : null
-          }
-        >
+        <a>
           {record.attendace ? record.attendace.length : 0}
         </a>
       ),
