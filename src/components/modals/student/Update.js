@@ -17,6 +17,7 @@ import { fetchParents, fetchClass } from "../funcs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
+import PhoneInput from "react-phone-number-input";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -179,7 +180,10 @@ function UpdateStudents() {
   };
 
   const setPhone = (e, index) => {
-    allPhone[index] = e.target.value;
+    // allPhone[index] = e.target.value;
+    allPhone[index] = e;
+    setPhones(e);
+
     setUpdateStudent({ ...updateStudent, phone: allPhone });
   };
 
@@ -260,163 +264,151 @@ function UpdateStudents() {
   }, []);
 
   return (
-    <>
-      <div className="bg-[#F9FAFB] h-[100vh] p-2 -mt-14">
-        <div className="add-header mb-6 items-center">
-          <h1 className="text-[1.5rem] font-jakarta text-[#344054]">
-            {" "}
-            Edit Student
-          </h1>
-          <Button
-            className=" !bg-[#E7752B] hover:!text-[white] -mb-0"
-            icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
-            onClick={async () => await handleUpdate()}
-          >
-            Confirm
-          </Button>
-        </div>
-        <div className="p-6 bg-[#FFF] border-[1px] border-[#D0D5DD] rounded-lg">
-          <div className="flex flex-row">
-            <div className="flex flex-col">
-              <div>
-                <h3 className="text-[#475467] text-sm font-jakarta  ">
-                  Student Picture
-                </h3>
-              </div>
-              <div className="rounded-full  border-[#E7752B] bg-[white]">
-                <img
-                  className="w-[8vw] h-[8vw] border-[2px] rounded-full"
-                  src={
-                    file
-                      ? URL.createObjectURL(file)
-                      : data.avater
-                      ? data.avater
-                      : "img-5.jpg"
-                  }
-                />
-              </div>
+    <div className="bg-[#F9FAFB] min-h-[100vh] p-2 -mt-14">
+      <div className="mb-6 items-center">
+        <h1 className="text-[1.5rem] font-jakarta text-[#344054]">
+          {" "}
+          Edit Student
+        </h1>
+        <Button
+          className=" !bg-[#E7752B] hover:!text-[white] -mt-14 float-right !rounded-[8px] !text-[white]"
+          icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
+          onClick={async () => await handleUpdate()}
+        >
+          Confirm
+        </Button>
+      </div>
+      <div className="p-6 bg-[#FFF] border-[1px] border-[#D0D5DD] rounded-lg">
+        <div className="flex flex-row">
+          <div className="flex flex-col">
+            <div>
+              <h3 className="text-[#475467] text-sm font-jakarta  ">
+                Student Picture
+              </h3>
             </div>
-            <div className="flex flex-col justify-center ml-10">
-              <span className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">
-                This will be displayed to you when you view this profile
-              </span>
-
-              <div className="flex flex-row mt-2 ">
-                <button className="p-2 bg-[#E7752B] rounded-[8px] text-white mr-4">
-                  <input
-                    type="file"
-                    id="browse"
-                    name="files"
-                    style={{ display: "none" }}
-                    onChange={handleFile}
-                    accept="/image/*"
-                  />
-                  <input type="hidden" id="filename" />
-                  <input
-                    type="button"
-                    value="Change Photo"
-                    id="fakeBrowse"
-                    onClick={HandleBrowseClick}
-                  />
-                </button>
-                <button
-                  className="p-2 border-[#E7752B] border-[1px] rounded-[8px] text-[#E7752B]"
-                  onClick={onRemove}
-                >
-                  Remove
-                </button>
-              </div>
+            <div className="rounded-full  border-[#E7752B] bg-[white]">
+              <img
+                className="w-[8vw] h-[8vw] border-[2px] rounded-full"
+                src={
+                  file
+                    ? URL.createObjectURL(file)
+                    : data.avater
+                    ? data.avater
+                    : "img-5.jpg"
+                }
+              />
             </div>
           </div>
+          <div className="flex flex-col justify-center ml-10">
+            <span className="text-[#475467] text-sm font-jakarta justify-center flex items-stretch ">
+              This will be displayed to you when you view this profile
+            </span>
 
-          <div className="flex flex-row justify-between mt-10">
-            <div className="flex flex-col w-[40%] mr-10">
-              <div className="">
-                <p className="!pb-[6px] font-jakarta">First Name</p>
-                <Input
-                  className="!rounded-[6px]"
-                  name="first_name"
-                  placeholder="Eneter First Name"
-                  defaultValue={updateStudent.first_name}
-                  onChange={(e) => onChange(e)}
+            <div className="flex flex-row mt-2 ">
+              <button className="p-2 bg-[#E7752B] rounded-[8px] text-white mr-4">
+                <input
+                  type="file"
+                  id="browse"
+                  name="files"
+                  style={{ display: "none" }}
+                  onChange={handleFile}
+                  accept="/image/*"
                 />
-              </div>
+                <input type="hidden" id="filename" />
+                <input
+                  type="button"
+                  value="Change Photo"
+                  id="fakeBrowse"
+                  onClick={HandleBrowseClick}
+                />
+              </button>
+              <button
+                className="p-2 border-[#E7752B] border-[1px] rounded-[8px] text-[#E7752B]"
+                onClick={onRemove}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
 
-              <div>
-                <p className="pb-[6px] mt-[35px] font-jakarta">Class</p>
-                <Select
-                  placeholder="Select Class"
-                  defaultValue={data.class}
-                  onChange={handlesection}
-                  optionLabelProp="label"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {classOption.map((item, index) => (
-                    <Option
-                      key={item.key}
-                      value={item.key}
-                      label={item.level + item.section}
-                    >
-                      {item.level + item.section}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-              <div>
-                <p className="pb-[6px] mt-[35px] font-jakarta">Date of Birth</p>
-                <DatePicker
-                  style={{ width: "100%" }}
-                  onChange={handleDob}
-                  defaultValue={
-                    updateStudent.DOB
-                      ? moment(JSON.parse(updateStudent.DOB))
-                      : ""
-                  }
-                />
-              </div>
+        <div className="flex flex-row justify-between mt-10">
+          <div className="flex flex-col w-[40%] mr-10">
+            <div className="">
+              <p className="!pb-[6px] font-jakarta">First Name</p>
+              <Input
+                className="!rounded-[6px]"
+                name="first_name"
+                placeholder="Eneter First Name"
+                defaultValue={updateStudent.first_name}
+                onChange={(e) => onChange(e)}
+              />
             </div>
-            <div className="flex flex-col w-[40%]  mr-10">
-              <div>
-                <p className="pb-[6px] font-jakarta">Last Name</p>
-                <Input
-                  name="last_name"
-                  placeholder="Enter Last Name"
-                  defaultValue={updateStudent.last_name}
-                  onChange={(e) => onChange(e)}
-                />
-              </div>
-              <div>
-                <p className="pb-[6px] mt-[35px] font-jakarta">Sex </p>
-                <Select
-                  placeholder="Select Gender"
-                  onChange={handleGender}
-                  defaultValue={updateStudent.sex}
-                  optionLabelProp="label"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {gender.map((item, index) => (
-                    <Option key={item.index} value={item} label={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-              <div>
-                <p className="pb-[6px] mt-[35px] font-jakarta">Email</p>
-                <Input
-                  name="email"
-                  placeholder="Enter Email Address"
-                  defaultValue={updateStudent.email}
-                  onChange={(e) => onChange(e)}
-                />
-              </div>
+
+            <div>
+              <p className="pb-[6px] mt-[35px] font-jakarta">Class</p>
+              <Select
+                placeholder="Select Class"
+                defaultValue={data.class}
+                onChange={handlesection}
+                optionLabelProp="label"
+                style={{
+                  width: "100%",
+                }}
+              >
+                {classOption.map((item, index) => (
+                  <Option
+                    key={item.key}
+                    value={item.key}
+                    label={item.level + item.section}
+                  >
+                    {item.level + item.section}
+                  </Option>
+                ))}
+              </Select>
             </div>
-            <div className="flex flex-col w-[40%] mr-10">
-              <div className="py-4">
+            <div>
+              <p className="pb-[6px] mt-[35px] font-jakarta">Date of Birth</p>
+              <DatePicker
+                style={{ width: "100%" }}
+                onChange={handleDob}
+                defaultValue={
+                  updateStudent.DOB ? moment(JSON.parse(updateStudent.DOB)) : ""
+                }
+              />
+            </div>
+          </div>
+          <div className="flex flex-col w-[40%]  mr-10">
+            <div>
+              <p className="pb-[6px] font-jakarta">Last Name</p>
+              <Input
+                name="last_name"
+                placeholder="Enter Last Name"
+                defaultValue={updateStudent.last_name}
+                onChange={(e) => onChange(e)}
+              />
+            </div>
+            <div>
+              <p className="pb-[6px] mt-[35px] font-jakarta">Sex </p>
+              <Select
+                placeholder="Select Gender"
+                onChange={handleGender}
+                defaultValue={updateStudent.sex}
+                optionLabelProp="label"
+                style={{
+                  width: "100%",
+                }}
+              >
+                {gender.map((item, index) => (
+                  <Option key={item.index} value={item} label={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </div>
+          <div className="flex flex-col w-[40%] mr-10">
+            {/* <div className="py-4">
                 <label>Guardian Contact</label>
                 {data.phone.map((item, index) => {
                   return (
@@ -438,17 +430,27 @@ function UpdateStudents() {
                     Add New
                   </Button>
                 ) : null}
-              </div>
-              <div>
-                <label>Student Id</label>
-                <Input
-                  name="studentId"
-                  placeholder="Enter Student Id"
-                  defaultValue={updateStudent.studentId}
-                  onChange={(e) => onChange(e)}
-                />
-              </div>
-              {/* <div>
+              </div> */}
+            <div>
+              <label className="py-4">Student Id</label>
+              <Input
+                name="studentId"
+                className="!mt-4"
+                placeholder="Enter Student Id"
+                defaultValue={updateStudent.studentId}
+                onChange={(e) => onChange(e)}
+              />
+            </div>
+            <div>
+              <p className="pb-[6px] mt-[35px] font-jakarta">Email</p>
+              <Input
+                name="email"
+                placeholder="Enter Email Address"
+                defaultValue={updateStudent.email}
+                onChange={(e) => onChange(e)}
+              />
+            </div>
+            {/* <div>
               <Button
                 className="float-right -bottom-[5.5vh] border-[2px] border-[#E7752B] text-[#E7752B] rounded-lg flex flex-row  "
                 onClick={handleCancle}
@@ -457,35 +459,47 @@ function UpdateStudents() {
                 Cancel
               </Button>
             </div> */}
-            </div>
-            <div></div>
           </div>
+          <div></div>
         </div>
-        <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}></div>
-
-        {/* </Tabs.TabPane> */}
-        {/* <Tabs.TabPane tab={
-              <p className="text-base font-bold text-center  font-jakarta">Course</p>
-            } key="2">
-              <Button className="btn-confirm" onClick={handleUpdate}>
-                Edit Profile
-              </Button>
-              <div className="teacher-course-list">
-                <div className="tch-cr-list">
-                  <h1 className="text-xl font-bold  font-jakarta">Assigned Courses</h1>
-                </div>
-                <Table
-                  rowSelection={rowSelection}
-                  loading={courseLoading}
-                  dataSource={courseData}
-                  columns={columns}
+      </div>
+      <div
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          marginTop: 10,
+          marginBottom: 20,
+        }}
+      >
+        <h1 className="text-[1.5rem] font-jakarta text-[#344054]">Guardian</h1>
+        <div className="p-6 bg-[#FFF] border-[1px] border-[#D0D5DD] rounded-lg">
+          {input.map((item, index) => {
+            return (
+              <div className="mt-5">
+                <h1 className="text-lg font-[500]">Guardian {index + 1}</h1>
+                <PhoneInput
+                  placeholder="Enter Guardian Contact"
+                  className="py-1 border-[2px] bg-white px-2 mb-2 mt-6 !rounded-lg"
+                  style={{ marginTop: 6, width: "20%" }}
+                  value={item}
+                  country="ET"
+                  onChange={(e) => setPhone(e, index)}
                 />
               </div>
-            </Tabs.TabPane> */}
-        {/* </Tabs>
-        </div> */}
+            );
+          })}
+          <Button
+            className="!rounded-lg ]"
+            onClick={() => {
+              setInputs([...input, 0]);
+              setAllPhone([...allPhone, phone]);
+            }}
+          >
+            Add New
+          </Button>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

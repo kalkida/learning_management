@@ -52,6 +52,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState("");
+  const [setLogingIn, setLoadingData] = useState(false);
   const [finished, setFinished] = useState(false);
   const [otp, setOTP] = useState("");
   const dispatch = useDispatch();
@@ -170,6 +171,7 @@ export default function Login() {
         <div className="flex flex-col mb-[20px]">
           <label>Email Address</label>
           <input
+            required
             className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-sm p-2"
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -177,6 +179,7 @@ export default function Login() {
         <div className="flex flex-col mb-[20px]">
           <label>Password</label>
           <input
+            required
             type="password"
             className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-sm p-2"
             onChange={(e) => setPassword(e.target.value)}
@@ -192,14 +195,15 @@ export default function Login() {
           </a>
         </div>
 
-        <button
+        <Button
           onClick={() => onFinish()}
-          className="w-[300px] h-[44px] active:bg-[#E7752B] after:bg-[#E7752B] visited:bg-[#E7752B] hover:bg-[#e7762bc2] text- hover:border-[#E7752B] hover:text-[white] bg-[#E7752B] text-white  border-[#E7752B]"
+          className="w-[300px] h-[44px] !bg-[#E7752B] visited:bg-[#E7752B] hover:bg-[#e7762bc2] text- hover:border-[#E7752B] !text-[white] hover:!text-[white]   border-[#E7752B]"
           disabled={loading}
+          loading={loading}
           type="submit"
         >
           Login
-        </button>
+        </Button>
       </div>
     </div>
   );

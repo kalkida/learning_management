@@ -56,8 +56,8 @@ import ViewStudent from "./modals/student/View";
 import UpdateStudent from "./modals/student/Update";
 import AttendanceList from "./subComponents/AttendanceList";
 import AttendanceView from "./modals/attendance/view";
-import zIndex from "@mui/material/styles/zIndex";
-
+import Profile from "../components/subComponents/Profile";
+import ProfileEdit from "../components/subComponents/ProfileEdit";
 const { Header, Content, Sider } = Layout;
 const drawerWidth = 240;
 
@@ -458,6 +458,8 @@ const Layouts = () => {
                       minHeight: 48,
                       borderRadius: 2,
                       justifyContent: open ? "initial" : "center",
+                      backgroundColor:
+                        item.link == currentURL ? "#FCF0E8" : "white",
                       px: 2.5,
                     }}
                   >
@@ -490,7 +492,7 @@ const Layouts = () => {
                 paddingRight: 2,
               }}
             >
-              <a onClick={() => logout()}>
+              <a onClick={() => navigate("/profile")}>
                 <ListItemButton
                   sx={{
                     ":hover": {
@@ -664,6 +666,8 @@ const Layouts = () => {
               <Route path="/announcment" element={<ListAnnouncment />} />
               <Route path="/attendance" element={<AttendanceList />} />
               <Route path="/view-attendance" element={<AttendanceView />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="profile-edit" element={<ProfileEdit />} />
             </Routes>
           </Content>
         </Box>

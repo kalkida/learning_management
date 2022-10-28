@@ -26,7 +26,6 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { firestoreDb, storage } from "../../../firebase";
-import AttendanceList from "../../subComponents/AttendanceList";
 import moment from "moment";
 import {
   removeSingleCourseFromClass,
@@ -275,12 +274,12 @@ function UpdateCourse() {
   return (
     <>
       {loading ? (
-        <div className="bg-[#F9FAFB] h-[100vh] py-4">
+        <div className="bg-[#F9FAFB] min-h-[100vh] py-4">
           <div className="flex flex-row justify-between w-[100%] -mt-20 border-b-[1px] p-3">
-            <div className="flex flex-row justify-between align-middle h-[78px]">
+            <div className="flex flex-row justify-between align-middle h-[7.4vw]">
               <div className="rounded-full  border-[2px] border-[#E7752B] mr-10">
                 <img
-                  className="w-[74px] rounded-full  bg-[white] "
+                  className="w-[7vw] rounded-full  bg-[white] "
                   src="logo512.png"
                   alt="profile"
                 />
@@ -331,7 +330,7 @@ function UpdateCourse() {
             </div>
           </div>
 
-          <div className="mt-[32px]">
+          <div className="mt-[8px]">
             <p className="text-xl font-semibold text-[#344054] text-left font-jakarta mb-[12px]">
               Edit Course
             </p>
@@ -416,6 +415,7 @@ function UpdateCourse() {
                   dataSource={teachers}
                   rowSelection={rowSelection}
                   columns={columns}
+                  pagination={{ position: ["bottomCenter"] }}
                 />
               ) : (
                 <Spin />
@@ -428,30 +428,30 @@ function UpdateCourse() {
               >
                 Edit Schedule
               </h4>
-              <div className="up-card-schedule pb-10 border-[2px] rounded-[8px] bg-[white]">
+              <div className="p-6 pb-10 border-[2px] rounded-[8px] bg-[white]">
                 <h2 className="text-lg py-2">
                   Class{"  "}
                   {singleClass?.level}
                   {singleClass?.section}
                 </h2>
                 <div className="flex flex-row justify-between">
-                  <div className="border-[2px] w-[100%] p-2 text-left rounded-l-lg border-r-[0px] border-[#F2F4F7]">
+                  <div className="border-[2px] w-[100%] p-2 text-left border-[#F2F4F7]">
                     <p> Period</p>
                   </div>
                   <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-left border-r-[0px] rounded-none border-[#F2F4F7]">
                     <p> Start time</p>
                   </div>
 
-                  <div className="border-[2px] w-[100%] p-2 text-left rounded-l-none border-l-[0px] rounded-lg border-[#F2F4F7]">
+                  <div className="border-[2px] w-[100%] p-2 text-left rounded-l-none border-l-[0px]  border-[#F2F4F7]">
                     <p> End time</p>
                   </div>
                 </div>
 
                 {data.schedule?.map((item, i) => (
-                  <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
+                  <div className="border-[#F2F4F7] border-[0px] my-2 rounded-lg">
                     <Select
-                      style={{ width: "33%" }}
-                      className="rounded-lg border-[0px]"
+                      style={{ width: "30%", marginRight: "3%" }}
+                      className="border-[0px]"
                       placeholder="First Select Days"
                       onChange={(e) => handleScheduler(e, i)}
                       defaultValue={item.day}
@@ -464,7 +464,7 @@ function UpdateCourse() {
                     </Select>
                     <TimePicker.RangePicker
                       style={{ width: "67%" }}
-                      className="rounded-lg border-[0px]"
+                      className=" !border-[1px]"
                       format={"hh:mm a"}
                       showTime={{ use12Hours: true }}
                       defaultValue={
@@ -480,9 +480,9 @@ function UpdateCourse() {
                   </div>
                 ))}
                 {input.map((item, i) => (
-                  <div className="border-[#F2F4F7] border-[2px] my-2 rounded-lg">
+                  <div className="border-[#F2F4F7] border-[0px] my-2">
                     <Select
-                      style={{ width: "33%" }}
+                      style={{ width: "30%", marginRight: "3%" }}
                       placeholder="First Select Days"
                       onChange={(e) => handleNewScheduler(e, i)}
                     >
