@@ -95,7 +95,7 @@ function TeacherUpdate() {
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",
-        (err) => console.log(err),
+        (err) => console.log("error", err),
         () => {
           // download url
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
@@ -391,11 +391,24 @@ function TeacherUpdate() {
       },
     },
   ];
+  const getClassToSetClass = async (courses) => {
+    var temporary = [];
+    courses.map(async (item) => {
+      var set = await fetchclassFromCourse(item.key);
+      temporary.push(set.class);
+    });
+    await setUpdateTeacher({
+      ...updateTeacher,
+      class: temporary,
+    });
+    console.log("tempory", temporary);
+  };
 
   useEffect(() => {
     getClass();
     getCourse();
     getID();
+    getClassToSetClass(data.course);
 
     getSubject();
   }, []);

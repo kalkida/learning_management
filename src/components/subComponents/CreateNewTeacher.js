@@ -41,6 +41,7 @@ const CreateNewTeacher = () => {
   const [coursesData, setCourseData] = useState([]);
   const [courseLoading, setCourseLoading] = useState(true);
   const [classLoading, setClassLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(false);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [subject, setSubject] = useState();
@@ -63,10 +64,12 @@ const CreateNewTeacher = () => {
   const valueRef = useRef();
 
   const getClassToSet = async (courses) => {
+    var data = [];
     courses.map(async (item) => {
       var set = await fetchclassFromCourse(item);
-      await setNewUser({ ...newUser, class: [...newUser.class, set.class] });
+      data.push(set.class);
     });
+    setNewUser({ ...newUser, class: data });
   };
 
   const onSelectChange = (newSelectedRowKeys) => {
@@ -115,13 +118,14 @@ const CreateNewTeacher = () => {
   };
 
   async function handleUpload() {
+    var newUserUUID = uuid();
+
     if (!file) {
-      var newUserUUID = uuid();
-      setDoc(doc(firestoreDb, "teachers", newUserUUID), {
+      await setDoc(doc(firestoreDb, "teachers", newUserUUID), {
         ...newUser,
         course: selectedRowKeys,
       });
-      setDoc(doc(firestoreDb, "users", newUserUUID), {
+      await setDoc(doc(firestoreDb, "users", newUserUUID), {
         phoneNumber: newUser.phone,
         role: {
           isAdmin: false,
@@ -130,8 +134,8 @@ const CreateNewTeacher = () => {
         },
         school: schools,
       });
-      newUser.course.map((item) => {
-        addSingleTeacherToCourse(newUserUUID, item);
+      selectedRowKeys.map((items) => {
+        addSingleTeacherToCourse(newUserUUID, items);
       });
       navigate("/list-teacher");
     } else {
@@ -156,8 +160,14 @@ const CreateNewTeacher = () => {
             if (valueRef.current != null) {
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
-                setDoc(doc(firestoreDb, "teachers", uuid()), newUser);
-                setDoc(doc(firestoreDb, "users", uuid()), {
+                setDoc(doc(firestoreDb, "teachers", newUserUUID), {
+                  ...newUser,
+                  course: selectedRowKeys,
+                });
+                selectedRowKeys.map((items) => {
+                  addSingleTeacherToCourse(newUserUUID, items);
+                });
+                setDoc(doc(firestoreDb, "users", newUserUUID), {
                   phoneNumber: newUser.phone,
                   role: {
                     isAdmin: false,
@@ -428,7 +438,7 @@ const CreateNewTeacher = () => {
                   First Name
                 </h1>
                 <Input
-                  className="!border-[2px]"
+                  className="!border-[2px] !rounded-lg"
                   name="first_name"
                   onChange={(e) => handleChangeTeacher(e)}
                 />
@@ -438,7 +448,7 @@ const CreateNewTeacher = () => {
                   Last Name
                 </h1>
                 <Input
-                  className="!border-[2px]"
+                  className="!border-[2px] !rounded-lg"
                   name="last_name"
                   onChange={(e) => handleChangeTeacher(e)}
                 />
@@ -448,7 +458,7 @@ const CreateNewTeacher = () => {
               <div className="py-2">
                 <h1 className="text-[#344054] pb-[6px] font-jakarta">Phone</h1>
                 <Input
-                  className="!border-[2px]"
+                  className="!border-[2px] !rounded-lg"
                   name="phone"
                   onChange={(e) => handleChangeTeacher(e)}
                 />
@@ -456,8 +466,9 @@ const CreateNewTeacher = () => {
               <div className="py-2">
                 <h1 className="text-[#344054] pb-[6px] font-jakarta">Email</h1>
                 <Input
-                  className="!border-[2px]"
+                  className="!border-[2px] !rounded-lg"
                   name="email"
+                  placeholder="Email Address"
                   onChange={(e) => handleChangeTeacher(e)}
                 />
               </div>
@@ -468,7 +479,7 @@ const CreateNewTeacher = () => {
                   Date Of Birth
                 </h1>
                 <DatePicker
-                  // className="!border-[2px]"
+                  className="!border-[2px] !rounded-lg"
                   style={{ width: "100%", height: "4vh" }}
                   onChange={handleDob}
                 />
@@ -476,7 +487,8 @@ const CreateNewTeacher = () => {
               <div className="-mt-2">
                 <h1 className="text-[#344054] pb-[6px] font-jakarta">Sex</h1>
                 <Select
-                  // className="!border-[2px] h-[4vh]"
+                  bordered={false}
+                  className="!border-[2px] !rounded-lg h-9"
                   placeholder="Select Gender"
                   onChange={handleGender}
                   optionLabelProp="label"
@@ -492,11 +504,14 @@ const CreateNewTeacher = () => {
                 </Select>
               </div>
               <div className="-mt-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                <h1 className="text-[#344054] pb-[6px] font-jakarta ">
                   Working Since
                 </h1>
 
-                <DatePicker className=" w-[100%]" onChange={handleWork} />
+                <DatePicker
+                  className="text-center w-[100%] !rounded-lg h-9 flex pt-1"
+                  onChange={handleWork}
+                />
               </div>
             </div>
           </div>

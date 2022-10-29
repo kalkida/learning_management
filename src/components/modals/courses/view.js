@@ -19,30 +19,8 @@ function ViewCourse() {
   const [loading, setLoading] = useState(true);
   const { state } = useLocation();
   const { data } = state;
-  const [teachers, setTeachers] = useState([]);
 
-  const getStudents = async (ids) => {
-    var temporary = [];
-    if (ids.length > 0) {
-      const q = query(collection(firestoreDb, "teachers"));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        var data = doc.data();
-        console.log("data: " + data.first_name);
-        console.log("data doc: " + doc.id);
-        if (ids.includes(doc.id)) {
-          temporary.push(data);
-        }
-      });
-      setTeachers(temporary);
-    }
-  };
-
-  useEffect(() => {
-    getStudents(data.teachers);
-    console.log(data);
-  }, []);
-
+  console.log(data);
   const navigate = useNavigate();
 
   const columnsA = [
@@ -105,17 +83,25 @@ function ViewCourse() {
   ];
   const columns = [
     {
-      title: "Name",
+      title: (
+        <p className="text-[#344054] text-[16px] font-[600]">
+          Assigned Teachers
+        </p>
+      ),
       dataIndex: "first_name",
       key: "first_name",
       render: (text, record) => {
-        console.log("record    ", record);
-
-        return (
-          <div className="font-[500] text-sm font-jakarta">
-            {record.first_name} {record.last_name}
-          </div>
-        );
+        if (record?.first_name) {
+          return (
+            <div className="font-[500] text-sm font-jakarta capitalize">
+              {record.first_name} {record.last_name}
+            </div>
+          );
+        } else {
+          return (
+            <h1 className="text-[#b0acac] font-jakarta font-[300]">No Data</h1>
+          );
+        }
       },
     },
   ];
@@ -232,7 +218,8 @@ function ViewCourse() {
   const getAttendaceFilter = async (ID, Date) => {
     const q = query(
       collection(firestoreDb, "attendanceanddaily", `${data.key}/attendace`),
-      where("studentId", "==", ID), where("date", "==", Date)
+      where("studentId", "==", ID),
+      where("date", "==", Date)
     );
     var temporary = [];
 
@@ -309,24 +296,16 @@ function ViewCourse() {
               Edit
             </Button>
             <div className=" rounded-2xl border-[0px]">
-              <h4 className="mb-2 font-semibold text-sm font-jakarta text-[#344054]">
+              <h4 className="mb-2 font-semibold text-sm font-jakarta text-[#344054] ">
                 Coures Description
               </h4>
-              {/* <Input.TextArea
-                disabled
-                className="border-[1px] rounded-sm"
-                width="100%"
-                rows={4}
-                defaultValue={data.description}
-              /> */}
-              <p className="border-[1px] rounded-sm p-3">{data.description}</p>
+
+              <p className="border-[1px] rounded-sm p-3 bg-[white] min-h-[120px]">
+                {data.description}
+              </p>
             </div>
             <div className="text-xl mt-10">
-              <p className="text-lg font-semibold text-left ml-0 font-jakarta">
-                Assigned Teachers
-              </p>
               <Table
-                className=" bg-[white]"
                 dataSource={data.teachers}
                 columns={columns}
                 pagination={false}
@@ -337,7 +316,7 @@ function ViewCourse() {
                 Schedule
               </h4>
               <Table
-                className=" bg-[white]"
+                className=" !bg-[white]"
                 dataSource={data.schedule}
                 columns={columnsA}
                 pagination={false}
