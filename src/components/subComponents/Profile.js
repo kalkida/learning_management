@@ -20,6 +20,7 @@ import { faCheck, faEdit, faPen } from "@fortawesome/free-solid-svg-icons";
 import PhoneInput from "react-phone-number-input";
 
 export default function Profile() {
+  const school = useSelector((state) => state.user.school);
   var data = "";
   const navigation = useNavigate();
   const dispatch = useDispatch();
@@ -55,29 +56,27 @@ export default function Profile() {
         <div className="p-6 ">
           <div className="flex flex-row">
             <div className="flex flex-col">
-              <div className="rounded-full  border-[#E7752B] bg-[white]">
+              <div className="rounded-full  border-[#E7752B] border-[2px] bg-[white]">
                 <img
-                  className="w-[10vw] border-[2px] rounded-full"
-                  src={data.avater ? data.avater : "img-5.jpg"}
+                  className="w-[11vw] h-[17vh] border-[2px] rounded-full"
+                  src={school.logo ? school.logo : "img-5.jpg"}
                   alt="profile"
                 />
               </div>
               <h1 className="text-center mt-10 text-xl text-[#344054] ">
-                Janet Doe
+                {school.principle}
               </h1>
               <h2 className="text-center text-[#98A2B3]">Principal </h2>
             </div>
             <div className="ml-40">
-              <h1 className="text-xl text-[#344054]">Radical School</h1>
+              <h1 className="text-xl text-[#344054]">{school.name}</h1>
               <h2 className="text-[#98A2B3] text-[14px]">School Name</h2>
               <br />
-              <h1 className="text-xl text-[#344054]">
-                radicalschool@gmail.com
-              </h1>
+              <h1 className="text-xl text-[#344054]">{school.email}</h1>
               <h2 className="text-[#98A2B3] text-[14px]">Email</h2>
               <br />
               <h1 className="text-xl text-[#344054]">Location</h1>
-              <h2 className="text-[#98A2B3] text-[14px]">Location</h2>
+              <h2 className="text-[#98A2B3] text-[14px]">{school.location}</h2>
             </div>
           </div>
         </div>

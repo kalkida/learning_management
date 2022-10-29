@@ -64,6 +64,7 @@ const drawerWidth = 240;
 const Layouts = () => {
   const navigate = useNavigate();
   const profile = useSelector((state) => state.user.profile);
+  const school = useSelector((state) => state.user.school);
   const user = useSelector((state) => state.user.value);
   const role = useSelector((state) => state.user.profile.role);
   const [windowSize, setWindowSize] = useState(getWindowSize());
@@ -513,7 +514,11 @@ const Layouts = () => {
                       justifyContent: "center",
                     }}
                   >
-                    <Avatar style={{ padding: "none" }} fontSize="small" />
+                    <Avatar
+                      src={school.logo}
+                      style={{ padding: "none" }}
+                      fontSize="large"
+                    />
                   </ListItemIcon>
                   {role["isAdmin"] == true ? (
                     <ListItemText

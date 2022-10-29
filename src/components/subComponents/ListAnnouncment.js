@@ -223,6 +223,26 @@ export default function ListAnnouncment() {
         console.log(error);
       });
   };
+  const archive = () => {
+    setDoc(
+      doc(firestoreDb, "announcment", editData.key),
+      { ...editData, archived: true },
+      {
+        merge: true,
+      }
+    )
+      .then((response) => {
+        setShowEdit(false);
+        message.success("Data is updated successfuly");
+        setEditorState("");
+        setShowPost(true);
+        getBlog();
+      })
+      .catch((error) => {
+        message.error("Data is not updated");
+        console.log(error);
+      });
+  };
 
   const openEdit = (data) => {
     setShowEdit(true);
@@ -360,6 +380,12 @@ export default function ListAnnouncment() {
             />
             <div className="flex flex-row justify-end">
               <button
+                onClick={() => archive()}
+                className="float-right px-3 w-30 mr-2 font-jakarta  rounded-md py-2 text-[#E7752B] border-[#E7752B] border-[2px] mt-4 right-0"
+              >
+                Archive
+              </button>
+              <button
                 onClick={() => shownewPost()}
                 className="float-right px-3 w-30 mr-2 font-jakarta  rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
               >
@@ -436,27 +462,28 @@ export default function ListAnnouncment() {
         </div>
       </div>
       <div className="mb-10">
-        <h1 className="text-2xl font-bold  font-jakarta leading-10 mb-5 text-[#344054]">
-          Archived Announcements
-        </h1>
         <div className="bg-[#FFFFFF] p-6 border-[1px] rounded-md">
-          {archivedAnnoumnet.map((item, index) => (
-            <div key={index} className="mt-0">
-              <h1 className="text-lg mb-2 font-bold  font-jakarta text-[#344054]">
-                {item.title}
-              </h1>
-              <p
-                style={{
-                  fontFamily: "Plus Jackarta Sans",
-                  fontSize: 16,
-                  fontWeight: "500",
-                  color: "#667085",
-                }}
-              >
-                {item.body}
-              </p>
-            </div>
-          ))}
+          <h1 className="text-2xl font-[500]  font-jakarta leading-10 mb-5 text-[#344054]">
+            Archived Announcements
+          </h1>
+          <div className="px-2">
+            {archivedAnnoumnet.map((item, index) => (
+              <div key={index} className="mb-10">
+                <h1 className="text-lg mb-2 font-bold  font-jakarta text-[#344054]">
+                  {item.title}
+                </h1>
+                <ReactReadMoreReadLess
+                  charLimit={200}
+                  readMoreText={"Show more ▼"}
+                  readLessText={"Show less ▲"}
+                  readMoreClassName="text-[#E7752B]"
+                  readLessClassName="text-[#E7752B]"
+                >
+                  {item.body}
+                </ReactReadMoreReadLess>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
