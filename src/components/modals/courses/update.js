@@ -428,30 +428,40 @@ function UpdateCourse() {
               >
                 Edit Schedule
               </h4>
-              <div className="p-6 pb-10 border-[2px] rounded-[8px] bg-[white]">
+              <div className="p-6 pb-20 border-[px] rounded-[8px] bg-[white]">
                 <h2 className="text-lg py-2">
                   Class{"  "}
                   {singleClass?.level}
                   {singleClass?.section}
                 </h2>
                 <div className="flex flex-row justify-between">
-                  <div className="border-[2px] w-[100%] p-2 text-left border-[#F2F4F7]">
-                    <p> Period</p>
+                  <div className="border-[0px] w-[100%] py-2 text-left border-[#F2F4F7]">
+                    <p className="text-[#344054] font-[600] text-[16px]">
+                      {" "}
+                      Period
+                    </p>
                   </div>
-                  <div className="border-t-[2px] border-b-[2px] w-[100%] p-2 text-left border-r-[0px] rounded-none border-[#F2F4F7]">
-                    <p> Start time</p>
+                  <div className="border-t-[0px] border-b-[0px] w-[100%] p-2 text-left border-r-[0px] rounded-none border-[#F2F4F7]">
+                    <p className="text-[#344054] font-[600] text-[16px]">
+                      {" "}
+                      Start time
+                    </p>
                   </div>
 
-                  <div className="border-[2px] w-[100%] p-2 text-left rounded-l-none border-l-[0px]  border-[#F2F4F7]">
-                    <p> End time</p>
+                  <div className="border-[0px] w-[100%] p-2 text-left rounded-l-none border-l-[0px]  border-[#F2F4F7]">
+                    <p className="text-[#344054] font-[600] text-[16px]">
+                      {" "}
+                      End time
+                    </p>
                   </div>
                 </div>
 
                 {data.schedule?.map((item, i) => (
-                  <div className="border-[#F2F4F7] border-[0px] my-2 rounded-lg">
+                  <div className="border-[#F2F4F7] border-[0px] -mt-1 rounded-lg">
                     <Select
+                      bordered={false}
                       style={{ width: "30%", marginRight: "3%" }}
-                      className="border-[0px]"
+                      className="border-[2px] !rounded-lg"
                       placeholder="First Select Days"
                       onChange={(e) => handleScheduler(e, i)}
                       defaultValue={item.day}
@@ -464,7 +474,7 @@ function UpdateCourse() {
                     </Select>
                     <TimePicker.RangePicker
                       style={{ width: "67%" }}
-                      className=" !border-[1px]"
+                      className="!rounded-lg !border-[2px]"
                       format={"hh:mm a"}
                       showTime={{ use12Hours: true }}
                       defaultValue={
@@ -503,7 +513,7 @@ function UpdateCourse() {
                   </div>
                 ))}
                 <Button
-                  style={{ float: "right", marginBottom: 10 }}
+                  style={{ float: "right", marginBottom: 10, marginTop: 20 }}
                   onClick={() => {
                     setInput([...input, 0]);
                     setUpdateCourse({
@@ -522,10 +532,11 @@ function UpdateCourse() {
           </div>
         </div>
       ) : (
-        <div className="flex  flex-col justify-center align-middle mt-[20vh]">
+        <div className="flex  flex-col justify-center align-middle  min-h-[100vh]">
           <Spin
-            tip={<p className="text-lg">Loading course...</p>}
+            tip={<p className="text-lg">Loading Course...</p>}
             className="text-[#E7752B] "
+            size="large"
             wrapperClassName="text-[#E7752B]"
           />
         </div>
