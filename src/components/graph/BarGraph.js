@@ -29,45 +29,38 @@ export const options = {
 };
 
 export default function BarGraph({ datas2 }) {
-  const [lable, setLable] = useState([]);
+
+  const [labels, setLable] = useState([]);
   const [student, setStudent] = useState([]);
+
   useEffect(() => {
     const temporary = [];
     const temporary2 = [];
     datas2.map((item, index) => {
-      temporary2.push(item.student?.length);
+      var male = item.student.filter((doc) => doc.sex === "Male");
+      var female = item.student.filter((doc) => doc.sex === "Female");
+      temporary2.push({ male: male.length, female: female.length });
+      temporary.push("Grade " + item.level + item.section)
     });
-    setStudent(temporary2);
-    console.log(temporary);
+
     setLable(temporary);
+    setStudent(temporary2);
   }, []);
-  const labels = [
-    "Grade 1",
-    "Grade 2",
-    "Grade 3",
-    "Grade 4",
-    "Grade 5",
-    "Grade 6",
-    "Grade 7",
-    "Grade 8",
-    "Grade 9",
-    "Grade 10",
-  ];
 
   const data = {
-    lable,
+    labels,
     datasets: [
       {
         label: "Male",
-        data: labels.map(() => student),
+        data: labels.map((item, index) => student[index].male),
         backgroundColor: "#EA8848",
         innerHeight: "20vh",
       },
-      // {
-      //   label: "Female",
-      //   data: lable.map(() => student),
-      //   backgroundColor: "#F6C9AC",
-      // },
+      {
+        label: "Female",
+        data: labels.map((item, index) => student[index].female),
+        backgroundColor: "#F6C9AC",
+      },
     ],
   };
   return <Bar options={options} data={data} />;

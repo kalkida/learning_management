@@ -5,8 +5,9 @@ import { useSelector } from "react-redux";
 import { Card, Progress, Select } from "antd";
 import Grid from "@mui/material/Grid";
 import { firestoreDb } from "../../firebase";
-import { getDocs, query, collection, where } from "firebase/firestore";
+import { getDocs, query, collection, where, getDoc, doc } from "firebase/firestore";
 import { async } from "@firebase/util";
+
 
 const { Option } = Select;
 export default function AdminDash() {
@@ -19,6 +20,7 @@ export default function AdminDash() {
   const [studentAttendance, setstudentAttendance] = useState([]);
   const [attendStudents, setAttendStudents] = useState();
   const [classes, setClasses] = useState([]);
+
   const schools = useSelector((state) => state.user.profile);
 
   var Student = [];
@@ -46,7 +48,6 @@ export default function AdminDash() {
     });
     var male = temporary.filter((doc) => doc.sex === "Male");
     var femail = temporary.filter((doc) => doc.sex === "Female");
-
     Student = temporary;
     setStudents(temporary);
     setMale(male);
@@ -79,20 +80,34 @@ export default function AdminDash() {
 
   const getAbsentClass = async () => {
     var temporary = [];
+
     const queryCourse = query(
       collection(firestoreDb, "class"),
       where("school_id", "==", schools.school)
     );
+
     const snapCourse = await getDocs(queryCourse);
-    snapCourse.forEach((doc) => {
+    snapCourse.forEach(async (doc) => {
       var data = doc.data();
+      data.student.map(async (doc, i) => data.student[i] = await getStudentsSex(doc))
       temporary.push(data);
     });
     setClasses(temporary);
   };
-  const getAbsentStudent = async () => {
-    getAbsentClass();
 
+  const getStudentsSex = async (ID) => {
+    const docRef = doc(firestoreDb, "students", ID);
+    var data = "";
+    await getDoc(docRef).then((response) => {
+      data = response.data();
+      data.key = response.id;
+    });
+    return data
+  };
+
+  const getAbsentStudent = async () => {
+
+    getAbsentClass();
     var temporary = [];
     const queryCourse = query(
       collection(firestoreDb, "courses"),
@@ -332,7 +347,7 @@ export default function AdminDash() {
                 </Select>
               </div>
             </div>
-            <BarGraph datas2={classes} />
+            {classes.length ? <BarGraph datas2={classes} /> : null}
           </Card>
         </Grid>
       </Grid>
