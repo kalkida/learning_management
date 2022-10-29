@@ -13,7 +13,6 @@ import {
 import { firebaseAuth, firestoreDb } from "../../firebase";
 
 import "../modals/attendance/style.css";
-import { async } from "@firebase/util";
 import { SearchOutlined } from "@ant-design/icons";
 
 //const { Search } = Input;
@@ -38,7 +37,9 @@ function AttendanceList() {
       dataIndex: "course_name",
       key: "name",
       render: (_, record) => (
-        <a className="text-[black]" onClick={() => onView(record)}>{record.course_name}</a>
+        <a className="text-[black]" onClick={() => onView(record)}>
+          {record.course_name}
+        </a>
       ),
     },
     {
@@ -46,7 +47,9 @@ function AttendanceList() {
       dataIndex: "class",
       key: "course",
       render: (_, record) => (
-        <a className="text-[black]" onClick={() => onView(record)}>{record.class.level}</a>
+        <a className="text-[black]" onClick={() => onView(record)}>
+          {record.class.level}
+        </a>
       ),
     },
     {
@@ -54,7 +57,9 @@ function AttendanceList() {
       dataIndex: "class",
       key: "age",
       render: (_, record) => (
-        <a className="text-[black]" onClick={() => onView(record)}>{record.class.section}</a>
+        <a className="text-[black]" onClick={() => onView(record)}>
+          {record.class.section}
+        </a>
       ),
     },
     {
@@ -62,7 +67,9 @@ function AttendanceList() {
       dataIndex: "attendance",
       key: "sex",
       render: (_, record) => (
-        <a className="text-[black]" onClick={() => onView(record)}>{record.attendace?.length}</a>
+        <a className="text-[black]" onClick={() => onView(record)}>
+          {record.attendace?.length}
+        </a>
       ),
     },
     {
@@ -289,7 +296,11 @@ function AttendanceList() {
         </div>
         <div className="at-filters">
           <div>
-            <Select placeholder={"Select class"} onChange={handleFilterClass} className="!mr-4">
+            <Select
+              placeholder={"Select class"}
+              onChange={handleFilterClass}
+              className="!mr-4"
+            >
               {classes?.map((item, i) => (
                 <Option
                   key={item.key}
@@ -329,6 +340,7 @@ function AttendanceList() {
             loading={tableLoading}
             dataSource={courseData}
             columns={columns}
+            pagination={{ position: ["bottomCenter"] }}
           />
         </div>
       </div>

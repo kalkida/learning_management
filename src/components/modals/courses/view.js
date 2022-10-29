@@ -1,15 +1,17 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Tabs, Table } from "antd";
+import { Input, Button, Select, DatePicker, Tabs, Table } from "antd";
 import moment from "moment";
 import "../courses/style.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { firestoreDb } from "../../../firebase";
+import { SearchOutlined } from "@ant-design/icons";
+
+const { Option } = Select;
 
 function ViewCourse() {
   const uid = useSelector((state) => state.user.profile);
@@ -191,6 +193,45 @@ function ViewCourse() {
     return temporary;
   };
 
+  const getStudentByDate = async (Date) => {
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school),
+      where("course", "array-contains", data.key)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      data.attendance = await getAttendaceFilter(doc.id, Date);
+      temporary.push(data);
+    });
+
+    setTimeout(() => {
+      setStudent(temporary);
+      setLoading(false);
+    }, 2000);
+  };
+
+  const getAttendaceFilter = async (ID, Date) => {
+    const q = query(
+      collection(firestoreDb, "attendanceanddaily", `${data.key}/attendace`),
+      where("studentId", "==", ID),
+      where("date", "==", Date)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    return temporary;
+  };
+
   useEffect(() => {
     getStudent();
   }, []);
@@ -290,7 +331,23 @@ function ViewCourse() {
             }
             key="2"
           >
-            <div className="mt-14"></div>
+            <div className="mt-5"></div>
+            <div className="at-filters">
+              <div>
+                <DatePicker
+                  onChange={getStudentByDate}
+                  placeholder="Select date"
+                />
+              </div>
+              <div>
+                <Input
+                  style={{ width: 200 }}
+                  className="mr-3 rounded-lg"
+                  placeholder="Search"
+                  prefix={<SearchOutlined className="site-form-item-icon" />}
+                />
+              </div>
+            </div>
             <Table
               loading={loading}
               dataSource={student}

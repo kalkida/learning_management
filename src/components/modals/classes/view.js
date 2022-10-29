@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Select, Tabs, Table, Tag } from "antd";
-import { fetchTeacher } from "../funcs";
-import Icon from "react-eva-icons";
+import { Button, Select, Tabs, Table, DatePicker, Input } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import "./style.css";
-import AttendanceList from "../../subComponents/AttendanceList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPen } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -18,6 +15,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { firestoreDb } from "../../../firebase";
+import { SearchOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -27,13 +25,13 @@ function ViewClass() {
   const [courseLoading, setCourseLoading] = useState(true);
   const [studentClass, setStudentClass] = useState([]);
   const [studentLoading, setStudentLoading] = useState(true);
+  const [classes, setClasses] = useState([]);
+  const [subject, setSubject] = useState([]);
 
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
   var { data } = state;
   const [selectedRowKeys, setSelectedRowKeys] = useState(data.course);
-
-  console.log(data);
 
   const navigate = useNavigate();
 
@@ -298,7 +296,6 @@ function ViewClass() {
     var data = "";
     getDoc(docRef).then((response) => {
       data = response.data();
-      console.log(data);
       data.key = response.id;
     });
     return data;
@@ -375,6 +372,70 @@ function ViewClass() {
     return temporary;
   };
 
+  const getStudentByDate = async (date) => {
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school),
+      where("class", "==", data.key)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var datas = doc.data();
+      datas.key = doc.id;
+      data.course?.forEach(async (key) => {
+        datas.attendance = await getFilterAttendace(doc.id, key, date);
+      });
+      temporary.push(datas);
+    });
+
+    setTimeout(() => {
+      setStudentClass(temporary);
+      setStudentLoading(false);
+    }, 2000);
+  };
+
+  const getFilterAttendace = async (ID, key, date) => {
+    const q = query(
+      collection(firestoreDb, "attendanceanddaily", `${key}/attendace`),
+      where("studentId", "==", ID), where("date", "==", date)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach((doc) => {
+      var data = doc.data();
+      data.key = doc.id;
+      temporary.push(data);
+    });
+    return temporary;
+  };
+
+  const getStudentByCourse = async (ID) => {
+    const q = query(
+      collection(firestoreDb, "students"),
+      where("school_id", "==", uid.school),
+      where("course", "array-contains", ID)
+    );
+    var temporary = [];
+
+    const snap = await getDocs(q);
+    snap.forEach(async (doc) => {
+      var datas = doc.data();
+      datas.key = doc.id;
+      data.course?.forEach(async (key) => {
+        datas.attendance = await getAttendace(doc.id, key);
+      });
+      temporary.push(datas);
+    });
+
+    setTimeout(() => {
+      setStudentClass(temporary);
+      setStudentLoading(false);
+    }, 2000);
+  };
+
   const getStudents = async (ids) => {
     var temporary = [];
     if (ids.length > 0) {
@@ -407,6 +468,7 @@ function ViewClass() {
     getCourses();
     getStudentByClass();
   }, []);
+
   return (
     <div className="bg-[#F9FAFB] py-4">
       <div className="flex flex-row justify-between w-[100%] -mt-20 ">
@@ -488,7 +550,33 @@ function ViewClass() {
             }
             key="2"
           >
-            <div className="mt-10 ">
+            <div className="mt-5 ">
+              <div className="at-filters">
+                <div>
+                  <Select
+                    placeholder={"Select subject"}
+                    onChange={getStudentByCourse}
+                  >
+                    {datas?.map((item, i) => (
+                      <Option key={item.key} value={item.key} lable={item.course_name}>
+                        {item.course_name.split(" ")[0]}
+                      </Option>
+                    ))}
+                  </Select>
+                  <DatePicker
+                    onChange={getStudentByDate}
+                    placeholder="Select date"
+                  />
+                </div>
+                <div>
+                  <Input
+                    style={{ width: 200 }}
+                    className="mr-3 rounded-lg"
+                    placeholder="Search"
+                    prefix={<SearchOutlined className="site-form-item-icon" />}
+                  />
+                </div>
+              </div>
               <Table
                 loading={studentLoading}
                 dataSource={studentClass}
