@@ -29,7 +29,7 @@ export const options = {
 };
 
 export default function BarGraph({ datas2 }) {
-
+  console.log(datas2)
   const [labels, setLable] = useState([]);
   const [student, setStudent] = useState([]);
 
@@ -39,10 +39,9 @@ export default function BarGraph({ datas2 }) {
     datas2.map((item, index) => {
       var male = item.student.filter((doc) => doc.sex === "Male");
       var female = item.student.filter((doc) => doc.sex === "Female");
-      temporary2.push({ male: male.length, female: female.length });
+      temporary2.push(item.student.length);
       temporary.push("Grade " + item.level + item.section)
     });
-
     setLable(temporary);
     setStudent(temporary2);
   }, []);
@@ -51,16 +50,16 @@ export default function BarGraph({ datas2 }) {
     labels,
     datasets: [
       {
-        label: "Male",
-        data: labels.map((item, index) => student[index].male),
+        label: "Students",
+        data: labels.map((item, index) => student[index]),
         backgroundColor: "#EA8848",
         innerHeight: "20vh",
       },
-      {
-        label: "Female",
-        data: labels.map((item, index) => student[index].female),
-        backgroundColor: "#F6C9AC",
-      },
+      // {
+      //   label: "Female",
+      //   data: labels.map((item, index) => student[index]),
+      //   backgroundColor: "#F6C9AC",
+      // },
     ],
   };
   return <Bar options={options} data={data} />;
