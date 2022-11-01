@@ -217,17 +217,23 @@ const CreateNewStudnet = () => {
     getClass();
   }, []);
   return (
-    <div className="bg-[#F9FAFB] h-[100vh]  -mt-14">
-      <div className="add-header mb-10 items-center">
-        < h1 className="text-[1.5rem] font-jakarta" > Add Student</h1 >
-        <button onClick={async () => await createNewStudent()}>
-          <FontAwesomeIcon className="mr-2" icon={faCheck} />Confirm
-        </button>
-      </div >
+    <div className="bg-[#F9FAFB] min-h-[100vh]  -mt-14">
+      <div className=" mb-8 pb-9 items-center border-b-[1px]">
+        <h1 className="text-[1.5rem] font-jakarta"> Add Student</h1>
+        <Button
+          className="!bg-[#E7752B] !text-[white] hover:!text-[white] !rounded-lg shadow-md -z-0 float-right -mt-14"
+          onClick={async () => await createNewStudent()}
+          icon={<FontAwesomeIcon className="mr-2" icon={faCheck} />}
+        >
+          Confirm
+        </Button>
+      </div>
       <div className="add-teacher bg-[#FFF]">
         <div className="avater-img">
           <div className="-mx-6">
-            <h3 className="text-sm font-jakarta -mb-2 color-[#475467]">Student Picture</h3>
+            <h3 className="text-sm font-jakarta -mb-2 color-[#475467]">
+              Student Picture
+            </h3>
             <div className="rounded-full  border-[#E7752B] bg-[white]">
               <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
             </div>
@@ -264,18 +270,26 @@ const CreateNewStudnet = () => {
           <div className="flex flex-col w-[40%] mr-10">
             <div className="py-4">
               <label style={{ paddingBottom: 6 }}>First Name</label>
-              <Input style={{ marginTop: 6 }} className="py-6 mt-6" name="first_name" placeholder="Enter First Name" onChange={(e) => handleStudent(e)} />
+              <Input
+                style={{ marginTop: 6 }}
+                className="py-6 mt-6 !rounded-lg !border-[2px]"
+                name="first_name"
+                placeholder="Enter First Name"
+                onChange={(e) => handleStudent(e)}
+              />
             </div>
 
             <div>
               <label>Class</label>
               <Select
+                bordered={false}
                 placeholder="Select Class"
+                className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
                 onChange={handlelevel}
                 optionLabelProp="label"
                 style={{
                   width: "100%",
-                  marginTop: 6
+                  marginTop: 6,
                 }}
               >
                 {classData.map((item, index) => (
@@ -287,24 +301,35 @@ const CreateNewStudnet = () => {
             </div>
             <div className="py-4">
               <label>Date of Birth</label>
-              <DatePicker style={{ width: "100%", marginTop: 6 }} onChange={handleDob} />
+              <DatePicker
+                className="py-6 mt-6 !rounded-lg !border-[2px]"
+                style={{ width: "100%", marginTop: 6 }}
+                onChange={handleDob}
+              />
             </div>
-
           </div>
           <div className="flex flex-col w-[40%]  mr-10">
             <div className="py-4">
               <label>Last Name</label>
-              <Input style={{ marginTop: 6 }} name="last_name" placeholder="Enter Last Name" onChange={(e) => handleStudent(e)} />
+              <Input
+                style={{ marginTop: 6 }}
+                className="py-6 mt-6 !rounded-lg !border-[2px]"
+                name="last_name"
+                placeholder="Enter Last Name"
+                onChange={(e) => handleStudent(e)}
+              />
             </div>
             <div>
               <label>Sex </label>
               <Select
+                bordered={false}
                 placeholder="Select Gender"
+                className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
                 onChange={handleGender}
                 optionLabelProp="label"
                 style={{
                   width: "100%",
-                  marginTop: 6
+                  marginTop: 6,
                 }}
               >
                 {gender.map((item, index) => (
@@ -314,56 +339,70 @@ const CreateNewStudnet = () => {
                 ))}
               </Select>
             </div>
-            <div className="py-4">
-              <label>Email</label>
-              <Input style={{ marginTop: 6 }} name="email" placeholder="Enter Email Address" onChange={(e) => handleStudent(e)} />
-            </div>
           </div>
           <div className="flex flex-col w-[40%] mr-10">
             <div className="py-4">
-              <label>Guardian Contact</label>
-              {input.map((_, index) => {
-                return (
-                  <PhoneInput
-                    placeholder="Enter Guardian Contact"
-                    className="py-1 border-[1px] bg-white px-2 mb-2 mt-6"
-                    style={{ marginTop: 6 }}
-                    country="ET"
-                    onChange={(e) => setPhone(e, index)}
-                  />
-                );
-              })}
-              {phone !== "" ? (
-                <Button
-                  onClick={() => {
-                    setInputs([...input, 0]);
-                    setAllPhone([...allPhone, phone]);
-                  }}
-                >
-                  Add New
-                </Button>
-              ) : null}
+              <label>Email</label>
+              <Input
+                style={{ marginTop: 6 }}
+                className="py-6 mt-6 !rounded-lg !border-[2px]"
+                name="email"
+                placeholder="Enter Email Address"
+                onChange={(e) => handleStudent(e)}
+              />
             </div>
             <div className="-py-6 -mt-2">
               <label>Student Id</label>
-              <Input style={{ marginTop: 6 }} name="studentId" placeholder="Enter Student Id" onChange={(e) => handleStudent(e)} />
+              <Input
+                style={{ marginTop: 6 }}
+                name="studentId"
+                className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
+                placeholder="Enter Student Id"
+                onChange={(e) => handleStudent(e)}
+              />
             </div>
-            {/* <div>
-              <Button
-                className="float-right -bottom-[5.5vh] border-[2px] border-[#E7752B] text-[#E7752B] rounded-lg flex flex-row  "
-                onClick={handleCancle}
-              >
-                <CloseCircleFilled className="mt-[1px]" />
-                Cancel
-              </Button>
-            </div> */}
           </div>
           <div></div>
         </div>
       </div>
 
-      <div style={{ flex: 1, flexDirection: "row", marginLeft: 190 }}></div>
-    </div >
+      <div
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          marginTop: 32,
+          marginBottom: 16,
+        }}
+      >
+        <h1 className="text-[1.5rem] font-jakarta text-[#344054]">Guardian</h1>
+        <div className="p-6 bg-[#FFF] border-[1px] border-[#D0D5DD] rounded-lg">
+          {input.map((item, index) => {
+            return (
+              <div className="mt-5">
+                <h1 className="text-lg font-[500]">Guardian {index + 1}</h1>
+                <PhoneInput
+                  placeholder="Enter Guardian Contact"
+                  className="py-1 border-[2px] bg-white px-2 mb-2 mt-6 !rounded-lg"
+                  style={{ marginTop: 6, width: "20%" }}
+                  value={item}
+                  country="ET"
+                  onChange={(e) => setPhone(e, index)}
+                />
+              </div>
+            );
+          })}
+          <Button
+            className="!rounded-lg ]"
+            onClick={() => {
+              setInputs([...input, 0]);
+              setAllPhone([...allPhone, phone]);
+            }}
+          >
+            Add New
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

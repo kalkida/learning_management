@@ -237,7 +237,7 @@ function ViewCourse() {
   }, []);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh] py-4">
+    <div className="bg-[#F9FAFB] min-h-[100vh] py-4">
       <div className="flex flex-row justify-between w-[100%] -mt-20 ">
         <div className="flex flex-row justify-between align-middle h-[78px]">
           <div className="rounded-full  border-[2px] border-[#E7752B] mr-10">

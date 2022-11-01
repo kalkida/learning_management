@@ -277,22 +277,22 @@ function ViewStudent() {
   ]);
 
   return (
-    <div className="-mt-20 h-[100vh] overflow-scroll main scroll-smooth">
+    <div className="-mt-20 h-[100vh] overflow-scroll main scroll-smooth ">
       <div className="flex flex-row justify-between  pt-10">
-        <div className="flex flex-row w-[40%] justify-between">
+        <div className="flex flex-row justify-between">
           <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
             <img
-              className="w-[10vw] border-[2px] rounded-full"
+              className="w-[10vw] h-[7vw] border-[2px] rounded-full"
               src={data.avater ? data.avater : "img-5.jpg"}
               alt="profile"
             />
           </div>
-          <div className="flex flex-col justify-start align-baseline mt-2 ml-5 w-[100%] ">
-            <div className="flex flex-row mb-2">
+          <div className="flex flex-col justify-center align-baseline mt-2 ml-5 w-[100%] ">
+            <div className="flex flex-row">
               <h3 className="text-lg font-bold font-jakarta capitalize">
                 {data.first_name + " " + data.last_name}
               </h3>
-              <h4 className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta  text-[#667085] p-[1px] ml-2">
+              <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2">
                 ID: {data.studentId}
               </h4>
             </div>
@@ -302,7 +302,7 @@ function ViewStudent() {
             </a>
           </div>
         </div>
-        <div className="flex flex-col  align-middle">
+        <div className="flex flex-col justify-center  align-middle">
           <div className="flex flex-row">
             <h3 className="text-lg font-semibold font-jakarta">Class</h3>
             <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2">

@@ -297,9 +297,10 @@ function AttendanceList() {
         <div className="at-filters">
           <div>
             <Select
+              bordered={false}
               placeholder={"Select class"}
               onChange={handleFilterClass}
-              className="!mr-4"
+              className="!mr-4 !rounded-lg border-[2px] hover:border-[#E7752B]"
             >
               {classes?.map((item, i) => (
                 <Option
@@ -312,6 +313,8 @@ function AttendanceList() {
               ))}
             </Select>
             <Select
+              bordered={false}
+              className="!mr-4 !rounded-lg border-[2px] hover:border-[#E7752B]"
               placeholder={"Select subject"}
               onChange={handleFilterSubject}
             >
@@ -322,6 +325,7 @@ function AttendanceList() {
               ))}
             </Select>
             <DatePicker
+              className="!mr-4 !rounded-lg border-[2px] hover:border-[#E7752B]"
               onChange={handlefilterAttenance}
               placeholder="Select date"
             />
@@ -329,7 +333,7 @@ function AttendanceList() {
           <div>
             <Input
               style={{ width: 200 }}
-              className="mr-3 rounded-lg"
+              className="mr-3 !rounded-lg"
               placeholder="Search"
               prefix={<SearchOutlined className="site-form-item-icon" />}
             />

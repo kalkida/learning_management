@@ -212,7 +212,7 @@ export default function AddStudnets() {
   }, [updateComplete]);
 
   return (
-    <div className="bg-[#F9FAFB] h-[100vh]  -mt-14">
+    <div className="bg-[#F9FAFB] min-h-[100vh]  -mt-14">
       <div className="list-header mb-2">
         <h1 className="text-2xl  font-[600] font-jakarta">List Of Students</h1>
       </div>
@@ -276,6 +276,7 @@ export default function AddStudnets() {
         style={{ marginTop: 20 }}
         columns={columns}
         dataSource={datas}
+        pagination={{ position: ["bottomCenter"] }}
       />
     </div>
   );

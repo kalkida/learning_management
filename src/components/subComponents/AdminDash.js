@@ -5,9 +5,15 @@ import { useSelector } from "react-redux";
 import { Card, Progress, Select } from "antd";
 import Grid from "@mui/material/Grid";
 import { firestoreDb } from "../../firebase";
-import { getDocs, query, collection, where, getDoc, doc } from "firebase/firestore";
+import {
+  getDocs,
+  query,
+  collection,
+  where,
+  getDoc,
+  doc,
+} from "firebase/firestore";
 import { async } from "@firebase/util";
-
 
 const { Option } = Select;
 export default function AdminDash() {
@@ -89,7 +95,9 @@ export default function AdminDash() {
     const snapCourse = await getDocs(queryCourse);
     snapCourse.forEach(async (doc) => {
       var data = doc.data();
-      data.student.map(async (doc, i) => data.student[i] = await getStudentsSex(doc))
+      data.student.map(
+        async (doc, i) => (data.student[i] = await getStudentsSex(doc))
+      );
       temporary.push(data);
     });
     setClasses(temporary);
@@ -102,11 +110,10 @@ export default function AdminDash() {
       data = response.data();
       data.key = response.id;
     });
-    return data
+    return data;
   };
 
   const getAbsentStudent = async () => {
-
     getAbsentClass();
     var temporary = [];
     const queryCourse = query(
@@ -172,7 +179,7 @@ export default function AdminDash() {
                 <Progress
                   type="circle"
                   strokeColor={"#EA8848"}
-                  percent={attendStudents}
+                  percent={parseFloat(attendStudents).toFixed(1)}
                   width={"9rem"}
                 />
               </div>
@@ -197,6 +204,7 @@ export default function AdminDash() {
                 fontSize: 18,
               }}
             ></h1>
+
             <div style={{ display: "flex", flexDirection: "row" }}>
               <div
                 style={{
@@ -208,34 +216,46 @@ export default function AdminDash() {
               >
                 <div>
                   <div className="relative flex flex-col justify-center">
-                    <Progress
-                      type="circle"
-                      strokeColor={"#EA8848"}
-                      percent={75}
-                      width={"6rem"}
-                    />
+                    {true ? (
+                      <h1 className="w-60%  text-gray-400 h-10 p-4">No Data</h1>
+                    ) : (
+                      <Progress
+                        type="circle"
+                        strokeColor={"#EA8848"}
+                        percent={75}
+                        width={"6rem"}
+                      />
+                    )}
                   </div>
                   <h1 className="text-center">Weekly</h1>
                 </div>
                 <div>
                   <div className="relative flex flex-col justify-center">
-                    <Progress
-                      type="circle"
-                      strokeColor={"#EA8848"}
-                      percent={75}
-                      width={"6rem"}
-                    />
+                    {true ? (
+                      <h1 className="w-60%  text-gray-400 h-10 p-4">No Data</h1>
+                    ) : (
+                      <Progress
+                        type="circle"
+                        strokeColor={"#EA8848"}
+                        percent={75}
+                        width={"6rem"}
+                      />
+                    )}
                   </div>
                   <h1 className="text-center">Monthly</h1>
                 </div>
                 <div>
                   <div className="relative flex flex-col justify-center">
-                    <Progress
-                      type="circle"
-                      strokeColor={"#EA8848"}
-                      percent={75}
-                      width={"6rem"}
-                    />
+                    {true ? (
+                      <h1 className="w-60%  text-gray-400 h-10 p-4">No Data</h1>
+                    ) : (
+                      <Progress
+                        type="circle"
+                        strokeColor={"#EA8848"}
+                        percent={75}
+                        width={"6rem"}
+                      />
+                    )}
                   </div>
                   <h1 className="text-center">Yearly</h1>
                 </div>
@@ -258,7 +278,7 @@ export default function AdminDash() {
                 <h1 className="text-[18px] font-semibold">{students.length}</h1>
                 <Progress
                   strokeColor={"#EA8848"}
-                  percent={(100 * students.length) / 20}
+                  percent={100}
                   showInfo={false}
                 />
                 <h1 className="text-[14px] ">Total</h1>
@@ -270,7 +290,7 @@ export default function AdminDash() {
                 </div>
                 <Progress
                   strokeColor={"#EA8848"}
-                  percent={(100 * female.length) / students.length}
+                  percent={100}
                   showInfo={false}
                   success={{
                     percent: (100 * male.length) / students.length,
@@ -282,7 +302,7 @@ export default function AdminDash() {
                 </div>
               </div>
             </div>
-            <Liner />
+            <Liner datas={students} />
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
@@ -302,7 +322,7 @@ export default function AdminDash() {
                 </h1>
                 <Progress
                   strokeColor={"#EA8848"}
-                  percent={(100 * teacherData.length) / 20}
+                  percent={100}
                   showInfo={false}
                 />
                 <h1 className="text-[14px] ">Total</h1>
@@ -321,7 +341,9 @@ export default function AdminDash() {
                   percent={100}
                   showInfo={false}
                   success={{
-                    percent: 60,
+                    percent:
+                      (teacherfemale.length * 100) /
+                      (teachermale.length + teacherfemale.length),
                   }}
                 />
                 <div className="flex flex-row justify-between">
@@ -331,7 +353,7 @@ export default function AdminDash() {
               </div>
             </div>
 
-            <Liner />
+            <Liner datas={teacherData} />
           </Card>
         </Grid>
         <Grid item xs={12} sm={12} md={12}>

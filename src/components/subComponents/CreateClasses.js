@@ -13,7 +13,6 @@ import {
 } from "firebase/firestore";
 import { firestoreDb } from "../../firebase";
 import uuid from "react-uuid";
-import moment from "moment";
 
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -228,7 +227,7 @@ const CreateClasses = () => {
     const checkIsExist = (await getDocs(q)).empty;
     if (checkIsExist) {
       var uids = uuid();
-      setDoc(doc(firestoreDb, "class", uids), {
+      setDoc(doc(firestoreDb, `class`, uids), {
         ...newClass,
         course: selectedRowKeysCourses,
       })
@@ -237,7 +236,6 @@ const CreateClasses = () => {
           selectedRowKeysCourses.map((item) => {
             addSingleClassToCourses(item, uids);
           });
-
           navigate("/list-Classes");
         })
         .catch((error) => console.log(error));

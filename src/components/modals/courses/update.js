@@ -428,7 +428,7 @@ function UpdateCourse() {
               >
                 Edit Schedule
               </h4>
-              <div className="p-6 pb-20 border-[px] rounded-[8px] bg-[white]">
+              <div className="p-6 pb-20  rounded-[8px] bg-[white] border-[2px]">
                 <h2 className="text-lg py-2">
                   Class{"  "}
                   {singleClass?.level}
@@ -457,7 +457,7 @@ function UpdateCourse() {
                 </div>
 
                 {data.schedule?.map((item, i) => (
-                  <div className="border-[#F2F4F7] border-[0px] -mt-1 rounded-lg">
+                  <div className="border-[#F2F4F7] border-[0px] mt-1 rounded-lg">
                     <Select
                       bordered={false}
                       style={{ width: "30%", marginRight: "3%" }}
@@ -490,9 +490,11 @@ function UpdateCourse() {
                   </div>
                 ))}
                 {input.map((item, i) => (
-                  <div className="border-[#F2F4F7] border-[0px] my-2">
+                  <div className="border-[#F2F4F7] border-[0px] mt-1 rounded-lg">
                     <Select
+                      bordered={false}
                       style={{ width: "30%", marginRight: "3%" }}
+                      className="border-[2px] !rounded-lg"
                       placeholder="First Select Days"
                       onChange={(e) => handleNewScheduler(e, i)}
                     >
@@ -505,7 +507,7 @@ function UpdateCourse() {
                     <TimePicker.RangePicker
                       status="warning"
                       style={{ width: "67%" }}
-                      className="rounded-lg border-[0px] active:border-[0px] outline-none selection:border-[#E7752B]"
+                      className="!rounded-lg !border-[2px]"
                       format={"hh:mm"}
                       use12Hours
                       onChange={(e) => handleNewScheduler(e, i)}

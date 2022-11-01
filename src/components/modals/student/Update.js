@@ -337,7 +337,7 @@ function UpdateStudents() {
             <div className="">
               <p className="!pb-[6px] font-jakarta">First Name</p>
               <Input
-                className="!rounded-[6px]"
+                className="!rounded-[6px] !border-[2px]"
                 name="first_name"
                 placeholder="Eneter First Name"
                 defaultValue={updateStudent.first_name}
@@ -348,7 +348,9 @@ function UpdateStudents() {
             <div>
               <p className="pb-[6px] mt-[35px] font-jakarta">Class</p>
               <Select
+                bordered={false}
                 placeholder="Select Class"
+                className="!rounded-[6px] !border-[2px]"
                 defaultValue={data.class}
                 onChange={handlesection}
                 optionLabelProp="label"
@@ -371,6 +373,7 @@ function UpdateStudents() {
               <p className="pb-[6px] mt-[35px] font-jakarta">Date of Birth</p>
               <DatePicker
                 style={{ width: "100%" }}
+                className="!rounded-[6px] !border-[2px]"
                 onChange={handleDob}
                 defaultValue={
                   updateStudent.DOB ? moment(JSON.parse(updateStudent.DOB)) : ""
@@ -384,6 +387,7 @@ function UpdateStudents() {
               <Input
                 name="last_name"
                 placeholder="Enter Last Name"
+                className="!rounded-[6px] !border-[2px]"
                 defaultValue={updateStudent.last_name}
                 onChange={(e) => onChange(e)}
               />
@@ -391,6 +395,8 @@ function UpdateStudents() {
             <div>
               <p className="pb-[6px] mt-[35px] font-jakarta">Sex </p>
               <Select
+                bordered={false}
+                className="!rounded-[6px] !border-[2px]"
                 placeholder="Select Gender"
                 onChange={handleGender}
                 defaultValue={updateStudent.sex}
@@ -408,34 +414,11 @@ function UpdateStudents() {
             </div>
           </div>
           <div className="flex flex-col w-[40%] mr-10">
-            {/* <div className="py-4">
-                <label>Guardian Contact</label>
-                {data.phone.map((item, index) => {
-                  return (
-                    <Input
-                      defaultValue={item}
-                      name="phone"
-                      onChange={(e) => setPhone(e, index)}
-                    />
-                  );
-                })}
-                {phone !== "" ? (
-                  <Button
-                    className="mt-2"
-                    onClick={() => {
-                      setInputs(...input, 0);
-                      setAllPhone([...allPhone, phone]);
-                    }}
-                  >
-                    Add New
-                  </Button>
-                ) : null}
-              </div> */}
             <div>
               <label className="py-4">Student Id</label>
               <Input
                 name="studentId"
-                className="!mt-4"
+                className="!rounded-[6px] !border-[2px] !mt-4"
                 placeholder="Enter Student Id"
                 defaultValue={updateStudent.studentId}
                 onChange={(e) => onChange(e)}
@@ -445,20 +428,12 @@ function UpdateStudents() {
               <p className="pb-[6px] mt-[35px] font-jakarta">Email</p>
               <Input
                 name="email"
+                className="!rounded-[6px] !border-[2px]"
                 placeholder="Enter Email Address"
                 defaultValue={updateStudent.email}
                 onChange={(e) => onChange(e)}
               />
             </div>
-            {/* <div>
-              <Button
-                className="float-right -bottom-[5.5vh] border-[2px] border-[#E7752B] text-[#E7752B] rounded-lg flex flex-row  "
-                onClick={handleCancle}
-              >
-                <CloseCircleFilled className="mt-[1px]" />
-                Cancel
-              </Button>
-            </div> */}
           </div>
           <div></div>
         </div>
@@ -467,8 +442,8 @@ function UpdateStudents() {
         style={{
           flex: 1,
           flexDirection: "row",
-          marginTop: 10,
-          marginBottom: 20,
+          marginTop: 32,
+          marginBottom: 16,
         }}
       >
         <h1 className="text-[1.5rem] font-jakarta text-[#344054]">Guardian</h1>
@@ -480,7 +455,7 @@ function UpdateStudents() {
                 <PhoneInput
                   placeholder="Enter Guardian Contact"
                   className="py-1 border-[2px] bg-white px-2 mb-2 mt-6 !rounded-lg"
-                  style={{ marginTop: 6, width: "20%" }}
+                  style={{ marginTop: 6, width: "30%" }}
                   value={item}
                   country="ET"
                   onChange={(e) => setPhone(e, index)}
