@@ -130,9 +130,9 @@ function UpdateCourse() {
         });
 
         removeSingleCourseFromClass(data.class.key, data.key, school);
-        updateCourse.class.map((item, index) => {
-          addSingleCourseToClass(item, data.key, school);
-        });
+        // updateCourse?.class.map((item, index) => {
+        addSingleCourseToClass(updateCourse.class, data.key, school);
+        // });
         message.success("Data is updated successfuly");
         navigate("/list-course");
       })
