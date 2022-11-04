@@ -36,13 +36,14 @@ export const options = {
 const labels = ["2017", "2018", "2019", "2020", "2021", "2022", "2023"];
 
 export default function Liner({ datas }) {
+  const graphData = [[], [], [], [], [], datas, []]
   console.log("dat", datas);
   var len = datas?.length ? datas.length : 0;
   const data = {
     labels,
     datasets: [
       {
-        data: labels.map(() => faker.datatype.number({ min: 0, max: len })),
+        data: labels.map((item, index) => graphData[index].length),
         borderColor: "#E7752B",
         backgroundColor: "#E7752B",
       },
