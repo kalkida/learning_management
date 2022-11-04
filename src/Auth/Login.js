@@ -172,7 +172,7 @@ export default function Login() {
           <label>Email Address</label>
           <input
             required
-            className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-sm p-2"
+            className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-lg p-2"
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -181,7 +181,7 @@ export default function Login() {
           <input
             required
             type="password"
-            className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-sm p-2"
+            className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-lg p-2"
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
@@ -197,7 +197,7 @@ export default function Login() {
 
         <Button
           onClick={() => onFinish()}
-          className="w-[300px] h-[44px] !bg-[#E7752B] visited:bg-[#E7752B] hover:bg-[#e7762bc2] text- hover:border-[#E7752B] !text-[white] hover:!text-[white]   border-[#E7752B]"
+          className="w-[300px] !h-[44px] !rounded-lg !bg-[#E7752B] visited:bg-[#E7752B] hover:bg-[#e7762bc2] text- hover:border-[#E7752B] !text-[white] hover:!text-[white]   border-[#E7752B]"
           disabled={loading}
           loading={loading}
           type="submit"

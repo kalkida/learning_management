@@ -362,7 +362,14 @@ function ViewStudent() {
                     </h1>
                   }
                 >
-                  <div>
+                  <div className="flex flex-row w-[100%] mt-[25%] flex-wrap justify-around">
+                    <div className="flex flex-col items-center  justify-center text-[#98A2B3]">
+                      <h1 className="text-[20px] text-[#98A2B3] ">
+                        Data Not Available Yet
+                      </h1>
+                    </div>
+                  </div>
+                  {/* <div>
                     <div>
                       <h1 className="text-[18px] text-[#32D583] font-semibold">
                         Good
@@ -378,7 +385,7 @@ function ViewStudent() {
                       <h1 className="text-[14px] ">Total</h1>
                     </div>
                   </div>
-                  <Liner />
+                  <Liner /> */}
                 </Card>
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
@@ -391,7 +398,14 @@ function ViewStudent() {
                     </h1>
                   }
                 >
-                  <div>
+                  <div className="flex flex-row w-[100%] mt-[25%] flex-wrap justify-around">
+                    <div className="flex flex-col items-center  justify-center text-[#98A2B3]">
+                      <h1 className="text-[20px] text-[#98A2B3] ">
+                        Data Not Available Yet
+                      </h1>
+                    </div>
+                  </div>
+                  {/* <div>
                     <div>
                       <h1 className="text-[18px] text-[#FDB022] font-semibold">
                         Average
@@ -404,7 +418,7 @@ function ViewStudent() {
                       <h1 className="text-[14px] ">Total</h1>
                     </div>
                   </div>
-                  <Liner />
+                  <Liner /> */}
                 </Card>
               </Grid>
               {/* <Grid item xs={12} sm={12} md={12}>
@@ -433,7 +447,7 @@ function ViewStudent() {
               />
               Edit
             </Button>
-            <div className="flex flex-row justify-start justify-between border-[0px] border-[#e5e5e5] text-[#344054]">
+            <div className="flex flex-row justify-between border-[0px] border-[#e5e5e5] text-[#344054]">
               <div className="flex flex-col justify-start align-middle text-[#344054]">
                 <span className="text-base text-center text-[#344054] font-jakarta">
                   Grade

@@ -113,11 +113,11 @@ function TeacherView() {
     },
     {
       title: "Class",
-      dataIndex: "course_name",
-      key: "course_name",
-      render: (item) => {
+      dataIndex: "class",
+      key: "class",
+      render: (_, item) => {
         if (item) {
-          return <div>{item.split(" ")[1]}</div>;
+          return <div>{item.grade + item.section}</div>;
         } else {
           return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
@@ -127,7 +127,7 @@ function TeacherView() {
 
   return (
     <>
-      <div className="w-[100%]  -mt-20">
+      <div className="w-[100%] min-h-[100vh]  -mt-20">
         <div className=" flex flex-row  mb-1 -mt-4 justify-between  py-7 ">
           <div className="flex flex-row  w-[40%] justify-between ">
             <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
@@ -171,14 +171,18 @@ function TeacherView() {
               </h3>
               {/* <div className="flex flex-row">
               <h3 className="font-bold pr-2 border-r-[1px] font-serif">Class</h3> */}
-              {data?.class ? (
+              {data?.class?.level ? (
                 <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2 ">
                   {data?.class?.map(
                     (item, i) => item.level + item.section + ","
                   )}
                 </h4>
               ) : (
-                <Tag className="ml-2">not Assigned</Tag>
+                <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2">
+                  {data?.course?.map(
+                    (item, i) => item.grade + item.section + ","
+                  )}
+                </h4>
               )}
             </div>
 
@@ -209,7 +213,7 @@ function TeacherView() {
               key="1"
             >
               <Button
-                className="float-right -mt-14 !text-[#E7752B]"
+                className="float-right -mt-16 !text-[#E7752B]"
                 icon={
                   <FontAwesomeIcon
                     className="pr-2 text-sm text-[#E7752B] bg-[white]"
@@ -247,7 +251,11 @@ function TeacherView() {
                 </div>
               </div>
 
-              <Table dataSource={teacherData} columns={teacherColumn} />
+              <Table
+                dataSource={teacherData}
+                columns={teacherColumn}
+                pagination={false}
+              />
             </Tabs.TabPane>
             <Tabs.TabPane
               tab={
@@ -259,7 +267,7 @@ function TeacherView() {
             >
               <Button
                 color="#E7752B"
-                className="float-right -mt-14 !text-[#E7752B]"
+                className="float-right -mt-20 !text-[#E7752B]"
                 icon={
                   <FontAwesomeIcon
                     className="pr-2 text-sm text-[#E7752B] bg-[white]"
@@ -276,7 +284,11 @@ function TeacherView() {
                     Assigned Courses
                   </h1>
                 </div>
-                <Table dataSource={data.course} columns={columns} />
+                <Table
+                  dataSource={data.course}
+                  columns={columns}
+                  pagination={false}
+                />
               </div>
             </Tabs.TabPane>
           </Tabs>

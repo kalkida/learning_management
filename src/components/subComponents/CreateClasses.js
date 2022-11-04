@@ -27,15 +27,11 @@ const { Option } = Select;
 const CreateClasses = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
-  const classes = useRef();
-  const [input, setInput] = useState([]);
+  const school = useSelector((state) => state.user.profile.school);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const days = ["Monday", "Thusday", "Wednsday", "Thursday", "Friday"];
   const [coursesData, setCourseData] = useState([]);
-  const [selectedCourseForSchedule, setSelectedCourseForSchedule] = useState(
-    {}
-  );
+
   const [teachers, setTeachers] = useState([]);
   const [classSelected, setClassSelected] = useState(true);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -47,7 +43,6 @@ const CreateClasses = () => {
     section: "",
     school_id: uid.school,
   });
-  const [updateCourse, setUpdateCourse] = useState({});
 
   const courseColumn = [
     {
@@ -111,11 +106,7 @@ const CreateClasses = () => {
 
   const getStudents = async (level) => {
     const children = [];
-    const q = query(
-      collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school)
-      // where("level", "==", level)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/students`));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
@@ -219,22 +210,21 @@ const CreateClasses = () => {
 
   const createNewClass = async () => {
     const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school),
+      collection(firestoreDb, "schools", `${school}/class`),
       where("level", "==", newClass.level),
       where("section", "==", newClass.section)
     );
     const checkIsExist = (await getDocs(q)).empty;
     if (checkIsExist) {
       var uids = uuid();
-      setDoc(doc(firestoreDb, `class`, uids), {
+      setDoc(doc(firestoreDb, "schools", `${school}/class`, uids), {
         ...newClass,
         course: selectedRowKeysCourses,
       })
         .then((_) => {
           message.success("Class Created");
           selectedRowKeysCourses.map((item) => {
-            addSingleClassToCourses(item, uids);
+            addSingleClassToCourses(item, uids, school);
           });
           navigate("/list-Classes");
         })
@@ -244,7 +234,7 @@ const CreateClasses = () => {
     }
   };
   const getCourseData = async (ID) => {
-    const docRef = doc(firestoreDb, "courses", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/courses`, ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       data = response.data();
@@ -258,7 +248,6 @@ const CreateClasses = () => {
     if (data.class !== "") {
       data.class = await getClassData(data.class);
     }
-    data.subject = await getSubjectData(data.subject);
     return data;
   };
   const getDatas = async (data, teach) => {
@@ -277,7 +266,7 @@ const CreateClasses = () => {
   };
 
   const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/class`, ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       console.log(response.data());
@@ -287,22 +276,9 @@ const CreateClasses = () => {
     return data;
   };
 
-  const getSubjectData = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
-  };
-
   const getCourse = async (value) => {
     var variables = [];
-    const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/courses`));
     var querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
@@ -336,10 +312,7 @@ const CreateClasses = () => {
 
   const getTeacher = async () => {
     var value = [];
-    const q = query(
-      collection(firestoreDb, "teachers"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/teachers`));
 
     const snap = await getDocs(q);
     snap.forEach((doc) => {

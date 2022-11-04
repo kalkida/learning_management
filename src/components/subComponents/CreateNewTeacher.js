@@ -6,6 +6,7 @@ import {
   fetchClass,
   fetchSubject,
   fetchclassFromCourse,
+  addSingleClassToTeacher,
 } from "../modals/funcs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
@@ -119,12 +120,20 @@ const CreateNewTeacher = () => {
 
   async function handleUpload() {
     var newUserUUID = uuid();
-
+    var temporary = [];
+    newUser.course.map(async (item) => {
+      var set = await fetchclassFromCourse(item.key, schools);
+      temporary.push(set.class);
+    });
     if (!file) {
-      await setDoc(doc(firestoreDb, "teachers", newUserUUID), {
-        ...newUser,
-        course: selectedRowKeys,
-      });
+      await setDoc(
+        doc(firestoreDb, "schools", `${schools}/teachers`, newUserUUID),
+        {
+          ...newUser,
+          course: selectedRowKeys,
+          class: temporary,
+        }
+      );
       await setDoc(doc(firestoreDb, "users", newUserUUID), {
         phoneNumber: newUser.phone,
         role: {
@@ -135,7 +144,7 @@ const CreateNewTeacher = () => {
         school: schools,
       });
       selectedRowKeys.map((items) => {
-        addSingleTeacherToCourse(newUserUUID, items);
+        addSingleTeacherToCourse(newUserUUID, items, schools);
       });
       navigate("/list-teacher");
     } else {
@@ -160,13 +169,20 @@ const CreateNewTeacher = () => {
             if (valueRef.current != null) {
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
-                setDoc(doc(firestoreDb, "teachers", newUserUUID), {
-                  ...newUser,
-                  course: selectedRowKeys,
-                });
-                selectedRowKeys.map((items) => {
-                  addSingleTeacherToCourse(newUserUUID, items);
-                });
+                setDoc(
+                  doc(
+                    firestoreDb,
+                    "schools",
+                    `${schools}/teachers`,
+                    newUserUUID
+                  ),
+                  {
+                    ...newUser,
+                    course: selectedRowKeys,
+                    class: temporary,
+                  }
+                );
+
                 setDoc(doc(firestoreDb, "users", newUserUUID), {
                   phoneNumber: newUser.phone,
                   role: {
@@ -175,6 +191,9 @@ const CreateNewTeacher = () => {
                     isParent: false,
                   },
                   school: schools,
+                });
+                selectedRowKeys.map((items) => {
+                  addSingleTeacherToCourse(newUserUUID, items, schools);
                 });
                 navigate("/list-teacher");
               }
@@ -187,10 +206,7 @@ const CreateNewTeacher = () => {
 
   const getClass = async () => {
     const children = [];
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${schools}/class`));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
@@ -205,15 +221,11 @@ const CreateNewTeacher = () => {
 
   const getData = async (data) => {
     data.class = await fetchClass(data.class);
-    data.subject = await fetchSubject(data.subject);
     return data;
   };
 
   const getCourse = async () => {
-    const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${schools}/courses`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach(async (doc) => {
@@ -229,23 +241,6 @@ const CreateNewTeacher = () => {
       setCourseLoading(false);
       setClassLoading(false);
     }, 2000);
-  };
-
-  const getSubject = async () => {
-    const coursess = [];
-    const q = query(
-      collection(firestoreDb, "subject"),
-      where("school_id", "==", uid.school)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      var datas = doc.data();
-      coursess.push({
-        ...datas,
-        key: doc.id,
-      });
-    });
-    setSubject(coursess);
   };
 
   const createNewTeacher = async () => {
@@ -269,8 +264,7 @@ const CreateNewTeacher = () => {
   const handleFilterSubject = async (value) => {
     if (value) {
       const q = query(
-        collection(firestoreDb, "courses"),
-        where("school_id", "==", uid.school),
+        collection(firestoreDb, "schools", `${schools}/courses`),
         where("subject", "==", value)
       );
       var temporary = [];
@@ -289,8 +283,7 @@ const CreateNewTeacher = () => {
   const handleFilterClass = async (value) => {
     if (value) {
       const q = query(
-        collection(firestoreDb, "courses"),
-        where("school_id", "==", uid.school),
+        collection(firestoreDb, "schools", `${schools}/courses`),
         where("class", "==", value)
       );
       var temporary = [];
@@ -321,17 +314,17 @@ const CreateNewTeacher = () => {
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
-        return <div>{item.name}</div>;
+        return <div>{item}</div>;
       },
     },
     {
       title: "Class",
       dataIndex: "class",
       key: "class",
-      render: (item) => {
+      render: (_, item) => {
         return (
           <div>
-            {item.level}
+            {item.grade}
             {"   "}
             {item.section}
           </div>
@@ -340,23 +333,9 @@ const CreateNewTeacher = () => {
     },
   ];
 
-  const classColumns = [
-    {
-      title: "Grade",
-      dataIndex: "level",
-      key: "course_name",
-    },
-    {
-      title: "Section",
-      dataIndex: "section",
-      key: "secticon",
-    },
-  ];
-
   useEffect(() => {
     getClass();
     getCourse();
-    getSubject();
   }, []);
 
   function HandleBrowseClick() {
@@ -398,7 +377,7 @@ const CreateNewTeacher = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col justify-end ml-3 -mt-2">
+            <div className="flex flex-col justify-center ml-3">
               <span className="font-jakarta text-[12px] mb-2">
                 This will be displayed to you when you view this profile
               </span>
@@ -431,88 +410,82 @@ const CreateNewTeacher = () => {
               </div>
             </div>
           </div>
-          <div className="add-form">
-            <div className="col">
-              <div className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                  First Name
-                </h1>
-                <Input
-                  className="!border-[2px] !rounded-lg"
-                  name="first_name"
-                  onChange={(e) => handleChangeTeacher(e)}
-                />
-              </div>
-              <div className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                  Last Name
-                </h1>
-                <Input
-                  className="!border-[2px] !rounded-lg"
-                  name="last_name"
-                  onChange={(e) => handleChangeTeacher(e)}
-                />
-              </div>
+          <div className="grid grid-cols-4 gap-4 p-5">
+            <div className="py-2">
+              <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                First Name
+              </h1>
+              <Input
+                className="!border-[2px] !rounded-lg"
+                name="first_name"
+                onChange={(e) => handleChangeTeacher(e)}
+              />
             </div>
-            <div className="col">
-              <div className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">Phone</h1>
-                <Input
-                  className="!border-[2px] !rounded-lg"
-                  name="phone"
-                  onChange={(e) => handleChangeTeacher(e)}
-                />
-              </div>
-              <div className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">Email</h1>
-                <Input
-                  className="!border-[2px] !rounded-lg"
-                  name="email"
-                  placeholder="Email Address"
-                  onChange={(e) => handleChangeTeacher(e)}
-                />
-              </div>
+            <div className="py-2">
+              <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                Last Name
+              </h1>
+              <Input
+                className="!border-[2px] !rounded-lg"
+                name="last_name"
+                onChange={(e) => handleChangeTeacher(e)}
+              />
             </div>
-            <div className="col">
-              <div className="py-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                  Date Of Birth
-                </h1>
-                <DatePicker
-                  className="!border-[2px] !rounded-lg"
-                  style={{ width: "100%", height: "4vh" }}
-                  onChange={handleDob}
-                />
-              </div>
-              <div className="-mt-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta">Sex</h1>
-                <Select
-                  bordered={false}
-                  className="!border-[2px] !rounded-lg h-9"
-                  placeholder="Select Gender"
-                  onChange={handleGender}
-                  optionLabelProp="label"
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {gender.map((item, index) => (
-                    <Option key={item.index} value={item} label={item}>
-                      {item}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-              <div className="-mt-2">
-                <h1 className="text-[#344054] pb-[6px] font-jakarta ">
-                  Working Since
-                </h1>
+            <div className="py-2">
+              <h1 className="text-[#344054] pb-[6px] font-jakarta">Phone</h1>
+              <Input
+                className="!border-[2px] !rounded-lg"
+                name="phone"
+                onChange={(e) => handleChangeTeacher(e)}
+              />
+            </div>
+            <div className="py-2">
+              <h1 className="text-[#344054] pb-[6px] font-jakarta">Email</h1>
+              <Input
+                className="!border-[2px] !rounded-lg"
+                name="email"
+                placeholder="Email Address"
+                onChange={(e) => handleChangeTeacher(e)}
+              />
+            </div>
+            <div className="py-2 -mt-4">
+              <h1 className="text-[#344054] pb-2  font-jakarta">
+                Date Of Birth
+              </h1>
+              <DatePicker
+                className="!border-[2px] !rounded-lg"
+                style={{ width: "100%" }}
+                onChange={handleDob}
+              />
+            </div>
+            <div className="-mt-2">
+              <h1 className="text-[#344054] pb-[6px] font-jakarta">Sex</h1>
+              <Select
+                bordered={false}
+                className="!border-[2px] !rounded-lg h-9"
+                placeholder="Select Gender"
+                onChange={handleGender}
+                optionLabelProp="label"
+                style={{
+                  width: "100%",
+                }}
+              >
+                {gender.map((item, index) => (
+                  <Option key={item.index} value={item} label={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+            <div className="-mt-2">
+              <h1 className="text-[#344054] pb-[6px] font-jakarta ">
+                Working Since
+              </h1>
 
-                <DatePicker
-                  className="text-center w-[100%] !rounded-lg h-9 flex pt-1"
-                  onChange={handleWork}
-                />
-              </div>
+              <DatePicker
+                className="text-center w-[100%] !rounded-lg h-9 flex pt-1"
+                onChange={handleWork}
+              />
             </div>
           </div>
         </div>
@@ -522,7 +495,7 @@ const CreateNewTeacher = () => {
               Courses{" "}
             </h1>
           </div>
-          <div className="bg-[#FFFFFF] p-[24px] border-[1px]">
+          <div className="bg-[#FFFFFF] p-[24px] border-[1px] !rounded-lg">
             <div className="list-sub mb-2">
               <div className="list-filter">
                 <Select
@@ -585,6 +558,7 @@ const CreateNewTeacher = () => {
               </div>
             </div>
             <Table
+              className="!bg-white"
               loading={courseLoading}
               rowSelection={rowSelection}
               dataSource={coursesData}

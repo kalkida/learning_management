@@ -42,6 +42,7 @@ const { Option } = Select;
 
 function UpdateClass() {
   const uid = useSelector((state) => state.user.profile);
+  const school = useSelector((state) => state.user.profile.school);
   const [loading, setLoading] = useState(false);
   const [courses, setcourse] = useState([]);
   const [item, setItem] = useState([]);
@@ -62,7 +63,7 @@ function UpdateClass() {
     level: data.level,
     student: data.student,
     section: data.section,
-    homeRoomTeacher: data?.homeRoomTeacher,
+    homeRoomTeacher: data?.homeRoomTeacher ? data.homeRoomTeacher : "",
     school_id: data.school_id,
     course: data.course,
   });
@@ -154,19 +155,19 @@ function UpdateClass() {
     },
     {
       title: <h1 className="text-[16px] font-[600] text-[#344054]">Subject</h1>,
-      dataIndex: "course_name",
-      key: "course_name",
+      dataIndex: "subject",
+      key: "subject",
       render: (item) => {
-        return <div>{item.split(" ")[0]}</div>;
+        return <div>{item}</div>;
       },
     },
     {
       title: <h1 className="text-[16px] font-[600] text-[#344054]">Grade</h1>,
-      dataIndex: "course_name",
-      key: "course_name",
+      dataIndex: "grade",
+      key: "grade",
       render: (item) => {
         if (item) {
-          return <div>{item.split(" ")[1].split("")[0]}</div>;
+          return <div>{item}</div>;
         } else {
           return <div className="text-[#515f76]">No Data</div>;
         }
@@ -174,11 +175,11 @@ function UpdateClass() {
     },
     {
       title: <h1 className="text-[16px] font-[600] text-[#344054]">Section</h1>,
-      dataIndex: "course_name",
-      key: "course_name",
+      dataIndex: "section",
+      key: "section",
       render: (item) => {
         if (item) {
-          return <div>{item.split(" ")[1].split("")[1]}</div>;
+          return <div>{item}</div>;
         } else {
           return <div className="text-[#515f76]">No Data</div>;
         }
@@ -189,7 +190,7 @@ function UpdateClass() {
   const handleUpdate = async () => {
     setLoading(true);
     setDoc(
-      doc(firestoreDb, "class", data.key),
+      doc(firestoreDb, "schools", `${school}/class`, data.key),
       {
         ...updateClass,
         student: selectedRowKeys,
@@ -322,9 +323,9 @@ function UpdateClass() {
     const sectionArray = [];
 
     const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school)
-      // where("class", "==", data.key)
+      collection(firestoreDb, "schools", `${school}/courses`),
+      where("section", "==", data.section),
+      where("grade", "==", data.level)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -584,6 +585,7 @@ function UpdateClass() {
                       rowSelection={rowSelectionCourse}
                       dataSource={item}
                       columns={courseColumns}
+                      pagination={false}
                     />
                   </div>
                 </Tabs.TabPane>

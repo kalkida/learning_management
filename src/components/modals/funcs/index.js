@@ -58,14 +58,14 @@ const checkCourseExists = async (teacherId) => {
 };
 
 //  Course is created
-const addSingleCourseToClass = async (classId, courseId) => {
-  const classRef = doc(firestoreDb, "class", classId);
+const addSingleCourseToClass = async (classId, courseId, school) => {
+  const classRef = doc(firestoreDb, "schools", `${school}/class`, classId);
   await updateDoc(classRef, {
     course: arrayUnion(courseId),
   });
 };
-const removeSingleCourseFromClass = async (classId, courseId) => {
-  const classRef = doc(firestoreDb, "class", classId);
+const removeSingleCourseFromClass = async (classId, courseId, school) => {
+  const classRef = doc(firestoreDb, "schools", `${school}/class`, classId);
   await updateDoc(classRef, {
     course: arrayRemove(courseId),
   });
@@ -78,8 +78,8 @@ const addSingleClassToCourse = async (courseId, classId) => {
     course: arrayUnion(classId),
   });
 };
-const addSingleClassToCourses = async (courseId, classId) => {
-  const classRef = doc(firestoreDb, "courses", courseId);
+const addSingleClassToCourses = async (courseId, classId, school) => {
+  const classRef = doc(firestoreDb, "schools", `${school}/courses`, courseId);
   await updateDoc(classRef, {
     class: classId,
     // course_name:
@@ -102,27 +102,39 @@ const addClassIDToCourse = async (classId, courseId) => {
 };
 
 // Add Couse To Teachers
-const addSingleCourseToTeacher = async (courseId, teacherId) => {
-  const teacherRef = doc(firestoreDb, "teachers", teacherId);
-  await checkCourseExists(teacherId);
+const addSingleCourseToTeacher = async (courseId, teacherId, school) => {
+  const teacherRef = doc(
+    firestoreDb,
+    "schools",
+    `${school}/teachers`,
+    teacherId
+  );
 
   await updateDoc(teacherRef, {
     course: arrayUnion(courseId),
   });
-  console.log("course course   ", courseId);
 };
 
-const removeSingleCourseToTeacher = async (courseId, teacherId) => {
-  const teacherRef = doc(firestoreDb, "teachers", teacherId);
+const removeSingleCourseToTeacher = async (courseId, teacherId, school) => {
+  const teacherRef = doc(
+    firestoreDb,
+    "schools",
+    `${school}/teachers`,
+    teacherId
+  );
   await updateDoc(teacherRef, {
     course: arrayRemove(courseId),
   });
 };
 
 // add class to teacher
-const addSingleClassToTeacher = async (classId, teacherId) => {
-  const teacherRef = doc(firestoreDb, "teachers", teacherId);
-  await checkClassExists(teacherId);
+const addSingleClassToTeacher = async (classId, teacherId, school) => {
+  const teacherRef = doc(
+    firestoreDb,
+    "schools",
+    `${school}/teachers`,
+    teacherId
+  );
   await updateDoc(teacherRef, {
     class: arrayUnion(classId),
   });
@@ -135,9 +147,9 @@ const removeSingleClassToTeacher = async (classId, teacherId) => {
 };
 
 // Teachers
-const addSingleTeacherToCourse = async (teacherId, courseId) => {
+const addSingleTeacherToCourse = async (teacherId, courseId, school) => {
   // await checkClassExists(teacherId);
-  const teacherRef = doc(firestoreDb, "courses", courseId);
+  const teacherRef = doc(firestoreDb, "schools", `${school}/courses`, courseId);
   await updateDoc(teacherRef, {
     teachers: arrayUnion(teacherId),
   });
@@ -216,8 +228,13 @@ const fetchTeacher = async (sectionId) => {
     return "";
   }
 };
-const fetchclassFromCourse = async (sectionId) => {
-  const teacherRef = doc(firestoreDb, "courses", sectionId);
+const fetchclassFromCourse = async (sectionId, school) => {
+  const teacherRef = doc(
+    firestoreDb,
+    "schools",
+    `${school}/courses`,
+    sectionId
+  );
   const docSnap = await getDoc(teacherRef);
   if (docSnap.exists()) {
     return docSnap.data();

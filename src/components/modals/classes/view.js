@@ -25,8 +25,7 @@ function ViewClass() {
   const [courseLoading, setCourseLoading] = useState(true);
   const [studentClass, setStudentClass] = useState([]);
   const [studentLoading, setStudentLoading] = useState(true);
-  const [classes, setClasses] = useState([]);
-  const [subject, setSubject] = useState([]);
+  const school = useSelector((state) => state.user.profile.school);
 
   const uid = useSelector((state) => state.user.profile);
   const { state } = useLocation();
@@ -41,7 +40,7 @@ function ViewClass() {
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
-        return <div>{item.name}</div>;
+        return <div>{item}</div>;
       },
     },
 
@@ -69,9 +68,9 @@ function ViewClass() {
           return (
             <div className="flex flex-col w-[3.7rem] ">
               {value?.map((item, i) => (
-                <a className="!mb-2" color="#EA8848">
+                <h1 className="!mb-2">
                   {moment(JSON.parse(item?.time[0])).format("hh:mm")}{" "}
-                </a>
+                </h1>
               ))}
             </div>
           );
@@ -90,9 +89,9 @@ function ViewClass() {
           return (
             <div className="flex flex-col w-[3.7rem] ">
               {value?.map((item, i) => (
-                <a className="!mb-2" color="#EA8848">
+                <h1 className="!mb-2">
                   {moment(JSON.parse(item?.time[1])).format("hh:mm")}
-                </a>
+                </h1>
               ))}
             </div>
           );
@@ -175,7 +174,7 @@ function ViewClass() {
       dataIndex: "subject",
       key: "subject",
       render: (item) => {
-        return <div>{item.name}</div>;
+        return <div>{item}</div>;
       },
     },
     {
@@ -259,30 +258,9 @@ function ViewClass() {
     },
   ];
 
-  const getSchool = async () => {
-    const docRef = doc(firestoreDb, "schools", uid.school);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset;
-    } else {
-    }
-  };
-
   const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/class`, ID);
 
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
-  };
-
-  const getSubjectData = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       data = response.data();
@@ -292,29 +270,29 @@ function ViewClass() {
   };
 
   const getTeacherData = async (ID) => {
-    const docRef = doc(firestoreDb, "teachers", ID);
+    console.log(ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/teachers`, ID);
     var data = "";
-    getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
+    const referance = await getDoc(docRef);
+    data = referance.data();
+    data.key = referance.id;
+
     return data;
   };
   const getData = async (data) => {
     data.class = await getClassData(data.class);
-    data.subject = await getSubjectData(data.subject);
     data.teachers?.map(async (item, index) => {
-      data.teachers[index] = await getTeacherData(item);
+      console.log(item);
+      var temp = await getTeacherData(item);
+      data.teachers[index] = temp;
+      console.log(temp);
     });
+    console.log(data);
     return data;
   };
 
   const getCourses = async () => {
-    var branches = await getSchool();
-    const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "in", branches.branches)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/courses`));
     var temporary = [];
     const snap = await getDocs(q);
     for (var i = 0; i < data.course.length; i++) {
@@ -328,14 +306,14 @@ function ViewClass() {
     }
     setTimeout(() => {
       setData(temporary);
+      console.log(temporary);
       setCourseLoading(false);
     }, 2000);
   };
 
   const getStudentByClass = async () => {
     const q = query(
-      collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school),
+      collection(firestoreDb, "schools", `${school}/students`),
       where("class", "==", data.key)
     );
     var temporary = [];
@@ -374,8 +352,7 @@ function ViewClass() {
 
   const getStudentByDate = async (date) => {
     const q = query(
-      collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school),
+      collection(firestoreDb, "schools", `${school}/students`),
       where("class", "==", data.key)
     );
     var temporary = [];
@@ -399,7 +376,8 @@ function ViewClass() {
   const getFilterAttendace = async (ID, key, date) => {
     const q = query(
       collection(firestoreDb, "attendanceanddaily", `${key}/attendace`),
-      where("studentId", "==", ID), where("date", "==", date)
+      where("studentId", "==", ID),
+      where("date", "==", date)
     );
     var temporary = [];
 
@@ -414,8 +392,7 @@ function ViewClass() {
 
   const getStudentByCourse = async (ID) => {
     const q = query(
-      collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school),
+      collection(firestoreDb, "schools", `${school}/students`),
       where("course", "array-contains", ID)
     );
     var temporary = [];
@@ -439,7 +416,7 @@ function ViewClass() {
   const getStudents = async (ids) => {
     var temporary = [];
     if (ids.length > 0) {
-      const q = query(collection(firestoreDb, "students"));
+      const q = query(collection(firestoreDb, "schools", `${school}/students`));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         var data = doc.data();
@@ -471,10 +448,10 @@ function ViewClass() {
 
   return (
     <div className="bg-[#F9FAFB] py-4">
-      <div className="flex flex-row justify-between w-[100%] -mt-20 ">
+      <div className="flex flex-row justify-between w-[100%] -mt-16 ">
         <div className="flex flex-row justify-center align-middle ">
           <div className="flex flex-row">
-            <h1 className="text-lg font-bold font-jakarta mr-2 text-[#1D2939]">
+            <h1 className="text-xl font-bold font-jakarta mr-2 text-[#1D2939]">
               Class
             </h1>
             <h2 className="text-lg font-bold font-jakarta">{data?.level}</h2>
@@ -485,7 +462,7 @@ function ViewClass() {
           <h3 className="text-lg font-[600]  font-jakarta border-r-[2px] pr-2 text-[#344054]">
             Number of Student{" "}
           </h3>
-          <h4 className="text-lg font-semibold font-jakarta pl-2">
+          <h4 className="text-lg font-[500] font-jakarta text-[#667085] pl-2">
             {data?.student.length}
           </h4>
         </div>
@@ -494,7 +471,7 @@ function ViewClass() {
         <Tabs defaultActiveKey="1" className="pb-30">
           <Tabs.TabPane
             tab={
-              <span className="text-lg font-[500] text-center ml-0 font-jakarta ">
+              <span className="text-[16px] font-[500] text-center ml-0 font-jakarta ">
                 Profile
               </span>
             }
@@ -504,7 +481,7 @@ function ViewClass() {
               icon={
                 <FontAwesomeIcon className="pr-2 text-[#EA8848]" icon={faPen} />
               }
-              className=" text-center  border-[2px] !border-[#E7752B] !text-[#E7752B] !rounded-[8px] float-right -mt-14"
+              className=" text-center  !border-[2px] !border-[#D0D5DD] !text-[#E7752B] !rounded-[8px] float-right -mt-24"
               onClick={handleUpdate}
             >
               Edit
@@ -544,7 +521,7 @@ function ViewClass() {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <span className="text-lg font-[500] text-center ml-0 font-jakarta">
+              <span className="text-[16px] font-[500] text-center ml-0 font-jakarta">
                 Attendance
               </span>
             }
@@ -558,7 +535,11 @@ function ViewClass() {
                     onChange={getStudentByCourse}
                   >
                     {datas?.map((item, i) => (
-                      <Option key={item.key} value={item.key} lable={item.course_name}>
+                      <Option
+                        key={item.key}
+                        value={item.key}
+                        lable={item.course_name}
+                      >
                         {item.course_name.split(" ")[0]}
                       </Option>
                     ))}

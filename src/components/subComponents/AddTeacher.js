@@ -30,129 +30,13 @@ export default function AddTeacher() {
 
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
+  const school = useSelector((state) => state.user.profile.school);
   const [course, setCourse] = useState([]);
   const [classes, setClasses] = useState([]);
   const [tableLoading, setTableTextLoading] = useState(true);
-  const searchInput = useRef(null);
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
-
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
-
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div
-        style={{
-          padding: 8,
-        }}
-      >
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{
-            marginBottom: 8,
-            display: "block",
-          }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined
-        style={{
-          color: filtered ? "#1890ff" : undefined,
-        }}
-      />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{
-            backgroundColor: "#ffc069",
-            padding: 0,
-          }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
-
-  const getSchool = async () => {
-    const docRef = doc(firestoreDb, "schools", uid.school);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset;
-    } else {
-    }
-  };
 
   const getClassData = async (ID, teach) => {
-    const docRef = doc(firestoreDb, "class", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/class`, ID);
 
     var data = "";
     const response = await getDoc(docRef);
@@ -162,14 +46,13 @@ export default function AddTeacher() {
     } else {
       console.log("none exist data", data);
       console.log("data  ", ID, "and  ", teach);
-      //removeSingleClassToTeacher(ID, teach);
     }
 
     return data;
   };
 
   const getCourseData = async (ID) => {
-    const docRef = doc(firestoreDb, "courses", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/courses`, ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       data = response.data();
@@ -187,8 +70,6 @@ export default function AddTeacher() {
 
       data.course?.map(async (item, index) => {
         var course = await getCourseData(item);
-        var subject = await fetchSubject(course.subject);
-        course.subject = subject;
         data.course[index] = course;
 
         console.log("courses  :", data.course);
@@ -201,10 +82,7 @@ export default function AddTeacher() {
   };
 
   const getTeacher = async () => {
-    const q = query(
-      collection(firestoreDb, "teachers"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/teachers`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
@@ -230,10 +108,7 @@ export default function AddTeacher() {
   };
 
   const getClass = async () => {
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach(async (doc) => {
@@ -245,11 +120,7 @@ export default function AddTeacher() {
   };
 
   const getCourse = async () => {
-    var branches = await getSchool();
-    const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "in", branches.branches)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/courses`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach(async (doc) => {
@@ -263,10 +134,8 @@ export default function AddTeacher() {
 
   const handleFilterSubject = async (value) => {
     if (value) {
-      var branches = await getSchool();
       const q = query(
-        collection(firestoreDb, "teachers"),
-        where("school_id", "in", branches.branches),
+        collection(firestoreDb, `${school}/teachers`),
         where("course", "array-contains", value)
       );
       var temporary = [];
@@ -285,10 +154,8 @@ export default function AddTeacher() {
 
   const handleFilterClass = async (value) => {
     if (value) {
-      var branches = await getSchool();
       const q = query(
-        collection(firestoreDb, "teachers"),
-        where("school_id", "in", branches.branches),
+        collection(firestoreDb, `${school}/teachers`),
         where("class", "array-contains", value)
       );
       var temporary = [];
@@ -331,15 +198,23 @@ export default function AddTeacher() {
       width: "20%",
 
       render: (text, data) => {
-        return (
-          <div>
-            {data.course.map((item) => (
-              <p className="text-[14px] font-jakarta text-[#344054]">
-                {item?.subject?.name}
-              </p>
-            ))}
-          </div>
-        );
+        if (data?.course.length > 0) {
+          return (
+            <div>
+              {data.course.map((item) => (
+                <p className="text-[14px] font-jakarta text-[#344054]">
+                  {item?.subject}
+                </p>
+              ))}
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <p className="text-[14px] font-jakarta text-[#7d8594]">No Data</p>
+            </div>
+          );
+        }
       },
     },
     {

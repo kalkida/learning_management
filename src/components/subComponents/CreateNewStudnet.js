@@ -19,13 +19,11 @@ import { firestoreDb, storage } from "../../firebase";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { CloseCircleFilled } from "@ant-design/icons";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "../../css/teacher.css";
 import "../modals/courses/style.css";
 import "../modals/teacher/style.css";
-import Icon from "react-eva-icons";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -45,6 +43,7 @@ const CreateNewStudnet = () => {
 
   const [classData, setClassData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
+  const school = useSelector((state) => state.user.profile.school);
   var [newUser, setNewUser] = useState({
     DOB: "",
     studentId: "",
@@ -67,7 +66,7 @@ const CreateNewStudnet = () => {
     var classN = await fetchClass(newUser.class);
     console.log(classN);
     if (!file) {
-      setDoc(doc(firestoreDb, "students", newUID), {
+      setDoc(doc(firestoreDb, "schools", `${school}/students`, newUID), {
         ...newUser,
         course: data,
         className: classN.level + classN.section,
@@ -109,10 +108,13 @@ const CreateNewStudnet = () => {
               //    setNewUser({ ...newUser, avater: valueRef.current })
               newUser.avater = valueRef.current;
               if (newUser.avater !== null) {
-                setDoc(doc(firestoreDb, "students", newUID), {
-                  ...newUser,
-                  course: data,
-                })
+                setDoc(
+                  doc(firestoreDb, "schools", `${school}/students`, newUID),
+                  {
+                    ...newUser,
+                    course: data,
+                  }
+                )
                   .then(
                     (reponse) => modifyClassWithStudent(newUID, newUser.class),
                     newUser.phone.map((item) => {
@@ -134,7 +136,7 @@ const CreateNewStudnet = () => {
     }
   }
   const getCourses = async (id) => {
-    const docRef = doc(firestoreDb, "class", id);
+    const docRef = doc(firestoreDb, "schools", `${school}/class`, id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       var data = docSnap.data();
@@ -145,10 +147,7 @@ const CreateNewStudnet = () => {
   };
 
   const getClass = async () => {
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     var children = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -166,7 +165,12 @@ const CreateNewStudnet = () => {
     setFile("");
   };
   const modifyClassWithStudent = async (studnetId, classID) => {
-    const washingtonRef = doc(firestoreDb, "class", classID);
+    const washingtonRef = doc(
+      firestoreDb,
+      "schools",
+      `${school}/class`,
+      classID
+    );
     await updateDoc(washingtonRef, {
       student: arrayUnion(studnetId),
     });
@@ -266,103 +270,96 @@ const CreateNewStudnet = () => {
           </div>
         </div>
 
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-col w-[40%] mr-10">
-            <div className="py-4">
-              <label style={{ paddingBottom: 6 }}>First Name</label>
-              <Input
-                style={{ marginTop: 6 }}
-                className="py-6 mt-6 !rounded-lg !border-[2px]"
-                name="first_name"
-                placeholder="Enter First Name"
-                onChange={(e) => handleStudent(e)}
-              />
-            </div>
+        <div className="grid grid-cols-4 gap-4 pb-10">
+          <div className="py-4">
+            <label style={{ paddingBottom: 6 }}>First Name</label>
+            <Input
+              style={{ marginTop: 6 }}
+              className="py-6 mt-6 !rounded-lg !border-[2px]"
+              name="first_name"
+              placeholder="Enter First Name"
+              onChange={(e) => handleStudent(e)}
+            />
+          </div>
 
-            <div>
-              <label>Class</label>
-              <Select
-                bordered={false}
-                placeholder="Select Class"
-                className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
-                onChange={handlelevel}
-                optionLabelProp="label"
-                style={{
-                  width: "100%",
-                  marginTop: 6,
-                }}
-              >
-                {classData.map((item, index) => (
-                  <Option key={item.id} value={item.id} label={item.className}>
-                    {item.className}
-                  </Option>
-                ))}
-              </Select>
-            </div>
-            <div className="py-4">
-              <label>Date of Birth</label>
-              <DatePicker
-                className="py-6 mt-6 !rounded-lg !border-[2px]"
-                style={{ width: "100%", marginTop: 6 }}
-                onChange={handleDob}
-              />
-            </div>
+          <div className="py-4">
+            <label>Class</label>
+            <Select
+              bordered={false}
+              placeholder="Select Class"
+              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
+              onChange={handlelevel}
+              optionLabelProp="label"
+              style={{
+                width: "100%",
+                marginTop: 6,
+              }}
+            >
+              {classData.map((item, index) => (
+                <Option key={item.id} value={item.id} label={item.className}>
+                  {item.className}
+                </Option>
+              ))}
+            </Select>
           </div>
-          <div className="flex flex-col w-[40%]  mr-10">
-            <div className="py-4">
-              <label>Last Name</label>
-              <Input
-                style={{ marginTop: 6 }}
-                className="py-6 mt-6 !rounded-lg !border-[2px]"
-                name="last_name"
-                placeholder="Enter Last Name"
-                onChange={(e) => handleStudent(e)}
-              />
-            </div>
-            <div>
-              <label>Sex </label>
-              <Select
-                bordered={false}
-                placeholder="Select Gender"
-                className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
-                onChange={handleGender}
-                optionLabelProp="label"
-                style={{
-                  width: "100%",
-                  marginTop: 6,
-                }}
-              >
-                {gender.map((item, index) => (
-                  <Option key={item.index} value={item} label={item}>
-                    {item}
-                  </Option>
-                ))}
-              </Select>
-            </div>
+          <div className="py-4">
+            <label>Date of Birth</label>
+            <DatePicker
+              className="py-6 mt-6 !rounded-lg !border-[2px]"
+              style={{ width: "100%", marginTop: 6 }}
+              onChange={handleDob}
+            />
           </div>
-          <div className="flex flex-col w-[40%] mr-10">
-            <div className="py-4">
-              <label>Email</label>
-              <Input
-                style={{ marginTop: 6 }}
-                className="py-6 mt-6 !rounded-lg !border-[2px]"
-                name="email"
-                placeholder="Enter Email Address"
-                onChange={(e) => handleStudent(e)}
-              />
-            </div>
-            <div className="-py-6 -mt-2">
-              <label>Student Id</label>
-              <Input
-                style={{ marginTop: 6 }}
-                name="studentId"
-                className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
-                placeholder="Enter Student Id"
-                onChange={(e) => handleStudent(e)}
-              />
-            </div>
+          <div className="py-4">
+            <label>Last Name</label>
+            <Input
+              style={{ marginTop: 6 }}
+              className="py-6 mt-6 !rounded-lg !border-[2px]"
+              name="last_name"
+              placeholder="Enter Last Name"
+              onChange={(e) => handleStudent(e)}
+            />
           </div>
-          <div></div>
+          <div>
+            <label>Sex </label>
+            <Select
+              bordered={false}
+              placeholder="Select Gender"
+              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
+              onChange={handleGender}
+              optionLabelProp="label"
+              style={{
+                width: "100%",
+                marginTop: 6,
+              }}
+            >
+              {gender.map((item, index) => (
+                <Option key={item.index} value={item} label={item}>
+                  {item}
+                </Option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <label>Email</label>
+            <Input
+              style={{ marginTop: 6 }}
+              className=" !rounded-lg !border-[2px]"
+              name="email"
+              placeholder="Enter Email Address"
+              onChange={(e) => handleStudent(e)}
+            />
+          </div>
+          <div className="">
+            <label>Student Id</label>
+            <Input
+              style={{ marginTop: 6 }}
+              name="studentId"
+              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
+              placeholder="Enter Student Id"
+              onChange={(e) => handleStudent(e)}
+            />
+          </div>
         </div>
       </div>
 
@@ -392,7 +389,7 @@ const CreateNewStudnet = () => {
             );
           })}
           <Button
-            className="!rounded-lg ]"
+            className="!rounded-lg mt-10"
             onClick={() => {
               setInputs([...input, 0]);
               setAllPhone([...allPhone, phone]);

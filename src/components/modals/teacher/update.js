@@ -28,6 +28,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { firestoreDb, storage } from "../../../firebase";
+import { useSelector } from "react-redux";
 import {
   fetchSubject,
   fetchClass,
@@ -51,6 +52,7 @@ function TeacherUpdate() {
   const [courseOption, setCourseOption] = useState([]);
   const [subjectloaded, setSubjectLoaded] = useState(false);
   const [file, setFile] = useState("");
+  const school = useSelector((state) => state.user.profile.school);
   const [subject, setSubject] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedRowKeysCourse, setSelectedRowKeysCourse] = useState([]);
@@ -71,9 +73,8 @@ function TeacherUpdate() {
 
   const handleUpdate = () => {
     if (!file) {
-      console.log(updateTeacher);
       setDoc(
-        doc(firestoreDb, "teachers", data.key),
+        doc(firestoreDb, "schools", `${school}/teachers`, data.key),
         { ...updateTeacher, course: selectedRowKeysCourse },
         {
           merge: true,
@@ -105,7 +106,7 @@ function TeacherUpdate() {
 
               if (updateTeacher.avater !== null) {
                 setDoc(
-                  doc(firestoreDb, "teachers", data.key),
+                  doc(firestoreDb, "schools", `${school}/teachers`, data.key),
                   { ...updateTeacher, course: selectedRowKeysCourse },
                   {
                     merge: true,
@@ -128,7 +129,6 @@ function TeacherUpdate() {
   };
 
   const handleChangeTeacher = (e) => {
-    console.log(e.target.name);
     setUpdateTeacher({ ...updateTeacher, [e.target.name]: e.target.value });
   };
 
@@ -150,10 +150,7 @@ function TeacherUpdate() {
   };
   const getClass = async () => {
     const children = [];
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", data.school_id)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     const Snapshot = await getDocs(q);
     Snapshot.forEach((doc) => {
       var datas = doc.data();
@@ -166,10 +163,7 @@ function TeacherUpdate() {
   const getCourse = async () => {
     const children = [];
 
-    const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "==", data.school_id)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/courses`));
     const Snapshot = await getDocs(q);
     Snapshot.forEach((doc) => {
       var datas = doc.data();
@@ -205,10 +199,7 @@ function TeacherUpdate() {
   };
   const getSubjectTeacher = async () => {
     const coursess = [];
-    const q = query(
-      collection(firestoreDb, "subject"),
-      where("school_id", "==", data.school_id)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/subject`));
     const querySnapshot = await getDocs(q);
     await querySnapshot.forEach((doc) => {
       var datas = doc.data();
@@ -230,23 +221,6 @@ function TeacherUpdate() {
     await setSubjects(coursess);
   };
 
-  const getSubject = async () => {
-    const coursess = [];
-    const q = query(
-      collection(firestoreDb, "subject"),
-      where("school_id", "==", data.school_id)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      var datas = doc.data();
-      coursess.push({
-        ...datas,
-        key: doc.id,
-      });
-    });
-    setSubject(coursess);
-  };
-
   const getData = async (data) => {
     data.class = await fetchClass(data.class);
     data.subject = await fetchSubject(data.subject);
@@ -256,8 +230,7 @@ function TeacherUpdate() {
   const handleFilterSubject = async (value) => {
     if (value) {
       const q = query(
-        collection(firestoreDb, "courses"),
-        where("school_id", "==", data.school_id),
+        collection(firestoreDb, "schools", `${school}/courses`),
         where("subject", "==", value)
       );
       var temporary = [];
@@ -276,8 +249,7 @@ function TeacherUpdate() {
   const handleFilterClass = async (value) => {
     if (value) {
       const q = query(
-        collection(firestoreDb, "courses"),
-        where("school_id", "==", data.school_id),
+        collection(firestoreDb, "schools", `${school}/courses`),
         where("class", "==", value)
       );
       var temporary = [];
@@ -314,7 +286,6 @@ function TeacherUpdate() {
       ...updateTeacher,
       class: temporary,
     });
-    console.log("tempory", temporary);
   };
 
   const onSelectChange = (course) => {
@@ -394,23 +365,21 @@ function TeacherUpdate() {
   const getClassToSetClass = async (courses) => {
     var temporary = [];
     courses.map(async (item) => {
-      var set = await fetchclassFromCourse(item.key);
+      var set = await fetchclassFromCourse(item.key, school);
       temporary.push(set.class);
     });
     await setUpdateTeacher({
       ...updateTeacher,
       class: temporary,
     });
-    console.log("tempory", temporary);
   };
 
   useEffect(() => {
+    console.log(data);
     getClass();
     getCourse();
     getID();
     getClassToSetClass(data.course);
-
-    getSubject();
   }, []);
 
   return (
@@ -445,7 +414,7 @@ function TeacherUpdate() {
                 Class
               </h3>
 
-              {data?.class ? (
+              {data.class != "" ? (
                 <h4
                   className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] 
                 p-[1px] ml-2"
@@ -461,24 +430,20 @@ function TeacherUpdate() {
 
             <div className="flex flex-row ">
               <h3 className="text-lg font-[500] font-jakarta text-[#344054] border-r-2 pr-2">
-                Subject
+                Subjects
               </h3>
               <div>
-                {subjectloaded ? (
-                  <div>
-                    {data?.course ? (
-                      <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] p-[1px] ml-2">
-                        {subjects
-                          ?.slice(0, 2)
-                          .map((item, i) => item.name + ",")}
-                      </h4>
-                    ) : (
-                      <a className="ml-2 pt-1">Not Assigned</a>
-                    )}
-                  </div>
-                ) : (
-                  <Spin size="small" style={{ padding: 5 }} />
-                )}
+                <div>
+                  {data?.course ? (
+                    <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] p-[1px] ml-2">
+                      {data.course.map((item) => {
+                        <h1>{item.subject}</h1>;
+                      })}
+                    </h4>
+                  ) : (
+                    <a className="ml-2 pt-1">Not Assigned</a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -496,7 +461,7 @@ function TeacherUpdate() {
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
-              className="!border-[#E7752B] !border-[2px] !text-[#E7752B] hover:shadow-[#E7752B] hover:shadow-sm float-right -mt-14"
+              className="!border-[#E7752B] !border-[2px] !text-[#E7752B] hover:shadow-[#E7752B] hover:shadow-sm float-right -mt-20 !rounded-lg"
               onClick={handleUpdate}
             >
               Finalize review
@@ -512,7 +477,7 @@ function TeacherUpdate() {
                     <h2 className="text-[14px] font-[500] font-jakarta text-[#475467] text-center">
                       Teacher Picture
                     </h2>
-                    <div className="rounded-full border-[2px] border-[#E7752B] bg-[white] w-[6vw]">
+                    <div className="rounded-full border-[2px] border-[#E7752B] bg-[white] w-[78px]">
                       <img
                         src={
                           file
@@ -521,11 +486,11 @@ function TeacherUpdate() {
                             ? data.avater
                             : "img-5.jpg"
                         }
-                        className="rounded-full w-[6vw] !p-0"
+                        className="rounded-full w-[78px] h-[78px] !p-0"
                       />
                     </div>
                   </div>
-                  <div className="flex flex-col justify-end ml-3 -mt-2">
+                  <div className="flex flex-col justify-center ml-3">
                     <span className="font-jakarta text-[12px] mb-2">
                       This will be displayed to you when you view this profile
                     </span>
@@ -558,107 +523,102 @@ function TeacherUpdate() {
                     </div>
                   </div>
                 </div>
-                <div className="add-form">
-                  <div className="col">
-                    <div className="py-2">
-                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                        First Name
-                      </h1>
-                      <Input
-                        className="!border-[2px]"
-                        defaultValue={updateTeacher.first_name}
-                        name="first_name"
-                        onChange={(e) => handleChangeTeacher(e)}
-                      />
-                    </div>
-                    <div className="py-2">
-                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                        Last Name
-                      </h1>
-                      <Input
-                        className="!border-[2px]"
-                        defaultValue={updateTeacher.last_name}
-                        name="last_name"
-                        onChange={(e) => handleChangeTeacher(e)}
-                      />
-                    </div>
+                <div className="grid grid-cols-4 gap-4 pb-20 pl-5 pr-5 pt-10">
+                  <div className="py-2">
+                    <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                      First Name
+                    </h1>
+                    <Input
+                      className="!border-[2px] !rounded-lg border-solid"
+                      defaultValue={updateTeacher.first_name}
+                      name="first_name"
+                      onChange={(e) => handleChangeTeacher(e)}
+                    />
                   </div>
-                  <div className="col">
-                    <div className="py-2">
-                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                        Phone
-                      </h1>
-                      <Input
-                        className="!border-[2px]"
-                        defaultValue={updateTeacher.phone}
-                        name="phone"
-                        onChange={(e) => handleChangeTeacher(e)}
-                      />
-                    </div>
-                    <div className="py-2">
-                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                        Email
-                      </h1>
-                      <Input
-                        className="!border-[2px]"
-                        defaultValue={updateTeacher.email}
-                        name="email"
-                        onChange={(e) => handleChangeTeacher(e)}
-                      />
-                    </div>
+                  <div className="py-2">
+                    <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                      Last Name
+                    </h1>
+                    <Input
+                      className="!border-[2px] !rounded-lg border-solid"
+                      defaultValue={updateTeacher.last_name}
+                      name="last_name"
+                      onChange={(e) => handleChangeTeacher(e)}
+                    />
                   </div>
-                  <div className="col">
-                    <div className="py-2">
-                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                        Date Of Birth
-                      </h1>
-                      <DatePicker
-                        // className="!border-[2px]"
-                        style={{ width: "100%" }}
-                        onChange={handleDob}
-                        defaultValue={
-                          updateTeacher.DOB
-                            ? moment(JSON.parse(updateTeacher.DOB))
-                            : ""
-                        }
-                      />
-                    </div>
-                    <div className="-mt-2">
-                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                        Sex
-                      </h1>
-                      <Select
-                        // className="!border-[2px] h-[4vh]"
-                        defaultValue={updateTeacher.sex}
-                        placeholder="Select Gender"
-                        onChange={handleGender}
-                        optionLabelProp="label"
-                        style={{
-                          width: "100%",
-                        }}
-                      >
-                        {gender.map((item, index) => (
-                          <Option key={item.index} value={item} label={item}>
-                            {item}
-                          </Option>
-                        ))}
-                      </Select>
-                    </div>
-                    <div className="-mt-2">
-                      <h1 className="text-[#344054] pb-[6px] font-jakarta">
-                        Working Since
-                      </h1>
+                  <div className="py-2">
+                    <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                      Phone
+                    </h1>
+                    <Input
+                      className="!border-[2px] !rounded-lg border-solid"
+                      defaultValue={updateTeacher.phone}
+                      name="phone"
+                      onChange={(e) => handleChangeTeacher(e)}
+                    />
+                  </div>
+                  <div className="py-2">
+                    <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                      Email
+                    </h1>
+                    <Input
+                      className="!border-[2px] !rounded-lg border-solid"
+                      defaultValue={updateTeacher.email}
+                      name="email"
+                      onChange={(e) => handleChangeTeacher(e)}
+                    />
+                  </div>
+                  <div>
+                    <h1 className="text-[#344054]  font-jakarta">
+                      Date Of Birth
+                    </h1>
+                    <DatePicker
+                      className="!border-[2px] !rounded-lg border-solid"
+                      style={{ width: "100%" }}
+                      onChange={handleDob}
+                      defaultValue={
+                        updateTeacher.DOB
+                          ? moment(JSON.parse(updateTeacher.DOB))
+                          : ""
+                      }
+                    />
+                  </div>
+                  <div className="-mt-2">
+                    <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                      Sex
+                    </h1>
+                    <Select
+                      bordered={false}
+                      className="!border-[2px]  !rounded-lg border-solid"
+                      defaultValue={updateTeacher.sex}
+                      placeholder="Select Gender"
+                      onChange={handleGender}
+                      optionLabelProp="label"
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {gender.map((item, index) => (
+                        <Option key={item.index} value={item} label={item}>
+                          {item}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                  <div className="-mt-2">
+                    <h1 className="text-[#344054] pb-[6px] font-jakarta">
+                      Working Since
+                    </h1>
 
-                      <DatePicker
-                        className=" w-[100%]"
-                        onChange={handleWork}
-                        defaultValue={
-                          updateTeacher.working_since
-                            ? moment(JSON.parse(updateTeacher.working_since))
-                            : ""
-                        }
-                      />
-                    </div>
+                    <DatePicker
+                      className=" w-[100%]  !rounded-lg border-solid !border-[2px]"
+                      onChange={handleWork}
+                      defaultValue={
+                        updateTeacher.working_since
+                          ? moment(JSON.parse(updateTeacher.working_since))
+                          : ""
+                      }
+                    />
                   </div>
                 </div>
               </div>
@@ -674,7 +634,7 @@ function TeacherUpdate() {
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
-              className="!border-[#E7752B] !border-[2px] !text-[#E7752B] hover:shadow-[#E7752B] hover:shadow-sm float-right -mt-14"
+              className="!border-[#E7752B] !border-[2px] !text-[#E7752B] hover:shadow-[#E7752B] hover:shadow-sm float-right -mt-20 !rounded-lg"
               onClick={handleUpdate}
             >
               Finalize review

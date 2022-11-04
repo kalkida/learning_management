@@ -31,8 +31,10 @@ import {
   removeSingleCourseFromClass,
   addSingleCourseToTeacher,
   addSingleClassToTeacher,
+  addSingleClassToCourses,
   removeSingleCourseToTeacher,
   fetchSubject,
+  addSingleCourseToClass,
 } from "../funcs";
 
 const { Option } = Select;
@@ -40,9 +42,9 @@ const { Option } = Select;
 function UpdateCourse() {
   const { state } = useLocation();
   const { data } = state;
-  console.log("dat", data);
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
+  const school = useSelector((state) => state.user.profile.school);
   const [input, setInput] = useState([]);
   const [classes, setClasses] = useState([]);
   const [subjectData, setSubjectData] = useState();
@@ -59,9 +61,11 @@ function UpdateCourse() {
 
   const [updateCourse, setUpdateCourse] = useState({
     course_name: data.course_name,
-    subject: data.subject?.key,
+    subject: data.subject,
+    grade: data.grade,
+    section: data.section,
     teachers: data.teachers,
-    class: data.class.key,
+    class: data?.class ? data.class.key : "",
     schedule: data.schedule,
     description: data.description,
     school_id: data.school_id,
@@ -95,31 +99,40 @@ function UpdateCourse() {
 
   const handleUpdate = async () => {
     setLoading(true);
-    updateCourse.course_name = selectedSubject + " " + selectedLevel;
+    updateCourse.course_name = data.subject + " " + data.grade + data.section;
     updateCourse.teachers?.map((item, i) => {
       if (typeof item === "object") {
         updateCourse.teachers[i] = item.key;
       }
     });
-    setDoc(doc(firestoreDb, "courses", data.key), updateCourse, { merge: true })
+    setDoc(
+      doc(firestoreDb, "schools", `${school}/courses`, data.key),
+      updateCourse,
+      { merge: true }
+    )
       .then((_) => {
         setLoading(false);
         //add Course To Teacher when updating
         updateCourse.teachers.map((items) => {
           if (!data.teachers.includes(items)) {
-            addSingleCourseToTeacher(data.key, items);
-            addSingleClassToTeacher(updateCourse.class, items);
+            addSingleCourseToTeacher(data.key, items, school);
+            if (data.class) {
+              addSingleClassToTeacher(updateCourse.class, items, school);
+            }
           }
         });
         // if teacher is in data but not in updateCourse then remove it from the teacher
         data.teachers.map((items) => {
           if (!updateCourse.teachers.includes(items)) {
             console.log("removed", data.key, items.key);
-            removeSingleCourseToTeacher(data.key, items.key);
+            removeSingleCourseToTeacher(data.key, items.key, school);
           }
         });
 
-        removeSingleCourseFromClass(data.class.key, data.key);
+        removeSingleCourseFromClass(data.class.key, data.key, school);
+        updateCourse.class.map((item, index) => {
+          addSingleCourseToClass(item, data.key, school);
+        });
         message.success("Data is updated successfuly");
         navigate("/list-course");
       })
@@ -132,11 +145,7 @@ function UpdateCourse() {
   const getCourseData = async () => {
     const children = [];
     const teachersArrary = [];
-    const subjectArrary = [];
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
@@ -146,8 +155,7 @@ function UpdateCourse() {
       });
     });
     const qTeachers = query(
-      collection(firestoreDb, "teachers"),
-      where("school_id", "==", uid.school)
+      collection(firestoreDb, "schools", `${school}/teachers`)
     );
     const queryTeachers = await getDocs(qTeachers);
     queryTeachers.forEach((doc) => {
@@ -157,35 +165,12 @@ function UpdateCourse() {
         key: doc.id,
       });
     });
-    const qSubject = query(
-      collection(firestoreDb, "subject"),
-      where("school_id", "==", uid.school)
-    );
-    const querySubject = await getDocs(qSubject);
-    querySubject.forEach((doc) => {
-      var datas = doc.data();
-      subjectArrary.push({
-        ...datas,
-        key: doc.id,
-      });
-    });
     setClasses(children);
     setTeachers(teachersArrary);
-    setSubject(subjectArrary);
-  };
-
-  const getSubjectID = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
   };
 
   const getClasstID = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/class`, ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       data = response.data();
@@ -214,22 +199,6 @@ function UpdateCourse() {
     setUpdateCourse({ ...updateCourse, class: value });
   };
 
-  const handleSubject = async (value) => {
-    const response = await getSubjectID(value);
-    setSelectedSubject(response.name);
-    setUpdateCourse({ ...updateCourse, subject: value });
-  };
-
-  const getTeacherID = async (ID) => {
-    const docRef = doc(firestoreDb, "teachers", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
-  };
-
   const handleScheduler = (value, i) => {
     updateCourse.schedule[i].day = value;
     console.log(updateCourse);
@@ -256,6 +225,12 @@ function UpdateCourse() {
     }
   };
 
+  const handleGrade = (e) => {
+    setUpdateCourse({ ...updateCourse, grade: e.target.value });
+  };
+  const handleSection = (e) => {
+    setUpdateCourse({ ...updateCourse, section: e.target.value });
+  };
   const columns = [
     {
       title: "First Name",
@@ -275,16 +250,16 @@ function UpdateCourse() {
     <>
       {loading ? (
         <div className="bg-[#F9FAFB] min-h-[100vh] py-4">
-          <div className="flex flex-row justify-between w-[100%] -mt-20 border-b-[1px] p-3">
-            <div className="flex flex-row justify-between align-middle h-[7.4vw]">
-              <div className="rounded-full  border-[2px] border-[#E7752B] mr-10">
+          <div className="flex flex-row justify-between w-[100%] -mt-20 border-b-[1px] p-">
+            <div className="flex flex-row justify-between h-[83px] ">
+              <div className="rounded-full  border-[2px] border-[#D0D5DD] mr-10 h-[83px]">
                 <img
-                  className="w-[7vw] rounded-full  bg-[white] "
+                  className="w-[78px] h-[78px] rounded-full  bg-[white] "
                   src="logo512.png"
                   alt="profile"
                 />
               </div>
-              <div className="flex flex-col justify-center align-middle">
+              <div className="flex flex-col justify-center">
                 <h2 className="text-xl font-[600] font-jakarta text-[#1D2939]">
                   {data.course_name}
                 </h2>
@@ -296,17 +271,18 @@ function UpdateCourse() {
                   Class
                 </h3>
                 <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] p-[1px] ml-2">
-                  {singleClass?.level}
-                  {singleClass?.section}
+                  {singleClass.level
+                    ? singleClass?.level + singleClass?.section
+                    : data.course_name + " " + data.grade + data.section}
                 </h4>
               </div>
               <div className="flex flex-row">
                 <h3 className="text-lg font-semibold font-jakarta">Subject</h3>
                 <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2">
-                  {subjectData?.name}
+                  {subjectData?.name ? subjectData?.name : data.subject}
                 </h4>
               </div>
-              <div className="flex flex-row mt-4 justify-end ">
+              <div className="flex flex-row mt-4 pb-4 justify-end ">
                 <Button
                   style={{
                     borderRadius: "8px",
@@ -330,7 +306,7 @@ function UpdateCourse() {
             </div>
           </div>
 
-          <div className="mt-[8px]">
+          <div className="mt-[32px]">
             <p className="text-xl font-semibold text-[#344054] text-left font-jakarta mb-[12px]">
               Edit Course
             </p>
@@ -356,23 +332,60 @@ function UpdateCourse() {
                   >
                     Subject
                   </span>
-                  <Select
-                    bordered={false}
+                  <Input
                     className="!rounded-[6px] mt-2 border-[2px] border-[#EAECF0]"
+                    value={updateCourse.subject}
                     style={{
                       width: "40%",
                     }}
-                    placeholder="select Subjects"
-                    onChange={handleSubject}
-                    optionLabelProp="label"
-                    defaultValue={updateCourse.subject}
-                  >
-                    {subject.map((item, index) => (
-                      <Option key={index} value={item.key} label={item.name}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
+                  />
+                </div>
+                <div className="flex flex-row w-[40%]">
+                  <div className="pb-[6px] pt-[12px] w-[100%]">
+                    <h3
+                      style={{
+                        fontFamily: "Plus Jakarta Sans",
+                        fontWeight: "500",
+                        lineHeight: "20px",
+                        fontSize: 14,
+                      }}
+                    >
+                      Grade
+                    </h3>
+                    <Input
+                      type="number"
+                      defaultValue={updateCourse.grade}
+                      style={{
+                        width: "98%",
+                        borderRadius: "8px",
+                        borderWidth: 2,
+                      }}
+                      onChange={handleGrade}
+                      placeholder="Grade"
+                    />
+                  </div>
+                  <div className="pb-[6px] pt-[12px] w-[100%]">
+                    <h3
+                      style={{
+                        fontFamily: "Plus Jakarta Sans",
+                        fontWeight: "500",
+                        lineHeight: "20px",
+                        fontSize: 14,
+                      }}
+                    >
+                      Section
+                    </h3>
+                    <Input
+                      defaultValue={updateCourse.section}
+                      style={{
+                        width: "100%",
+                        borderRadius: "8px",
+                        borderWidth: 2,
+                      }}
+                      onChange={handleSection}
+                      placeholder="Grade"
+                    />
+                  </div>
                 </div>
                 <div className="w-[40%] mt-[12px]">
                   <div>
@@ -404,7 +417,7 @@ function UpdateCourse() {
                 </div>
               </div>
             </div>
-            <div className="mt-10">
+            <div className="mt-10 mb-10">
               <div className="assign-header">
                 <h4 className="font-[600] font-jakarta text-[#344054] text-lg">
                   Edit Teachers
@@ -415,7 +428,7 @@ function UpdateCourse() {
                   dataSource={teachers}
                   rowSelection={rowSelection}
                   columns={columns}
-                  pagination={{ position: ["bottomCenter"] }}
+                  pagination={false}
                 />
               ) : (
                 <Spin />
@@ -515,7 +528,13 @@ function UpdateCourse() {
                   </div>
                 ))}
                 <Button
-                  style={{ float: "right", marginBottom: 10, marginTop: 20 }}
+                  style={{
+                    float: "right",
+                    marginBottom: 10,
+                    marginTop: 20,
+                    borderRadius: 8,
+                    borderWidth: 2,
+                  }}
                   onClick={() => {
                     setInput([...input, 0]);
                     setUpdateCourse({

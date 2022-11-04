@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { Form, Input, Button, Select, TimePicker, message } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import CreateSubject from "../modals/subject/createSubject";
 
 import {
   addSingleCourseToClass,
@@ -28,17 +27,19 @@ const days = ["Monday", "Tuesday", "Wednsday", "Thursday", "Friday"];
 const CreateCrouse = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.user.profile);
-  const [added, setAdded] = useState(1);
+  const school = useSelector((state) => state.user.profile.school);
   const [classes, setClasses] = useState([]);
   const [teachers, setTeachers] = useState([]);
-  const [subject, setSubject] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [secclas, setSecClass] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState("");
   const [input, setInput] = useState([0]);
   const [newCourse, setNewCourse] = useState({
     course_name: selectedSubject + " " + selectedLevel,
     teachers: [],
     class: "",
+    grade: "",
+    section: "",
     subject: "",
     schedule: [{ day: "", time: [] }],
     description: "",
@@ -49,11 +50,7 @@ const CreateCrouse = () => {
   const getCourseData = async () => {
     const children = [];
     const teachersArrary = [];
-    const subjectArrary = [];
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       var datas = doc.data();
@@ -63,8 +60,7 @@ const CreateCrouse = () => {
       });
     });
     const qTeachers = query(
-      collection(firestoreDb, "teachers"),
-      where("school_id", "==", uid.school)
+      collection(firestoreDb, "schools", `${school}/teachers`)
     );
     const queryTeachers = await getDocs(qTeachers);
     queryTeachers.forEach((doc) => {
@@ -74,32 +70,23 @@ const CreateCrouse = () => {
         key: doc.id,
       });
     });
-    const qSubject = query(
-      collection(firestoreDb, "subject"),
-      where("school_id", "==", uid.school)
-    );
-    const querySubject = await getDocs(qSubject);
-    querySubject.forEach((doc) => {
-      var datas = doc.data();
-      subjectArrary.push({
-        ...datas,
-        key: doc.id,
-      });
-    });
+
     setClasses(children);
     setTeachers(teachersArrary);
-    setSubject(subjectArrary);
   };
 
   const createNewCourse = async () => {
+    if (newCourse.class == "" && newCourse.grade == "") {
+      alert("Please select a class or Give Section and Course Name");
+      return;
+    }
     newCourse.course_name = selectedSubject + " " + selectedLevel;
     if (newCourse.course_name == "") {
       message.error("please enter a new course name");
       return 0;
     }
     const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "==", uid.school),
+      collection(firestoreDb, "schools", `${school}/courses`),
       where("course_name", "==", newCourse.course_name)
     );
 
@@ -107,16 +94,16 @@ const CreateCrouse = () => {
 
     if (checkIsExist) {
       var courseId = uuid();
-      setDoc(doc(firestoreDb, "courses", courseId), {
+      setDoc(doc(firestoreDb, "schools", `${school}/courses`, courseId), {
         ...newCourse,
         course_id: courseId,
       })
         .then((_) => {
-          addSingleCourseToClass(newCourse.class, courseId);
+          addSingleCourseToClass(newCourse.class, courseId, school);
 
           newCourse.teachers.map((teacher) => {
-            addSingleCourseToTeacher(courseId, teacher);
-            addSingleClassToTeacher(newCourse.class, teacher);
+            addSingleCourseToTeacher(courseId, teacher, school);
+            addSingleClassToTeacher(newCourse.class, teacher, school);
           });
           message.success("Course Created");
           navigate("/list-Course");
@@ -140,10 +127,16 @@ const CreateCrouse = () => {
     setNewCourse({ ...newCourse, class: classData.key });
   };
 
-  const handleSubject = (value) => {
-    const subValue = JSON.parse(value);
-    setSelectedSubject(subValue.name);
-    setNewCourse({ ...newCourse, subject: subValue.key });
+  const handleSubject = (e) => {
+    setSelectedSubject(e.target.value);
+    setNewCourse({ ...newCourse, subject: e.target.value });
+  };
+
+  const handleGrade = (e) => {
+    setNewCourse({ ...newCourse, grade: e.target.value });
+  };
+  const handleSection = (e) => {
+    setNewCourse({ ...newCourse, section: e.target.value });
   };
 
   const handleTeacher = (value) => {
@@ -161,6 +154,7 @@ const CreateCrouse = () => {
       newCourse.schedule[i].time = timeValue;
     }
   };
+
   useEffect(() => {
     getCourseData();
   }, []);
@@ -204,11 +198,12 @@ const CreateCrouse = () => {
             placeholder="Course "
             rows={4}
             name="description"
+            className="!border-[2px] !rounded-lg"
             onChange={(e) => handleCourse(e)}
           />
         </div>
-        <div className="info-selection">
-          <div className="col">
+        <div className="h-[auto]">
+          <div className="w-[100%]">
             <div className="pt-[24px] pb-[6px]">
               <h3
                 style={{
@@ -220,34 +215,61 @@ const CreateCrouse = () => {
               >
                 Subject
               </h3>
-              <Select
-                bordered={false}
+              <Input
+                onChange={handleSubject}
+                placeholder="Subject"
+                required
                 style={{
                   width: "50%",
                   borderRadius: "8px",
-                  borderWidth: 1,
+                  borderWidth: 2,
                 }}
-                // dropdownStyle={{ borderRadius: 20 }}
-                placeholder="select Subjects"
-                onChange={handleSubject}
-                optionLabelProp="label"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Select Subject!",
-                  },
-                ]}
-              >
-                {subject.map((item, index) => (
-                  <Option
-                    key={item.key}
-                    value={JSON.stringify(item)}
-                    label={item.name}
-                  >
-                    {item.name}
-                  </Option>
-                ))}
-              </Select>
+              />
+            </div>
+            <div className="flex flex-row w-[50%]">
+              <div className="pb-[6px] pt-[12px] w-[100%]">
+                <h3
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "500",
+                    lineHeight: "20px",
+                    fontSize: 14,
+                  }}
+                >
+                  Grade
+                </h3>
+                <Input
+                  type="number"
+                  style={{
+                    width: "98%",
+                    borderRadius: "8px",
+                    borderWidth: 2,
+                  }}
+                  onChange={handleGrade}
+                  placeholder="Grade"
+                />
+              </div>
+              <div className="pb-[6px] pt-[12px] w-[100%]">
+                <h3
+                  style={{
+                    fontFamily: "Plus Jakarta Sans",
+                    fontWeight: "500",
+                    lineHeight: "20px",
+                    fontSize: 14,
+                  }}
+                >
+                  Section
+                </h3>
+                <Input
+                  style={{
+                    width: "100%",
+                    borderRadius: "8px",
+                    borderWidth: 2,
+                  }}
+                  onChange={handleSection}
+                  placeholder="Grade"
+                />
+              </div>
             </div>
             <div className="pb-[6px] pt-[12px]">
               <h3
@@ -265,7 +287,7 @@ const CreateCrouse = () => {
                 style={{
                   width: "50%",
                   borderRadius: "8px",
-                  borderWidth: 1,
+                  borderWidth: 2,
                 }}
                 placeholder="select Classes"
                 onChange={handleClass}
@@ -281,9 +303,7 @@ const CreateCrouse = () => {
                 ))}
               </Select>
             </div>
-          </div>
-          <div className="col">
-            <div className="pt-[24px] pb-[6px]">
+            <div className="flex flex-col pt-[24px] pb-[6px]">
               <h3
                 style={{
                   fontFamily: "Plus Jakarta Sans",
@@ -294,36 +314,39 @@ const CreateCrouse = () => {
               >
                 Teachers
               </h3>
-              <Select
-                bordered={false}
-                style={{
-                  width: "50%",
-                  borderRadius: "8px",
-                  borderWidth: 1,
-                }}
-                placeholder="select Teachers"
-                onChange={handleTeacher}
-                optionLabelProp="label"
-                maxTagCount={3}
-                showArrow
-                mode="multiple"
-              >
-                {teachers.map((item, index) => (
-                  <Option
-                    key={item.key}
-                    value={item.key}
-                    label={
-                      item.first_name +
-                      " " +
-                      (item.last_name ? item.last_name : "")
-                    }
-                  >
-                    {item.first_name +
-                      " " +
-                      (item.last_name ? item.last_name : "")}
-                  </Option>
-                ))}
-              </Select>
+              {[0, 1, 2].map((_) => (
+                <Select
+                  bordered={false}
+                  style={{
+                    width: "50%",
+                    borderRadius: "8px",
+                    marginBottom: 14,
+                    borderWidth: 2,
+                  }}
+                  placeholder="select Teachers"
+                  onChange={handleTeacher}
+                  optionLabelProp="label"
+                  maxTagCount={3}
+                  showArrow
+                  mode="multiple"
+                >
+                  {teachers.map((item, index) => (
+                    <Option
+                      key={item.key}
+                      value={item.key}
+                      label={
+                        item.first_name +
+                        " " +
+                        (item.last_name ? item.last_name : "")
+                      }
+                    >
+                      {item.first_name +
+                        " " +
+                        (item.last_name ? item.last_name : "")}
+                    </Option>
+                  ))}
+                </Select>
+              ))}
             </div>
           </div>
         </div>
@@ -333,23 +356,15 @@ const CreateCrouse = () => {
       </h1>
       <div className="w-[100%] border-[1px] border-[#D0D5DD] bg-[#FFFFFF] mt-[0] p-6 rounded-lg">
         <div className="h-[auto] pb-10">
-          <h2
-            className="text-[20px] pb-[24px] text-[#EA8848]"
-            style={{
-              fontFamily: "Plus Jakarta Sans",
-            }}
-          >
-            Class {selectedLevel ? selectedLevel : ""}
-          </h2>
           <div className="flex flex-row justify-between">
-            <div className="border-[1px] border-r-[0px] w-[100%] p-2 text-left rounded-l-lg  border-[#bab8b7]">
+            <div className="border-[1px] h-10 border-r-[0px] w-[100%] p-2 text-left   border-[#F2F4F7]">
               <p> Period</p>
             </div>
-            <div className="border-t-[1px] border-r-[0px]  border-b-[1px] w-[100%] p-2 text-left  border-[#bab8b7]">
+            <div className="border-t-[1px] h-10 border-r-[0px]  border-b-[1px] w-[100%] p-2 text-left  border-[#F2F4F7]">
               <p> Start time</p>
             </div>
 
-            <div className="border-[1px] border-l-[0px] w-[100%] p-2 text-left rounded-r-lg border-[#bab8b7]">
+            <div className="border-[1px] h-10 border-l-[0px] w-[100%] p-2 text-left  border-[#F2F4F7]">
               <p> End time</p>
             </div>
           </div>
@@ -359,9 +374,10 @@ const CreateCrouse = () => {
               <Select
                 bordered={false}
                 style={{
-                  width: "33%",
+                  width: "30%",
+                  marginRight: "3%",
                   borderRadius: "8px",
-                  borderWidth: 1,
+                  borderWidth: 2,
                 }}
                 className="rounded-lg border-[0px] outline-none"
                 placeholder="First Select Days"
@@ -375,7 +391,7 @@ const CreateCrouse = () => {
               </Select>
               <TimePicker.RangePicker
                 style={{ width: "67%" }}
-                className="rounded-sm  outline-none border-[1px] border-[#F2F4F7]"
+                className="!rounded-lg  outline-none !border-[2px] !border-[#F2F4F7]"
                 status="warning"
                 format={"hh:mm"}
                 use12Hours
@@ -384,7 +400,7 @@ const CreateCrouse = () => {
             </div>
           ))}
           <Button
-            className="border-[2px] border-[#E7752B] text-[#E7752B]"
+            className="border-[2px] border-[#E7752B] text-[#E7752B] !rounded-lg"
             style={{
               float: "right",
             }}

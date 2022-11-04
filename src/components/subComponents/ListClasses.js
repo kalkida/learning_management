@@ -58,31 +58,14 @@ export default function ListClasses() {
 
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
+  const school = useSelector((state) => state.user.profile.school);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [tableLoading, setTableLoading] = useState(true);
-  const searchInput = useRef(null);
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
 
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
-  };
-
-  const getSchool = async () => {
-    const docRef = doc(firestoreDb, "schools", uid.school);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset;
-    } else {
-    }
   };
 
   const handleView = (data) => {
@@ -98,11 +81,7 @@ export default function ListClasses() {
   };
 
   const getClasses = async () => {
-    var branches = await getSchool();
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "in", branches.branches)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     var temporary = [];
     const snap = await getDocs(q);
 
@@ -149,20 +128,19 @@ export default function ListClasses() {
       render: (text) => <a className="text-[#344054]">{text}</a>,
     },
     {
-      title: "Number Of Students",
+      title: "Number of Students",
       key: "class",
       width: "20%",
       render: (_, record) => (
         <div className="flex flex-row justify-around">
-          {record.student.length}
+          {record?.student.length}
         </div>
       ),
     },
   ];
   const handleFilterLevel = async (value) => {
     const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school),
+      collection(firestoreDb, "schools", `${school}/class`),
       where("level", "==", value)
     );
     var temporary = [];
@@ -178,8 +156,7 @@ export default function ListClasses() {
 
   const handleFilterSection = async (value) => {
     const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", uid.school),
+      collection(firestoreDb, "schools", `${school}/class`),
       where("section", "==", value)
     );
     var temporary = [];

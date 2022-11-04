@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Button, Select, Input, DatePicker, message, Tabs, Table } from "antd";
 import moment from "moment";
 import {
@@ -38,7 +39,9 @@ function UpdateStudents() {
   const { data } = state;
   const [allPhone, setAllPhone] = useState(data.phone);
   const [selectedRowKeys, setSelectedRowKeys] = useState(data.course);
+  const school = useSelector((state) => state.user.profile.school);
 
+  console.log(data);
   const [input, setInputs] = useState(data.phone);
   const [updateStudent, setUpdateStudent] = useState({
     DOB: data.DOB,
@@ -95,7 +98,7 @@ function UpdateStudents() {
     setLoading(true);
     if (!file) {
       setDoc(
-        doc(firestoreDb, "students", data.key),
+        doc(firestoreDb, "schools", `${school}/students`, data.key),
         {
           ...updateStudent,
           course: users.course,
@@ -134,7 +137,7 @@ function UpdateStudents() {
 
               if (updateStudent.avater !== null) {
                 setDoc(
-                  doc(firestoreDb, "students", data.key),
+                  doc(firestoreDb, "schools", `${school}/students`, data.key),
                   { ...updateStudent, course: users.course },
                   {
                     merge: true,
@@ -158,7 +161,7 @@ function UpdateStudents() {
   };
 
   const getClassID = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/class`, ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       data = response.data();
@@ -201,10 +204,7 @@ function UpdateStudents() {
   };
   const getCourses = async (courses) => {
     const children = [];
-    const q = query(
-      collection(firestoreDb, "courses"),
-      where("course_id", "in", courses)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/courses`));
     const Snapshot = await getDocs(q);
     Snapshot.forEach((doc) => {
       var datas = doc.data();
@@ -226,10 +226,7 @@ function UpdateStudents() {
   const getClass = async () => {
     const children = [];
 
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", data.school_id)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     const Snapshot = await getDocs(q);
     Snapshot.forEach((doc) => {
       var datas = doc.data();
@@ -351,7 +348,7 @@ function UpdateStudents() {
                 bordered={false}
                 placeholder="Select Class"
                 className="!rounded-[6px] !border-[2px]"
-                defaultValue={data.class}
+                defaultValue={data.class.key}
                 onChange={handlesection}
                 optionLabelProp="label"
                 style={{
@@ -464,7 +461,7 @@ function UpdateStudents() {
             );
           })}
           <Button
-            className="!rounded-lg ]"
+            className="!rounded-lg mt-10"
             onClick={() => {
               setInputs([...input, 0]);
               setAllPhone([...allPhone, phone]);

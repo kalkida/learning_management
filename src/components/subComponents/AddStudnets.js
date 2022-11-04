@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Space, Table, Button } from "antd";
 import { useSelector } from "react-redux";
-import moment from "moment";
 import {
   collection,
   getDocs,
@@ -15,9 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "antd";
 import { Select } from "antd";
 import "../modals/courses/style.css";
-import { PlusOutlined } from "@ant-design/icons";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
 import { SearchOutlined } from "@ant-design/icons";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,36 +23,19 @@ const { Option } = Select;
 const { Search } = Input;
 
 export default function AddStudnets() {
-  const uid = useSelector((state) => state.user.profile);
+  const school = useSelector((state) => state.user.profile.school);
   const navigate = useNavigate();
   const [datas, setData] = useState([]);
 
   const [classes, setClasses] = useState([]);
-  const [updateComplete, setUpdateComplete] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const handleView = (data) => {
-    console.log("course", data);
     navigate("/view-student", { state: { data } });
   };
 
-  const handleUpdate = (data) => {
-    console.log("data is set", data);
-    navigate("/update-student", { state: { data } });
-  };
-
-  const getSchool = async () => {
-    const docRef = doc(firestoreDb, "schools", uid.school);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset;
-    } else {
-    }
-  };
   const getClassDataOne = async (id) => {
-    const docRef = doc(firestoreDb, "class", id);
+    const docRef = doc(firestoreDb, "schools", `${school}/class`, id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       var dataset = docSnap.data();
@@ -64,10 +44,7 @@ export default function AddStudnets() {
     }
   };
   const getStudents = async () => {
-    const q = query(
-      collection(firestoreDb, "students"),
-      where("school_id", "==", uid.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/students`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
@@ -78,23 +55,22 @@ export default function AddStudnets() {
       });
       temporary.push(data);
     });
-    setLoading(false);
     setData(temporary);
+    setLoading(false);
   };
 
   const handleFilterClass = async (value) => {
-    await getStudents();
-    await getClass();
+    getStudents();
+    getClass();
     var newData = datas.filter(function (val) {
       return val.class.level === value;
     });
-    console.log(datas, newData);
     setData(newData);
   };
 
   const handleFilterSection = async (value) => {
-    await getStudents();
-    await getClass();
+    getStudents();
+    getClass();
 
     var newData = datas.filter(function (val) {
       return val.class.section === value;
@@ -103,11 +79,7 @@ export default function AddStudnets() {
   };
 
   const getClass = async () => {
-    var branches = await getSchool();
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "in", branches.branches)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach(async (doc) => {
@@ -127,7 +99,7 @@ export default function AddStudnets() {
       ),
       dataIndex: "first_name",
       key: "first_name",
-      render: (text) => <p>{text}</p>,
+      render: (_, text) => <p>{text.first_name + " " + text.last_name}</p>,
     },
     {
       title: <p className="font-jakarta  font-[600]">ID</p>,
@@ -142,7 +114,7 @@ export default function AddStudnets() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <h1>{item?.level}</h1>;
+        return <h1>{item.level}</h1>;
       },
     },
     {
@@ -150,7 +122,7 @@ export default function AddStudnets() {
       dataIndex: "class",
       key: "class",
       render: (item) => {
-        return <h1>{item?.section}</h1>;
+        return <h1>{item.section}</h1>;
       },
     },
     {
@@ -160,10 +132,8 @@ export default function AddStudnets() {
       render: (item) => {
         var today = new Date();
         var birthDate = new Date(JSON.parse(item));
-        var age = today - birthDate;
-        var newAge = moment(age).format("YY");
-
-        return <h1>{newAge}</h1>;
+        var age = today.getFullYear() - birthDate.getFullYear();
+        return <h1>{age}</h1>;
       },
     },
     {
@@ -178,28 +148,6 @@ export default function AddStudnets() {
         }
       },
     },
-
-    // {
-    //   title: <p className="font-jakarta  font-[600]">Action</p>,
-    //   key: "action",
-    //   width: "10%",
-    //   render: (_, record) => (
-    //     <div className="flex flex-row justify-around">
-    //       <a
-    //         className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-    //         onClick={() => handleView(record)}
-    //       >
-    //         View{" "}
-    //       </a>
-    //       <a
-    //         className="py-1 px-2 mr-2  text-[12px] font-jakarta text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-    //         onClick={() => handleUpdate(record)}
-    //       >
-    //         Update
-    //       </a>
-    //     </div>
-    //   ),
-    // },
   ];
 
   const add = () => {
@@ -208,8 +156,7 @@ export default function AddStudnets() {
 
   useEffect(() => {
     getStudents();
-    getClass();
-  }, [updateComplete]);
+  }, []);
 
   return (
     <div className="bg-[#F9FAFB] min-h-[100vh]  -mt-14">
@@ -237,7 +184,6 @@ export default function AddStudnets() {
             style={{ width: 120 }}
             placeholder="Section"
             onChange={handleFilterSection}
-            o
           >
             {classes?.map((item, i) => (
               <Option key={item.key} value={item.section} lable={item.section}>

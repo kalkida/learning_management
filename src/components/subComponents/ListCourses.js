@@ -30,6 +30,7 @@ export default function ListCourses() {
 
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
+  const school = useSelector((state) => state.user.profile.school);
   const [subject, setSubject] = useState([]);
   const [classes, setClasses] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -38,18 +39,8 @@ export default function ListCourses() {
   const searchInput = useRef(null);
   const [tableLoading, setTableTextLoading] = useState(true);
 
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
   const edit = () => {
     navigate("/add-course");
-  };
-
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
   };
 
   const getSchool = async () => {
@@ -64,17 +55,7 @@ export default function ListCourses() {
   };
 
   const getClassData = async (ID) => {
-    const docRef = doc(firestoreDb, "class", ID);
-    var data = "";
-    await getDoc(docRef).then((response) => {
-      data = response.data();
-      data.key = response.id;
-    });
-    return data;
-  };
-
-  const getSubjectData = async (ID) => {
-    const docRef = doc(firestoreDb, "subject", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/class`, ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       data = response.data();
@@ -84,12 +65,11 @@ export default function ListCourses() {
   };
 
   const getTeacherData = async (ID) => {
-    const docRef = doc(firestoreDb, "teachers", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/teachers`, ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       if (response.exists()) {
         data = response.data();
-        console.log("checking", response.exists());
         data.key = response.id;
       }
     });
@@ -100,8 +80,6 @@ export default function ListCourses() {
     if (data.class) {
       data.class = await getClassData(data.class);
     }
-    data.subject = await getSubjectData(data.subject);
-
     data.teachers?.map(async (item, index) => {
       data.teachers[index] = await getTeacherData(item);
     });
@@ -109,11 +87,7 @@ export default function ListCourses() {
   };
 
   const getCourses = async () => {
-    var branches = await getSchool();
-    const q = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "in", branches.branches)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/courses`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach(async (doc) => {
@@ -129,11 +103,7 @@ export default function ListCourses() {
   };
 
   const getClass = async () => {
-    var branches = await getSchool();
-    const q = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "in", branches.branches)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/class`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach(async (doc) => {
@@ -142,22 +112,6 @@ export default function ListCourses() {
       temporary.push(data);
     });
     setClasses(temporary);
-  };
-
-  const getsubject = async () => {
-    var branches = await getSchool();
-    const q = query(
-      collection(firestoreDb, "subject"),
-      where("school_id", "in", branches.branches)
-    );
-    var temporary = [];
-    const snap = await getDocs(q);
-    snap.forEach(async (doc) => {
-      var data = doc.data();
-      data.key = doc.id;
-      temporary.push(data);
-    });
-    setSubject(temporary);
   };
 
   const handleView = (data) => {
@@ -183,15 +137,17 @@ export default function ListCourses() {
       title: "Subject",
       dataIndex: "subject",
       key: "subject",
-      render: (text) => <a className="text-[#344054]"> {text.name}</a>,
+      render: (text) => <a className="text-[#344054]"> {text}</a>,
     },
     {
       title: "Grade",
       dataIndex: "class",
       key: "class",
-      render: (item) => {
+      render: (item, data) => {
         if (item.level) {
           return <div className="text-[#344054]">{item.level}</div>;
+        } else if (data.grade) {
+          return <div className="text-[#344054] font-[600]">{data.grade}</div>;
         } else {
           return <div className="text-[#D0D5DD] font-light">No Data</div>;
         }
@@ -201,30 +157,20 @@ export default function ListCourses() {
       title: "Section",
       dataIndex: "class",
       key: "class",
-      render: (item) => {
+      render: (item, data) => {
         if (item.level) {
           return <div className="text-[#344054]">{item.section}</div>;
+        } else if (data.grade) {
+          return (
+            <div className="text-[#344054] font-[600] capitalize">
+              {data.section}
+            </div>
+          );
         } else {
-          return <div className="text-[#D0D5DD] font-light">No Data</div>;
+          return <div className="text-[#D0D5DD] font-light ">No Data</div>;
         }
       },
     },
-
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   width: "5%",
-    //   render: (_, record) => (
-    //     <div className="flex flex-row justify-around z-0">
-    //       <a
-    //         className="py-1 px-2 text-[12px] text-[white] hover:text-[#E7752B] rounded-sm bg-[#E7752B] hover:border-[#E7752B] hover:border-[1px] hover:bg-[white]"
-    //         onClick={() => handleUpdate(record)}
-    //       >
-    //         Update
-    //       </a>
-    //     </div>
-    //   ),
-    // },
   ];
   const handleFilterSubject = async (value) => {
     if (value) {
@@ -275,7 +221,6 @@ export default function ListCourses() {
   useEffect(() => {
     getCourses();
     getClass();
-    getsubject();
   }, []);
 
   return (
@@ -338,7 +283,7 @@ export default function ListCourses() {
               prefix={<SearchOutlined className="site-form-item-icon" />}
             />
           </div>
-          <CreateSubject />
+          {/* <CreateSubject /> */}
 
           <Button
             style={{

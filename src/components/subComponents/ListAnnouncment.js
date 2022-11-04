@@ -4,7 +4,6 @@ import { Editor } from "react-draft-wysiwyg";
 import DOMPurify from "dompurify";
 import ReactReadMoreReadLess from "react-read-more-read-less";
 
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Modal } from "antd";
 import {
@@ -21,6 +20,7 @@ import { firestoreDb } from "../../firebase";
 import { useSelector } from "react-redux";
 import { message, Select } from "antd";
 import Icon from "react-eva-icons";
+import uuid from "react-uuid";
 
 const { Option } = Select;
 export default function ListAnnouncment() {
@@ -32,6 +32,7 @@ export default function ListAnnouncment() {
   const [editData, setEditData] = useState({});
   const [showEdit, setShowEdit] = useState(false);
   const [deletData, setDeletData] = useState({});
+  const [toeditId, settoeditId] = useState(0);
   const [anounceData, setAnmounceData] = useState({
     title: "",
     body: "",
@@ -84,7 +85,11 @@ export default function ListAnnouncment() {
     setShowEdit(false);
   };
   const uploadData = async (datar) => {
-    await addDoc(collection(firestoreDb, "announcment"), anounceData)
+    var uid = uuid();
+    await setDoc(
+      doc(firestoreDb, "schools", data, "announcment", uid),
+      anounceData
+    )
       .then((response) => {
         getBlog();
         message.success("Announcement successfully added");
@@ -96,15 +101,13 @@ export default function ListAnnouncment() {
   };
 
   const getBlog = async () => {
-    const q = query(
-      collection(firestoreDb, "announcment"),
-      where("school", "==", data)
-    );
+    const q = query(collection(firestoreDb, "schools", `${data}/announcment`));
     var temporary = [];
     var temporary1 = [];
     const snap = await getDocs(q);
 
     snap.forEach((doc) => {
+      console.log("das", doc.data());
       var data = doc.data();
       data.key = doc.id;
       if (!data.archived) {
@@ -196,7 +199,7 @@ export default function ListAnnouncment() {
   };
 
   const handleDelete = (id) => {
-    deleteDoc(doc(firestoreDb, "announcment", id))
+    deleteDoc(doc(firestoreDb, "schools", `${data}/announcment`, id))
       .then((response) => {
         message.success("Data is Deleted successfuly");
         getBlog();
@@ -208,9 +211,13 @@ export default function ListAnnouncment() {
   };
 
   const EditData = () => {
-    setDoc(doc(firestoreDb, "announcment", editData.key), editData, {
-      merge: true,
-    })
+    setDoc(
+      doc(firestoreDb, "schools", `${data}/announcment`, editData.key),
+      editData,
+      {
+        merge: true,
+      }
+    )
       .then((response) => {
         setShowEdit(false);
         message.success("Data is updated successfuly");
@@ -225,7 +232,7 @@ export default function ListAnnouncment() {
   };
   const archive = () => {
     setDoc(
-      doc(firestoreDb, "announcment", editData.key),
+      doc(firestoreDb, "schools", `${data}/announcment`, editData.key),
       { ...editData, archived: true },
       {
         merge: true,
@@ -255,6 +262,13 @@ export default function ListAnnouncment() {
         )
       )
     );
+    if (data.target.toParents) {
+      settoeditId(1);
+    } else if (data.target.toTeachers) {
+      settoeditId(2);
+    } else {
+      settoeditId(0);
+    }
     setTimeout(() => {
       setShowEdit(true);
     }, 100);
@@ -308,7 +322,7 @@ export default function ListAnnouncment() {
               style={{ padding: 10 }}
               toolbarClassName="toolbarClassName"
               wrapperClassName="wrapperClassName"
-              editorClassName="p-2 h-[auto] border-b-[#D0D5DD] border-b-[2px] bg-[#FCFCFD]"
+              editorClassName="p-2 h-[auto] border-b-[#D0D5DD] border-b-[1px] bg-[#FCFCFD]"
               onEditorStateChange={onEditorStateChange}
               onChange={onEditorChange}
             />
@@ -345,10 +359,13 @@ export default function ListAnnouncment() {
             <div className="flex flex-row justify-between w-[15vw] mt-5 mb-5">
               <h1 className="text-lg font-bold">To:</h1>
               <Select
-                defaultValue="Select Audiance"
+                defaultValue={toeditId}
                 onChange={(e) => onSelect(e)}
                 className="w-[20vh] border-[#EAECF0] hover:border-[#EAECF0] !rounded-[6px]"
               >
+                <Option key={0} value={0}>
+                  All
+                </Option>
                 <Option key={1} value={1}>
                   Parents
                 </Option>
@@ -519,16 +536,6 @@ export default function ListAnnouncment() {
           onEditorStateChange={onEditorStateChange}
           onChange={onEditorEdit}
         />
-        {/* <div
-          className="preview"
-          style={{
-            fontFamily: "Plus Jackarta Sans",
-            fontSize: 16,
-            fontWeight: "500",
-            color: "#667085",
-          }}
-          dangerouslySetInnerHTML={createMarkup(editData)}
-        ></div> */}
       </Modal>
     </div>
   );

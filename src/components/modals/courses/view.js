@@ -239,10 +239,10 @@ function ViewCourse() {
   return (
     <div className="bg-[#F9FAFB] min-h-[100vh] py-4">
       <div className="flex flex-row justify-between w-[100%] -mt-20 ">
-        <div className="flex flex-row justify-between align-middle h-[78px]">
-          <div className="rounded-full  border-[2px] border-[#E7752B] mr-10">
+        <div className="flex flex-row justify-between align-middle">
+          <div className="rounded-full  border-[2px] border-[#D0D5DD] mr-10">
             <img
-              className="w-[74px] rounded-full  bg-[white] "
+              className="w-[78px] rounded-full  bg-[white] "
               src="logo512.png"
               alt="profile"
             />
@@ -259,21 +259,23 @@ function ViewCourse() {
               Class
             </h3>
             <h4
-              className="border-l-[2px] pl-2 text-lg font-semibold font-jakarta text-[#667085] 
+              className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta text-[#667085] 
             p-[1px] ml-2"
             >
-              {data.class.level + data.class.section}
+              {data.class.level
+                ? data.class.level + data.class.section
+                : "Not Assigned"}
             </h4>
           </div>
           <div className="flex flex-row justify-end">
             <h3 className="text-lg font-semibold font-jakarta text-[#344054]">
-              Class
+              Subject
             </h3>
             <h4
               className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta
               text-[#667085] p-[1px] ml-2"
             >
-              {data.subject.name}
+              {data.subject.name ? data.subject.name : data.subject}
             </h4>
           </div>
         </div>
@@ -282,7 +284,7 @@ function ViewCourse() {
         <Tabs className="bg-[#F9FAFB]" defaultActiveKey="1">
           <Tabs.TabPane
             tab={
-              <span className="text-lg font-[500] text-center ml-0 font-jakarta">
+              <span className="text-[16px] font-[500] text-center ml-0 font-jakarta">
                 Profile
               </span>
             }
@@ -290,17 +292,17 @@ function ViewCourse() {
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-              className="float-right -mt-14 !text-[#E7752B]"
+              className="float-right -mt-14 !text-[#E7752B] !border-[#D0D5DD]"
               onClick={handleUpdate}
             >
               Edit
             </Button>
             <div className=" rounded-2xl border-[0px]">
-              <h4 className="mb-2 font-semibold text-sm font-jakarta text-[#344054] ">
+              <h4 className="mb-2 font-[500] text-sm font-jakarta text-[#344054] ">
                 Coures Description
               </h4>
 
-              <p className="border-[1px] rounded-sm p-3 bg-[white] min-h-[120px]">
+              <p className="border-[2px] border-solid border-[#EAECF0]  rounded-md p-3 bg-[white] min-h-[120px]">
                 {data.description}
               </p>
             </div>
@@ -316,7 +318,7 @@ function ViewCourse() {
                 Schedule
               </h4>
               <Table
-                className=" !bg-[white]"
+                className="!bg-[white]"
                 dataSource={data.schedule}
                 columns={columnsA}
                 pagination={false}
@@ -325,7 +327,7 @@ function ViewCourse() {
           </Tabs.TabPane>
           <Tabs.TabPane
             tab={
-              <span className="text-lg font-[500] text-center  font-jakarta">
+              <span className="text-[16px] font-[500] text-center  font-jakarta">
                 Attendance
               </span>
             }

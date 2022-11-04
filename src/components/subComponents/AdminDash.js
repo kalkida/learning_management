@@ -25,6 +25,7 @@ export default function AdminDash() {
   const [teacherData, setTeacherData] = useState([]);
   const [studentAttendance, setstudentAttendance] = useState([]);
   const [attendStudents, setAttendStudents] = useState();
+  const school = useSelector((state) => state.user.profile.school);
   const [classes, setClasses] = useState([]);
 
   const schools = useSelector((state) => state.user.profile);
@@ -41,10 +42,7 @@ export default function AdminDash() {
   const filterDate = year + "-" + month + "-" + date;
 
   const getStudents = async () => {
-    const q = query(
-      collection(firestoreDb, "students"),
-      where("school_id", "==", schools.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/students`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
@@ -67,10 +65,7 @@ export default function AdminDash() {
   }, []);
 
   const getTeacher = async () => {
-    const q = query(
-      collection(firestoreDb, "teachers"),
-      where("school_id", "==", schools.school)
-    );
+    const q = query(collection(firestoreDb, "schools", `${school}/teachers`));
     var temporary = [];
     const snap = await getDocs(q);
     snap.forEach((doc) => {
@@ -88,8 +83,7 @@ export default function AdminDash() {
     var temporary = [];
 
     const queryCourse = query(
-      collection(firestoreDb, "class"),
-      where("school_id", "==", schools.school)
+      collection(firestoreDb, "schools", `${school}/class`)
     );
 
     const snapCourse = await getDocs(queryCourse);
@@ -104,7 +98,7 @@ export default function AdminDash() {
   };
 
   const getStudentsSex = async (ID) => {
-    const docRef = doc(firestoreDb, "students", ID);
+    const docRef = doc(firestoreDb, "schools", `${school}/students`, ID);
     var data = "";
     await getDoc(docRef).then((response) => {
       data = response.data();
@@ -117,8 +111,7 @@ export default function AdminDash() {
     getAbsentClass();
     var temporary = [];
     const queryCourse = query(
-      collection(firestoreDb, "courses"),
-      where("school_id", "==", schools.school)
+      collection(firestoreDb, "schools", `${school}/courses`)
     );
     const snapCourse = await getDocs(queryCourse);
 
