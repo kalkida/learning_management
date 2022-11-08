@@ -28,4 +28,4 @@ jobs:
         cache: 'npm'
     - run: npm install -f
     - run: CI=false npm run build
-    - run: npm test
+    
