@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Select, Input, DatePicker, message, Tabs, Table } from "antd";
-import moment from "moment";
+import { Button, Select, Input, message } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { userAction } from "../../redux/user";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { createParentwhithStudent, fetchClass } from "../modals/funcs";
 
+import { userAction } from "../../redux/user";
 import {
   doc,
   setDoc,
@@ -13,18 +14,120 @@ import {
   where,
   query,
   getDoc,
+  arrayUnion,
+  updateDoc,
 } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { firestoreDb, storage } from "../../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faEdit, faPen } from "@fortawesome/free-solid-svg-icons";
-import PhoneInput from "react-phone-number-input";
 
 export default function ProfileEdit() {
   const school = useSelector((state) => state.user.school);
+  const uid = useSelector((state) => state.user.profile.school);
+  const [file, setFile] = useState("");
+  const [allPhone, setAllPhone] = useState([]);
+  const [input, setInputs] = useState([0]);
+  const [phone, setPhones] = useState("");
+  const navigate = useNavigate();
+  const [percent, setPercent] = useState(0);
+  const [loadingbutton, setLoadingButton] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
+  const [classData, setClassData] = useState([]);
+  const schoolData = useSelector((state) => state.user.school);
+  var [newUser, setNewUser] = useState({
+    principle: schoolData.principle,
+    name: schoolData.name,
+    logo: schoolData.logo,
+    email: schoolData.email,
+    location: schoolData.location,
+    phone_number: schoolData.phone_number,
+  });
+
+  const valueRef = useRef();
+
+  const onRemove = () => {
+    setFile("");
+  };
   var data = "";
   const navigation = useNavigate();
   const dispatch = useDispatch();
+
+  function handleFile(event) {
+    var fileinput = document.getElementById("browse");
+    var textinput = document.getElementById("filename");
+    textinput.value = fileinput.value;
+    setFile(event.target.files[0]);
+  }
+  async function handleUpload() {
+    if (!file) {
+      setDoc(doc(firestoreDb, "schools", uid), newUser)
+        .then((_) => {
+          message.success("Updated");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      const storageRef = ref(storage, file.name);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+
+          // update progress
+          setPercent(percent);
+        },
+        (err) => console.log(err),
+        () => {
+          // download url
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            valueRef.current = url;
+            if (valueRef.current != null) {
+              setLoading(true);
+              newUser.avater = valueRef.current;
+              if (newUser.avater !== null) {
+                setDoc(doc(firestoreDb, "schools", uid), {
+                  ...newUser,
+                  logo: valueRef.current,
+                })
+                  .then((reponse) =>
+                    message.success("Student Added Successfuly")
+                  )
+                  .catch((error) => {
+                    message.error("Student is not added, Try Again");
+                  });
+                setLoading(false);
+              }
+            }
+          });
+        }
+      );
+    }
+  }
+  function HandleBrowseClick() {
+    var fileinput = document.getElementById("browse");
+    fileinput.click();
+  }
+  const changePrinciples = (e) => {
+    setNewUser({ ...newUser, principle: e.target.value });
+  };
+
+  const changeName = (e) => {
+    setNewUser({ ...newUser, name: e.target.value });
+  };
+
+  const changeLocation = (e) => {
+    setNewUser({ ...newUser, location: e.target.value });
+  };
+  const changeEmail = (e) => {
+    setNewUser({ ...newUser, email: e.target.value });
+  };
 
   const logout = () => {
     dispatch(userAction.logout());
@@ -39,7 +142,7 @@ export default function ProfileEdit() {
           </h1>
           <div className="float-right -mt-14">
             <Button
-              onClick={() => navigation("/profile-edit")}
+              onClick={() => handleUpload()}
               className=" !border-[#E7752B] hover:!text-[#E7752B] !rounded-[8px] !text-[#E7752B] mr-5"
               icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
               // onClick={async () => await handleUpdate()}
@@ -57,36 +160,36 @@ export default function ProfileEdit() {
         <div className=" ">
           <div className="flex flex-col">
             <div className="flex flex-col  justify-center">
-              <div className="rounded-full border-[0px]  border-[#E7752B] ">
+              <div className="w-[167px] h-[170px] rounded-full border-[1px]  border-[#E7752B] ">
                 <img
-                  className="w-[10vw] h-[17vh] border-[2px] rounded-full"
-                  src={school?.logo ? school.logo : "img-5.jpg"}
+                  className="w-[167px] h-[167px] border-[2px] rounded-full"
+                  src={file ? URL.createObjectURL(file) : "img-5.jpg"}
                   alt="profile"
                 />
               </div>
               <div className="flex flex-row w-[15vw] justify-between mt-10">
                 <button className="border-[2px] border-[#E7752B] text-[12px] rounded-lg bg-[#E7752B] text-white">
                   <input
-                    className="p-1 w-[10vw]"
+                    className="p-1 w-[10vw] cursor-pointer"
                     type="file"
                     id="browse"
                     name="files"
                     style={{ display: "none" }}
-                    // onChange={handleFile}
+                    onChange={handleFile}
                     accept="/image/*"
                   />
                   <input type="hidden" id="filename" readonly="true" />
                   <input
                     type="button"
-                    className="p-1 w-[7vw]"
+                    className="p-1 w-[7vw] cursor-pointer"
                     value="Change Photo"
                     id="fakeBrowse"
-                    // onClick={HandleBrowseClick}
+                    onClick={HandleBrowseClick}
                   />
                 </button>
                 <button
                   className="border-[2px] p-1 w-[7vw] border-[#E7752B] text-[12px] rounded-lg text-[#E7752B]"
-                  // onClick={onRemove}
+                  onClick={onRemove}
                 >
                   Remove
                 </button>
@@ -94,6 +197,7 @@ export default function ProfileEdit() {
             </div>
             <div className="ml-0 w-[100%] pt-10">
               <Input
+                onChange={(e) => changePrinciples(e)}
                 className="!border-[2px] border-[#EAECF0] !rounded-lg"
                 defaultValue={school.principle}
               />
@@ -109,12 +213,14 @@ export default function ProfileEdit() {
               <Input
                 className="!border-[2px] border-[#EAECF0] !rounded-lg"
                 defaultValue={school.email}
+                onChange={(e) => changeName(e)}
               />
               <h2 className="text-[#98A2B3] text-[14px]">Email</h2>
               <br />
               <Input
                 className="!border-[2px] border-[#EAECF0] !rounded-lg"
                 defaultValue={school.location}
+                onChange={(e) => changeEmail(e)}
               />
 
               <h2 className="text-[#98A2B3] text-[14px]">Location</h2>
@@ -124,6 +230,7 @@ export default function ProfileEdit() {
                     className="!border-[2px] border-[#EAECF0] !rounded-lg"
                     type="password"
                     defaultValue={school.location}
+                    onChange={(e) => changeLocation(e)}
                   />
                   <h2 className="text-[#98A2B3] text-[14px]">Password</h2>
                 </div>

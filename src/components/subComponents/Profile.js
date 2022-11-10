@@ -55,10 +55,10 @@ export default function Profile() {
         </div>
         <div className="p-6 ">
           <div className="flex flex-row">
-            <div className="flex flex-col">
+            <div className="flex flex-col border-r-2 border-[#D0D5DD] pr-[60px]">
               <div className="rounded-full  border-[#E7752B] border-[2px] bg-[white]">
                 <img
-                  className="w-[11vw] h-[17vh] border-[2px] rounded-full"
+                  className="w-[164px] h-[164px] border-[2px] rounded-full"
                   src={school.logo ? school.logo : "img-5.jpg"}
                   alt="profile"
                 />
@@ -68,7 +68,7 @@ export default function Profile() {
               </h1>
               <h2 className="text-center text-[#98A2B3]">Principal </h2>
             </div>
-            <div className="ml-40">
+            <div className="ml-[60px]">
               <h1 className="text-xl text-[#344054]">{school.name}</h1>
               <h2 className="text-[#98A2B3] text-[14px]">School Name</h2>
               <br />
