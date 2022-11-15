@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Tag } from "antd";
+import { message, Space, Table, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +21,7 @@ import { useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { Select } from "antd";
 import "../modals/courses/style.css";
+import { data } from "../graph/BarGraphStudent";
 
 const { Option } = Select;
 
@@ -33,10 +34,6 @@ export default function ListCourses() {
   const school = useSelector((state) => state.user.profile.school);
   const [subject, setSubject] = useState([]);
   const [classes, setClasses] = useState([]);
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
-  const [loading, setLoading] = useState(true);
-  const searchInput = useRef(null);
   const [tableLoading, setTableTextLoading] = useState(true);
 
   const edit = () => {
@@ -98,6 +95,7 @@ export default function ListCourses() {
 
     setTimeout(() => {
       setData(temporary);
+      fetchSubjects(temporary);
       setTableTextLoading(false);
     }, 2000);
   };
@@ -173,32 +171,20 @@ export default function ListCourses() {
     },
   ];
   const handleFilterSubject = async (value) => {
+    // value.preventDefault();
     if (value) {
-      var branches = await getSchool();
-      const q = query(
-        collection(firestoreDb, "courses"),
-        where("school_id", "in", branches.branches),
-        where("subject", "==", value)
-      );
-      var temporary = [];
-      const snap = await getDocs(q);
-      snap.forEach(async (doc) => {
-        var data = doc.data();
-        data.key = doc.id;
-        getData(data).then((response) => temporary.push(response));
+      var dataer = datas.filter((data) => {
+        return data.subject === value;
       });
-      setTimeout(() => {
-        setData(temporary);
-      }, 2000);
+      setData(dataer);
     }
   };
 
   const handleFilterClass = async (value) => {
+    console.log(value);
     if (value) {
-      var branches = await getSchool();
       const q = query(
-        collection(firestoreDb, "courses"),
-        where("school_id", "in", branches.branches),
+        collection(firestoreDb, "schools", `${school}/courses`),
         where("class", "==", value)
       );
       var temporary = [];
@@ -217,6 +203,21 @@ export default function ListCourses() {
   const onSearch = (value) => {
     console.log("search Value: " + value);
   };
+  const fetchSubjects = async (da) => {
+    var temporary = [];
+    if (da) {
+      da.map((item) => {
+        if (temporary.includes(item.subject) == false) {
+          temporary.push(item.subject);
+        }
+      });
+      setSubject(temporary);
+    }
+    if (temporary.length == 0) {
+      getCourses();
+      message.warning("No course found");
+    }
+  };
 
   useEffect(() => {
     getCourses();
@@ -228,8 +229,8 @@ export default function ListCourses() {
       <div className="list-header mb-10">
         <h1 className="text-2xl font-[600] font-jakarta">List Of Course</h1>
       </div>
-      <div className="list-sub">
-        <div className="flex flex-row  w-[30%]">
+      <div className="flex md:flex-row flex-col  md:justify-between">
+        <div className="flex md:flex-row flex-col  w-[30%]">
           <Select
             className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-4"
             placeholder="Subject"
@@ -241,9 +242,9 @@ export default function ListCourses() {
             }}
             onChange={handleFilterSubject}
           >
-            {subject?.map((item, i) => (
-              <Option key={item.key} value={item.key} lable={item.name}>
-                {item.name}
+            {subject.map((item, i) => (
+              <Option key={item} value={item} lable={item}>
+                {item}
               </Option>
             ))}
           </Select>
@@ -269,7 +270,7 @@ export default function ListCourses() {
             ))}
           </Select>
         </div>
-        <div className="course-search">
+        <div className="flex md:flex-row flex-col">
           <div>
             <Input
               style={{
@@ -290,7 +291,7 @@ export default function ListCourses() {
               borderRadius: "8px",
               borderWidth: 1,
             }}
-            className=" !text-[#E7752B] !border-[#E7752B] ml-2 round"
+            className=" !text-[#E7752B] !border-[#E7752B] ml-0 round"
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
             onClick={() => edit()}
           >

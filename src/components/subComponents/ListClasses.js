@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Button } from "antd";
+import { Space, Table, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -139,35 +139,25 @@ export default function ListClasses() {
     },
   ];
   const handleFilterLevel = async (value) => {
-    const q = query(
-      collection(firestoreDb, "schools", `${school}/class`),
-      where("level", "==", value)
-    );
-    var temporary = [];
-    const snap = await getDocs(q);
-
-    snap.forEach((doc) => {
-      var data = doc.data();
-      data.key = doc.id;
-      temporary.push(data);
+    var dataser = datas.filter((item) => {
+      return item.level === value;
     });
-    setData(temporary);
+    setData(dataser);
+    if (dataser.length == 0) {
+      getClasses();
+      message.warning("No records found");
+    }
   };
 
   const handleFilterSection = async (value) => {
-    const q = query(
-      collection(firestoreDb, "schools", `${school}/class`),
-      where("section", "==", value)
-    );
-    var temporary = [];
-    const snap = await getDocs(q);
-
-    snap.forEach((doc) => {
-      var data = doc.data();
-      data.key = doc.id;
-      temporary.push(data);
+    var dataser = datas.filter((item) => {
+      return item.section === value;
     });
-    setData(temporary);
+    setData(dataser);
+    if (dataser.length == 0) {
+      getClasses();
+      message.warning("No records found");
+    }
   };
 
   useEffect(() => {

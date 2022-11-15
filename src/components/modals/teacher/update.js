@@ -93,10 +93,14 @@ function TeacherUpdate() {
         });
     } else {
       const storageRef = ref(storage, file.name);
+
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",
-        (err) => console.log("error", err),
+        (err) => {
+          message.error("Couldnt Upload Image");
+          console.log(err); 
+        },
         () => {
           // download url
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {

@@ -218,15 +218,15 @@ const CreateCrouse = () => {
               <Input
                 onChange={handleSubject}
                 placeholder="Subject"
+                className="md:w-[50%] w-[100%]"
                 required
                 style={{
-                  width: "50%",
                   borderRadius: "8px",
                   borderWidth: 2,
                 }}
               />
             </div>
-            <div className="flex flex-row w-[50%]">
+            <div className="flex flex-row md:w-[50%]">
               <div className="pb-[6px] pt-[12px] w-[100%]">
                 <h3
                   style={{
@@ -285,11 +285,12 @@ const CreateCrouse = () => {
               <Select
                 bordered={false}
                 style={{
-                  width: "50%",
+                  // width: "50%",
                   borderRadius: "8px",
                   borderWidth: 2,
                 }}
                 placeholder="select Classes"
+                className="md:w-[50%] w-[100%]"
                 onChange={handleClass}
                 optionLabelProp="label"
               >
@@ -318,7 +319,6 @@ const CreateCrouse = () => {
                 <Select
                   bordered={false}
                   style={{
-                    width: "50%",
                     borderRadius: "8px",
                     marginBottom: 14,
                     borderWidth: 2,
@@ -328,6 +328,7 @@ const CreateCrouse = () => {
                   optionLabelProp="label"
                   maxTagCount={3}
                   showArrow
+                  className="md:w-[50%] w-[100%]"
                   mode="multiple"
                 >
                   {teachers.map((item, index) => (

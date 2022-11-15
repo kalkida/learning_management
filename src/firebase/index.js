@@ -15,15 +15,14 @@ import { getStorage } from "firebase/storage";
 //   // measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 // };
 const firebaseConfig = {
-  apiKey: "AIzaSyBZt7vD-g1DbhgNQBfzYavUEBlrsUPlMA8",
-  authDomain: "laba-school.firebaseapp.com",
-  databaseURL:
-    "https://laba-school-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "laba-school",
-  storageBucket: "laba-school.appspot.com",
-  messagingSenderId: "1054893224990",
-  appId: "1:1054893224990:web:149021e93d016106636a0f",
-  measurementId: "G-EYFSX5NK2V",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MESSUREMETNT_ID,
 };
 
 const app = getApps.length > 0 ? getApp() : initializeApp(firebaseConfig);
