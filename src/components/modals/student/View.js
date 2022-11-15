@@ -11,6 +11,8 @@ import {
 } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
+import HtmlCanvas from "./BarChart/htmlCanvas";
+import Chart from "./chart/Chart";
 import {
   collection,
   query,
@@ -277,7 +279,7 @@ function ViewStudent() {
   ]);
 
   return (
-    <div className="-mt-20 h-[100vh] overflow-scroll main scroll-smooth ">
+    <div className="-mt-20  overflow-scroll main scroll-smooth ">
       <div className="flex flex-row justify-between  pt-10">
         <div className="flex flex-row justify-between">
           <div className="rounded-full border-[2px] border-[#DC5FC9] bg-[white]">
@@ -292,14 +294,16 @@ function ViewStudent() {
               <h3 className="text-lg font-bold font-jakarta capitalize">
                 {data.first_name + " " + data.last_name}
               </h3>
-              <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta  text-[#667085] p-[1px] ml-2">
-                ID: {data.studentId}
+              <h4 className="border-l-[2px] pl-2 text-lg font-[500] font-jakarta items-center rounded-lg flex flex-row  text-[#DC5FC9] hover:text-[#DC5FC9] p-[1px] ml-2">
+                {/* ID: {data.studentId} */}
+                <MailOutlined className="mr-2" />
+              Contacts
               </h4>
             </div>
-            <a className="border-[0px] border-[#DC5FC9] font-jakarta items-center rounded-lg flex flex-row  text-[#DC5FC9] hover:text-[#DC5FC9] ">
+            {/* <a className="border-[0px] border-[#DC5FC9] font-jakarta items-center rounded-lg flex flex-row  text-[#DC5FC9] hover:text-[#DC5FC9] ">
               <MailOutlined className="mr-2" />
               Contacts
-            </a>
+            </a> */}
           </div>
         </div>
         <div className="flex flex-col justify-center  align-middle">
@@ -331,64 +335,61 @@ function ViewStudent() {
               />
               Edit
             </Button>
-            <Grid container rowSpacing={1} columnSpacing={1}>
-              <Grid item xs={12} sm={12} md={4}>
+          <div className="mb-5" >
+            <h1 className="text-[20px] text-[#333 ] ">
+             Class Conduct
+             </h1>
+             <h4 className="text-[14px] text-[#98A2B3] ">
+                      Attendance and Performance Available through out the year
+                </h4>
+         </div>
+         <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            backgroundColor: "#F9FAFB",
+            width: "100%",
+          }}
+         >
+            <Grid container rowSpacing={2} columnSpacing={1}>
+              <Grid item xs={12} sm={12} md={3}>
                 <Card
                   bordered={true}
                   className="w-[100%] min-h-[419px] h-[100%]"
                   title={
                     <h1 className="text-[#475467] font-[600] mb-[10px]">
                       {" "}
-                      Daily Report
+                      Attendance
                     </h1>
                   }
                 >
-                  <div className="flex flex-row w-[100%] mt-[25%] flex-wrap justify-around">
-                    <div className="flex flex-col items-center  justify-center text-[#98A2B3]">
-                      <h1 className="text-[20px] text-[#98A2B3] ">
-                        Data Not Available Yet
-                      </h1>
-                    </div>
-                  </div>
+                  <div className="flex flex-row w-[100%] flex-wrap justify-around">
+              <div className=" flex flex-col justify-center mt-10">
+                <Progress
+                  type="circle"
+                  strokeColor={"#16f929"}
+                  percent={95}
+                  trailColor={"#DC5FC9"}
+                  width={"9rem"}
+                />
+              </div>
+              <div className="flex flex-col justify-center  ">
+                <h1 className="!font-jakarta text-[16px] flex flex-row mt-20">
+                  {" "}
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#16f929] rounded-lg"></a>
+                  124 Present Students
+                </h1>
+                <h1 className="!font-jakarta text-[16px] flex flex-row">
+                  {" "}
+                  <a className="w-5 mr-2 h-2 mt-2 bg-[#DC5FC9] rounded-lg"></a>
+                  6 Absent Students
+                </h1>
+              </div>
+            </div>
                 </Card>
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <Card
-                  bordered={true}
-                  className="w-[100%] min-h-[419px]"
-                  title={
-                    <h1 className="text-[#475467] text-lg font-[600] mb-[10px]">
-                      Conduct
-                    </h1>
-                  }
-                >
-                  <div className="flex flex-row w-[100%] mt-[25%] flex-wrap justify-around">
-                    <div className="flex flex-col items-center  justify-center text-[#98A2B3]">
-                      <h1 className="text-[20px] text-[#98A2B3] ">
-                        Data Not Available Yet
-                      </h1>
-                    </div>
-                  </div>
-                  {/* <div>
-                    <div>
-                      <h1 className="text-[18px] text-[#32D583] font-semibold">
-                        Good
-                      </h1>
-                      <Progress
-                        strokeColor={"#32D583"}
-                        percent={(100 * 6) / 10}
-                        showInfo={false}
-                        // success={{
-                        //   percent: (100 * 6) / 10,
-                        // }}
-                      />
-                      <h1 className="text-[14px] ">Total</h1>
-                    </div>
-                  </div>
-                  <Liner /> */}
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={9}>
                 <Card
                   bordered={true}
                   className="w-[100%] min-h-[419px]"
@@ -398,35 +399,58 @@ function ViewStudent() {
                     </h1>
                   }
                 >
-                  <div className="flex flex-row w-[100%] mt-[25%] flex-wrap justify-around">
-                    <div className="flex flex-col items-center  justify-center text-[#98A2B3]">
-                      <h1 className="text-[20px] text-[#98A2B3] ">
-                        Data Not Available Yet
-                      </h1>
-                    </div>
+                  <div className="flex py-15">
+                  <Chart title="" aspect={2 / 1} />
                   </div>
-                  {/* <div>
-                    <div>
-                      <h1 className="text-[18px] text-[#FDB022] font-semibold">
-                        Average
-                      </h1>
-                      <Progress
-                        strokeColor={"#FDB022"}
-                        percent={(100 * 10) / 20}
-                        showInfo={false}
-                      />
-                      <h1 className="text-[14px] ">Total</h1>
-                    </div>
-                  </div>
-                  <Liner /> */}
+                 
                 </Card>
               </Grid>
-              {/* <Grid item xs={12} sm={12} md={12}>
-                <Card bordered={true} className="w-[100%]  ">
-                  <BarGraph />
+              <Grid item xs={12} sm={12} md={12}>
+                <Card bordered={true} className="w-[100%]  "
+                 title={
+                  <div>
+                  <h1 className="text-[#475467] text-lg font-[600] mb-[10px]">
+                    Grade
+                  </h1>
+                  <h4 className="text-[#475467] text-lg font-[600] mb-[10px]">
+                  Average result for student subjects 
+                </h4>
+                </div>
+                }
+                >
+                  {/* <BarGraph /> */}
+                  <div className="flex flex-row w-[100%] flex-wrap justify-around">
+                  <div className="flex flex-row ml-[50%] !justify-end bg-white p-4 ">
+                    <div className="flex items-center mr-5">
+                      <div
+                        className="bg-[#DC5FC9] w-[2rem] h-[0.5rem] mr-1"
+                        style={{ borderRadius: "10px" }}
+                      />
+                      <span>Grade</span>
+                    </div>
+                    <div className="flex items-center mr-5">
+                      <div
+                        className="bg-[#f5c702] w-[2rem] h-[0.5rem] mr-1"
+                        style={{ borderRadius: "10px" }}
+                      />
+                      <span color="gold">Average</span>
+                    </div>
+                    <div className="flex items-center mr-5">
+                      <div
+                        className="bg-[#C2BCF2] w-[2rem] h-[0.5rem] mr-1"
+                        style={{ borderRadius: "10px" }}
+                      />
+                      <span color="lime">Highest</span>
+                    </div>
+                  </div>
+                    <HtmlCanvas/>
+                  </div>
                 </Card>
-              </Grid> */}
+              </Grid>
             </Grid>
+            </div>
+            
+
           </Tabs.TabPane>
 
           <Tabs.TabPane
@@ -571,6 +595,24 @@ function ViewStudent() {
               </div>
             </div>
           </Tabs.TabPane>
+          <Tabs.TabPane
+            tab={
+              <span className="text-base font-[500] text-center  font-jakarta">
+                Assignment
+              </span>
+            }
+            key="3"
+          >
+        </Tabs.TabPane>
+        <Tabs.TabPane
+            tab={
+              <span className="text-base font-[500] text-center  font-jakarta">
+                Grade
+              </span>
+            }
+            key="4"
+          >
+        </Tabs.TabPane>
         </Tabs>
       </div>
     </div>
