@@ -357,7 +357,7 @@ const CreateNewTeacher = () => {
             Add Teacher
           </h1>
           <button
-            className="bg-[#E7752B] text-[white] rounded-lg shadow-md -z-0"
+            className="bg-[#DC5FC9] text-[white] rounded-lg shadow-md -z-0"
             onClick={async () => await createNewTeacher()}
           >
             Confirm
@@ -370,7 +370,7 @@ const CreateNewTeacher = () => {
               <h2 className="text-[14px] font-[500] font-jakarta text-[#475467] text-center">
                 Teacher Picture
               </h2>
-              <div className="rounded-full border-[2px] border-[#E7752B] bg-[white] w-[6vw]">
+              <div className="rounded-full border-[2px] border-[#DC5FC9] bg-[white] w-[6vw]">
                 <img
                   src={file ? URL.createObjectURL(file) : "img-5.jpg"}
                   className="w-[8vw] h-[6vw] rounded-full"
@@ -384,7 +384,7 @@ const CreateNewTeacher = () => {
 
               <div className="img-btn">
                 {/* <input type="file" onChange={handleChange} accept="/image/*" /> */}
-                <button className="border-[2px] border-[#E7752B] text-[12px] rounded-lg bg-[#E7752B] text-white">
+                <button className="border-[2px] border-[#DC5FC9] text-[12px] rounded-lg bg-[#DC5FC9] text-white">
                   <input
                     type="file"
                     id="browse"
@@ -402,7 +402,7 @@ const CreateNewTeacher = () => {
                   />
                 </button>
                 <button
-                  className="border-[2px] border-[#E7752B] text-[12px] rounded-lg text-[#E7752B]"
+                  className="border-[2px] border-[#DC5FC9] text-[12px] rounded-lg text-[#DC5FC9]"
                   onClick={onRemove}
                 >
                   Remove

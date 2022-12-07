@@ -171,7 +171,7 @@ const CreateCrouse = () => {
               borderRadius: "8px",
               borderWidth: 1,
             }}
-            className="!border-[#E7752B] !bg-[#E7752B] border-[2px] hover:!text-white !text-[white] rounded-lg shadow-md -z-0 ml-10"
+            className="!border-[#DC5FC9] !bg-[#DC5FC9] border-[2px] hover:!text-white !text-[white] rounded-lg shadow-md -z-0 ml-10"
             icon={<FontAwesomeIcon className="mr-2" icon={faArrowRight} />}
             onClick={createNewCourse}
           >
@@ -401,7 +401,7 @@ const CreateCrouse = () => {
             </div>
           ))}
           <Button
-            className="border-[2px] border-[#E7752B] text-[#E7752B] !rounded-lg"
+            className="border-[2px] border-[#DC5FC9] text-[#DC5FC9] !rounded-lg"
             style={{
               float: "right",
             }}

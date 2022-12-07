@@ -59,21 +59,12 @@ export default function ListClasses() {
   const [datas, setData] = useState([]);
   const uid = useSelector((state) => state.user.profile);
   const school = useSelector((state) => state.user.profile.school);
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
-  const [tableLoading, setTableLoading] = useState(true);
+  const [unfiltered, setUnfiltered] = useState([]);
 
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
+  const [tableLoading, setTableLoading] = useState(true);
 
   const handleView = (data) => {
     navigate("/view-class", { state: { data } });
-  };
-
-  const handleUpdate = (data) => {
-    navigate("/update-class", { state: { data } });
   };
 
   const handleAdd = (data) => {
@@ -92,6 +83,7 @@ export default function ListClasses() {
     });
     console.log(temporary);
     setData(temporary);
+    setUnfiltered(temporary);
     setTableLoading(false);
   };
 
@@ -139,24 +131,30 @@ export default function ListClasses() {
     },
   ];
   const handleFilterLevel = async (value) => {
-    var dataser = datas.filter((item) => {
-      return item.level === value;
-    });
-    setData(dataser);
-    if (dataser.length == 0) {
-      getClasses();
-      message.warning("No records found");
+    if (value) {
+      var dataser = unfiltered.filter((item) => {
+        return item.level === value;
+      });
+      setData(dataser);
     }
   };
 
   const handleFilterSection = async (value) => {
-    var dataser = datas.filter((item) => {
-      return item.section === value;
-    });
-    setData(dataser);
-    if (dataser.length == 0) {
-      getClasses();
-      message.warning("No records found");
+    if (value) {
+      var dataser = unfiltered.filter((item) => {
+        return item.section === value;
+      });
+      setData(dataser);
+    }
+  };
+  const onSearch = (value) => {
+    if (value) {
+      var dataer = unfiltered.filter((data) => {
+        return data.level.includes(value.target.value);
+      });
+      setData(dataer);
+    } else {
+      setData(unfiltered);
     }
   };
 
@@ -173,7 +171,7 @@ export default function ListClasses() {
         <div className="flex flex-row  w-[30%]">
           <Select
             placeholder="Grade"
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px]"
+            className="hover:border-[#DC5FC9] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px]"
             bordered={false}
             style={{ width: 141 }}
             onChange={handleFilterLevel}
@@ -188,7 +186,7 @@ export default function ListClasses() {
             bordered={false}
             style={{ width: 141 }}
             placeholder="Section"
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !rounded-[6px]"
+            className="hover:border-[#DC5FC9] border-[#EAECF0] border-[2px] bg-[white] !rounded-[6px]"
             onChange={handleFilterSection}
           >
             {SECTION.map((item, i) => (
@@ -203,13 +201,14 @@ export default function ListClasses() {
             style={{ width: 200 }}
             className="mr-3 border-[#EAECF0] !rounded-lg"
             placeholder="Search"
+            onChange={onSearch}
             prefix={<SearchOutlined className="site-form-item-icon" />}
           />
           <Button
             bordered={false}
             onClick={() => handleAdd()}
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
-            className="border-[2px] !border-[#E7752B] flex flex-row justify-center !text-[#E7752B] bg-white !rounded-lg "
+            className="border-[2px] !border-[#DC5FC9] flex flex-row justify-center !text-[#DC5FC9] bg-white !rounded-lg "
           >
             Add Class
           </Button>

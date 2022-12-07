@@ -52,7 +52,7 @@ export default function BarGraph({ datas2 }) {
       {
         label: "Students",
         data: labels.map((item, index) => student[index]),
-        backgroundColor: "#EA8848",
+        backgroundColor: "#DC5FC9",
         innerHeight: "20vh",
       },
       // {

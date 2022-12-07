@@ -54,7 +54,7 @@ export const data = {
         {
             label: "Grade",
             data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-            backgroundColor: "#EA8848",
+            backgroundColor: "#DC5FC9",
         },
         {
             label: "Avg Grade",

@@ -12,13 +12,9 @@ import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import { firebaseAuth } from "../firebase";
 import PhoneInput from "react-phone-number-input";
 import OtpInput from "react-otp-input";
+import image from "../assets/vectors.png";
 import { phoneLogin } from "../redux/user";
-
-// interface TabPanelProps {
-//   children?: React.ReactNode;
-//   index: number;
-//   value: number;
-// }
+import logo from "../assets/log.png";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -148,62 +144,53 @@ export default function Login() {
   });
 
   return (
-    <div className="flex flex-row justify-center align-center width-[100%]">
-      <img
-        src={require("../assets/Vector1.png")}
-        className="w-[25vw] absolute top-0 left-0"
-      />
-      <img
-        src={require("../assets/data.png")}
-        className="w-[25vw] absolute bottom-0 right-0 z-10"
-      />
-      <img
-        src={require("../assets/Vector.png")}
-        className="w-[25vw]  absolute bottom-0 right-0"
-      />
-      <img
-        src={require("../assets/logo1.png")}
-        className="lg:w-[8vw] absolute top-[20vh] left-[50vw] -ml-20"
-      />
+    <div className="flex flex-row justify-center align-center w-[100%] h-[100vh] ">
+      <div className="flex flex-col w-[50vw] justify-center   ">
+        <div className="flex flex-row justify-center mb-5">
+          <img src={logo} className="w-10" />
+        </div>
+        <h1
+         className="text-center text-2xl font-bold mb-10 !font-jakarta">Login To Laba</h1>
+        <div className="flex flex-row justify-center">
+          <div>
+            <div className="flex flex-col justify-center mb-[20px] !font-jakarta">
+              <input
+                required
+                placeholder="Email Address"
+                className="border-[#D0D5DD] focus:bg-[#FCF2FB]  outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#DC5FC9] focus:border-[#DC5FC9] rounded-lg p-2"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col mb-[20px]">
+              <input
+                required
+                type="password"
+                placeholder="password"
+                className="border-[#D0D5DD] focus:bg-[#FCF2FB] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#DC5FC9] focus:border-[#DC5FC9] rounded-lg p-2"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-      <div className="flex flex-col top-[30%] absolute">
-        <h1 className="text-center text-2xl font-bold mb-10">Login To Laba</h1>
-        <div className="flex flex-col mb-[20px]">
-          <label>Email Address</label>
-          <input
-            required
-            className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-lg p-2"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col mb-[20px]">
-          <label>Password</label>
-          <input
-            required
-            type="password"
-            className="border-[#E7752B] outline-none border-[2px] text-[gray] font-light h-[44px] w-[300px] hover:border-[#E7752B] focus:border-[#E7752B] rounded-lg p-2"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-row justify-between">
-          <div className="py-5">
-            <input type="radio" className="mr-2 p-2" />
-            <label className="text-xs">Remember my Password</label>
+            <Button
+              onClick={() => onFinish()}
+              className="!font-jakarta w-[300px] !h-[44px] !rounded-lg !bg-gradient-to-r from-[#FAAA35] to-[#DC5FC9]  visited:bg-[#DC5FC9] hover:bg-[#e7762bc2] text- hover:border-[#DC5FC9] !text-[white] hover:!text-[white]   border-[#DC5FC9]"
+              disabled={loading}
+              loading={loading}
+              type="submit"
+            >
+              Login
+            </Button>
+            <br />
+            {/* <div className="flex flex-col">
+              <a className="text-center py-6 hover:text-[#667085] text-[#667085] text-xs">
+                Forgot Password?
+              </a>
+            </div> */}
           </div>
-          <a className="py-6 hover:text-[#e7762bc2] text-xs">
-            Forgot Password?
-          </a>
         </div>
-
-        <Button
-          onClick={() => onFinish()}
-          className="w-[300px] !h-[44px] !rounded-lg !bg-[#E7752B] visited:bg-[#E7752B] hover:bg-[#e7762bc2] text- hover:border-[#E7752B] !text-[white] hover:!text-[white]   border-[#E7752B]"
-          disabled={loading}
-          loading={loading}
-          type="submit"
-        >
-          Login
-        </Button>
+      </div>
+      <div className="relative hidden md:w-[50vw] w-0 invisible md:visible md:block relative  overflow-hidden">
+        <img src={image} style={{ width: "auto", height: "auto" }} />
       </div>
     </div>
   );

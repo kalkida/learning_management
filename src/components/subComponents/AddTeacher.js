@@ -358,7 +358,7 @@ export default function AddTeacher() {
       <div className="list-sub">
         <div className="flex flex-row w-[50%]">
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px]"
+            className="hover:border-[#DC5FC9] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px]"
             placeholder="Subject"
             bordered={false}
             style={{ width: 161 }}
@@ -371,7 +371,7 @@ export default function AddTeacher() {
             ))}
           </Select>
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px] "
+            className="hover:border-[#DC5FC9] border-[#EAECF0] border-[2px] bg-[white] !mr-5 !rounded-[6px] "
             style={{ width: 161 }}
             placeholder="Grade"
             bordered={false}
@@ -384,7 +384,7 @@ export default function AddTeacher() {
             ))}
           </Select>
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !rounded-[6px]"
+            className="hover:border-[#DC5FC9] border-[#EAECF0] border-[2px] bg-[white] !rounded-[6px]"
             style={{ width: 161 }}
             placeholder="Section"
             bordered={false}
@@ -414,12 +414,12 @@ export default function AddTeacher() {
           {/* add padding  */}
           <Button
             onClick={() => edit()}
-            className="hover:border-[#E7752B] hover:border-[2px]"
+            className="hover:border-[#DC5FC9] hover:border-[2px]"
             style={{
               padding: 10,
-              borderColor: "#E7752B",
+              borderColor: "#DC5FC9",
               borderWidth: 2,
-              color: "#E7752B",
+              color: "#DC5FC9",
               borderRadius: 5,
               display: "flex",
               justifyContent: "center",

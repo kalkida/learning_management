@@ -130,7 +130,7 @@ function TeacherView() {
       <div className="w-[100%] min-h-[100vh]  -mt-20">
         <div className=" flex flex-row  mb-1 -mt-4 justify-between  py-7 ">
           <div className="flex flex-row  w-[40%] justify-between ">
-            <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
+            <div className="rounded-full border-[2px] border-[#DC5FC9] bg-[white]">
               <img
                 src={data.avater ? data.avater : "img-5.jpg"}
                 alt="profile"
@@ -147,7 +147,7 @@ function TeacherView() {
                 <div>
                   <Icon
                     name="message-square-outline"
-                    fill="#E7752B"
+                    fill="#DC5FC9"
                     size="large"
                     animation={{
                       type: "pulse",
@@ -157,7 +157,7 @@ function TeacherView() {
                   />
                 </div>
                 <div>
-                  <h3 className="text-md text-[#E7752B] p-1 font-jakarta">
+                  <h3 className="text-md text-[#DC5FC9] p-1 font-jakarta">
                     Contact
                   </h3>
                 </div>
@@ -213,10 +213,10 @@ function TeacherView() {
               key="1"
             >
               <Button
-                className="float-right -mt-16 !text-[#E7752B]"
+                className="float-right -mt-16 !text-[#DC5FC9]"
                 icon={
                   <FontAwesomeIcon
-                    className="pr-2 text-sm text-[#E7752B] bg-[white]"
+                    className="pr-2 text-sm text-[#DC5FC9] bg-[white]"
                     icon={faPen}
                   />
                 }
@@ -266,11 +266,11 @@ function TeacherView() {
               key="2"
             >
               <Button
-                color="#E7752B"
-                className="float-right -mt-20 !text-[#E7752B]"
+                color="#DC5FC9"
+                className="float-right -mt-20 !text-[#DC5FC9]"
                 icon={
                   <FontAwesomeIcon
-                    className="pr-2 text-sm text-[#E7752B] bg-[white]"
+                    className="pr-2 text-sm text-[#DC5FC9] bg-[white]"
                     icon={faPen}
                   />
                 }

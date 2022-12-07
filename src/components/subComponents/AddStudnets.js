@@ -205,7 +205,7 @@ export default function AddStudnets() {
           <Button
             onClick={() => add()}
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
-            className="hover:border-[#E7752B] hover:font-[500] !text-[#E7752B] !border-[#E7752B] !rounded-[6px] "
+            className="hover:border-[#DC5FC9] hover:font-[500] !text-[#DC5FC9] !border-[#DC5FC9] !rounded-[6px] "
           >
             Add Student
           </Button>

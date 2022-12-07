@@ -280,7 +280,7 @@ function ViewStudent() {
     <div className="-mt-20 h-[100vh] overflow-scroll main scroll-smooth ">
       <div className="flex flex-row justify-between  pt-10">
         <div className="flex flex-row justify-between">
-          <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
+          <div className="rounded-full border-[2px] border-[#DC5FC9] bg-[white]">
             <img
               className="w-[10vw] h-[7vw] border-[2px] rounded-full"
               src={data.avater ? data.avater : "img-5.jpg"}
@@ -296,7 +296,7 @@ function ViewStudent() {
                 ID: {data.studentId}
               </h4>
             </div>
-            <a className="border-[0px] border-[#E7752B] font-jakarta items-center rounded-lg flex flex-row  text-[#E7752B] hover:text-[#E7752B] ">
+            <a className="border-[0px] border-[#DC5FC9] font-jakarta items-center rounded-lg flex flex-row  text-[#DC5FC9] hover:text-[#DC5FC9] ">
               <MailOutlined className="mr-2" />
               Contacts
             </a>
@@ -322,12 +322,12 @@ function ViewStudent() {
             key="0"
           >
             <Button
-              className="btn-confirm  !text-[#E7752B]"
+              className="btn-confirm  !text-[#DC5FC9]"
               onClick={handleUpdate}
             >
               <FontAwesomeIcon
                 icon={faPen}
-                className="text-[#E7752B] mr-2 hover:text-[#E7752B]"
+                className="text-[#DC5FC9] mr-2 hover:text-[#DC5FC9]"
               />
               Edit
             </Button>
@@ -438,12 +438,12 @@ function ViewStudent() {
             key="1"
           >
             <Button
-              className="btn-confirm  !text-[#E7752B]"
+              className="btn-confirm  !text-[#DC5FC9]"
               onClick={handleUpdate}
             >
               <FontAwesomeIcon
                 icon={faPen}
-                className="text-[#E7752B] mr-2 hover:text-[#E7752B]"
+                className="text-[#DC5FC9] mr-2 hover:text-[#DC5FC9]"
               />
               Edit
             </Button>

@@ -494,7 +494,7 @@ function UpdateClass() {
                 >
                   <Button
                     icon={<FontAwesomeIcon className="pr-2" icon={faPen} />}
-                    className="!bg-[#E7752B] !text-[white] float-right -mt-16 hover:!text-[white] "
+                    className="!bg-[#DC5FC9] !text-[white] float-right -mt-16 hover:!text-[white] "
                     onClick={handleUpdate}
                   >
                     Finish Review
@@ -608,8 +608,8 @@ function UpdateClass() {
         <div className="flex flex-row justify-center">
           <Spin
             tip={<p className="text-lg">Loading class...</p>}
-            className="text-[#E7752B] "
-            wrapperClassName="text-[#E7752B]"
+            className="text-[#DC5FC9] "
+            wrapperClassName="text-[#DC5FC9]"
           />
         </div>
       )}

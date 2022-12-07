@@ -79,7 +79,7 @@ export default function Laba() {
           />
           <Button
             onClick={() => navigate("/login")}
-            className="border-[#E7752B] hover:border-[#E7752B] hover:bg-[#E7752B] hover:text-white active:border-[#E7752B] "
+            className="border-[#DC5FC9] hover:border-[#DC5FC9] hover:bg-[#DC5FC9] hover:text-white active:border-[#DC5FC9] "
             style={{ width: 79, marginLeft: 5, marginTop: 20 }}
           >
             Admin
@@ -98,7 +98,7 @@ export default function Laba() {
           />
           <Button
             onClick={() => navigate("/login")}
-            className="border-[#E7752B] hover:border-[#E7752B] hover:bg-[#E7752B] hover:text-white active:border-[#E7752B] open:border-[#E7752B] hover: "
+            className="border-[#DC5FC9] hover:border-[#DC5FC9] hover:bg-[#DC5FC9] hover:text-white active:border-[#DC5FC9] open:border-[#DC5FC9] hover: "
             style={{ width: 79, marginLeft: 5, marginTop: 20 }}
           >
             Teacher

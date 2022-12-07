@@ -225,7 +225,7 @@ const CreateNewStudnet = () => {
       <div className=" mb-8 pb-9 items-center border-b-[1px]">
         <h1 className="text-[1.5rem] font-jakarta"> Add Student</h1>
         <Button
-          className="!bg-[#E7752B] !text-[white] hover:!text-[white] !rounded-lg shadow-md -z-0 float-right -mt-14"
+          className="!bg-[#DC5FC9] !text-[white] hover:!text-[white] !rounded-lg shadow-md -z-0 float-right -mt-14"
           onClick={async () => await createNewStudent()}
           icon={<FontAwesomeIcon className="mr-2" icon={faCheck} />}
         >
@@ -238,7 +238,7 @@ const CreateNewStudnet = () => {
             <h3 className="text-sm font-jakarta -mb-2 color-[#475467]">
               Student Picture
             </h3>
-            <div className="rounded-full  border-[#E7752B] bg-[white]">
+            <div className="rounded-full  border-[#DC5FC9] bg-[white]">
               <img src={file ? URL.createObjectURL(file) : "img-5.jpg"} />
             </div>
           </div>
@@ -287,7 +287,7 @@ const CreateNewStudnet = () => {
             <Select
               bordered={false}
               placeholder="Select Class"
-              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
+              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#DC5FC9]"
               onChange={handlelevel}
               optionLabelProp="label"
               style={{
@@ -325,7 +325,7 @@ const CreateNewStudnet = () => {
             <Select
               bordered={false}
               placeholder="Select Gender"
-              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
+              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#DC5FC9]"
               onChange={handleGender}
               optionLabelProp="label"
               style={{
@@ -355,7 +355,7 @@ const CreateNewStudnet = () => {
             <Input
               style={{ marginTop: 6 }}
               name="studentId"
-              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#E7752B]"
+              className="py-6 mt-6 !rounded-lg !border-[2px] hover:border-[#DC5FC9]"
               placeholder="Enter Student Id"
               onChange={(e) => handleStudent(e)}
             />

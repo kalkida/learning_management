@@ -54,7 +54,8 @@ export default function ListAnnouncment() {
   };
 
   const handleOk = () => {
-    handleDelete(deletData.key);
+    // handleDelete(deletData.key);
+    archive(deletData.key);
     setIsModalOpen(false);
   };
 
@@ -230,9 +231,9 @@ export default function ListAnnouncment() {
         console.log(error);
       });
   };
-  const archive = () => {
+  const archive = (id) => {
     setDoc(
-      doc(firestoreDb, "schools", `${data}/announcment`, editData.key),
+      doc(firestoreDb, "schools", `${data}/announcment`, id),
       { ...editData, archived: true },
       {
         merge: true,
@@ -310,7 +311,7 @@ export default function ListAnnouncment() {
                 placeholder="Please update student’s progress using laba "
                 onChange={onChange}
                 type="text"
-                className="mt-2 font-jakarta border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
+                className="mt-2 font-jakarta border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#DC5FC9] rounded-sm hover:border-[#DC5FC9] focus:border-[#DC5FC9] active:border-[#DC5FC9] w-[35vw] mb-4 px-2 py-1 "
               />
             </div>
             <h1 className="text-lg font-bold font-jakarta text-[#344054]">
@@ -330,7 +331,7 @@ export default function ListAnnouncment() {
               {anounceData.title != "" ? (
                 <button
                   onClick={() => showModals()}
-                  className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 font-jakarta right-0"
+                  className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#DC5FC9] mt-4 font-jakarta right-0"
                 >
                   Post{"  "}
                   <Icon name="checkmark-outline" size="small" />
@@ -338,7 +339,7 @@ export default function ListAnnouncment() {
               ) : (
                 <button
                   disabled
-                  className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#E7752B] mt-4 font-jakarta right-0"
+                  className="float-right px-3 w-20  rounded-md py-1 text-[white] bg-[#DC5FC9] mt-4 font-jakarta right-0"
                 >
                   Post{"  "}
                   <Icon name="checkmark-outline" size="small" />
@@ -380,7 +381,7 @@ export default function ListAnnouncment() {
                 onChange={onEdit}
                 type="text"
                 placeholder="Please update student’s progress using laba"
-                className="mt-2 border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#E7752B] rounded-sm hover:border-[#E7752B] focus:border-[#E7752B] font-jakarta active:border-[#E7752B] w-[35vw] mb-4 px-2 py-1 "
+                className="mt-2 border-[0px] bg-[#FCFCFD] h-10 outline-none border-[#DC5FC9] rounded-sm hover:border-[#DC5FC9] focus:border-[#DC5FC9] font-jakarta active:border-[#DC5FC9] w-[35vw] mb-4 px-2 py-1 "
                 defaultValue={editData.title}
               />
             </div>
@@ -396,21 +397,21 @@ export default function ListAnnouncment() {
               onChange={onEditorEdit}
             />
             <div className="flex flex-row justify-end">
-              <button
+              {/* <button
                 onClick={() => archive()}
-                className="float-right px-3 w-30 mr-2 font-jakarta  rounded-md py-2 text-[#E7752B] border-[#E7752B] border-[2px] mt-4 right-0"
+                className="float-right px-3 w-30 mr-2 font-jakarta  rounded-md py-2 text-[#DC5FC9] border-[#DC5FC9] border-[2px] mt-4 right-0"
               >
                 Archive
-              </button>
+              </button> */}
               <button
                 onClick={() => shownewPost()}
-                className="float-right px-3 w-30 mr-2 font-jakarta  rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
+                className="float-right px-3 w-30 mr-2 font-jakarta  rounded-md py-2 text-[white] bg-[#DC5FC9] mt-4 right-0"
               >
                 Add Post
               </button>
               <button
                 onClick={() => EditData()}
-                className="float-right px-3 w-20 font-jakarta rounded-md py-2 text-[white] bg-[#E7752B] mt-4 right-0"
+                className="float-right px-3 w-20 font-jakarta rounded-md py-2 text-[white] bg-[#DC5FC9] mt-4 right-0"
               >
                 Update
               </button>
@@ -432,8 +433,8 @@ export default function ListAnnouncment() {
                 charLimit={200}
                 readMoreText={"Show more ▼"}
                 readLessText={"Show less ▲"}
-                readMoreClassName="text-[#E7752B]"
-                readLessClassName="text-[#E7752B]"
+                readMoreClassName="text-[#DC5FC9]"
+                readLessClassName="text-[#DC5FC9]"
               >
                 {item.body}
               </ReactReadMoreReadLess>
@@ -451,7 +452,7 @@ export default function ListAnnouncment() {
                   onClick={() => openEdit(item)}
                 >
                   <Icon
-                    fill="#E7752B"
+                    fill="#DC5FC9"
                     name="edit-outline"
                     size="large"
                     animation={{
@@ -463,7 +464,7 @@ export default function ListAnnouncment() {
                 </button>
                 <button onClick={() => showModal(item)}>
                   <Icon
-                    fill="#E7752B"
+                    fill="#DC5FC9"
                     name="trash-2-outline"
                     size="large"
                     animation={{
@@ -493,8 +494,8 @@ export default function ListAnnouncment() {
                   charLimit={200}
                   readMoreText={"Show more ▼"}
                   readLessText={"Show less ▲"}
-                  readMoreClassName="text-[#E7752B]"
-                  readLessClassName="text-[#E7752B]"
+                  readMoreClassName="text-[#DC5FC9]"
+                  readLessClassName="text-[#DC5FC9]"
                 >
                   {item.body}
                 </ReactReadMoreReadLess>
@@ -508,7 +509,7 @@ export default function ListAnnouncment() {
         title={<h1 className="text-[#1D2939] text-[30px]">Remove Post</h1>}
         open={isModalOpen}
         onOk={handleOk}
-        okText="Remove Permanently"
+        okText="Archive Permanently"
         okType="danger"
         onCancel={handleCancel}
       >
@@ -521,7 +522,7 @@ export default function ListAnnouncment() {
         open={isModalOpens}
         onOk={handleOks}
         okText="Post"
-        okType="primary"
+        okType="#DC5FC9"
         onCancel={handleCancels}
       >
         <h1 className="text-[#344054] text-[24px]">{anounceData?.title}</h1>

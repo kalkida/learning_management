@@ -341,7 +341,7 @@ const CreateClasses = () => {
             Add Class
           </h1>
           <Button
-            className="!border-[#E7752B] !text-[white] hover:!text-[white] !rounded-[6px] shadow-md -z-0 !bg-[#E7752B]"
+            className="!border-[#DC5FC9] !text-[white] hover:!text-[white] !rounded-[6px] shadow-md -z-0 !bg-[#DC5FC9]"
             icon={<FontAwesomeIcon className="mr-2" icon={faCheck} />}
             onClick={() => createNewClass()}
           >

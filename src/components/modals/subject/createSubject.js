@@ -68,7 +68,7 @@ function CreateSubject() {
           borderWidth: 1,
         }}
         icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
-        className=" !text-[white] !bg-[#E7752B] hover:!text-[white]"
+        className=" !text-[white] !bg-[#DC5FC9] hover:!text-[white]"
         onClick={showModal}
       >
         Add Subject

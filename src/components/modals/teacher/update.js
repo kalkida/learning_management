@@ -391,7 +391,7 @@ function TeacherUpdate() {
       <div className="w-[100%] -mt-20">
         <div className=" flex flex-row  pb-2 -mt-4 justify-between  py-7 ">
           <div className=" flex flex-row  w-[40%] justify-between ">
-            <div className="rounded-full border-[2px] border-[#E7752B] bg-[white]">
+            <div className="rounded-full border-[2px] border-[#DC5FC9] bg-[white]">
               <img
                 src={data.avater ? data.avater : "img-5.jpg"}
                 alt="profile"
@@ -404,9 +404,9 @@ function TeacherUpdate() {
                   {data.first_name + " " + data.last_name}
                 </h3>
               </div>
-              <div className="flex flex-row align-bottom text-[#E7752B] items-center">
+              <div className="flex flex-row align-bottom text-[#DC5FC9] items-center">
                 <MailOutlined className="mr-2" />
-                <h3 className="text-md text-[#E7752B] mb-0 font-jakarta">
+                <h3 className="text-md text-[#DC5FC9] mb-0 font-jakarta">
                   Contact
                 </h3>
               </div>
@@ -465,7 +465,7 @@ function TeacherUpdate() {
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
-              className="!border-[#E7752B] !border-[2px] !text-[#E7752B] hover:shadow-[#E7752B] hover:shadow-sm float-right -mt-20 !rounded-lg"
+              className="!border-[#DC5FC9] !border-[2px] !text-[#DC5FC9] hover:shadow-[#DC5FC9] hover:shadow-sm float-right -mt-20 !rounded-lg"
               onClick={handleUpdate}
             >
               Finalize review
@@ -481,7 +481,7 @@ function TeacherUpdate() {
                     <h2 className="text-[14px] font-[500] font-jakarta text-[#475467] text-center">
                       Teacher Picture
                     </h2>
-                    <div className="rounded-full border-[2px] border-[#E7752B] bg-[white] w-[78px]">
+                    <div className="rounded-full border-[2px] border-[#DC5FC9] bg-[white] w-[78px]">
                       <img
                         src={
                           file
@@ -501,7 +501,7 @@ function TeacherUpdate() {
 
                     <div className="img-btn">
                       {/* <input type="file" onChange={handleChange} accept="/image/*" /> */}
-                      <button className="border-[2px] border-[#E7752B] text-[12px] rounded-lg bg-[#E7752B] text-white">
+                      <button className="border-[2px] border-[#DC5FC9] text-[12px] rounded-lg bg-[#DC5FC9] text-white">
                         <input
                           type="file"
                           id="browse"
@@ -519,7 +519,7 @@ function TeacherUpdate() {
                         />
                       </button>
                       <button
-                        className="border-[2px] border-[#E7752B] text-[12px] rounded-lg text-[#E7752B]"
+                        className="border-[2px] border-[#DC5FC9] text-[12px] rounded-lg text-[#DC5FC9]"
                         onClick={onRemove}
                       >
                         Remove
@@ -638,7 +638,7 @@ function TeacherUpdate() {
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
-              className="!border-[#E7752B] !border-[2px] !text-[#E7752B] hover:shadow-[#E7752B] hover:shadow-sm float-right -mt-20 !rounded-lg"
+              className="!border-[#DC5FC9] !border-[2px] !text-[#DC5FC9] hover:shadow-[#DC5FC9] hover:shadow-sm float-right -mt-20 !rounded-lg"
               onClick={handleUpdate}
             >
               Finalize review

@@ -153,7 +153,7 @@ export default function AdminDash() {
         width: "100%",
       }}
     >
-      <p className="text-center text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8 border-b-[#EAECF0] border-b-[2px]">
+      <p className="!font-jakarta text-center text-[#344054] text-[24px] font-bold align-middle -mt-16 mb-8 border-b-[#EAECF0] border-b-[2px]">
         Hello Admin
       </p>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
@@ -162,7 +162,7 @@ export default function AdminDash() {
             bordered={true}
             className="w-[100%] min-h-[419px] h-[100%]"
             title={
-              <h1 className="text-[#475467] font-[600] mb-[10px]">
+              <h1 className=" !font-jakarta text-[#475467] font-[600] mb-[10px]">
                 Todays Attendance
               </h1>
             }
@@ -171,18 +171,18 @@ export default function AdminDash() {
               <div className=" flex flex-col justify-center">
                 <Progress
                   type="circle"
-                  strokeColor={"#EA8848"}
+                  strokeColor={"#DC5FC9"}
                   percent={parseFloat(attendStudents).toFixed(1)}
                   width={"9rem"}
                 />
               </div>
               <div className="flex flex-col justify-center ">
-                <h1 className="text-[16px] flex flex-row">
+                <h1 className="!font-jakarta text-[16px] flex flex-row">
                   {" "}
                   <a className="w-5 mr-2 h-2 mt-2 bg-[#475467] rounded-lg"></a>
                   {studentAttendance.length} Absent Students
                 </h1>
-                <h1 className="text-[16px] flex flex-row">
+                <h1 className="!font-jakarta text-[16px] flex flex-row">
                   {" "}
                   <a className="w-5 mr-2 h-2 mt-2 bg-[#98A2B3] rounded-lg"></a>
                   {students.length - studentAttendance.length} Present Students
@@ -210,26 +210,26 @@ export default function AdminDash() {
                 <div>
                   <div className="relative flex flex-col justify-center">
                     {true ? (
-                      <h1 className="w-60%  text-gray-400 h-10 p-4">No Data</h1>
+                      <h1 className="!font-jakarta w-60%  text-gray-400 h-10 p-4">No Data</h1>
                     ) : (
                       <Progress
                         type="circle"
-                        strokeColor={"#EA8848"}
+                        strokeColor={"#DC5FC9"}
                         percent={75}
                         width={"6rem"}
                       />
                     )}
                   </div>
-                  <h1 className="text-center">Weekly</h1>
+                  <h1 className="!font-jakarta text-center">Weekly</h1>
                 </div>
                 <div>
                   <div className="relative flex flex-col justify-center">
                     {true ? (
-                      <h1 className="w-60%  text-gray-400 h-10 p-4">No Data</h1>
+                      <h1 className="!font-jakarta w-60%  text-gray-400 h-10 p-4">No Data</h1>
                     ) : (
                       <Progress
                         type="circle"
-                        strokeColor={"#EA8848"}
+                        strokeColor={"#DC5FC9"}
                         percent={75}
                         width={"6rem"}
                       />
@@ -244,13 +244,13 @@ export default function AdminDash() {
                     ) : (
                       <Progress
                         type="circle"
-                        strokeColor={"#EA8848"}
+                        strokeColor={"#DC5FC9"}
                         percent={75}
                         width={"6rem"}
                       />
                     )}
                   </div>
-                  <h1 className="text-center">Yearly</h1>
+                  <h1 className="!font-jakarta text-center">Yearly</h1>
                 </div>
               </div>
             </div>
@@ -261,28 +261,28 @@ export default function AdminDash() {
             bordered={true}
             className="w-[100%] min-h-[419px]"
             title={
-              <h1 className="text-[#475467] font-[600] mb-[10px]">
+              <h1 className="!font-jakarta text-[#475467] font-[600] mb-[10px]">
                 Student Number
               </h1>
             }
           >
             <div>
               <div>
-                <h1 className="text-[18px] font-semibold">{students.length}</h1>
+                <h1 className="!font-jakarta text-[18px] font-semibold">{students.length}</h1>
                 <Progress
-                  strokeColor={"#EA8848"}
+                  strokeColor={"#DC5FC9"}
                   percent={100}
                   showInfo={false}
                 />
-                <h1 className="text-[14px] ">Total</h1>
+                <h1 className="text-[14px] !font-jakarta">Total</h1>
               </div>
               <div>
                 <div className="flex flex-row justify-between">
-                  <h1 className="text-[18px] font-semibold">{male.length}</h1>
-                  <h1 className="text-[18px] font-semibold">{female.length}</h1>
+                  <h1 className="text-[18px] font-semibold !font-jakarta">{male.length}</h1>
+                  <h1 className="text-[18px] font-semibold !font-jakarta">{female.length}</h1>
                 </div>
                 <Progress
-                  strokeColor={"#EA8848"}
+                  strokeColor={"#DC5FC9"}
                   percent={100}
                   showInfo={false}
                   success={{
@@ -290,8 +290,8 @@ export default function AdminDash() {
                   }}
                 />
                 <div className="flex flex-row justify-between">
-                  <h1 className="text-[14px] ">Femail</h1>
-                  <h1 className="text-[14px]">Male</h1>
+                  <h1 className="text-[14px] !font-jakarta">Female</h1>
+                  <h1 className="text-[14px] !font-jakarta">Male</h1>
                 </div>
               </div>
             </div>
@@ -310,15 +310,15 @@ export default function AdminDash() {
           >
             <div>
               <div>
-                <h1 className="text-[18px] font-semibold">
+                <h1 className="text-[18px] font-semibold !font-jakarta">
                   {teacherData.length}
                 </h1>
                 <Progress
-                  strokeColor={"#EA8848"}
+                  strokeColor={"#DC5FC9"}
                   percent={100}
                   showInfo={false}
                 />
-                <h1 className="text-[14px] ">Total</h1>
+                <h1 className="text-[14px] !font-jakarta">Total</h1>
               </div>
               <div>
                 <div className="flex flex-row justify-between">
@@ -330,7 +330,7 @@ export default function AdminDash() {
                   </h1>
                 </div>
                 <Progress
-                  strokeColor={"#EA8848"}
+                  strokeColor={"#DC5FC9"}
                   percent={100}
                   showInfo={false}
                   success={{
@@ -340,7 +340,7 @@ export default function AdminDash() {
                   }}
                 />
                 <div className="flex flex-row justify-between">
-                  <h1 className="text-[14px] ">Femail</h1>
+                  <h1 className="text-[14px] ">Female</h1>
                   <h1 className="text-[14px]">Male</h1>
                 </div>
               </div>

@@ -268,7 +268,7 @@ function UpdateStudents() {
           Edit Student
         </h1>
         <Button
-          className=" !bg-[#E7752B] hover:!text-[white] -mt-14 float-right !rounded-[8px] !text-[white]"
+          className=" !bg-[#DC5FC9] hover:!text-[white] -mt-14 float-right !rounded-[8px] !text-[white]"
           icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
           onClick={async () => await handleUpdate()}
         >
@@ -283,7 +283,7 @@ function UpdateStudents() {
                 Student Picture
               </h3>
             </div>
-            <div className="rounded-full  border-[#E7752B] bg-[white]">
+            <div className="rounded-full  border-[#DC5FC9] bg-[white]">
               <img
                 className="w-[8vw] h-[8vw] border-[2px] rounded-full"
                 src={
@@ -302,7 +302,7 @@ function UpdateStudents() {
             </span>
 
             <div className="flex flex-row mt-2 ">
-              <button className="p-2 bg-[#E7752B] rounded-[8px] text-white mr-4">
+              <button className="p-2 bg-[#DC5FC9] rounded-[8px] text-white mr-4">
                 <input
                   type="file"
                   id="browse"
@@ -320,7 +320,7 @@ function UpdateStudents() {
                 />
               </button>
               <button
-                className="p-2 border-[#E7752B] border-[1px] rounded-[8px] text-[#E7752B]"
+                className="p-2 border-[#DC5FC9] border-[1px] rounded-[8px] text-[#DC5FC9]"
                 onClick={onRemove}
               >
                 Remove

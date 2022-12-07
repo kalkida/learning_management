@@ -297,7 +297,7 @@ function UpdateCourse() {
                       style={{ paddingTop: 4 }}
                     />
                   }
-                  className=" !text-[white] !bg-[#E7752B] items-center rounded-lg hover:!text-white"
+                  className=" !text-[white] !bg-[#DC5FC9] items-center rounded-lg hover:!text-white"
                   onClick={handleUpdate}
                 >
                   Finalize Review
@@ -556,9 +556,9 @@ function UpdateCourse() {
         <div className="flex  flex-col justify-center align-middle  min-h-[100vh]">
           <Spin
             tip={<p className="text-lg">Loading Course...</p>}
-            className="text-[#E7752B] "
+            className="text-[#DC5FC9] "
             size="large"
-            wrapperClassName="text-[#E7752B]"
+            wrapperClassName="text-[#DC5FC9]"
           />
         </div>
       )}

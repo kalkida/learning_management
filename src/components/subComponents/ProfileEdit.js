@@ -143,14 +143,14 @@ export default function ProfileEdit() {
           <div className="float-right -mt-14">
             <Button
               onClick={() => handleUpload()}
-              className=" !border-[#E7752B] hover:!text-[#E7752B] !rounded-[8px] !text-[#E7752B] mr-5"
+              className=" !border-[#DC5FC9] hover:!text-[#DC5FC9] !rounded-[8px] !text-[#DC5FC9] mr-5"
               icon={<FontAwesomeIcon className="pr-2" icon={faCheck} />}
               // onClick={async () => await handleUpdate()}
             >
               Done
             </Button>
             <Button
-              className=" !bg-[#E7752B] hover:!text-[white] !rounded-[8px] !text-[white]"
+              className=" !bg-[#DC5FC9] hover:!text-[white] !rounded-[8px] !text-[white]"
               onClick={async () => await logout()}
             >
               Logout
@@ -160,7 +160,7 @@ export default function ProfileEdit() {
         <div className=" ">
           <div className="flex flex-col">
             <div className="flex flex-col  justify-center">
-              <div className="w-[167px] h-[170px] rounded-full border-[1px]  border-[#E7752B] ">
+              <div className="w-[167px] h-[170px] rounded-full border-[1px]  border-[#DC5FC9] ">
                 <img
                   className="w-[167px] h-[167px] border-[2px] rounded-full"
                   src={file ? URL.createObjectURL(file) : "img-5.jpg"}
@@ -168,7 +168,7 @@ export default function ProfileEdit() {
                 />
               </div>
               <div className="flex flex-row w-[15vw] justify-between mt-10">
-                <button className="border-[2px] border-[#E7752B] text-[12px] rounded-lg bg-[#E7752B] text-white">
+                <button className="border-[2px] border-[#DC5FC9] text-[12px] rounded-lg bg-[#DC5FC9] text-white">
                   <input
                     className="p-1 w-[10vw] cursor-pointer"
                     type="file"
@@ -188,7 +188,7 @@ export default function ProfileEdit() {
                   />
                 </button>
                 <button
-                  className="border-[2px] p-1 w-[7vw] border-[#E7752B] text-[12px] rounded-lg text-[#E7752B]"
+                  className="border-[2px] p-1 w-[7vw] border-[#DC5FC9] text-[12px] rounded-lg text-[#DC5FC9]"
                   onClick={onRemove}
                 >
                   Remove
@@ -234,7 +234,7 @@ export default function ProfileEdit() {
                   />
                   <h2 className="text-[#98A2B3] text-[14px]">Password</h2>
                 </div>
-                <Button className="!border-[#E7752B]  !text-[#E7752B] !rounded-lg">
+                <Button className="!border-[#DC5FC9]  !text-[#DC5FC9] !rounded-lg">
                   Contact Support
                 </Button>
               </div>

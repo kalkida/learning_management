@@ -1,36 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { message, Space, Table, Tag } from "antd";
+import { message, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-import { firebaseAuth, firestoreDb } from "../../firebase";
+import { collection, getDocs, query, doc, getDoc } from "firebase/firestore";
+import { firestoreDb } from "../../firebase";
 import { Button } from "antd";
-import CreateSubject from "../modals/subject/createSubject";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
-import { useRef } from "react";
-import Highlighter from "react-highlight-words";
 import { Select } from "antd";
 import "../modals/courses/style.css";
-import { data } from "../graph/BarGraphStudent";
 
 const { Option } = Select;
 
 export default function ListCourses() {
   const navigate = useNavigate();
   const { Search } = Input;
-
   const [datas, setData] = useState([]);
-  const uid = useSelector((state) => state.user.profile);
+  const [unfiltered, setunfiltered] = useState([]);
   const school = useSelector((state) => state.user.profile.school);
   const [subject, setSubject] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -38,17 +26,6 @@ export default function ListCourses() {
 
   const edit = () => {
     navigate("/add-course");
-  };
-
-  const getSchool = async () => {
-    const docRef = doc(firestoreDb, "schools", uid.school);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      var dataset = docSnap.data();
-      return dataset;
-    } else {
-    }
   };
 
   const getClassData = async (ID) => {
@@ -95,6 +72,7 @@ export default function ListCourses() {
 
     setTimeout(() => {
       setData(temporary);
+      setunfiltered(temporary);
       fetchSubjects(temporary);
       setTableTextLoading(false);
     }, 2000);
@@ -114,10 +92,6 @@ export default function ListCourses() {
 
   const handleView = (data) => {
     navigate("/view-course", { state: { data } });
-  };
-
-  const handleUpdate = (data) => {
-    navigate("/update-course", { state: { data } });
   };
 
   const columns = [
@@ -171,9 +145,8 @@ export default function ListCourses() {
     },
   ];
   const handleFilterSubject = async (value) => {
-    // value.preventDefault();
     if (value) {
-      var dataer = datas.filter((data) => {
+      var dataer = unfiltered.filter((data) => {
         return data.subject === value;
       });
       setData(dataer);
@@ -181,27 +154,23 @@ export default function ListCourses() {
   };
 
   const handleFilterClass = async (value) => {
-    console.log(value);
     if (value) {
-      const q = query(
-        collection(firestoreDb, "schools", `${school}/courses`),
-        where("class", "==", value)
-      );
-      var temporary = [];
-      const snap = await getDocs(q);
-      snap.forEach(async (doc) => {
-        var data = doc.data();
-        data.key = doc.id;
-        getData(data).then((response) => temporary.push(response));
+      var dataer = unfiltered.filter((data) => {
+        return data.grade + data.section == value;
       });
-      setTimeout(() => {
-        setData(temporary);
-      }, 2000);
+      setData(dataer);
     }
   };
 
   const onSearch = (value) => {
-    console.log("search Value: " + value);
+    if (value) {
+      var dataer = unfiltered.filter((data) => {
+        return data.course_name.includes(value.target.value);
+      });
+      setData(dataer);
+    } else {
+      setData(unfiltered);
+    }
   };
   const fetchSubjects = async (da) => {
     var temporary = [];
@@ -215,7 +184,7 @@ export default function ListCourses() {
     }
     if (temporary.length == 0) {
       getCourses();
-      message.warning("No course found");
+      // message.warning("No course found");
     }
   };
 
@@ -232,7 +201,7 @@ export default function ListCourses() {
       <div className="flex md:flex-row flex-col  md:justify-between">
         <div className="flex md:flex-row flex-col  w-[30%]">
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] !mr-4"
+            className="hover:border-[#DC5FC9] border-[#EAECF0] border-[2px] bg-[white] !mr-4"
             placeholder="Subject"
             bordered={false}
             style={{
@@ -249,7 +218,7 @@ export default function ListCourses() {
             ))}
           </Select>
           <Select
-            className="hover:border-[#E7752B] border-[#EAECF0] border-[2px] bg-[white] "
+            className="hover:border-[#DC5FC9] border-[#EAECF0] border-[2px] bg-[white] "
             style={{
               width: 141,
               borderRadius: "8px",
@@ -262,7 +231,7 @@ export default function ListCourses() {
             {classes?.map((item, i) => (
               <Option
                 key={item.key}
-                value={item.key}
+                value={item.level + item.section}
                 lable={item.level + item.section}
               >
                 {item.level + item.section}
@@ -280,7 +249,7 @@ export default function ListCourses() {
               }}
               className="mr-3 rounded-lg"
               placeholder="Search"
-              onSearch={onSearch}
+              onChange={onSearch}
               prefix={<SearchOutlined className="site-form-item-icon" />}
             />
           </div>
@@ -291,7 +260,7 @@ export default function ListCourses() {
               borderRadius: "8px",
               borderWidth: 1,
             }}
-            className=" !text-[#E7752B] !border-[#E7752B] ml-0 round"
+            className=" !text-[#DC5FC9] !border-[#DC5FC9] ml-0 round"
             icon={<FontAwesomeIcon className="pr-2" icon={faAdd} />}
             onClick={() => edit()}
           >

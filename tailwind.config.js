@@ -8,8 +8,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
-        jakarta: ["Plus Jakarta Sans", "sans-serif"],
+        // poppins: ["Poppins", "sans-serif"],
+        // jakarta: ["Plus Jakarta Sans", "sans-serif"],
+         jakarta: ["Inter"]
       },
     },
   },

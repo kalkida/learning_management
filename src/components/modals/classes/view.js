@@ -479,9 +479,9 @@ function ViewClass() {
           >
             <Button
               icon={
-                <FontAwesomeIcon className="pr-2 text-[#EA8848]" icon={faPen} />
+                <FontAwesomeIcon className="pr-2 text-[#DC5FC9]" icon={faPen} />
               }
-              className=" text-center  !border-[2px] !border-[#D0D5DD] !text-[#E7752B] !rounded-[8px] float-right -mt-24"
+              className=" text-center  !border-[2px] !border-[#D0D5DD] !text-[#DC5FC9] !rounded-[8px] float-right -mt-24"
               onClick={handleUpdate}
             >
               Edit

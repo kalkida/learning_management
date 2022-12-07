@@ -39,14 +39,14 @@ export default function Profile() {
           <div className="float-right -mt-14">
             <Button
               onClick={() => navigation("/profile-edit")}
-              className=" !border-[#E7752B] hover:!text-[#E7752B] !rounded-[8px] !text-[#E7752B] mr-5"
+              className=" !border-[#DC5FC9] hover:!text-[#DC5FC9] !rounded-[8px] !text-[#DC5FC9] mr-5"
               icon={<FontAwesomeIcon className="pr-2" icon={faPen} />}
               // onClick={async () => await handleUpdate()}
             >
               Edit
             </Button>
             <Button
-              className=" !bg-[#E7752B] hover:!text-[white] !rounded-[8px] !text-[white]"
+              className=" !bg-[#DC5FC9] hover:!text-[white] !rounded-[8px] !text-[white]"
               onClick={async () => await logout()}
             >
               Logout
@@ -56,7 +56,7 @@ export default function Profile() {
         <div className="p-6 ">
           <div className="flex flex-row">
             <div className="flex flex-col border-r-2 border-[#D0D5DD] pr-[60px]">
-              <div className="rounded-full  border-[#E7752B] border-[2px] bg-[white]">
+              <div className="rounded-full  border-[#DC5FC9] border-[2px] bg-[white]">
                 <img
                   className="w-[164px] h-[164px] border-[2px] rounded-full"
                   src={school.logo ? school.logo : "img-5.jpg"}

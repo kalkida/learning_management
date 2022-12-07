@@ -227,7 +227,7 @@ const Layouts = () => {
                   <ChevronLeftIcon />
                 </IconButton>
                 <img
-                  src={require("../assets/logo1.png")}
+                  src={require("../assets/looog.jpg")}
                   className="w-[98px] h-[37px] z-1"
                 />
               </div>

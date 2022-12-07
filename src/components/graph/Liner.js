@@ -44,8 +44,8 @@ export default function Liner({ datas }) {
     datasets: [
       {
         data: labels.map((item, index) => graphData[index].length),
-        borderColor: "#E7752B",
-        backgroundColor: "#E7752B",
+        borderColor: "#DC5FC9",
+        backgroundColor: "#DC5FC9",
       },
       // {
       //   label: "Dataset 2",

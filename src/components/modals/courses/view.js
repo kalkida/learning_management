@@ -292,7 +292,7 @@ function ViewCourse() {
           >
             <Button
               icon={<FontAwesomeIcon className="pr-2 text-sm" icon={faPen} />}
-              className="float-right -mt-14 !text-[#E7752B] !border-[#D0D5DD]"
+              className="float-right -mt-14 !text-[#DC5FC9] !border-[#D0D5DD]"
               onClick={handleUpdate}
             >
               Edit
