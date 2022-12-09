@@ -38,18 +38,18 @@
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-    color: #e66937 !important;
+    color: #DC5FC9 !important;
     font-weight: 500;
 }
 
 .ant-tabs-tab:hover {
-    color: #e66937 !important;
+    color: #DC5FC9 !important;
 
 }
 
 .ant-tabs-ink-bar {
     position: absolute;
-    background: #e66937;
+    background: #DC5FC9;
     pointer-events: none;
 }
 
@@ -58,9 +58,9 @@
 }
 
 .tab-content Button {
-    border: 2px solid #e66937;
+    border: 2px solid #DC5FC9;
     border-radius: 5px;
-    color: #e66937;
+    color: #DC5FC9;
 }
 
 .btn-confirm {
@@ -69,10 +69,10 @@
 }
 
 .tab-content Button:hover {
-    border: 2px solid #e66937;
+    border: 2px solid #DC5FC9;
     border-radius: 5px;
-    color: #e66937;
-    box-shadow: 0px 0px 6px #e66937;
+    color: #DC5FC9;
+    box-shadow: 0px 0px 6px #DC5FC9;
 
 }
 
@@ -95,7 +95,7 @@
 }
 
 .schedule h2 {
-    color: #e66937;
+    color: #DC5FC9;
 }
 
 .card-schedule {
@@ -236,21 +236,21 @@
 }
 
 .course-search div:nth-child(2) {
-    border: 2px solid #e66937;
+    border: 2px solid #DC5FC9;
     border-radius: 5px;
-    color: #e66937;
+    color: #DC5FC9;
     padding: 5px 10px;
     align-content: center;
 }
 
 
 .course-search div:nth-child(2):hover {
-    box-shadow: 0px 0px 5px #e66937;
-    color: #e66937;
+    box-shadow: 0px 0px 5px #DC5FC9;
+    color: #DC5FC9;
 }
 
 .course-search div:nth-child(2) a:hover {
-    color: #e66937;
+    color: #DC5FC9;
 
 }
 
@@ -266,17 +266,17 @@
 }
 
 .create-header Button {
-    border: 2px solid #e66937;
+    border: 2px solid #DC5FC9;
     border-radius: 5px;
-    color: #e66937;
+    color: #DC5FC9;
 }
 
 
 .create-header Button:hover {
-    border: 2px solid #e66937;
+    border: 2px solid #DC5FC9;
     border-radius: 5px;
-    color: #e66937;
-    box-shadow: 0px 0px 6px #e66937;
+    color: #DC5FC9;
+    box-shadow: 0px 0px 6px #DC5FC9;
 }
 
 .create-info {
@@ -330,7 +330,7 @@
 }
 
 .create-schedule h2 {
-    color: #e66937;
+    color: #DC5FC9;
     margin-bottom: 15px;
     font-weight: 600;
 }
@@ -343,7 +343,7 @@
 
 .btn-cancle {
     left: 95%;
-    color: #e66937 !important;
+    color: #DC5FC9 !important;
 }
 
 .btn-cancle:hover {
@@ -359,24 +359,26 @@
 .ant-select-open .ant-select-selector,
 .ant-picker:hover,
 .ant-picker:active {
-    border-color: #e66937 !important;
+    border-color: #DC5FC9 !important;
     outline: 0;
     -webkit-box-shadow: 0 0 0 2px rgba(233, 170, 87, 0.2) !important;
 }
 
 .ant-btn:hover {
-    border-color: #e66937 !important;
-    color: #e66937 !important;
+    border-color: #DC5FC9 !important;
+    color: #DC5FC9 !important;
 }
 
-.ant-table table { font-size: 14px; 
+.ant-table table {
+    font-size: 14px;
     font-family: 'plus jakarta Sans';
     font-weight: 500;
     line-height: 20px;
 
 }
 
-.ant-table table thead { font-size: 16px; 
+.ant-table table thead {
+    font-size: 16px;
     font-family: 'plus jakarta Sans';
     font-weight: bold;
     line-height: 24px;

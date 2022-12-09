@@ -150,7 +150,7 @@ export default function Login() {
           <img src={logo} className="w-10" />
         </div>
         <h1
-         className="text-center text-2xl font-bold mb-10 !font-jakarta">Login To Laba</h1>
+          className="text-center text-2xl font-bold mb-10 !font-jakarta">Login To Laba</h1>
         <div className="flex flex-row justify-center">
           <div>
             <div className="flex flex-col justify-center mb-[20px] !font-jakarta">
@@ -173,7 +173,7 @@ export default function Login() {
 
             <Button
               onClick={() => onFinish()}
-              className="!font-jakarta w-[300px] !h-[44px] !rounded-lg !bg-gradient-to-r from-[#FAAA35] to-[#DC5FC9]  visited:bg-[#DC5FC9] hover:bg-[#e7762bc2] text- hover:border-[#DC5FC9] !text-[white] hover:!text-[white]   border-[#DC5FC9]"
+              className="!font-jakarta w-[300px] !h-[44px] !rounded-lg !bg-gradient-to-r from-[#FAAA35] to-[#DC5FC9]  visited:bg-[#DC5FC9] hover:!bg-gradient-to-l hover:from-[#DC5FC9] hover:to-[#DC5FC9]  text- hover:border-[#DC5FC9] !text-[white] hover:!text-[white]   border-[#DC5FC9]"
               disabled={loading}
               loading={loading}
               type="submit"
@@ -189,8 +189,8 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="relative hidden md:w-[50vw] w-0 invisible md:visible md:block relative  overflow-hidden">
-        <img src={image} style={{ width: "auto", height: "auto" }} />
+      <div className=" hidden md:w-[50vw] w-0 invisible md:visible md:block flex justify-center">
+        <img src={image} style={{ width: '100%', height: "100vh" }} />
       </div>
     </div>
   );
