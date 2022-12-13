@@ -32,6 +32,7 @@ import moment from "moment";
 import { Card, Progress } from "antd";
 import Grid from "@mui/material/Grid";
 import "./style.css";
+import UpdateStudents from "./Update";
 
 function ViewStudent() {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ function ViewStudent() {
   const [courses, setCourses] = useState([]);
   const [guardian, setGuardian] = useState([]);
   const [loadingCourse, setLoadingCourse] = useState(true);
+  const [open, setOpen] = useState(false);
   const { data } = state;
   const [age, setAge] = useState();
   const [teacherData, setTeacherData] = useState([data]);
@@ -111,7 +113,8 @@ function ViewStudent() {
   };
 
   const handleUpdate = () => {
-    navigate("/update-student", { state: { data } });
+    // navigate("/update-student", { state: { data } });
+    setOpen(true);
   };
 
   const teacherColumn = [
@@ -573,6 +576,11 @@ function ViewStudent() {
           </Tabs.TabPane>
         </Tabs>
       </div>
+      <UpdateStudents
+        open={open}
+        setOpen={setOpen}
+        Datas={data}
+      />
     </div>
   );
 }
