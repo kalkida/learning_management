@@ -54,9 +54,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject",
-    "build:dev":"env-cmd -f .env.development git add . && git commit -m 'dev' && git push main https://github.com/6irdviewEth/laba-Web.git dev",
-    "build:prod":"env-cmd -f .env.production npm run build && firebase deploy -P prod"
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [
