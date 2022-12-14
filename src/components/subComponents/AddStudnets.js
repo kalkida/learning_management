@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Button } from "antd";
+import { Space, Table, Button, Col, DatePicker, Drawer, Form, Input, Row, Select } from "antd";
 import { useSelector } from "react-redux";
 import {
   collection,
@@ -11,13 +11,12 @@ import {
 } from "firebase/firestore";
 import { firestoreDb } from "../../firebase";
 import { useNavigate } from "react-router-dom";
-import { Input } from "antd";
-import { Select } from "antd";
 import "../modals/courses/style.css";
 import "react-phone-number-input/style.css";
 import { SearchOutlined } from "@ant-design/icons";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CreateNewStudnet from "./CreateNewStudnet";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -26,7 +25,7 @@ export default function AddStudnets() {
   const school = useSelector((state) => state.user.profile.school);
   const navigate = useNavigate();
   const [datas, setData] = useState([]);
-
+  const [open, setOpen] = useState(false);
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -151,8 +150,10 @@ export default function AddStudnets() {
   ];
 
   const add = () => {
-    navigate("/add-student");
+    // navigate("/add-student");
+    setOpen(true);
   };
+
 
   useEffect(() => {
     getStudents();
@@ -223,6 +224,10 @@ export default function AddStudnets() {
         columns={columns}
         dataSource={datas}
         pagination={{ position: ["bottomCenter"] }}
+      />
+      <CreateNewStudnet
+        open={open}
+        setOpen={setOpen}
       />
     </div>
   );

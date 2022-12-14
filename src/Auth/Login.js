@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useLayoutEffect} from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Button, Checkbox, Form, Input, message, Alert } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../redux/user";
@@ -157,13 +157,13 @@ export default function Login() {
     console.log("Failed:", errorInfo);
   };
 
-  const handlechanging =()=>{
-    if(size.width <= 1400){
+  const handlechanging = () => {
+    if (size.width <= 1400) {
       setLeftValue("60%")
       setOverLeftValue("5%")
       setWidthValue("40%")
       console.log("Size: " + LeftValue)
-    }else {
+    } else {
       console.log("Size: ")
     }
   }
@@ -197,27 +197,27 @@ export default function Login() {
 
   useEffect(() => {
     if (current) {
-      navigate("/"); 
+      navigate("/");
     }
   });
- 
+
   return (
     <div className="flex min-h-screen" >
       <div className="w-full md:w-1/2 flex items-center">
         <div className="w-full max-w-70 mx-auto px-4 py-15">
           <div className="flex items-center justify-center">
-          <img src={logo} className="w-10" />
+            <img src={logo} className="w-10" />
           </div>
           <div className="text-center my-5">
-          <h1
-         className="text-center text-2xl font-medium mb-10 !font-jakarta">Sign in To Laba</h1>
+            <h1
+              className="text-center text-2xl font-medium mb-10 !font-jakarta">Sign in To Laba</h1>
           </div>
           <div className="lg:flex lg:items-center mb-2">
           </div>
           <div className="relative flex items-center justify-center h-5 mb-2">
           </div>
           <div className="ml-[25%]">
-          <div className="flex flex-col justify-center mb-[20px] ">
+            <div className="flex flex-col justify-center mb-[20px] ">
               <input
                 required
                 placeholder="Email Address"
@@ -240,16 +240,16 @@ export default function Login() {
               !bg-gradient-to-r from-[#DC5FC9] to-[#FAAA35] 
               !text-[white] hover:!text-[white] hover:!border-[#DC5FC9]  border-[#DC5FC9]"
               disabled={loading}
-              
+
               loading={loading}
               type="submit"
             >
               Login
             </Button>
-            </div>
-            <div className="flex items-center justify-center mt-5">
+          </div>
+          <div className="flex items-center justify-center mt-5">
 
-            </div>
+          </div>
         </div>
       </div>
       {/* <div className="flex flex-col w-[50vw] justify-center "
@@ -302,63 +302,62 @@ export default function Login() {
           </div>
         </div>
       </div>     */}
-    <div className="hidden md:block md:w-1/2 bg-wtf-pigmentblue relative overflow-hidden justify-center">
-      <svg className="absolute top-0 left-0" width={720} height={784} viewBox={"0 0 720 784"} 
-      fill={"none"} xmlns={"http://www.w3.org/2000/svg"}>
-        <path
-          d = "M-392.905 -502.476L-391.004 -501.739C-391.004 -501.739 326.491 -197.031 501.442 -56.8491C676.392 83.3324 662.208 352.981 508.59 506.599C354.972 660.217 85.3233 674.401 -54.8582 499.451C-195.04 324.5 -499.748 -392.994 -499.748 -392.994L-500.485 -394.895C-516.584 -436.403 -527.156 -463.658 -494.411 -496.402C-461.667 -529.146 -434.412 -518.575 -392.905 -502.476Z"
-          fill="#DC5FC9"
+      <div className="hidden md:block md:w-1/2 bg-wtf-pigmentblue relative overflow-hidden justify-center">
+        <svg className="absolute top-0 left-0" width={720} height={784} viewBox={"0 0 720 784"}
+          fill={"none"} xmlns={"http://www.w3.org/2000/svg"}>
+          <path
+            d="M-392.905 -502.476L-391.004 -501.739C-391.004 -501.739 326.491 -197.031 501.442 -56.8491C676.392 83.3324 662.208 352.981 508.59 506.599C354.972 660.217 85.3233 674.401 -54.8582 499.451C-195.04 324.5 -499.748 -392.994 -499.748 -392.994L-500.485 -394.895C-516.584 -436.403 -527.156 -463.658 -494.411 -496.402C-461.667 -529.146 -434.412 -518.575 -392.905 -502.476Z"
+            fill="#DC5FC9"
           >
-        </path>
-      </svg>
-      <svg className="absolute top-0 left-0" width={392} height={487} viewBox={"0 0 392 487"} 
-      fill={"none"} xmlns={"http://www.w3.org/2000/svg"}>
-        <path
-        d="M-336.818 -308.216L-335.645 -307.762C-335.645 -307.762 106.836 -120.048 214.706 -33.6373C322.576 52.7737 313.735 219.111 218.923 313.922C124.112 408.734 -42.2253 417.575 -128.636 309.705C-215.047 201.835 -402.761 -240.646 -402.761 -240.646L-403.215 -241.819C-413.132 -267.417 -419.644 -284.226 -399.434 -304.435C-379.225 -324.644 -362.416 -318.133 -336.818 -308.216Z"
-        fill ="#FCC5F3"
-        >
-        </path>
-        </svg>  
-      <svg className="absolute bottom-0 left-0" width={632} height={316} viewBox={"0 0 632 316"} 
-      fill={"#DC5FC9"} xmlns={"http://www.w3.org/2000/svg"}>
-        <path
-        d="M-351.418 900.397L-350.856 898.948C-350.856 898.948 -118.665 351.944 -11.8154 218.578C95.0341 85.2126 300.633 96.0786 417.79 213.235C534.947 330.392 545.813 535.991 412.447 642.841C279.081 749.69 -267.923 981.882 -267.923 981.882L-269.372 982.444C-301.016 994.711 -321.795 1002.77 -346.768 977.793C-371.74 952.821 -363.685 932.042 -351.418 900.397Z"
-        fill="#DC5FC9"></path>
-      </svg>
-      <svg className="absolute bottom-0 right-0" width={477} height={768} viewBox={"0 0 477 768"} 
-      fill={"none"} xmlns={"http://www.w3.org/2000/svg"}>
-        <path
-        d="M334.917 239.653L336.582 240.299C336.582 240.299 965.06 507.074 1118.29 629.839C1271.52 752.603 1259.04 988.825 1124.43 1123.43C989.823 1258.04 753.6 1270.52 630.836 1117.29C508.071 964.063 241.296 335.585 241.296 335.585L240.65 333.92C226.556 297.562 217.301 273.688 245.993 244.996C274.685 216.304 298.559 225.559 334.917 239.653Z"
-        fill="#00ACFF"
-        >
-        </path>
+          </path>
         </svg>
-        <div className="absolute inset-0 flex items-center justify-center ">
-          <div className=" w-89  px-8 bg-white py-4 justify-center  rounded shadow-menu m-40">
-     <div style={{position:'absolute', backgroundColor:'white', 
-     width:280,height:350, borderRadius:15 ,margin:'-25%', marginLeft:'-20%' ,padding:20 }}>
-            <div className="w-6 h-6">
-              <img className="block w-6 h-6 ml-5 mt-5 mb-5" src={logo} />
-            </div>
-            <p className="text-18 mt-10 !font-jakarta  ">
-            Laba School is the best option for chechking Student Performance. I experienced the way things work, and wow, are you kidding me! Laba is gonna change the industry!
+        <svg className="absolute top-0 left-0" width={392} height={487} viewBox={"0 0 392 487"}
+          fill={"none"} xmlns={"http://www.w3.org/2000/svg"}>
+          <path
+            d="M-336.818 -308.216L-335.645 -307.762C-335.645 -307.762 106.836 -120.048 214.706 -33.6373C322.576 52.7737 313.735 219.111 218.923 313.922C124.112 408.734 -42.2253 417.575 -128.636 309.705C-215.047 201.835 -402.761 -240.646 -402.761 -240.646L-403.215 -241.819C-413.132 -267.417 -419.644 -284.226 -399.434 -304.435C-379.225 -324.644 -362.416 -318.133 -336.818 -308.216Z"
+            fill="#FCC5F3"
+          >
+          </path>
+        </svg>
+        <svg className="absolute bottom-0 left-0" width={632} height={316} viewBox={"0 0 632 316"}
+          fill={"#DC5FC9"} xmlns={"http://www.w3.org/2000/svg"}>
+          <path
+            d="M-351.418 900.397L-350.856 898.948C-350.856 898.948 -118.665 351.944 -11.8154 218.578C95.0341 85.2126 300.633 96.0786 417.79 213.235C534.947 330.392 545.813 535.991 412.447 642.841C279.081 749.69 -267.923 981.882 -267.923 981.882L-269.372 982.444C-301.016 994.711 -321.795 1002.77 -346.768 977.793C-371.74 952.821 -363.685 932.042 -351.418 900.397Z"
+            fill="#DC5FC9"></path>
+        </svg>
+        <svg className="absolute bottom-0 right-0" width={477} height={768} viewBox={"0 0 477 768"}
+          fill={"none"} xmlns={"http://www.w3.org/2000/svg"}>
+          <path
+            d="M334.917 239.653L336.582 240.299C336.582 240.299 965.06 507.074 1118.29 629.839C1271.52 752.603 1259.04 988.825 1124.43 1123.43C989.823 1258.04 753.6 1270.52 630.836 1117.29C508.071 964.063 241.296 335.585 241.296 335.585L240.65 333.92C226.556 297.562 217.301 273.688 245.993 244.996C274.685 216.304 298.559 225.559 334.917 239.653Z"
+            fill="#00ACFF"
+          >
+          </path>
+        </svg>
+        <div className="flex items-center justify-center h-[100vh] ">
+          <div className="w-89 bg-white justify-center rounded shadow-menu">
+            <div style={{ position: "relative", backgroundColor: 'white', width: 280, height: 350, borderRadius: 15, padding: 20 }}>
+              <div className="w-6 h-6">
+                <img className="block w-6 h-6 ml-5 mt-5 mb-5" src={logo} />
+              </div>
+              <p className="text-18 mt-10 !font-jakarta  ">
+                Laba School is the best option for chechking Student Performance. I experienced the way things work, and wow, are you kidding me! Laba is gonna change the industry!
                 .</p>
-            <div className="relative flex items-center mt-10">
-            <img className="block w-8 h-8 rounded-full" 
-            src={image1}
-            />
-            <div className="ml-2 ">
-              <h4 className="text-16 font-medium !font-jakarta ">admin</h4>
-              <span className="text-wtf-wildblue !font-jakarta mt[-2]">@Laba</span>
+              <div className="relative flex items-center mt-10">
+                <img className="block w-8 h-8 rounded-full"
+                  src={image1}
+                />
+                <div className="ml-2 ">
+                  <h4 className="text-16 font-medium !font-jakarta ">admin</h4>
+                  <span className="text-wtf-wildblue !font-jakarta mt[-2]">@Laba</span>
+                </div>
+              </div>
             </div>
-            </div>
-            </div>
-            </div>
+          </div>
         </div>
-     
-    </div>
 
-  {/* //   <div className="md:w-[50vw] w-0 invisible md:visible md:block w-[100%] h-[100vh]"
+      </div>
+
+      {/* //   <div className="md:w-[50vw] w-0 invisible md:visible md:block w-[100%] h-[100vh]"
   //   > 
   //     <img src={image1}  viewBox={"0 0 720 787"}
   //     style={{ margin:0,
@@ -371,8 +370,8 @@ export default function Login() {
   //       }}
   //     />
   // </div>  */}
-    
-   
+
+
     </div>
   );
 }

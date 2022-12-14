@@ -13,4 +13,42 @@
     color: white;
     margin-bottom: 5vh;
     text-align: center;
+
+}
+
+.test-back {
+    background-image: url("./assets/vectors.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-h {
+    padding: 2rem;
+    padding-top: 1.5rem;
+    flex: 2;
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
+.right-h {
+    flex: 2;
+    position: relative;
+    background-color: blue;
+    z-index: -1;
+}
+
+.hero-image {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    width: 40rem;
+
 }
