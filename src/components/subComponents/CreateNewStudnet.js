@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { createParentwhithStudent, fetchClass } from "../modals/funcs";
-import { Input, Button, Select, message, Space, Col, DatePicker, Drawer, Form, Row } from "antd";
+import { Input, Button, Select, message, DatePicker, Drawer } from "antd";
 import {
   doc,
   setDoc,

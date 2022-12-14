@@ -34,13 +34,13 @@ const Chart = ({ aspect, title }) => {
           data={data}
           margin={{ top: 10, right: 30, left: 20, bottom: 0 }}
         >
-{/* 
+          {/* 
 request.auth != null; */}
           <defs>
             <linearGradient id="total" x1="0" y1="0" x2="0" y2="1">
               <stop offset="2%" stopColor="#DC5FC9" stopOpacity={0.2} />
               <stop offset="98%" stopColor="white" stopOpacity={0.2} />
-                          </linearGradient>
+            </linearGradient>
           </defs>
           <XAxis dataKey="name" stroke="gray" />
           <CartesianGrid strokeDasharray="3 3" className="chartGrid" />
@@ -50,7 +50,7 @@ request.auth != null; */}
             dataKey="Total"
             stroke="#DC5FC9"
             strokeWidth={2}
-           fillOpacity={1}
+            fillOpacity={1}
             fill="url(#total)"
           />
         </AreaChart>

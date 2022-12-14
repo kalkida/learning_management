@@ -58,6 +58,7 @@ import AttendanceList from "./subComponents/AttendanceList";
 import AttendanceView from "./modals/attendance/view";
 import Profile from "../components/subComponents/Profile";
 import ProfileEdit from "../components/subComponents/ProfileEdit";
+import Calender from "./subComponents/Calender";
 const { Header, Content, Sider } = Layout;
 const drawerWidth = 240;
 
@@ -420,21 +421,26 @@ const Layouts = () => {
                 ),
                 link: "/attendance",
               },
-              // {
-              //   text: "Schedule",
-              //   Icon: (
-              //     <FontAwesomeIcon
-              //       icon={faCalendar}
-              //       className="text-xl  text-[#2c5886]"
-              //       style={{
-              //         fontFamily: "Plus Jakarta Sans",
-              //         fontSize: 16,
-              //         fontWeight: "500",
-              //       }}
-              //     />
-              //   ),
-              //   link: "/schedule",
-              // },
+              {
+                text: (
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
+                    Calendar
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="calendar-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/schedule",
+              },
             ].map((item, index) => (
               <ListItem
                 key={item.text}
@@ -673,6 +679,7 @@ const Layouts = () => {
               <Route path="/view-attendance" element={<AttendanceView />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="profile-edit" element={<ProfileEdit />} />
+              <Route path="schedule" element={<Calender />} />
             </Routes>
           </Content>
         </Box>

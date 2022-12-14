@@ -444,3 +444,7 @@
     line-height: 24px;
 
 }
+
+.ant-progress-circle .ant-progress-text {
+    font-size: 2.5rem;
+}
