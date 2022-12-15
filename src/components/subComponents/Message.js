@@ -12,7 +12,7 @@ function Message() {
                 <h1 className="text-2xl font-[600] font-jakarta">Message </h1>
             </div>
             <div className="list-sub mb-10 flex flex-col md:flex-row">
-                <div className='w-[100%] md:w-[30%] min-h-[100vh] px-2'>
+                <div className='w-[100%] md:w-[30%]  px-2'>
                     <Input
                         style={{
                             width: "100%",
@@ -131,7 +131,7 @@ function Message() {
                                         </div>
                                         <div >
                                             <h1>Adonay Kebede</h1>
-                                            <p className='mb-0 text-[#667085] text-[12px] truncate'>Typing Ofcourse have agood</p>
+                                            <p className='mb-0 text-[#667085] text-[12px] truncate'>Typing...</p>
                                         </div>
                                     </div>
 
@@ -176,15 +176,15 @@ function Message() {
                     </div>
                     <div className='h-[100%] flex flex-col justify-end'>
                         <div className='mb-2 pr-5 w-[100%] flex flex-col place-items-end'>
-                            <p className='mb-0 max-w-[70%] bg-[#FCF2FB] border-2 border-[#EA9FDF] rounded-lg p-2'>Dear Meron’s parents, we would like to discuss about an upcoming project to help students’ learning process. Would be great if you could join us on Saturday, Oct 8 at 9AM at the school hall.</p>
+                            <p className='mb-0 max-w-[70%] bg-[#FCF2FB] border-2 border-[#EA9FDF] rounded-br-none rounded-lg p-2'>Dear Meron’s parents, we would like to discuss about an upcoming project to help students’ learning process. Would be great if you could join us on Saturday, Oct 8 at 9AM at the school hall.</p>
                             <span className='text-[#98A2B3]'>3:02 PM</span>
                         </div>
                         <div className='mb-2 pl-5 w-[100%] flex flex-col place-items-start'>
-                            <p className='mb-0 max-w-[70%] bg-[#FFFFFF] border-2 border-[#D0D5DD] rounded-lg p-2'>Of course, I wil be there.</p>
+                            <p className='mb-0 max-w-[70%] bg-[#FFFFFF] border-2 border-[#D0D5DD] rounded-bl-none rounded-lg p-2'>Of course, I wil be there.</p>
                             <span className='text-[#98A2B3]'>3:02 PM</span>
                         </div>
                         <div className='mb-2 pr-5 w-[100%] flex flex-col place-items-end'>
-                            <p className='mb-0 max-w-[70%] bg-[#FCF2FB] border-2 border-[#EA9FDF] rounded-lg p-2'>Thank you for your time.</p>
+                            <p className='mb-0 max-w-[70%] bg-[#FCF2FB] border-2 border-[#EA9FDF] rounded-br-none rounded-lg p-2'>Thank you for your time.</p>
                             <span className='text-[#98A2B3]'>3:02 PM</span>
                         </div>
                     </div>
