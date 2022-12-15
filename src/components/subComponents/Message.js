@@ -11,8 +11,8 @@ function Message() {
             <div className="list-header mb-5">
                 <h1 className="text-2xl font-[600] font-jakarta">Message </h1>
             </div>
-            <div className="list-sub mb-10 flex">
-                <div className='w-[30%] h-[80vh] px-2'>
+            <div className="list-sub mb-10 flex flex-col md:flex-row">
+                <div className='w-[100%] md:w-[30%] min-h-[100vh] px-2'>
                     <Input
                         style={{
                             width: "100%",
@@ -66,7 +66,7 @@ function Message() {
                                         </div>
                                         <div >
                                             <h1>Adonay Kebede</h1>
-                                            <p className='mb-0 text-[#667085] text-[12px] truncate'>Typing</p>
+                                            <p className='mb-0 text-[#667085] text-[12px] truncate'>Typing  </p>
                                         </div>
                                     </div>
 
@@ -131,7 +131,7 @@ function Message() {
                                         </div>
                                         <div >
                                             <h1>Adonay Kebede</h1>
-                                            <p className='mb-0 text-[#667085] text-[12px] truncate'>Typing</p>
+                                            <p className='mb-0 text-[#667085] text-[12px] truncate'>Typing Ofcourse have agood</p>
                                         </div>
                                     </div>
 
@@ -167,8 +167,8 @@ function Message() {
                         </Tabs>
                     </div>
                 </div>
-                <div className='w-[70%] border-2 bg-white rounded-xl h-[85vh] overflow-scroll'>
-                    <div className='flex border-b-2 py-2 px-5 items-center top-0 sticky'>
+                <div className='w-[100%] md:w-[70%] border-2 bg-white rounded-xl h-[85vh] overflow-scroll'>
+                    <div className='flex border-b-2 py-2 px-5 items-center top-0 sticky bg-white'>
                         <div className='w-10 h-10 border-2 rounded-3xl border-[#667085] mr-2'>
                             <img src={profile1} alt='profile' />
                         </div>
