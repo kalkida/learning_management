@@ -59,6 +59,8 @@ import AttendanceView from "./modals/attendance/view";
 import Profile from "../components/subComponents/Profile";
 import ProfileEdit from "../components/subComponents/ProfileEdit";
 import Calender from "./subComponents/Calender";
+import Message from "./subComponents/Message";
+
 const { Header, Content, Sider } = Layout;
 const drawerWidth = 240;
 
@@ -281,26 +283,26 @@ const Layouts = () => {
                 ),
                 link: "/admin",
               },
-              // {
-              //   text: (
-              //     <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
-              //       Message
-              //     </p>
-              //   ),
-              //   Icon: (
-              //     <Icon
-              //       name="message-square-outline"
-              //       fill="#667085"
-              //       size="large" // small, medium, large, xlarge
-              //       animation={{
-              //         type: "pulse", // zoom, pulse, shake, flip
-              //         hover: true,
-              //         infinite: false,
-              //       }}
-              //     />
-              //   ),
-              //   link: "/message",
-              // },
+              {
+                text: (
+                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+                    Message
+                  </p>
+                ),
+                Icon: (
+                  <Icon
+                    name="message-square-outline"
+                    fill="#667085"
+                    size="large" // small, medium, large, xlarge
+                    animation={{
+                      type: "pulse", // zoom, pulse, shake, flip
+                      hover: true,
+                      infinite: false,
+                    }}
+                  />
+                ),
+                link: "/message",
+              },
               {
                 text: (
                   <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left h-2">
@@ -678,8 +680,9 @@ const Layouts = () => {
               <Route path="/attendance" element={<AttendanceList />} />
               <Route path="/view-attendance" element={<AttendanceView />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="profile-edit" element={<ProfileEdit />} />
-              <Route path="schedule" element={<Calender />} />
+              <Route path="/profile-edit" element={<ProfileEdit />} />
+              <Route path="/schedule" element={<Calender />} />
+              <Route path="/message" element={<Message />} />
             </Routes>
           </Content>
         </Box>
