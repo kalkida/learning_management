@@ -12,7 +12,6 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { firestoreDb } from "../../../firebase";
 import HtmlCanvas from "./BarChart/htmlCanvas";
-import Chart from "./chart/Chart";
 import {
   collection,
   query,
@@ -403,7 +402,7 @@ function ViewStudent() {
                   }
                 >
                   <div className="flex py-15">
-                  <Chart title="" aspect={2 / 1} />
+                  {/* <Chart title="" aspect={2 / 1} /> */}
                   </div>
                  
                 </Card>
