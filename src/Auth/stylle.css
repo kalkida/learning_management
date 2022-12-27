@@ -1,0 +1,22 @@
+.parallax {
+    /* The image used */
+    background-image: url("https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png");
+  
+    /* Set a specific height */
+    min-height: 500px; 
+    min-width: 1900px;
+  
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .ant-picker-focused{
+    border-color: white !important;
+    box-shadow: none;
+  }
+  
+  
+  
+  
