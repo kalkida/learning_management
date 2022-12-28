@@ -60,6 +60,8 @@ import Profile from "../components/subComponents/Profile";
 import ProfileEdit from "../components/subComponents/ProfileEdit";
 import Calender from "./subComponents/Calender";
 import Message from "./subComponents/Message";
+import Inventory from "./subComponents/Inventory";
+import { colors } from "@mui/material";
 
 const { Header, Content, Sider } = Layout;
 const drawerWidth = 240;
@@ -227,12 +229,16 @@ const Layouts = () => {
                     marginLeft: 0,
                   }}
                 >
-                  <ChevronLeftIcon />
-                </IconButton>
+                   <div className="flex">
                 <img
-                  src={require("../assets/looog.jpg")}
-                  className="w-[98px] h-[37px] z-1"
+                  src={require("../assets/log.png")}
+                  className="w-[27px] h-[27px] z-1"
                 />
+                  <h1 className="ml-2 w-[53px] h-[15px] z-1 text-xl font-bold text-[#301430] mb-2">Laba</h1>
+                </div>
+                  {/* <ChevronLeftIcon /> */}
+                </IconButton>
+               
               </div>
             ) : (
               <div className="flex flex-row justify-start -ml-2">
@@ -265,184 +271,204 @@ const Layouts = () => {
             {[
               {
                 text: (
-                  <p className="text-[#344054] font-[500] font-jakarta text-[16px] text-left h-2">
+                  <p className=" font-[500] font-jakarta text-[16px] text-left h-2 -ml-6  ">
                     Home
                   </p>
                 ),
-                Icon: (
-                  <Icon
-                    name="home-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
+                // Icon: (
+                //   <Icon hover:text-[#982086] text-[#344054]
+                //     name="home-outline"
+                //     fill="#667085"
+                //     size="large" // small, medium, large, xlarge
+                //     animation={{
+                //       type: "pulse", // zoom, pulse, shake, flip
+                //       hover: true,
+                //       infinite: false,
+                //     }}
+                //   />
+                // ),
                 link: "/admin",
               },
+              // {
+              //   text: (
+              //     <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
+              //       Message
+              //     </p>
+              //   ),
+              //   Icon: (
+              //     <Icon
+              //       name="message-square-outline"
+              //       fill="#667085"
+              //       size="large" // small, medium, large, xlarge
+              //       animation={{
+              //         type: "pulse", // zoom, pulse, shake, flip
+              //         hover: true,
+              //         infinite: false,
+              //       }}
+              //     />
+              //   ),
+              //   link: "/message",
+              // },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left pt-1">
-                    Message
-                  </p>
-                ),
-                Icon: (
-                  <Icon
-                    name="message-square-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
-                link: "/message",
-              },
-              {
-                text: (
-                  <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left h-2">
+                  <p className=" font-jakarta  font-[500] text-[16px] text-left h-2 -ml-6">
                     Announcment
                   </p>
                 ),
-                Icon: (
-                  <Icon
-                    name="volume-up-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
+                // Icon: (
+                //   <Icon
+                //     name="volume-up-outline"
+                //     fill="#667085"
+                //     size="large" // small, medium, large, xlarge
+                //     animation={{
+                //       type: "pulse", // zoom, pulse, shake, flip
+                //       hover: true,
+                //       infinite: false,
+                //     }}
+                //   />
+                // ),
                 link: "/announcment",
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta  font-[500] text-[16px] text-left h-2">
+                  <p className=" font-jakarta  font-[500] text-[16px] text-left h-2 -ml-6">
                     Course
                   </p>
                 ),
-                Icon: (
-                  <Icon
-                    name="book-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
+                // Icon: (
+                //   <Icon
+                //     name="book-outline"
+                //     fill="#667085"
+                //     size="large" // small, medium, large, xlarge
+                //     animation={{
+                //       type: "pulse", // zoom, pulse, shake, flip
+                //       hover: true,
+                //       infinite: false,
+                //     }}
+                //   />
+                // ),
                 link: "/list-course",
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
+                  <p className=" font-jakarta font-[500] text-[16px] text-left h-2 -ml-6">
                     Classes
                   </p>
                 ),
-                Icon: (
-                  <Icon
-                    name="pie-chart-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
+                // Icon: (
+                //   <Icon
+                //     name="pie-chart-outline"
+                //     fill="#667085"
+                //     size="large" // small, medium, large, xlarge
+                //     animation={{
+                //       type: "pulse", // zoom, pulse, shake, flip
+                //       hover: true,
+                //       infinite: false,
+                //     }}
+                //   />
+                // ),
                 link: "/list-classes",
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
+                  <p className=" font-jakarta font-[500] text-[16px] text-left h-2 -ml-6">
                     Teacher
                   </p>
                 ),
-                Icon: (
-                  <Icon
-                    name="person-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
+                // Icon: (
+                //   <Icon
+                //     name="person-outline"
+                //     fill="#667085"
+                //     size="large" // small, medium, large, xlarge
+                //     animation={{
+                //       type: "pulse", // zoom, pulse, shake, flip
+                //       hover: true,
+                //       infinite: false,
+                //     }}
+                //   />
+                // ),
                 link: "/list-teacher",
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
+                  <p className=" font-jakarta font-[500] text-[16px] text-left h-2 -ml-6">
                     Students
                   </p>
                 ),
-                Icon: (
-                  <Icon
-                    name="people-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
+                // Icon: (
+                //   <Icon
+                //     name="people-outline"
+                //     fill="#667085"
+                //     size="large" // small, medium, large, xlarge
+                //     animation={{
+                //       type: "pulse", // zoom, pulse, shake, flip
+                //       hover: true,
+                //       infinite: false,
+                //     }}
+                //   />
+                // ),
                 link: "/list-student",
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
+                  <p className="font-jakarta font-[500] text-[16px] text-left h-2 -ml-6">
                     Attendance
                   </p>
                 ),
-                Icon: (
-                  <Icon
-                    name="smiling-face-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
+                // Icon: (
+                //   <Icon
+                //     name="smiling-face-outline"
+                //     fill="#667085"
+                //     size="large" // small, medium, large, xlarge
+                //     animation={{
+                //       type: "pulse", // zoom, pulse, shake, flip
+                //       hover: true,
+                //       infinite: false,
+                //     }}
+                //   />
+                // ),
                 link: "/attendance",
               },
               {
                 text: (
-                  <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
-                    Calendar
+                  <p className="font-jakarta font-[500] text-[16px] text-left h-2 -ml-6">
+                    Inventory
                   </p>
                 ),
-                Icon: (
-                  <Icon
-                    name="calendar-outline"
-                    fill="#667085"
-                    size="large" // small, medium, large, xlarge
-                    animation={{
-                      type: "pulse", // zoom, pulse, shake, flip
-                      hover: true,
-                      infinite: false,
-                    }}
-                  />
-                ),
-                link: "/schedule",
+                // Icon: (
+                //   <Icon
+                //     name="smiling-face-outline"
+                //     fill="#667085"
+                //     size="large" // small, medium, large, xlarge
+                //     animation={{
+                //       type: "pulse", // zoom, pulse, shake, flip
+                //       hover: true,
+                //       infinite: false,
+                //     }}
+                //   />
+                // ),
+                link: "/inventory",
               },
+              // {
+              //   text: (
+              //     <p className="text-[#344054] font-jakarta font-[500] text-[16px] text-left h-2">
+              //       Calendar
+              //     </p>
+              //   ),
+              //   Icon: (
+              //     <Icon
+              //       name="calendar-outline"
+              //       fill="#667085"
+              //       size="large" // small, medium, large, xlarge
+              //       animation={{
+              //         type: "pulse", // zoom, pulse, shake, flip
+              //         hover: true,
+              //         infinite: false,
+              //       }}
+              //     />
+              //   ),
+              //   link: "/schedule",
+              // },
             ].map((item, index) => (
               <ListItem
                 key={item.text}
@@ -458,17 +484,18 @@ const Layouts = () => {
                   <ListItemButton
                     sx={{
                       ":hover": {
-                        backgroundColor: "#FCF0E8",
+                        backgroundColor: "#F7F6F9",
+                        color: "#982086"
                       },
                       ":active": {
-                        backgroundColor: "#FCF0E8",
-                      },
-                      color: "#2c5886",
+                        backgroundColor: "#F7F6F9",
+                        color: "#982086"
+                      }, 
                       minHeight: 48,
                       borderRadius: 2,
                       justifyContent: open ? "initial" : "center",
                       backgroundColor:
-                        item.link == currentURL ? "#FCF0E8" : "white",
+                        item.link == currentURL ? "#F7F6F9" : "white",
                       px: 2.5,
                     }}
                   >
@@ -484,7 +511,19 @@ const Layouts = () => {
 
                     <ListItemText
                       primary={item.text}
-                      sx={{ opacity: open ? 1 : 0 }}
+                      selected={true}
+                      sx={{ opacity: open ? 1 : 0,
+                        ":hover": {
+                          color: "#982086"
+                        },
+                        ":active": {
+                          color: "#982086"
+                        },
+                      
+                        color: item.link == currentURL ? "#982086" : "#344054",
+                        textDecorationColor: item.link == currentURL ? "#F7F6F9" : "white"
+                       // backgroundColor: item.link == currentURL ? "#F7F6F9" : "white",    
+                      }}
                     />
                   </ListItemButton>
                 </Link>
@@ -505,7 +544,7 @@ const Layouts = () => {
                 <ListItemButton
                   sx={{
                     ":hover": {
-                      backgroundColor: "#FCF0E8",
+                      backgroundColor: "#F7F6F9",
                     },
                     borderRadius: 2,
 
@@ -531,14 +570,14 @@ const Layouts = () => {
                   {role["isAdmin"] == true ? (
                     <ListItemText
                       primary={
-                        <p className="text-[#344054] font-jakarta text-[16px] text-left h-2 ">
+                        <p className="text-[#344054] font-jakarta text-[16px] text-left h-2  -ml-2">
                           Admin
                         </p>
                       }
                       sx={{ opacity: open ? 1 : 0 }}
                     />
                   ) : (
-                    <h1></h1>
+                    <h1>...</h1>
                   )}
                 </ListItemButton>
               </a>
@@ -643,16 +682,16 @@ const Layouts = () => {
   }, []);
 
   return (
-    <Layout className="bg-[#F9FAFB] min-h-[100vh]">
+    <Layout className="bg-[#FFF] min-h-[100vh]">
       <Box sx={{ display: "flex", width: "100%" }}>
         <SiderGenerator />
         <Box
           component="main"
           sx={{ flexGrow: 1, p: 3 }}
-          className="bg-[#F9FAFB] w-[100%] overflow-x-hidden "
+          className="bg-[#FFF] w-[100%] overflow-x-hidden "
         >
           <DrawerHeader />
-          <Content className="bg-[#F9FAFB] h-[auto] w-[100%]">
+          <Content className="bg-[#FFF] h-[auto] w-[100%]">
             <Routes>
               <Route path="/admin" element={<AdminDash />} />
               <Route path="/teacher" element={<TeacherDash />} />
@@ -683,6 +722,7 @@ const Layouts = () => {
               <Route path="/profile-edit" element={<ProfileEdit />} />
               <Route path="/schedule" element={<Calender />} />
               <Route path="/message" element={<Message />} />
+              <Route path="/inventory" element={<Inventory />} />
             </Routes>
           </Content>
         </Box>
