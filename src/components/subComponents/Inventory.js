@@ -21,7 +21,8 @@ import CreateNewSupplier from "./CreateSupplier";
 import EditSupplier from "../modals/inventory/EditSupply";
 import HistorySupplier from "../modals/inventory/HistorySupply";
 import Grid from "@mui/material/Grid";
-import CreateInventoryProduct from "../modals/inventory/createInventoryProduct";
+import HistoryProduct from "../modals/inventory/HistoryProduct";
+import CreateInventoryProduct from "../modals/inventory/createInventoryProduct.js";
 import UpdateInventoryProduct from "../modals/inventory/upadateInventoryProduct";
 
 const { Option } = Select;
@@ -37,6 +38,7 @@ export default function Inventory() {
   const [openProduct, setOpenProduct] = useState(false);
   const [openUpdateProduct, setOpenUpdateProduct] = useState(false);
   const [updateProductData, setUpdateProductData] = useState();
+  const [HistoryProducts , setHistoryProducts] = useState(false);
   const [EditSupply, setEditSupply] = useState(false);
   const [HistorySupply, setHistorySupply] = useState(false);
   const [openSupplier, setOpenSupplier] = useState(false);
@@ -288,18 +290,21 @@ export default function Inventory() {
     },
   ];
 
+  const handleproduct = async (record) =>{
+    setHistoryProducts(true)
+  }
 
 
   const handleEdit = async (record, value) => {
     //  console.log("record: " + record)
     // console.log("value: " + value)
-    console.log("worst  ", record.user)
-    if (value == "Edit") {
+    console.log("worst  ", value)
+    if (value.value == "Edit") {
       // 
       setEditSupply(true)
       setDatarecord(record);
     }
-    if (value == "History") {
+    if (value.value == "History") {
       setHistorySupply(true);
       setDatarecord(record);
       //  handleViewSupply(record)
@@ -489,13 +494,13 @@ export default function Inventory() {
               onChange={handleEdit(record)}
             // onChange={handleFilterSection}
             >
-              {/* <Option style={{color:'#344054',fontSize:14, }}value="Edit" >Edit</Option>
-            <Option style={{color:'red'}} value="Remove">Remove</Option> */}
-              {classes?.map((item, i) => (
+              <Option style={{color:'#344054',fontSize:14, }}value="Edit" >Edit</Option>
+            <Option style={{color:'red'}} value="Remove">Remove</Option>
+              {/* {classes?.map((item, i) => (
                 <Option key={item.key} value={item.section} lable={item.section}>
                   {item.section}
                 </Option>
-              ))}
+              ))} */}
 
             </Select>
           </div>
@@ -612,15 +617,16 @@ export default function Inventory() {
               style={{ width: 80 }}
               placeholder="..."
               onChange={() => handleEdit(record)}
+              onClick={() => handleproduct(record)}
             // onChange={handleFilterSection}
             >
-              {/* <Option style={{color:'#344054',fontSize:14, }}value="Edit" >Edit</Option>
-            <Option style={{color:'red'}} value="Remove">Remove</Option> */}
-              {classes?.map((item, i) => (
+              <Option style={{color:'#344054',fontSize:14, }}value="Edit" >item History</Option>
+            <Option style={{color:'red'}} value="Remove">Remove</Option>
+              {/* {classes?.map((item, i) => (
                 <Option key={item.key} value={item.section} lable={item.section}>
                   {item.section}
                 </Option>
-              ))}
+              ))} */}
 
             </Select>
           </div>
@@ -758,7 +764,7 @@ export default function Inventory() {
                 // onChange={(e) =>handledata(e)}
                 />
                 <Select
-                  defaultValue={Dates[0]}
+                  defaultValue={Dates[2]}
                   // placeholder={Genders[2]}  
                   options={Dates}
                   styles={{
@@ -792,7 +798,7 @@ export default function Inventory() {
                       color: '#98A2B3',
                     },
                   })}
-                  className="!mr-2 !rounded-lg  !border-0 hover:!border-0 !text-[#667085]"
+                  className="!mr-2 !rounded-lg  !border-0 hover:!border-0 !text-[#d3d3d3]"
                 />
               </div>
             </div>
@@ -842,7 +848,7 @@ export default function Inventory() {
                 <div className="flex flex-row justify-start align-bottom items-center mt-4">
                   <h1 className="text-3xl text-[#344054] ">
                     5417</h1>
-                  <FontAwesomeIcon className="pr-2  mb-2 ml-5 text-[#0ceb20]" icon={faArrowUp} />
+                  <FontAwesomeIcon className="pr-2  mb-2 ml-2 text-[#0ceb20]" icon={faArrowUp} />
                   <h4 className="text-sm text-[#0ceb20]" style={{ marginLeft: -4 }}>8%</h4>
                 </div>
                 <div className="flex" >
@@ -885,6 +891,11 @@ export default function Inventory() {
             <UpdateInventoryProduct
               open={openUpdateProduct}
               setOpen={setOpenUpdateProduct}
+              data={updateProductData}
+            />
+              <HistoryProduct
+              open={HistoryProducts}
+              setOpen={setHistoryProducts}
               data={updateProductData}
             />
           </Tabs.TabPane>
