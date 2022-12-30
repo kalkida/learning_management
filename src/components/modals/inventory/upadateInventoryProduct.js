@@ -14,7 +14,7 @@ import {
     updateDoc,
 } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faSlash } from "@fortawesome/free-solid-svg-icons";
 import { firestoreDb, storage } from "../../../firebase";
 import uuid from "react-uuid";
 import { useNavigate } from "react-router-dom";
@@ -32,41 +32,42 @@ import TextArea from "antd/lib/input/TextArea";
 const { Option } = Select;
 const { Search } = Input;
 
-const gender = ["Male", "Female", "Other"];
+const ItemCategory = ["Book", "Excercisebook", "Pen", "Pencil", "paper"];
+const ItemsSupplier = ["ABC Trading", "DoubleA papers", "AtoZ plc"]
 
 const UpdateInventoryProduct = ({ open, setOpen, data }) => {
-    const [loadingbutton, setLoadingButton] = useState(false);
+    console.log(data)
     const uid = useSelector((state) => state.user.profile);
     const school = useSelector((state) => state.user.profile.school);
-    var [newUser, setNewUser] = useState({
-        DOB: "",
-        studentId: "",
-        avater: null,
-        email: "",
-        sex: "",
-        first_name: "",
-        last_name: "",
-        class: "",
-        className: "",
-        phone: [],
+    var [updateProduct, setupdateProduct] = useState({
+        ItemName: data.ItemName,
+        Category: data.Category,
+        ItemCount: data.ItemCount,
+        TotalItem: data.TotalItem,
+        Supplier: data.Supplier,
+        price: data.price,
+        Description: data.Description,
         school_id: uid.school,
     });
 
     const valueRef = useRef();
 
-
-    const createNewStudent = async () => {
-        setLoadingButton(true);
-        setLoadingButton(false);
+    const createUpdateProduct = async () => {
+        message.success("Product Updated");
+        console.log(updateProduct);
+        setOpen(false);
     };
 
-    const handleStudent = (e) => {
-        setNewUser({ ...newUser, [e.target.name]: e.target.value });
+    const handleUpdateProduct = (e) => {
+        setupdateProduct({ ...updateProduct, [e.target.name]: e.target.value });
     };
 
+    const handleCategory = (value) => {
+        setupdateProduct({ ...updateProduct, Category: value });
+    };
 
-    const handleGender = (value) => {
-        setNewUser({ ...newUser, sex: value });
+    const handleSupplier = (value) => {
+        setupdateProduct({ ...updateProduct, Supplier: value });
     };
 
     const onClose = () => {
@@ -98,9 +99,10 @@ const UpdateInventoryProduct = ({ open, setOpen, data }) => {
                         <Input
                             style={{ marginTop: 6 }}
                             className="py-6 mt-6 !rounded-lg !border-[#d3d3d3] "
-                            name="first_name"
+                            name="ItemName"
+                            defaultValue={updateProduct.ItemName}
                             placeholder="Books"
-                        // onChange={(e) => handleStudent(e)}
+                            onChange={(e) => handleUpdateProduct(e)}
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4 ">
@@ -110,9 +112,11 @@ const UpdateInventoryProduct = ({ open, setOpen, data }) => {
                                 prefix={"+"}
                                 style={{ marginTop: 6 }}
                                 className=" !rounded-lg !border-[#d3d3d3] "
-                                name="email"
+                                name="ItemCount"
+                                type="number"
+                                defaultValue={updateProduct.ItemCount}
                                 placeholder="200"
-                                onChange={(e) => handleStudent(e)}
+                                onChange={(e) => handleUpdateProduct(e)}
                             />
                             <p className="text-[#98A2B3] text-sm m-0">The amount of item to be added to stock.</p>
                         </div>
@@ -121,9 +125,11 @@ const UpdateInventoryProduct = ({ open, setOpen, data }) => {
                             <Input
                                 style={{ marginTop: 6, color: "#475467" }}
                                 className=" !rounded-lg !border-[#d3d3d3] text-[#475467]"
-                                name="email"
+                                name="TotalItem"
+                                readOnly
+                                defaultValue={updateProduct.TotalItem}
                                 placeholder="1000"
-                                onChange={(e) => handleStudent(e)}
+                                onChange={(e) => handleUpdateProduct(e)}
                             />
                             <p className="text-[#98A2B3] text-sm m-0 ">The total amount in stock</p>
                         </div>
@@ -135,14 +141,16 @@ const UpdateInventoryProduct = ({ open, setOpen, data }) => {
                             <Select
                                 bordered={true}
                                 placeholder="Add Tag"
+                                onChange={handleCategory}
                                 className="py-6 mt-6 !rounded-lg !border-[#d3d3d3] hover:border-[#667085]"
+                                defaultValue={updateProduct.Category}
                                 optionLabelProp="label"
                                 style={{
                                     width: "100%",
                                     marginTop: 6,
                                 }}
                             >
-                                {gender.map((item, index) => (
+                                {ItemCategory.map((item, index) => (
                                     <Option key={index} value={item} label={item}>
                                         {item}
                                     </Option>
@@ -157,9 +165,11 @@ const UpdateInventoryProduct = ({ open, setOpen, data }) => {
                                 suffix={"Add Pricing"}
                                 style={{ marginTop: 6, color: "#475467" }}
                                 className=" !rounded-lg !border-[#d3d3d3] text-[#475467]"
-                                name="email"
+                                name="price"
+                                type="number"
+                                defaultValue={updateProduct.price}
                                 placeholder="1000"
-                                onChange={(e) => handleStudent(e)}
+                                onChange={(e) => handleUpdateProduct(e)}
                             />
                             <p className="text-[#98A2B3] text-sm m-0 ">Add the price of each unit item.</p>
                         </div>
@@ -170,14 +180,15 @@ const UpdateInventoryProduct = ({ open, setOpen, data }) => {
                             bordered={true}
                             placeholder="Select supplier"
                             className="py-6 mt-6 !rounded-lg !border-[#d3d3d3] hover:border-[#667085]"
-                            onChange={handleGender}
+                            onChange={handleSupplier}
+                            defaultValue={updateProduct.Supplier}
                             optionLabelProp="label"
                             style={{
                                 width: "100%",
                                 marginTop: 6,
                             }}
                         >
-                            {gender.map((item, index) => (
+                            {ItemsSupplier.map((item, index) => (
                                 <Option key={index} value={item} label={item}>
                                     {item}
                                 </Option>
@@ -190,6 +201,9 @@ const UpdateInventoryProduct = ({ open, setOpen, data }) => {
                             style={{ marginTop: 6 }}
                             placeholder="Add Description"
                             rows={6}
+                            name="Description"
+                            defaultValue={updateProduct.Description}
+                            onChange={(e) => handleUpdateProduct(e)}
                         />
 
                     </div>
@@ -198,7 +212,7 @@ const UpdateInventoryProduct = ({ open, setOpen, data }) => {
                     <Button className="w-[25%] mr-5 !rounded-lg" onClick={onClose}>Cancel</Button>
                     <Button
                         className="w-[65%] !bg-[#DC5FC9] !text-[white] hover:!text-[white] !rounded-lg shadow-md -z-0 "
-                        onClick={async () => await createNewStudent()}
+                        onClick={async () => await createUpdateProduct()}
                         icon={<FontAwesomeIcon className="mr-2" icon={faCheck} />}
                     >
                         Confirm

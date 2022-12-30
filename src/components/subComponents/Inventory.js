@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { firestoreDb } from "../../firebase";
 import { Tooltip, Timeline, Statistic } from "antd";
 import { useNavigate } from "react-router-dom";
-import { Input } from "antd";
-import { Select } from "antd";
+import { Input, Select, Card } from "antd";
+import dayjs from 'dayjs';
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "../modals/courses/style.css";
 import "react-phone-number-input/style.css";
@@ -16,7 +16,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../modals/student/style.css";
 import CreateNewInventory from "./CreateInventory";
 import ChartStudent from "../graph/studentGraph/Chart";
-import { Card, Progress, } from "antd";
 import CreateNewSupplier from "./CreateSupplier";
 import EditSupplier from "../modals/inventory/EditSupply";
 import HistorySupplier from "../modals/inventory/HistorySupply";
@@ -37,15 +36,14 @@ export default function Inventory() {
   const [open, setOpen] = useState(false);
   const [openProduct, setOpenProduct] = useState(false);
   const [openUpdateProduct, setOpenUpdateProduct] = useState(false);
-  const [updateProductData, setUpdateProductData] = useState();
-  const [HistoryProducts , setHistoryProducts] = useState(false);
+  const [HistoryProducts, setHistoryProducts] = useState(false);
   const [EditSupply, setEditSupply] = useState(false);
   const [HistorySupply, setHistorySupply] = useState(false);
   const [openSupplier, setOpenSupplier] = useState(false);
   const [classes, setClasses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [updateProductData, setUpdateProductData] = useState();
 
-  const [students, setStudents] = useState([]);
+
   var datas = [
     { name: "Sept", Total: 120, totalday: "2", howmuch: 0 },
     { name: "Oct", Total: 100, totalday: "3", howmuch: 0 },
@@ -145,45 +143,57 @@ export default function Inventory() {
     // navigate("/view-student", { state: { data } });
 
   };
-
-
-
-
   const dataSource = [
     {
       key: '1',
-      user: 'Abreham Abebe',
-      item_name: 'Excercisebook',
-      item_count: 100,
-      Date: '03 Jun 2022',
+      ItemName: 'Abreham Abebe',
+      TotalItem: '1000',
+      ItemCount: 100,
+      Category: 'Excercisebook',
+      Supplier: "ABC Trading",
+      price: "150",
+      Description: "Sample Text",
     },
     {
       key: '2',
-      user: 'Adera Tamirat',
-      item_name: 'text book',
-      item_count: 25,
-      Date: '13 Jun 2022',
+      ItemName: 'Adera Tamirat',
+      TotalItem: '250',
+      ItemCount: 25,
+      Category: 'text book',
+      Supplier: "AtoZ Plc",
+      price: "50",
+      Description: "Sample Text",
     },
     {
       key: '3',
-      user: 'Daniel Negus',
-      item_name: 'pen',
-      item_count: 90,
-      Date: '23 Jan 2022',
+      ItemName: 'Daniel Negus',
+      TotalItem: '1500',
+      ItemCount: 90,
+      Category: 'pen',
+      Supplier: "ABC Trading",
+      price: "18",
+      Description: "Sample Text",
+
     },
     {
       key: '4',
-      user: 'Girum Tamirat',
-      item_name: 'Pencil',
-      item_count: 78,
-      Date: '19 Dec 2022',
+      ItemName: 'Girum Tamirat',
+      TotalItem: '2500',
+      ItemCount: 78,
+      Category: 'Pencil',
+      Supplier: "AtoZ Plc",
+      price: "15",
+      Description: "Sample Text",
     },
     {
       key: '5',
-      user: 'Nahom Abebe',
-      item_name: 'Binder',
-      item_count: 58,
-      Date: '19 Nov 2022',
+      ItemName: 'Nahom Abebe',
+      TotalItem: '45',
+      ItemCount: 58,
+      Category: 'Binder',
+      Supplier: "DoubleAA Papers",
+      price: "600",
+      Description: "Sample Text",
     },
   ];
 
@@ -224,40 +234,40 @@ export default function Inventory() {
         //   User
         // </p>
       ),
-      dataIndex: "user",
-      key: "user",
+      dataIndex: "Supplier",
+      key: "Supplier",
       render: (item) => {
         return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
       },
     },
     {
       title: <p className="font-jakarta text-[#98A2B3] text-[14px] font-[500]">Product</p>,
-      key: "item_name",
-      dataIndex: "item_name",
+      key: "Category",
+      dataIndex: "Category",
       render: (value) => {
         return <p className="font-jakarta text-[#344054] !font-jakarta font-[500]">{value}</p>;
       },
     },
     {
       title: <p className="font-jakarta  text-[#98A2B3] text-[14px] font-[500]">Contact Person</p>,
-      dataIndex: "item_count",
-      key: "item_count",
+      dataIndex: "ItemName",
+      key: "ItemName",
       render: (item) => {
         return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
       },
     },
     {
       title: <p className="font-jakarta text-[#98A2B3] text-[14px] font-[500]">Bank</p>,
-      dataIndex: "Date",
-      key: "Date",
+      dataIndex: "Description",
+      key: "Description",
       render: (item) => {
         return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
       },
     },
     {
       title: <p className="font-jakarta  text-[#98A2B3] text-[14px] font-[500]">Bank account</p>,
-      dataIndex: "item_count",
-      key: "item_count",
+      dataIndex: "ItemCount",
+      key: "ItemCount",
       render: (item) => {
         return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
       },
@@ -290,7 +300,7 @@ export default function Inventory() {
     },
   ];
 
-  const handleproduct = async (record) =>{
+  const handleproduct = async (record) => {
     setHistoryProducts(true)
   }
 
@@ -398,7 +408,7 @@ export default function Inventory() {
         <div>
           <Select
             bordered={false}
-            defaultValue="User"
+            defaultValue="Item Name"
             // onChange={(e) => onSelect(e)}
             className="w-[20vh] text-[#344054] !font-[500] !font-jakarta text border-[#EAECF0] hover:border-[#EAECF0] !border-0 !rounded-[6px] border-[2px]"
           >
@@ -447,151 +457,32 @@ export default function Inventory() {
       // sorter: (a, b) => a.name- b.name,
       // sortDirections: ['descend'],
 
-      dataIndex: "user",
-      key: "user",
-      render: (item) => {
-        return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
-      },
-    },
-    {
-      title: <p className="font-jakarta text-[#98A2B3] text-[14px] font-[500]">Item Name</p>,
-      key: "item_name",
-      dataIndex: "item_name",
-      render: (value) => {
-        return <p className="font-jakarta text-[#344054] !font-jakarta font-[500]">{value}</p>;
-      },
-    },
-    {
-      title: <p className="font-jakarta  text-[#98A2B3] text-[14px] font-[500]">Item Count</p>,
-      dataIndex: "item_count",
-      key: "item_count",
-      render: (item) => {
-        return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
-      },
-    },
-    {
-      title: <p className="font-jakarta text-[#98A2B3] text-[14px] font-[500]">Date</p>,
-      dataIndex: "Date",
-      key: "Date",
-      render: (item) => {
-        return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
-      },
-    },
-    {
-      title: '',
-      key: 'operation',
-      fixed: 'right',
-      width: 100,
-      render: (record) => {
-        return (
-          <div>
-            <Select
-              bordered={false}
-              showArrow={false}
-              className="!rounded-[6px] border-[#EAECF0] border-[0px] text-[#344054] !font-jakarta font-[500] "
-              style={{ width: 80 }}
-              placeholder="..."
-              onChange={handleEdit(record)}
-            // onChange={handleFilterSection}
-            >
-              <Option style={{color:'#344054',fontSize:14, }}value="Edit" >Edit</Option>
-            <Option style={{color:'red'}} value="Remove">Remove</Option>
-              {/* {classes?.map((item, i) => (
-                <Option key={item.key} value={item.section} lable={item.section}>
-                  {item.section}
-                </Option>
-              ))} */}
-
-            </Select>
-          </div>
-        )
-      },
-    }
-
-  ];
-
-
-  const columnsProduct = [
-    {
-      title: (
-        <div>
-          <Select
-            bordered={false}
-            defaultValue="Name"
-            // onChange={(e) => onSelect(e)}
-            className="w-[20vh] text-[#344054] !font-[500] !font-jakarta text border-[#EAECF0] hover:border-[#EAECF0] !border-0 !rounded-[6px] border-[2px]"
-          >
-            <Option key={1} value={"all"}>
-              All
-            </Option>
-            <Option key={1} value={1}>
-              Parents
-            </Option>
-            <Option key={2} value={2}>
-              Teachers
-            </Option>
-          </Select>
-        </div>
-        // <p className="font-jakarta font-[500] text-[14px] text-[#344054] background-[#FFF]">
-        //   User
-        // </p>
-      ),
-      // filters: [
-      //   {
-      //     text: 'Abreham Abebe',
-      //     value: 'Abreham Abebe',
-      //   },
-      //   {
-      //     text: 'Adera Tamirat',
-      //     value: 'Adera Tamirat',
-      //   },
-      //   {
-      //     text: 'Daniel negus',
-      //     value: 'Daniel negus',
-      //     children: [
-      //       {
-      //         text: 'pen',
-      //         value: 'pen',
-      //       },
-      //       {
-      //         text: 'pencil',
-      //         value: 'pencil',
-      //       },
-      //     ],
-      //   },
-      // ],
-      // // specify the condition of filtering result
-      // // here is that finding the name started with `value`
-      // onFilter: (value, record) => record.name.indexOf(value) === 0,
-      // sorter: (a, b) => a.name- b.name,
-      // sortDirections: ['descend'],
-
-      dataIndex: "user",
-      key: "user",
+      dataIndex: "ItemName",
+      key: "ItemName",
       render: (item) => {
         return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
       },
     },
     {
       title: <p className="font-jakarta text-[#98A2B3] text-[14px] font-[500]">Description</p>,
-      key: "item_name",
-      dataIndex: "item_name",
+      key: "Description",
+      dataIndex: "Description",
       render: (value) => {
         return <p className="font-jakarta text-[#344054] !font-jakarta font-[500]">{value}</p>;
       },
     },
     {
       title: <p className="font-jakarta  text-[#98A2B3] text-[14px] font-[500]">Item Count</p>,
-      dataIndex: "item_count",
-      key: "item_count",
+      dataIndex: "ItemCount",
+      key: "ItemCount",
       render: (item) => {
         return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
       },
     },
     {
       title: <p className="font-jakarta text-[#98A2B3] text-[14px] font-[500]">Price/Uint</p>,
-      dataIndex: "Date",
-      key: "Date",
+      dataIndex: "price",
+      key: "price",
       render: (item) => {
         return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
       },
@@ -620,8 +511,134 @@ export default function Inventory() {
               onClick={() => handleproduct(record)}
             // onChange={handleFilterSection}
             >
-              <Option style={{color:'#344054',fontSize:14, }}value="Edit" >item History</Option>
-            <Option style={{color:'red'}} value="Remove">Remove</Option>
+              <Option style={{ color: '#344054', fontSize: 14, }} value="Edit" >item History</Option>
+              <Option style={{ color: 'red' }} value="Remove">Remove</Option>
+              {/* {classes?.map((item, i) => (
+                <Option key={item.key} value={item.section} lable={item.section}>
+                  {item.section}
+                </Option>
+              ))} */}
+
+            </Select>
+          </div>
+        )
+      },
+    }
+
+  ];
+
+
+  const columnsProduct = [
+    {
+      title: (
+        <div>
+          <Select
+            bordered={false}
+            defaultValue="Item Name"
+            // onChange={(e) => onSelect(e)}
+            className="w-[20vh] text-[#344054] !font-[500] !font-jakarta text border-[#EAECF0] hover:border-[#EAECF0] !border-0 !rounded-[6px] border-[2px]"
+          >
+            <Option key={1} value={"all"}>
+              All
+            </Option>
+            <Option key={1} value={1}>
+              Parents
+            </Option>
+            <Option key={2} value={2}>
+              Teachers
+            </Option>
+          </Select>
+        </div>
+        // <p className="font-jakarta font-[500] text-[14px] text-[#344054] background-[#FFF]">
+        //   User
+        // </p>
+      ),
+      // filters: [
+      //   {
+      //     text: 'Abreham Abebe',
+      //     value: 'Abreham Abebe',
+      //   },
+      //   {
+      //     text: 'Adera Tamirat',
+      //     value: 'Adera Tamirat',
+      //   },
+      //   {
+      //     text: 'Daniel negus',
+      //     value: 'Daniel negus',
+      //     children: [
+      //       {
+      //         text: 'pen',
+      //         value: 'pen',
+      //       },
+      //       {
+      //         text: 'pencil',
+      //         value: 'pencil',
+      //       },
+      //     ],
+      //   },
+      // ],
+      // // specify the condition of filtering result
+      // // here is that finding the name started with `value`
+      // onFilter: (value, record) => record.name.indexOf(value) === 0,
+      // sorter: (a, b) => a.name- b.name,
+      // sortDirections: ['descend'],
+
+      dataIndex: "ItemName",
+      key: "ItemName",
+      render: (item) => {
+        return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
+      },
+    },
+    {
+      title: <p className="font-jakarta text-[#98A2B3] text-[14px] font-[500]">Description</p>,
+      key: "Description",
+      dataIndex: "Description",
+      render: (value) => {
+        return <p className="font-jakarta text-[#344054] !font-jakarta font-[500]">{value}</p>;
+      },
+    },
+    {
+      title: <p className="font-jakarta  text-[#98A2B3] text-[14px] font-[500]">Item Count</p>,
+      dataIndex: "ItemCount",
+      key: "ItemCount",
+      render: (item) => {
+        return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
+      },
+    },
+    {
+      title: <p className="font-jakarta text-[#98A2B3] text-[14px] font-[500]">Price/Uint</p>,
+      dataIndex: "price",
+      key: "price",
+      render: (item) => {
+        return <h1 className="font-jakarta text-[#344054] !font-jakarta font-[500]">{item}</h1>;
+      },
+    },
+    {
+      title: '',
+      key: 'key',
+      dataIndex: "key",
+      fixed: 'right',
+      width: 100,
+      render: (_, record) => {
+        return (
+          <div style={{ display: 'flex' }}>
+            <Button
+              className="text-[#344054] !font-jakarta"
+              style={{ backgroundColor: '#F2F4F7', borderRadius: 15 }}
+              onClick={() => handleUpdateProduct(record)}
+            >Update</Button>
+            <Select
+              bordered={false}
+              showArrow={false}
+              className="!rounded-[6px] border-[#EAECF0] border-[0px] text-[#344054] !font-jakarta font-[500] "
+              style={{ width: 80 }}
+              placeholder="..."
+              onChange={() => handleEdit(record)}
+              onClick={() => handleproduct(record)}
+            // onChange={handleFilterSection}
+            >
+              <Option style={{ color: '#344054', fontSize: 14, }} value="Edit" >item History</Option>
+              <Option style={{ color: 'red' }} value="Remove">Remove</Option>
               {/* {classes?.map((item, i) => (
                 <Option key={item.key} value={item.section} lable={item.section}>
                   {item.section}
@@ -656,7 +673,6 @@ export default function Inventory() {
   }
 
   const handleUpdateProduct = (data) => {
-    console.log(data)
     setUpdateProductData(data)
     setOpenUpdateProduct(true);
 
@@ -665,6 +681,33 @@ export default function Inventory() {
   //   useEffect(() => {
   //     getStudents();
   //   }, []);
+
+  const onRangeChange = (dates, dateStrings) => {
+    if (dates) {
+      console.log('From: ', dates[0], ', to: ', dates[1]);
+      console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+    } else {
+      console.log('Clear');
+    }
+  };
+  const rangePresets = [
+    {
+      label: 'Last 7 Days',
+      value: [dayjs().add(-7, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 14 Days',
+      value: [dayjs().add(-14, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 30 Days',
+      value: [dayjs().add(-30, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 90 Days',
+      value: [dayjs().add(-90, 'd'), dayjs()],
+    },
+  ];
 
   return (
     <div className="bg-[#FFF] -mt-14">
@@ -758,11 +801,12 @@ export default function Inventory() {
             </Button>
             <div className=" ml-4">
               <div style={{ display: "flex", }}>
-                <RangePicker
+                <RangePicker presets={rangePresets} onChange={onRangeChange} />
+                {/* <RangePicker
                   format={'YYYY-MM-DD'}
                   className="!mr-2 !rounded-lg  !border-0 hover:!border-0 !text-[#98A2B3] !shadow-none hover:!shadow-none"
                 // onChange={(e) =>handledata(e)}
-                />
+                /> */}
                 <Select
                   defaultValue={Dates[2]}
                   // placeholder={Genders[2]}  
@@ -871,13 +915,6 @@ export default function Inventory() {
             </div>
             <Table
               className="bg-[#FFFFFF]"
-              // onRow={(record, rowIndex) => {
-              //   return {
-              //     onClick: (event) => handleView(record), // click row
-              //   };
-              // }}
-
-              // loading={loading}
               style={{ marginTop: 20, backgroundColor: '#FFF' }}
               columns={columnsProduct}
               dataSource={dataSource}
@@ -888,12 +925,14 @@ export default function Inventory() {
               open={openProduct}
               setOpen={setOpenProduct}
             />
-            <UpdateInventoryProduct
-              open={openUpdateProduct}
-              setOpen={setOpenUpdateProduct}
-              data={updateProductData}
-            />
-              <HistoryProduct
+            {updateProductData && openUpdateProduct ?
+              <UpdateInventoryProduct
+                open={openUpdateProduct}
+                setOpen={setOpenUpdateProduct}
+                data={updateProductData}
+              />
+              : null}
+            <HistoryProduct
               open={HistoryProducts}
               setOpen={setHistoryProducts}
               data={updateProductData}
